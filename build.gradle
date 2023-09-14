@@ -24,18 +24,16 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 
-//	Java Mail
+//	Mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 //	Apache PDFBOX:
 	implementation 'org.apache.pdfbox:pdfbox:2.0.27'
 
-//	Facebook:
-	implementation 'org.springframework.social:spring-social-facebook:3.0.0.M3'
+	implementation 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'
 
 //	JWT:
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-
 }
 
 tasks.named('test') {
