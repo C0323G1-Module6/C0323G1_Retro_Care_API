@@ -30,6 +30,7 @@ dependencies {
 //	Apache PDFBOX:
 	implementation 'org.apache.pdfbox:pdfbox:2.0.27'
 
+	implementation 'org.springframework.social:spring-social-facebook:3.0.0.M3'
 
 //	JWT:
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
