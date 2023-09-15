@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PrescriptionService implements IPrescriptionService{
     @Autowired
@@ -20,5 +22,10 @@ public class PrescriptionService implements IPrescriptionService{
     @Override
     public void createPrescription(Prescription prescription) {
         prescriptionRepository.createPrescription(prescription);
+    }
+
+    @Override
+    public List<Prescription> getAll() {
+        return prescriptionRepository.getAll();
     }
 }

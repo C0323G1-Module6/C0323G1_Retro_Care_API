@@ -8,83 +8,83 @@ import java.util.List;
 public class Supplier {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Long idSupplier;
-    private String codeSupplier;
-    private String nameSupplier;
-    private String emailSupplier;
-    private String addressSupplier;
-    private String telSupplier;
-    private String noteSupplier;
+    private Long id;
+    private String code;
+    private String name;
+    private String email;
+    private String address;
+    private String phone;
+    private String note;
     private Boolean flagDelete;
-
-    public Supplier(Long idSupplier, String codeSupplier, String nameSupplier, String emailSupplier, String addressSupplier, String telSupplier, String noteSupplier, Boolean flagDelete) {
-        this.idSupplier = idSupplier;
-        this.codeSupplier = codeSupplier;
-        this.nameSupplier = nameSupplier;
-        this.emailSupplier = emailSupplier;
-        this.addressSupplier = addressSupplier;
-        this.telSupplier = telSupplier;
-        this.noteSupplier = noteSupplier;
-        this.flagDelete = flagDelete;
-    }
 
     public Supplier() {
     }
 
-    public Long getIdSupplier() {
-        return idSupplier;
+    public Supplier(Long id, String code, String name, String email, String address, String phone, String note, Boolean flagDelete) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.email = email;
+        this.address = address;
+        this.phone = phone;
+        this.note = note;
+        this.flagDelete = flagDelete;
     }
 
-    public void setIdSupplier(Long idSupplier) {
-        this.idSupplier = idSupplier;
+    public Long getId() {
+        return id;
     }
 
-    public String getCodeSupplier() {
-        return codeSupplier;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setCodeSupplier(String codeSupplier) {
-        this.codeSupplier = codeSupplier;
+    public String getCode() {
+        return code;
     }
 
-    public String getNameSupplier() {
-        return nameSupplier;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public void setNameSupplier(String nameSupplier) {
-        this.nameSupplier = nameSupplier;
+    public String getName() {
+        return name;
     }
 
-    public String getEmailSupplier() {
-        return emailSupplier;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setEmailSupplier(String emailSupplier) {
-        this.emailSupplier = emailSupplier;
+    public String getEmail() {
+        return email;
     }
 
-    public String getAddressSupplier() {
-        return addressSupplier;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public void setAddressSupplier(String addressSupplier) {
-        this.addressSupplier = addressSupplier;
+    public String getAddress() {
+        return address;
     }
 
-    public String getTelSupplier() {
-        return telSupplier;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
-    public void setTelSupplier(String telSupplier) {
-        this.telSupplier = telSupplier;
+    public String getPhone() {
+        return phone;
     }
 
-    public String getNoteSupplier() {
-        return noteSupplier;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public void setNoteSupplier(String noteSupplier) {
-        this.noteSupplier = noteSupplier;
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Boolean getFlagDelete() {
