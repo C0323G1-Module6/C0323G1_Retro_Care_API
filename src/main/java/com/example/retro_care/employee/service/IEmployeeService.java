@@ -8,6 +8,9 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IEmployeeService {
+ String getNextCode();
+
+    Employee addEmployee(Employee employee);
     /**
      * Create: SonTT
      * Date create: 15/09/2023

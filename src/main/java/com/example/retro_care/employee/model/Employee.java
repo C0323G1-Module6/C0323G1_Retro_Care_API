@@ -27,8 +27,8 @@ public class Employee {
     private String idCard;
     @Column(columnDefinition = "longtext")
     private String note;
-    @Column(columnDefinition = "bit(1) default 1")
-    private boolean flagDelete;
+    @Column(columnDefinition = "bit(1)")
+    private Boolean flagDelete = true;
     @OneToOne
     @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
