@@ -20,9 +20,9 @@ public class Indication {
     @ManyToOne
     @JoinColumn(name = "prescription_id")
     private Prescription prescription;
-//    @ManyToOne
-//    @JoinColumn(name = "medicine_id")
-//    private Medicine medicine;
+    @ManyToOne
+    @JoinColumn(name = "medicine_id")
+    private Medicine medicine;
 
     public Indication() {
     }
