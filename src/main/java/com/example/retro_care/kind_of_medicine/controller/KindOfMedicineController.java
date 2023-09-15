@@ -35,7 +35,7 @@ public class KindOfMedicineController {
 
     //    Delete
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<KindOfMedicine>> deleteKindOfMedicine(@PathVariable("id") Integer id) {
+    public ResponseEntity<List<KindOfMedicine>> deleteKindOfMedicine(@PathVariable("id") Long id) {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -44,7 +44,7 @@ public class KindOfMedicineController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteKindOfMedicine(@PathVariable int id, RedirectAttributes redirectAttributes) {
+    public String deleteKindOfMedicine(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         if (kindOfMedicineService.deleteKindOfMedicine(id)) {
             redirectAttributes.addFlashAttribute("message", "Delete successfully");
         } else {
@@ -67,7 +67,7 @@ public class KindOfMedicineController {
 
     //    Edit
     @GetMapping("/edit/{id}")
-    public String getFormEdit(@PathVariable int id, RedirectAttributes redirectAttributes, Model model) {
+    public String getFormEdit(@PathVariable Long id, RedirectAttributes redirectAttributes, Model model) {
         if (kindOfMedicineService.getKindOfMedicineById(id) == null) {
             redirectAttributes.addFlashAttribute("message", "id not found");
             return "redirect: /kindOfMedicine";

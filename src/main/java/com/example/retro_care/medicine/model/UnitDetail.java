@@ -11,11 +11,12 @@ public class UnitDetail {
 
     @Column(name = "flag_deleted")
     private Boolean flagDeleted;
+
+    @Column(name = "conversion_unit")
+    private Long conversionUnit;
     @Column(name = "conversion_rate")
     private Long conversionRate;
 
-    @Column(name = "conversion_unit")
-    private String conversionUnit;
     @ManyToOne
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
@@ -34,14 +35,37 @@ public class UnitDetail {
         this.unit = unit;
     }
 
-    public UnitDetail(Long id, Boolean flagDeleted, Long conversionRate, String conversionUnit, Medicine medicine,
-                      Unit unit) {
+    public UnitDetail(Long id, Boolean flagDeleted, Long conversionUnit, Long conversionRate, Medicine medicine, Unit unit) {
         this.id = id;
         this.flagDeleted = flagDeleted;
-        this.conversionRate = conversionRate;
         this.conversionUnit = conversionUnit;
+        this.conversionRate = conversionRate;
         this.medicine = medicine;
         this.unit = unit;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
+    }
+
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
+    }
+
+    public Long getConversionUnit() {
+        return conversionUnit;
+    }
+
+    public void setConversionUnit(Long conversionUnit) {
+        this.conversionUnit = conversionUnit;
     }
 
     public Long getConversionRate() {
@@ -59,28 +83,5 @@ public class UnitDetail {
     public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
     }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Boolean getFlagDeleted() {
-        return this.flagDeleted;
-    }
-
-    public void setFlagDeleted(Boolean flagDeleted) {
-        this.flagDeleted = flagDeleted;
-    }
-
-    public String getConversionUnit() {
-        return this.conversionUnit;
-    }
-
-    public void setConversionUnit(String conversionUnit) {
-        this.conversionUnit = conversionUnit;
-    }
 }
+

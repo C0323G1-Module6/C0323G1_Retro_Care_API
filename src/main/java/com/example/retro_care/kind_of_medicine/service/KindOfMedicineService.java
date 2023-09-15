@@ -25,17 +25,17 @@ public class KindOfMedicineService implements IKindOfMedicineService {
     }
 
     @Override
-    public KindOfMedicine getKindOfMedicineById(Integer id) {
+    public KindOfMedicine getKindOfMedicineById(Long id) {
         return null;
     }
 
     @Override
-    public void deleteKindOfMedicineById(Integer id) {
+    public void deleteKindOfMedicineById(Long id) {
         kindOfMedicineRepository.deleteById(id);
     }
 
     @Override
-    public Boolean deleteKindOfMedicine(int id) {
+    public Boolean deleteKindOfMedicine(Long id) {
         kindOfMedicineRepository.deleteById(id);
         return true;
     }

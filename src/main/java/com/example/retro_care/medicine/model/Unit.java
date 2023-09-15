@@ -1,6 +1,9 @@
 package com.example.retro_care.medicine.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
+import javax.persistence.*;
+import java.util.Set;
 import javax.persistence.*;
 
 @Entity
@@ -15,19 +18,15 @@ public class Unit {
 
     @Column(name = "flag_deleted")
     private Boolean flagDeleted;
-
-    public Unit(Long id, String name, Boolean flagDeleted) {
-        this.id = id;
-        this.name = name;
-        this.flagDeleted = flagDeleted;
-
-    }
+    @JsonBackReference
+    @OneToMany
+    private Set<UnitDetail> unitDetailSet;
 
     public Unit() {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -35,7 +34,7 @@ public class Unit {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -43,10 +42,32 @@ public class Unit {
     }
 
     public Boolean getFlagDeleted() {
-        return this.flagDeleted;
+        return flagDeleted;
     }
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
+    }
+
+    public Set<UnitDetail> getUnitDetailSet() {
+        return unitDetailSet;
+    }
+
+    public void setUnitDetailSet(Set<UnitDetail> unitDetailSet) {
+        this.unitDetailSet = unitDetailSet;
+    }
+
+    public Unit(Long id, String name, Boolean flagDeleted, Set<UnitDetail> unitDetailSet) {
+        this.id = id;
+        this.name = name;
+        this.flagDeleted = flagDeleted;
+        this.unitDetailSet = unitDetailSet;
+
+
+
+
+
+
+
     }
 }
