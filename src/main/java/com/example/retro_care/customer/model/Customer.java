@@ -1,30 +1,35 @@
 package com.example.retro_care.customer.model;
+
 import com.example.retro_care.user.model.AppUser;
+
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
+@Table(name = "customer")
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
     private String name;
-    private Date birthday;
+    @Column(name = "birth_day", columnDefinition = "date")
+    private String birthday;
     private String address;
+    @Column(name = "phone_number")
     private String phoneNumber;
     private String email;
     private Long point;
-    private String text;
-    private Boolean flagDeleted;
+    private String note;
+    @Column(name = "flag_deleted", columnDefinition = "bit(1) default=1")
+    private Boolean flagDeleted = true;
     @OneToOne
-    @JoinColumn(name="app_user_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "app_user_id", referencedColumnName = "id", unique = true)
     private AppUser appUser;
 
     public Customer() {
     }
 
-    public Customer(Long id, String code, String name, Date birthday, String address, String phoneNumber, String email, Long point, String text, Boolean flagDeleted, AppUser appUser) {
+    public Customer(Long id, String code, String name, String birthday, String address, String phoneNumber, String email, Long point, String note, Boolean flagDeleted, AppUser appUser) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -33,7 +38,7 @@ public class Customer {
         this.phoneNumber = phoneNumber;
         this.email = email;
         this.point = point;
-        this.text = text;
+        this.note = note;
         this.flagDeleted = flagDeleted;
         this.appUser = appUser;
     }
@@ -62,11 +67,11 @@ public class Customer {
         this.name = name;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -102,12 +107,12 @@ public class Customer {
         this.point = point;
     }
 
-    public String getText() {
-        return text;
+    public String getNote() {
+        return note;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Boolean getFlagDeleted() {
