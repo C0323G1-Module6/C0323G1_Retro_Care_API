@@ -13,7 +13,7 @@ public class UnitDetail {
     private Boolean flagDeleted;
 
     @Column(name = "conversion_unit")
-    private Long conversionUnit;
+    private String conversionUnit;
     @Column(name = "conversion_rate")
     private Long conversionRate;
 
@@ -35,7 +35,7 @@ public class UnitDetail {
         this.unit = unit;
     }
 
-    public UnitDetail(Long id, Boolean flagDeleted, Long conversionUnit, Long conversionRate, Medicine medicine, Unit unit) {
+    public UnitDetail(Long id, Boolean flagDeleted, String conversionUnit, Long conversionRate, Medicine medicine, Unit unit) {
         this.id = id;
         this.flagDeleted = flagDeleted;
         this.conversionUnit = conversionUnit;
@@ -60,11 +60,11 @@ public class UnitDetail {
         this.flagDeleted = flagDeleted;
     }
 
-    public Long getConversionUnit() {
+    public String getConversionUnit() {
         return conversionUnit;
     }
 
-    public void setConversionUnit(Long conversionUnit) {
+    public void setConversionUnit(String conversionUnit) {
         this.conversionUnit = conversionUnit;
     }
 
