@@ -8,8 +8,21 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IEmployeeService {
+   /**
+    * Author: TanNV
+    * Date create: 15/09/2023
+    * Get next code of employee
+    * @return new code
+    */
  String getNextCode();
 
+   /**
+    * Author: TanNV
+    * Date create: 15/09/2023
+    * Save employee
+    * @param employee
+    * @return employee
+    */
     Employee addEmployee(Employee employee);
     /**
      * Create: SonTT
