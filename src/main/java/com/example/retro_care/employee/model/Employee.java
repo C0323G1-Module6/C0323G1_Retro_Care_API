@@ -1,36 +1,37 @@
 package com.example.retro_care.employee.model;
 
 import com.example.retro_care.user.model.AppUser;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
 @Entity
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
-    @Column(columnDefinition = "varchar(50)")
-    private String code;
-    @Column(columnDefinition = "varchar(100)")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(columnDefinition = "varchar(50)",nullable = false)
+    private String code="NV001";
+    @Column(columnDefinition = "varchar(100)", nullable = false)
     private String name;
-    @Column(columnDefinition = "varchar(100)")
+    @Column(columnDefinition = "varchar(100)", nullable = false)
     private String address;
     @Column(columnDefinition = "longtext")
     private String image;
-    @Column(columnDefinition = "varchar(15)")
+    @Column(columnDefinition = "varchar(15)", nullable = false)
     private String phoneNumber;
-    @Column(columnDefinition = "date")
+    @Column(columnDefinition = "date", nullable = false)
     private String startDay;
-    @Column(columnDefinition = "date")
+    @Column(columnDefinition = "date", nullable = false)
     private String birthday;
-    @Column(columnDefinition = "varchar(20)")
+    @Column(columnDefinition = "varchar(20)", nullable = false)
     private String idCard;
     @Column(columnDefinition = "longtext")
     private String note;
     @Column(columnDefinition = "bit(1) default 1")
     private boolean flagDelete;
     @OneToOne
-    @JoinColumn(name = "app_user_id")
+    @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
 
     public Employee(String code, String name, String address, String image, String phoneNumber, String startDay, String birthday, String idCard, String note, AppUser appUser) {
