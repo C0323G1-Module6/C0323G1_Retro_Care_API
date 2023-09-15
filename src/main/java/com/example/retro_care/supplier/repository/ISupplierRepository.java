@@ -40,7 +40,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "        FROM\n" +
                     "            invoice i\n" +
                     "        WHERE\n" +
-                    "            i.flag_deleted = 0\n" +
+                    "            i.flag_deleted = false\n" +
                     "        GROUP BY\n" +
                     "            i.supplier_id\n" +
                     "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
@@ -56,8 +56,8 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "        JOIN\n" +
                     "            medicine m ON id.medicine_id = m.id\n" +
                     "        WHERE\n" +
-                    "            i.flag_deleted = 0\n" +
-                    "            AND id.flag_deleted = 0\n" +
+                    "            i.flag_deleted = false\n" +
+                    "            AND id.flag_deleted = false\n" +
                     "        GROUP BY\n" +
                     "            supplier_id\n" +
                     "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
@@ -74,8 +74,8 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      */
     @Query(nativeQuery = true,
             value = "INSERT INTO supplier(code, name, email, address, phone_number, note, flag_deleted)" +
-                    "VALUES (:#{#supplier.codeSupplier},#{#supplier.nameSupplier},#{#supplier.emailSupplier},#{#supplier.addressSupplier}," +
-                    "#{#supplier.telSupplier},#{#supplier.noteSupplier},false);")
+                    "VALUES (:#{#supplier.code},#{#supplier.name},#{#supplier.email},#{#supplier.address}," +
+                    "#{#supplier.phone},#{#supplier.note},false);")
     void createSupplier(@Param("supplier") Supplier supplier);
     /**
      * method :updateSupplierById()
@@ -86,13 +86,13 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      * return void
      */
     @Query(nativeQuery = true,
-           value = "UPDATE supplier SET code = #{#supplier.codeSupplier}," +
-                   " name = #{#supplier.nameSupplier}," +
-                   " email = #{#supplier.emailSupplier}," +
-                   " address = #{#supplier.addressSupplier}," +
-                   " phone_number = #{#supplier.telSupplier}," +
-                   " note = #{#supplier.noteSupplier}," +
-                   " WHERE (id = #{#supplier.idSupplier});")
+           value = "UPDATE supplier SET code = #{#supplier.code}," +
+                   " name = #{#supplier.name}," +
+                   " email = #{#supplier.email}," +
+                   " address = #{#supplier.address}," +
+                   " phone_number = #{#supplier.phone}," +
+                   " note = #{#supplier.note}," +
+                   " WHERE (id = #{#supplier.id});")
     void updateSupplierById(@Param("supplier") Supplier supplier);
     /**
      * method :deleteSupplierById()
@@ -130,13 +130,16 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
 
     @Query( nativeQuery = true,
             value = "SELECT \n" +
-                    "invoice.id as idInvoice ,\n" +
-                    "  invoice.`code` as codeInvoice,\n" +
-                    "  invoice.document_number as documentNumber,\n" +
-                    "  DATE(invoice.creation_date) AS createDate,\n" +
-                    "  TIME(invoice.creation_date) AS createTime,\n" +
-                    "  SUM(invoice_detail.medicine_quantity * medicine.price) AS totalAmount,\n" +
-                    "  (ANY_VALUE(invoice_detail.medicine_quantity) * ANY_VALUE(medicine.price)) - invoice.paid AS amountDue\n" +
+                    "  invoice.id,\n" +
+                    "  invoice.`code`,\n" +
+                    "  invoice.document_number,\n" +
+                    "  DATE(invoice.creation_date) AS creation_date,\n" +
+                    "  TIME(invoice.creation_date) AS creation_time,\n" +
+                    "  SUM(invoice_detail.medicine_quantity * medicine.price) AS total_amount,\n" +
+                    "  CASE\n" +
+                    "    WHEN (ANY_VALUE(invoice_detail.medicine_quantity) * ANY_VALUE(medicine.price)) - invoice.paid < 0 THEN 0\n" +
+                    "    ELSE (ANY_VALUE(invoice_detail.medicine_quantity) * ANY_VALUE(medicine.price)) - invoice.paid\n" +
+                    "  END AS amount_due\n" +
                     "FROM \n" +
                     "  invoice \n" +
                     "JOIN \n" +
