@@ -1,5 +1,7 @@
 package com.example.retro_care.user.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -12,6 +14,7 @@ public class AppUser {
     private String password;
     private Boolean flagDeleted;
     private Boolean flagOnline;
+    @JsonBackReference
     @OneToMany(mappedBy = "appUser")
     private Set<UserRole> userRoleSet;
 
