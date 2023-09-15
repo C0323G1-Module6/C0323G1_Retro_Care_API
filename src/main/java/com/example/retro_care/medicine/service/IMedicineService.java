@@ -26,6 +26,4 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
-    Page<Medicine> findAll(Pageable pageable);
-  
 }
