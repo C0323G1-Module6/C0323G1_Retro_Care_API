@@ -1,5 +1,7 @@
 package com.example.retro_care.medicine.model;
 
+import com.example.retro_care.indication.model.Indication;
+import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
@@ -42,9 +44,6 @@ public class Medicine {
     @Column(name = "retail_profits")
     private Float retailProfits;
 
-    @Column(name = "kind_of_medicine_id")
-    private Long kindOfMedicineId;
-
     @Column(name = "flag_deleted")
     private Boolean flagDeleted;
     @JsonBackReference
@@ -54,28 +53,18 @@ public class Medicine {
     @OneToMany(mappedBy = "medicine")
     private Set<ImageMedicine> imageMedicines;
 
+    @JsonBackReference
+    @OneToMany(mappedBy = "medicine")
+    private Set<Indication> indicationSet;
+
+    @ManyToOne
+    @JoinColumn(name = "kind_of_medicine_id")
+    private KindOfMedicine kindOfMedicine;
+
     public Medicine() {
     }
 
-    public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker,
-                    String activeElement, String origin, Float retailProfits, Long kindOfMedicineId, Boolean flagDeleted,
-                    Set<UnitDetail> unitDetailSet, Set<ImageMedicine> imageMedicines) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.price = price;
-        this.quantity = quantity;
-        this.vat = vat;
-        this.note = note;
-        this.maker = maker;
-        this.activeElement = activeElement;
-        this.origin = origin;
-        this.retailProfits = retailProfits;
-        this.kindOfMedicineId = kindOfMedicineId;
-        this.flagDeleted = flagDeleted;
-        this.unitDetailSet = unitDetailSet;
-        this.imageMedicines = imageMedicines;
-    }
+
 
     public Set<UnitDetail> getUnitDetailSet() {
         return unitDetailSet;
@@ -181,14 +170,6 @@ public class Medicine {
         this.retailProfits = retailProfits;
     }
 
-    public Long getKindOfMedicineId() {
-        return this.kindOfMedicineId;
-    }
-
-    public void setKindOfMedicineId(Long kindOfMedicineId) {
-        this.kindOfMedicineId = kindOfMedicineId;
-    }
-
     public Boolean getFlagDeleted() {
         return this.flagDeleted;
     }
@@ -197,5 +178,20 @@ public class Medicine {
         this.flagDeleted = flagDeleted;
     }
 
+    public Set<Indication> getIndicationSet() {
+        return indicationSet;
+    }
+
+    public void setIndicationSet(Set<Indication> indicationSet) {
+        this.indicationSet = indicationSet;
+    }
+
+    public KindOfMedicine getKindOfMedicine() {
+        return kindOfMedicine;
+    }
+
+    public void setKindOfMedicine(KindOfMedicine kindOfMedicine) {
+        this.kindOfMedicine = kindOfMedicine;
+    }
 }
 

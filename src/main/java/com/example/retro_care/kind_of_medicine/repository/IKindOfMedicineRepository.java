@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine,Integer> {
+public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine,Long> {
 //    @Query(value = "select code,name from kind_of_medicine where code like :searchCode && name like :searchName")
 }
