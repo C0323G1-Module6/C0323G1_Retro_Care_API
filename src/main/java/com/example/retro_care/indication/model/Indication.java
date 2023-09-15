@@ -41,7 +41,7 @@ public class Indication {
         this.frequency = frequency;
         this.flagDeleted = flagDeleted;
         this.prescription = prescription;
-        this.medicine = medicine;
+//        this.medicine = medicine;
     }
 
     public Long getId() {
@@ -80,13 +80,13 @@ public class Indication {
         return prescription;
     }
 
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
-    }
+//    public Medicine getMedicine() {
+//        return medicine;
+//    }
+//
+//    public void setMedicine(Medicine medicine) {
+//        this.medicine = medicine;
+//    }
 
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;
