@@ -64,7 +64,24 @@ public class Medicine {
     public Medicine() {
     }
 
-
+    public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, Set<UnitDetail> unitDetailSet, Set<ImageMedicine> imageMedicines, Set<Indication> indicationSet, KindOfMedicine kindOfMedicine) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.vat = vat;
+        this.note = note;
+        this.maker = maker;
+        this.activeElement = activeElement;
+        this.origin = origin;
+        this.retailProfits = retailProfits;
+        this.flagDeleted = flagDeleted;
+        this.unitDetailSet = unitDetailSet;
+        this.imageMedicines = imageMedicines;
+        this.indicationSet = indicationSet;
+        this.kindOfMedicine = kindOfMedicine;
+    }
 
     public Set<UnitDetail> getUnitDetailSet() {
         return unitDetailSet;
