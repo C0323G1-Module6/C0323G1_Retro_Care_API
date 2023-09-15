@@ -13,8 +13,32 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
- @Query(value = "select code_employee from employee where id = (select max(id) from employee)",nativeQuery = true)
+   /**
+    * Author: TanNV
+    * Date: 15/09/2023
+    * Get code of employee latest
+    * @return  code of employee latest
+    */
+    @Query(value = "select code_employee from employee where id = (select max(id) from employee)",nativeQuery = true)
     String getLastCodeEmployee();
+
+   /**
+    * Author: TanNV
+    * Date: 15/09/2023
+    * Use to save employee
+    * @param code
+    * @param name
+    * @param address
+    * @param phoneNumber
+    * @param startDay
+    * @param birthday
+    * @param idCard
+    * @param image
+    * @param note
+    * @param flagDelete
+    * @param appUserId
+    * @return Employee
+    */
     @Modifying
     @Transactional
     @Query(value = "insert into employee(code_employee,name_employee,address,phone_number,start_day,birthday,id_card,image,note,flag_delete,app_user_id) " +
