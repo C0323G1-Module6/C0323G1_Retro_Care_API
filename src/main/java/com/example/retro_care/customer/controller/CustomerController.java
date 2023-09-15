@@ -89,10 +89,10 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = "", required = false) Long id,
+                                             @RequestParam(defaultValue = "", required = false) String groupValue,
                                              @RequestParam(defaultValue = "code", required = false) String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", id, sortItem);
+        Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
         if (!customers.isEmpty()) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
