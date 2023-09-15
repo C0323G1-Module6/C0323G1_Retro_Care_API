@@ -18,7 +18,4 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     void createOrderForUser(@Param("appUserId") Long appUserId);
 
 
-
-
-
 }

@@ -1,9 +1,12 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
-import com.example.retro_care.order.repository.MedicineQuantityProjection;
+import com.example.retro_care.order.projection.MedicineQuantityProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CartDetailsService implements ICartDetailsService{
@@ -34,5 +37,10 @@ public class CartDetailsService implements ICartDetailsService{
     @Override
     public MedicineQuantityProjection checkQuantityBasedOnUnit(Long medicineId) {
         return iCartDetailsRepository.checkQuantityBasedOnUnit(medicineId);
+    }
+
+    @Override
+    public List<CartProjection> findCartDetailsByUserId(Long appUserId) {
+        return iCartDetailsRepository.findCartDetailsByUserId(appUserId);
     }
 }

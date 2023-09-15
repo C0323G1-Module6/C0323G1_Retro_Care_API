@@ -1,6 +1,4 @@
-package com.example.retro_care.order.repository;
-
-import org.springframework.beans.factory.annotation.Value;
+package com.example.retro_care.order.projection;
 
 public interface MedicineQuantityProjection {
     Long getId();

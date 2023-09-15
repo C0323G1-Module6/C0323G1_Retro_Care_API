@@ -1,11 +1,10 @@
 package com.example.retro_care.order.controller;
 
-import com.example.retro_care.order.repository.MedicineQuantityProjection;
+import com.example.retro_care.order.projection.MedicineQuantityProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

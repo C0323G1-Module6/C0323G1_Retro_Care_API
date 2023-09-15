@@ -1,0 +1,33 @@
+CREATE PROCEDURE createOrder(IN user_id BIGINT)
+BEGIN
+    -- create a new order
+    INSERT INTO orders (date_time, flag_deleted)
+    VALUES (NOW(), 0);
+
+    -- get the ID of the new added order
+    SET @order_id = LAST_INSERT_ID();
+
+    -- uupdate the 'code' field with the prefix 'KOL' and the orderId
+    UPDATE orders
+    SET code = CONCAT('KOL', @order_id)
+    WHERE id = @order_id;
+
+    -- insert a new row into user_order
+    INSERT INTO user_order (app_user_id, order_id)
+    VALUES (user_id, @order_id);
+
+    -- Create new order details for each item in the cart
+    INSERT INTO order_details (order_id, medicine_id, quantity)
+    SELECT @order_id, medicine_id, quantity
+    FROM cart_details
+    WHERE app_user_id = user_id;
+
+    -- update the quantity in the medicine table
+    UPDATE medicine AS m
+        INNER JOIN cart_details AS c ON m.id = c.medicine_id
+    SET m.quantity = m.quantity - c.quantity
+    WHERE c.app_user_id = user_id;
+
+    -- delete the items from the cart
+    DELETE FROM cart_details WHERE app_user_id = user_id;
+END;
