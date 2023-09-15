@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
 public class OrderController {
     @Autowired
     private IOrderService iOrderService;
