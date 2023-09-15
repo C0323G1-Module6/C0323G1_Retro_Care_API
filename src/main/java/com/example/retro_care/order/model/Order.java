@@ -1,10 +1,7 @@
 package com.example.retro_care.order.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -16,8 +13,10 @@ public class Order {
 
     private String code;
 
+    @Column(name = "date_time")
     private LocalDate dateTime;
 
+    @Column(name = "flag_deleted")
     private Boolean flagDeleted;
 
     private String note;
