@@ -20,7 +20,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Query(value = "UPDATE retro_care.customer set name =:name,birth_day=:birth_day,address=:address,phone_number=:phone_number,email=:email,note=:note,flag_deleted = true WHERE id =:id", nativeQuery = true)
     void updateCustomer(@Param(value = "name") String name, @Param(value = "birth_day") String birthDay, @Param(value = "address") String address, @Param(value = "phone_number") String phoneNumber, @Param(value = "email") String email, @Param(value = "note") String note, @Param(value = "id") Long id);
 
-    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id", nativeQuery = true)   
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id", nativeQuery = true)
     Customer findCustomerById(@Param(value = "id") Long id);
 
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number", nativeQuery = true)
