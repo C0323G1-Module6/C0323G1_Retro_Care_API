@@ -1,74 +1,40 @@
-package com.example.retro_care.medicine.model;
+package com.example.retro_care.medicine.dto;
 
 import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
+import com.example.retro_care.medicine.model.ImageMedicine;
+import com.example.retro_care.medicine.model.UnitDetail;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.persistence.*;
-import java.util.Set;
+import javax.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "medicine")
-public class Medicine {
-    @Id
-    @Column(name = "id")
+
+public class MedicineDto implements Validator {
     private Long id;
 
-    @Column(name = "code")
     private String code;
-
-    @Column(name = "name")
+    @NotBlank(message = "Không được để trống trường này")
     private String name;
-
-    @Column(name = "price")
     private Double price;
-
-    @Column(name = "quantity")
     private Long quantity;
-
-    @Column(name = "vat")
     private Float vat;
-
-    @Column(name = "note", columnDefinition = "LONGTEXT")
     private String note;
-
-    @Column(name = "maker")
     private String maker;
-
-    @Column(name = "active_element", columnDefinition = "TEXT")
+    @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
-
-    @Column(name = "origin")
     private String origin;
-
-    @Column(name = "retail_profits")
     private Float retailProfits;
-
-    @Column(name = "flag_deleted")
     private Boolean flagDeleted;
-    @JsonBackReference
-    @OneToMany(mappedBy = "medicine")
-    private Set<UnitDetail> unitDetailSet;
-    @JsonBackReference
-    @OneToMany(mappedBy = "medicine")
-    private Set<ImageMedicine> imageMedicines;
-
-    @JsonBackReference
-    @OneToMany(mappedBy = "medicine")
-    private Set<Indication> indicationSet;
-
-    @ManyToOne
-    @JoinColumn(name = "kind_of_medicine_id")
     private KindOfMedicine kindOfMedicine;
+    private UnitDetail unitDetail;
+    private ImageMedicine imageMedicine;
 
-    public Medicine() {
+    public MedicineDto() {
     }
 
-
-    public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note,
-                    String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted,
-                    Set<UnitDetail> unitDetailSet, Set<ImageMedicine> imageMedicines, Set<Indication> indicationSet,
-                    KindOfMedicine kindOfMedicine) {
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -81,30 +47,13 @@ public class Medicine {
         this.origin = origin;
         this.retailProfits = retailProfits;
         this.flagDeleted = flagDeleted;
-        this.unitDetailSet = unitDetailSet;
-        this.imageMedicines = imageMedicines;
-        this.indicationSet = indicationSet;
         this.kindOfMedicine = kindOfMedicine;
-    }
-
-    public Set<UnitDetail> getUnitDetailSet() {
-        return unitDetailSet;
-    }
-
-    public void setUnitDetailSet(Set<UnitDetail> unitDetailSet) {
-        this.unitDetailSet = unitDetailSet;
-    }
-
-    public Set<ImageMedicine> getImageMedicines() {
-        return imageMedicines;
-    }
-
-    public void setImageMedicines(Set<ImageMedicine> imageMedicines) {
-        this.imageMedicines = imageMedicines;
+        this.unitDetail = unitDetail;
+        this.imageMedicine = imageMedicine;
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -112,7 +61,7 @@ public class Medicine {
     }
 
     public String getCode() {
-        return this.code;
+        return code;
     }
 
     public void setCode(String code) {
@@ -120,7 +69,7 @@ public class Medicine {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -128,7 +77,7 @@ public class Medicine {
     }
 
     public Double getPrice() {
-        return this.price;
+        return price;
     }
 
     public void setPrice(Double price) {
@@ -136,7 +85,7 @@ public class Medicine {
     }
 
     public Long getQuantity() {
-        return this.quantity;
+        return quantity;
     }
 
     public void setQuantity(Long quantity) {
@@ -144,7 +93,7 @@ public class Medicine {
     }
 
     public Float getVat() {
-        return this.vat;
+        return vat;
     }
 
     public void setVat(Float vat) {
@@ -152,7 +101,7 @@ public class Medicine {
     }
 
     public String getNote() {
-        return this.note;
+        return note;
     }
 
     public void setNote(String note) {
@@ -160,7 +109,7 @@ public class Medicine {
     }
 
     public String getMaker() {
-        return this.maker;
+        return maker;
     }
 
     public void setMaker(String maker) {
@@ -168,7 +117,7 @@ public class Medicine {
     }
 
     public String getActiveElement() {
-        return this.activeElement;
+        return activeElement;
     }
 
     public void setActiveElement(String activeElement) {
@@ -176,7 +125,7 @@ public class Medicine {
     }
 
     public String getOrigin() {
-        return this.origin;
+        return origin;
     }
 
     public void setOrigin(String origin) {
@@ -184,7 +133,7 @@ public class Medicine {
     }
 
     public Float getRetailProfits() {
-        return this.retailProfits;
+        return retailProfits;
     }
 
     public void setRetailProfits(Float retailProfits) {
@@ -192,19 +141,11 @@ public class Medicine {
     }
 
     public Boolean getFlagDeleted() {
-        return this.flagDeleted;
+        return flagDeleted;
     }
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
-    }
-
-    public Set<Indication> getIndicationSet() {
-        return indicationSet;
-    }
-
-    public void setIndicationSet(Set<Indication> indicationSet) {
-        this.indicationSet = indicationSet;
     }
 
     public KindOfMedicine getKindOfMedicine() {
@@ -215,5 +156,29 @@ public class Medicine {
         this.kindOfMedicine = kindOfMedicine;
     }
 
-}
+    public UnitDetail getUnitDetail() {
+        return unitDetail;
+    }
 
+    public void setUnitDetail(UnitDetail unitDetail) {
+        this.unitDetail = unitDetail;
+    }
+
+    public ImageMedicine getImageMedicine() {
+        return imageMedicine;
+    }
+
+    public void setImageMedicine(ImageMedicine imageMedicine) {
+        this.imageMedicine = imageMedicine;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
+    }
+}
