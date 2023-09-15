@@ -10,14 +10,16 @@ public class KindOfMedicine {
     private int id;
     private String code;
     private  String name;
+    private Boolean flagDeleted;
 
     public KindOfMedicine() {
     }
 
-    public KindOfMedicine(int id, String code, String name) {
+    public KindOfMedicine(int id, String code, String name, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
+        this.flagDeleted = flagDeleted;
     }
 
     public int getId() {
@@ -42,5 +44,13 @@ public class KindOfMedicine {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
+    }
+
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
     }
 }

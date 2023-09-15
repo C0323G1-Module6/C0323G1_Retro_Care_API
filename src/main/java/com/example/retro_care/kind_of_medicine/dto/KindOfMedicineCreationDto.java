@@ -7,14 +7,21 @@ public class KindOfMedicineCreationDto implements Validator {
     private int id;
     private String code;
     private String name;
+    private Boolean flagDeleted;
 
     public KindOfMedicineCreationDto() {
     }
 
-    public KindOfMedicineCreationDto(int id, String code, String name) {
+    public KindOfMedicineCreationDto(int id, String code, String name, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
+        this.flagDeleted = flagDeleted;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
     }
 
     public int getId() {
@@ -41,9 +48,12 @@ public class KindOfMedicineCreationDto implements Validator {
         this.name = name;
     }
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
+    }
+
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
     }
 
     @Override
