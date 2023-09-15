@@ -10,20 +10,25 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(columnDefinition = "varchar(20)")
     private String code;
+    @Column(columnDefinition = "varchar(100)")
     private String name;
     @Column(name = "birth_day", columnDefinition = "date")
     private String birthday;
+    @Column(columnDefinition = "varchar(255)")
     private String address;
-    @Column(name = "phone_number")
+    @Column(name = "phone_number",columnDefinition = "varchar(20)")
     private String phoneNumber;
+    @Column(columnDefinition = "varchar(100)")
     private String email;
     private Long point;
+    @Column(columnDefinition = "text")
     private String note;
-    @Column(name = "flag_deleted", columnDefinition = "bit(1) default=1")
+    @Column(name = "flag_deleted", columnDefinition = "bit(1)")
     private Boolean flagDeleted = true;
     @OneToOne
-    @JoinColumn(name = "app_user_id", referencedColumnName = "id", unique = true)
+    @JoinColumn(name = "app_user_id ",referencedColumnName = "id",nullable = true)
     private AppUser appUser;
 
     public Customer() {
