@@ -10,7 +10,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "varchar(50)",nullable = false)
-    private String codeEmployee ="NV001";
+    private String codeEmployee;
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private String nameEmployee;
     @Column(columnDefinition = "varchar(100)", nullable = false)
