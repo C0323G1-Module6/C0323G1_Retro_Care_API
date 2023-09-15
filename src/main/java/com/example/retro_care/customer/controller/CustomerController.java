@@ -40,14 +40,9 @@ public class CustomerController {
     }
 
     /**
-     *
-     * @param page
-     * @param search
-     * @param code
-     * @param address
-     * @param id
-     * @param sortItem
-     * @return
+     * Author: QuyenHT
+     * Goal: get all customers
+     * return list of customers
      */
     @GetMapping("/list")
     public ResponseEntity<?> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
@@ -63,7 +58,11 @@ public class CustomerController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
+    /**
+     * Author: QuyenHT
+     * Goal: Delete customer by id
+     * return HttpStatus
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         boolean check = customerService.deleteCustomerById(id);
