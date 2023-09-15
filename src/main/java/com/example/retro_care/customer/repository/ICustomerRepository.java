@@ -22,6 +22,11 @@ public interface ICustomerRepository extends JpaRepository<Customer,Long> {
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id",nativeQuery = true)
     Customer findCustomerById(@Param(value = "id") Long id);
 
+    /**
+     * Author: QuyenHT
+     * Goal: get all customers
+     * return list of customers
+     */
     @Query(value = " SELECT code, name, birth_day, address, phone_number, note," +
             "CASE" +
             "WHEN app_user_id is null then 'Khách offline' " +
@@ -32,6 +37,11 @@ public interface ICustomerRepository extends JpaRepository<Customer,Long> {
             "ORDER BY :sortItem", nativeQuery = true)
     Page<Customer> findAllCustomer(Pageable pageable,@Param("searchInput")String searchInput, @Param("code")String code,@Param("address") String address,@Param("appUserId") Long appUserId, @Param("sortItem") String sortItem);
 
+    /**
+     * Author: QuyenHT
+     * Goal: Delete customer by id
+     * return boolean
+     */
     @Modifying
     @Transactional
     @Query(value = " UPDATE retro_care.customer set flag_deleted = false WHERE id = :id ", nativeQuery = true)
