@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
 public class EmployeeDto implements Validator {
-    private String codeEmployee = "NV001";
+    private String codeEmployee;
     private String nameEmployee;
     private String address;
     private String image;
