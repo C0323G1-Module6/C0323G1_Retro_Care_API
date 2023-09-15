@@ -60,8 +60,6 @@ public class ImageMedicine {
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
     }
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> e5b4c5deea7d6691dfab86fd8e2fb84fd8d5c70f
+
