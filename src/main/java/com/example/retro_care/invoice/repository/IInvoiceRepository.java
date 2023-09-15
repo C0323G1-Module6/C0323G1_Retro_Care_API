@@ -29,10 +29,10 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
 
     /**
      * Create by: HuyHD;
-     * Date create: 10/08/2023
+     * Date create: 15/09/2023
      * Function: Delete an invoice by setting the flag_deleted to true based on the provided employee id.
      *
-     * @param id the id ò the employee to be  deleted.
+     * @param id the id of the employee to be  deleted.
      */
     @Transactional
     @Modifying
@@ -43,6 +43,18 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
 
 //    @Transactional
 //    @Modifying
+
+    /**
+     * Create by: HuyHD;
+     * Date create: 15/09/2023;
+     * Function: Search by invoice creation time, and sort by column;
+     * @param start_date
+     * @param end_date
+     * @param start_time
+     * @param end_time
+     * @param sort_column
+     * @return
+     */
     @Query(nativeQuery = true, value = "SELECT *\n" +
             "FROM invoice \n" +
             "WHERE \n" +

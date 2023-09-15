@@ -63,7 +63,9 @@ public class InvoiceController {
     }
 
     /**
-     *
+     *Create by: HuyHD;
+     * Date create: 15/09/2023
+     * Function: Search by invoice creation time, and sort by column;
      * @param start_date
      * @param end_date
      * @param start_time
