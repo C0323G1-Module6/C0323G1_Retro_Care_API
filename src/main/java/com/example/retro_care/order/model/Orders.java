@@ -1,11 +1,10 @@
 package com.example.retro_care.order.model;
 
-
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +20,7 @@ public class Order {
 
     private String note;
 
-    public Order() {
+    public Orders() {
     }
 
     public String getCode() {
