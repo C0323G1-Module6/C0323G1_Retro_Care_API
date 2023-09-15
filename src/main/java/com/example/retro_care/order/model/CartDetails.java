@@ -6,9 +6,9 @@ import com.example.retro_care.user.model.AppUser;
 import javax.persistence.*;
 
 @Entity
-@Table(indexes = {
-        @Index(name = "uniqueMultiIndex", columnList = "app_user_id, medicine_id", unique = true)
-})
+//@Table(indexes = {
+//        @Index(name = "uniqueMultiIndex", columnList = "app_user_id, medicine_id", unique = true)
+//})
 public class CartDetails {
 
 
@@ -19,12 +19,12 @@ public class CartDetails {
 
 
     @ManyToOne
-    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
+//    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUser;
 
 
     @ManyToOne
-    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+//    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
 
     private Integer quantity;

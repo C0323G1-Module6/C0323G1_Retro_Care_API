@@ -16,7 +16,7 @@ public class KindOfMedicineService implements IKindOfMedicineService {
 
     @Override
     public List<KindOfMedicine> getListKindOfMedicine() {
-        return null;
+        return kindOfMedicineRepository.findAll();
     }
 
     @Override
@@ -25,23 +25,24 @@ public class KindOfMedicineService implements IKindOfMedicineService {
     }
 
     @Override
-    public KindOfMedicine getKindOfMedicineById(Integer id) {
+    public KindOfMedicine getKindOfMedicineById(Long id) {
         return null;
     }
 
     @Override
-    public void deleteKindOfMedicineById(Integer id) {
-
+    public void deleteKindOfMedicineById(Long id) {
+        kindOfMedicineRepository.deleteById(id);
     }
 
     @Override
-    public Boolean deleteKindOfMedicine(int id) {
-        return null;
+    public Boolean deleteKindOfMedicine(Long id) {
+        kindOfMedicineRepository.deleteById(id);
+        return true;
     }
 
     @Override
     public void addKindOfMedicine(KindOfMedicine kindOfMedicine) {
-
+        kindOfMedicineRepository.save(kindOfMedicine);
     }
 
     @Override

@@ -9,10 +9,10 @@ import java.util.List;
 public interface IKindOfMedicineService {
     List<KindOfMedicine>getListKindOfMedicine();
     Page<KindOfMedicine>getPageKindOfMedicine(Pageable pageable,String searchCode,String searchName);
-     KindOfMedicine getKindOfMedicineById(Integer id);
+     KindOfMedicine getKindOfMedicineById(Long id);
 
-    void deleteKindOfMedicineById(Integer id);
-    Boolean deleteKindOfMedicine(int id);
+    void deleteKindOfMedicineById(Long id);
+    Boolean deleteKindOfMedicine(Long id);
     void addKindOfMedicine(KindOfMedicine kindOfMedicine);
     void editKindOfMedicine(KindOfMedicine kindOfMedicine);
 
