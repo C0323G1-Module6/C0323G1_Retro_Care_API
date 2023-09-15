@@ -1,7 +1,6 @@
 package com.example.retro_care.employee.model;
 
 import com.example.retro_care.user.model.AppUser;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
@@ -11,9 +10,9 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(columnDefinition = "varchar(50)",nullable = false)
-    private String code="NV001";
+    private String codeEmployee;
     @Column(columnDefinition = "varchar(100)", nullable = false)
-    private String name;
+    private String nameEmployee;
     @Column(columnDefinition = "varchar(100)", nullable = false)
     private String address;
     @Column(columnDefinition = "longtext")
@@ -28,15 +27,15 @@ public class Employee {
     private String idCard;
     @Column(columnDefinition = "longtext")
     private String note;
-    @Column(columnDefinition = "bit(1) default 1")
-    private boolean flagDelete;
+    @Column(columnDefinition = "bit(1)")
+    private Boolean flagDelete = true;
     @OneToOne
     @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
 
     public Employee(String code, String name, String address, String image, String phoneNumber, String startDay, String birthday, String idCard, String note, AppUser appUser) {
-        this.code = code;
-        this.name = name;
+        this.codeEmployee = code;
+        this.nameEmployee = name;
         this.address = address;
         this.image = image;
         this.phoneNumber = phoneNumber;
@@ -58,20 +57,20 @@ public class Employee {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getCodeEmployee() {
+        return codeEmployee;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCodeEmployee(String code) {
+        this.codeEmployee = code;
     }
 
-    public String getName() {
-        return name;
+    public String getNameEmployee() {
+        return nameEmployee;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNameEmployee(String name) {
+        this.nameEmployee = name;
     }
 
     public String getAddress() {

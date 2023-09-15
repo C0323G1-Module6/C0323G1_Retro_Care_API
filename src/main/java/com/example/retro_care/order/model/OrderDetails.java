@@ -17,7 +17,7 @@ public class OrderDetails {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+    private Orders orders;
 
     @ManyToOne
     @JoinColumn(name = "medicine_id", referencedColumnName = "id")
@@ -36,12 +36,12 @@ public class OrderDetails {
         this.currentPrice = currentPrice;
     }
 
-    public Order getOrder() {
-        return order;
+    public Orders getOrder() {
+        return orders;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(Orders orders) {
+        this.orders = orders;
     }
 
     public Medicine getMedicine() {
