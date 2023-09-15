@@ -1,9 +1,10 @@
 package com.example.retro_care.kind_of_medicine.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.example.retro_care.medicine.model.Medicine;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class KindOfMedicine {
@@ -11,17 +12,22 @@ public class KindOfMedicine {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String code;
-    private String name;
-    private boolean flagDelete;
+    private  String name;
+    private Boolean flagDeleted;
+
+//    @JsonBackReference
+    @OneToMany(mappedBy = "kindOfMedicine")
+    private Set<Medicine> medicineSet;
 
     public KindOfMedicine() {
     }
 
-    public KindOfMedicine(Long id, String code, String name, boolean flagDelete) {
+    public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted, Set<Medicine> medicineSet) {
         this.id = id;
         this.code = code;
         this.name = name;
-        this.flagDelete = flagDelete;
+        this.flagDeleted = flagDeleted;
+        this.medicineSet = medicineSet;
     }
 
     public Long getId() {
@@ -48,11 +54,19 @@ public class KindOfMedicine {
         this.name = name;
     }
 
-    public boolean isFlagDelete() {
-        return flagDelete;
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
     }
 
-    public void setFlagDelete(boolean flagDelete) {
-        this.flagDelete = flagDelete;
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
+    }
+
+    public Set<Medicine> getMedicineSet() {
+        return medicineSet;
+    }
+
+    public void setMedicineSet(Set<Medicine> medicineSet) {
+        this.medicineSet = medicineSet;
     }
 }

@@ -1,56 +1,39 @@
 package com.example.retro_care.order.model;
 
+
 import com.example.retro_care.medicine.model.Medicine;
 
 import javax.persistence.*;
 
 @Entity
-public class OrderDetails {
 
+public class OrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long currentPrice;
-    private Long quantity;
+
+
+    private Double currentPrice;
 
     @ManyToOne
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Orders orders;
+
     @ManyToOne
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
+
+    private Integer quantity;
 
     public OrderDetails() {
     }
 
-    public OrderDetails(Long id, Long currentPrice, Long quantity, Orders orders, Medicine medicine) {
-        this.id = id;
-        this.currentPrice = currentPrice;
-        this.quantity = quantity;
-        this.orders = orders;
-        this.medicine = medicine;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getCurrentPrice() {
+    public Double getCurrentPrice() {
         return currentPrice;
     }
 
-    public void setCurrentPrice(Long currentPrice) {
+    public void setCurrentPrice(Double currentPrice) {
         this.currentPrice = currentPrice;
-    }
-
-    public Long getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Long quantity) {
-        this.quantity = quantity;
     }
 
     public Orders getOrder() {
@@ -67,5 +50,21 @@ public class OrderDetails {
 
     public void setMedicine(Medicine medicine) {
         this.medicine = medicine;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

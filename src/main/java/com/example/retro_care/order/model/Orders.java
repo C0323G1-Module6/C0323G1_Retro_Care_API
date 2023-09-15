@@ -1,37 +1,26 @@
 package com.example.retro_care.order.model;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Orders {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String code;
-    private LocalDateTime dateTime;
-    private boolean flagDelete;
-    @Column(columnDefinition = "LONGTEXT")
+
+    @Column(name = "date_time")
+    private LocalDate dateTime;
+
+    @Column(name = "flag_deleted")
+    private Boolean flagDeleted;
+
     private String note;
 
     public Orders() {
-    }
-
-    public Orders(Long id, String code, LocalDateTime dateTime, boolean flagDelete, String note) {
-        this.id = id;
-        this.code = code;
-        this.dateTime = dateTime;
-        this.flagDelete = flagDelete;
-        this.note = note;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getCode() {
@@ -42,20 +31,20 @@ public class Orders {
         this.code = code;
     }
 
-    public LocalDateTime getDateTime() {
+    public LocalDate getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(LocalDate dateTime) {
         this.dateTime = dateTime;
     }
 
-    public boolean isFlagDelete() {
-        return flagDelete;
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
     }
 
-    public void setFlagDelete(boolean flagDelete) {
-        this.flagDelete = flagDelete;
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
     }
 
     public String getNote() {
@@ -64,5 +53,13 @@ public class Orders {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
     }
 }

@@ -1,78 +1,76 @@
 package com.example.retro_care.employee.model;
 
-import com.example.retro_care.order.model.AppUser;
+import com.example.retro_care.user.model.AppUser;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String code;
-    @Column(columnDefinition = "LONGTEXT")
-    private String image;
+    @Column(columnDefinition = "varchar(50)",nullable = false)
+    private String codeEmployee;
+    @Column(columnDefinition = "varchar(100)", nullable = false)
     private String nameEmployee;
+    @Column(columnDefinition = "varchar(100)", nullable = false)
     private String address;
+    @Column(columnDefinition = "longtext")
+    private String image;
+    @Column(columnDefinition = "varchar(15)", nullable = false)
     private String phoneNumber;
+    @Column(columnDefinition = "date", nullable = false)
     private String startDay;
-    private String birthDay;
+    @Column(columnDefinition = "date", nullable = false)
+    private String birthday;
+    @Column(columnDefinition = "varchar(20)", nullable = false)
     private String idCard;
-    @Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "longtext")
     private String note;
-    private boolean flagDelete;
-    @ManyToOne
+    @Column(columnDefinition = "bit(1)")
+    private Boolean flagDelete = true;
+    @OneToOne
+    @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
+
+    public Employee(String code, String name, String address, String image, String phoneNumber, String startDay, String birthday, String idCard, String note, AppUser appUser) {
+        this.codeEmployee = code;
+        this.nameEmployee = name;
+        this.address = address;
+        this.image = image;
+        this.phoneNumber = phoneNumber;
+        this.startDay = startDay;
+        this.birthday = birthday;
+        this.idCard = idCard;
+        this.note = note;
+        this.appUser = appUser;
+    }
 
     public Employee() {
     }
 
-    public Employee(Long id, String code, String image, String nameEmployee, String address, String phoneNumber, String startDay, String birthDay, String idCard, String note, boolean flagDelete, AppUser appUser) {
-        this.id = id;
-        this.code = code;
-        this.image = image;
-        this.nameEmployee = nameEmployee;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.startDay = startDay;
-        this.birthDay = birthDay;
-        this.idCard = idCard;
-        this.note = note;
-        this.flagDelete = flagDelete;
-        this.appUser = appUser;
-    }
-
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
+    public String getCodeEmployee() {
+        return codeEmployee;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
+    public void setCodeEmployee(String code) {
+        this.codeEmployee = code;
     }
 
     public String getNameEmployee() {
         return nameEmployee;
     }
 
-    public void setNameEmployee(String nameEmployee) {
-        this.nameEmployee = nameEmployee;
+    public void setNameEmployee(String name) {
+        this.nameEmployee = name;
     }
 
     public String getAddress() {
@@ -81,6 +79,14 @@ public class Employee {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getPhoneNumber() {
@@ -99,12 +105,12 @@ public class Employee {
         this.startDay = startDay;
     }
 
-    public String getBirthDay() {
-        return birthDay;
+    public String getBirthday() {
+        return birthday;
     }
 
-    public void setBirthDay(String birthDay) {
-        this.birthDay = birthDay;
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
     }
 
     public String getIdCard() {
