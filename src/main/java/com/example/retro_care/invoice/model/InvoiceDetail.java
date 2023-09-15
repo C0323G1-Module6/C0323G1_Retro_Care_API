@@ -4,6 +4,7 @@ import com.example.retro_care.medicine.model.Medicine;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class InvoiceDetail {
@@ -102,5 +103,18 @@ public class InvoiceDetail {
 
     public void setExpiry(Date expiry) {
         this.expiry = expiry;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InvoiceDetail)) return false;
+        InvoiceDetail that = (InvoiceDetail) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getDiscount(), that.getDiscount()) && Objects.equals(getExpiry(), that.getExpiry()) && Objects.equals(getMedicineQuantity(), that.getMedicineQuantity()) && Objects.equals(getLot(), that.getLot()) && Objects.equals(getFlagDeleted(), that.getFlagDeleted()) && Objects.equals(getMedicineId(), that.getMedicineId()) && Objects.equals(getInvoiceId(), that.getInvoiceId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getDiscount(), getExpiry(), getMedicineQuantity(), getLot(), getFlagDeleted(), getMedicineId(), getInvoiceId());
     }
 }

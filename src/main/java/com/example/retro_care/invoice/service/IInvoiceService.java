@@ -8,4 +8,5 @@ public interface IInvoiceService {
     Invoice editInvoice(Invoice invoice);
 
     Invoice getInvoiceById(Long invoiceId);
+
 }

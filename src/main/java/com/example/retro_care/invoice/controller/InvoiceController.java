@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/invoice")
+@RequestMapping("/api/invoice")
 public class InvoiceController {
     @Autowired
     IInvoiceService invoiceService;
@@ -29,14 +29,16 @@ public class InvoiceController {
      */
     @PostMapping("/create")
     public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDto invoiceDto) {
-        Invoice invoice = new Invoice();
-        BeanUtils.copyProperties(invoiceDto, invoice);
-        Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-            invoiceDetail.setInvoiceId(selectedInvoice);
-            invoiceDetailService.createInvoiceDetail(invoiceDetail);
-        }
-        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
+//        Invoice invoice = new Invoice();
+//        BeanUtils.copyProperties(invoiceDto, invoice);
+//        Invoice selectedInvoice = invoiceService.createInvoice(invoice);
+//        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+//            invoiceDetail.setInvoiceId(selectedInvoice);
+//            invoiceDetailService.createInvoiceDetail(invoiceDetail);
+//        }
+        System.out.println(invoiceDto);
+//        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -65,12 +67,13 @@ public class InvoiceController {
     public ResponseEntity<Invoice> editInvoice(@RequestBody InvoiceDto invoiceDto) {
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        invoiceDetailService.deleteInvoiceDetail(invoice.getId());
-        Invoice selectedInvoice = invoiceService.editInvoice(invoice);
         for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-            invoiceDetail.setInvoiceId(selectedInvoice);
-            invoiceDetailService.createInvoiceDetail(invoiceDetail);
+            if (invoiceDetail.getId() == null)
+                invoiceDetailService.createInvoiceDetail(invoiceDetail);
+            else if (!invoiceDetailService.getInvoiceDetailById(invoiceDetail.getId()).equals(invoiceDetail))
+                invoiceDetailService.editInvoiceDetail(invoiceDetail);
         }
+        Invoice selectedInvoice = invoiceService.editInvoice(invoice);
         return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 }

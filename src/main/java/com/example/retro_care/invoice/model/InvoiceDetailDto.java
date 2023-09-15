@@ -91,4 +91,17 @@ public class InvoiceDetailDto {
     public void setInvoiceId(Invoice invoiceId) {
         this.invoiceId = invoiceId;
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceDetailDto{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicineId=" + medicineId +
+                ", invoiceId=" + invoiceId +
+                '}';
+    }
 }

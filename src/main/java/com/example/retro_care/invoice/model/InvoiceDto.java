@@ -128,4 +128,20 @@ public class InvoiceDto implements Validator {
     public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
         this.invoiceDetailSet = invoiceDetailSet;
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceDto{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", creationDate=" + creationDate +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", supplierId=" + supplierId +
+                ", appUserId=" + appUserId +
+                ", invoiceDetailSet=" + invoiceDetailSet +
+                '}';
+    }
 }
