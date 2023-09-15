@@ -7,11 +7,33 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
+    /**
+     * Find a Medicine by its ID-TinVV
+     *
+     * @param id The ID of the Medicine to find.
+     * @return The Medicine object with the specified ID.
+     */
     @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name\n" +
             "FROM retro_care.medicine AS m\n" +
             "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id\n" +
             "where m.kind_of_medicine_id=3; ", nativeQuery = true)
     Medicine findMedicineById(@Param("id") Long id);
+
+    /**
+     * Add a new Medicine to the system-TinVV
+     *
+     * @param code             The code of the Medicine.
+     * @param name             The name of the Medicine.
+     * @param price            The price of the Medicine.
+     * @param quantity         The quantity of the Medicine.
+     * @param vat              The VAT (Value Added Tax) of the Medicine.
+     * @param note             The note for the Medicine.
+     * @param maker            The maker of the Medicine.
+     * @param activeElement    The active element of the Medicine.
+     * @param origin           The origin of the Medicine.
+     * @param retailProfits    The retail profits of the Medicine.
+     * @param kindOfMedicineId The ID of the associated KindOfMedicine.
+     */
 
     @Modifying
     @Query(value = "INSERT INTO medicine (code, name, price, quantity, vat, note, maker, active_element, origin, " +
@@ -23,6 +45,21 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
                      String origin, @Param("retailProfits") Float retailProfits, @Param("kindOfMedicineId")
                      Long kindOfMedicineId);
 
+    /**
+     * Update an existing Medicine in the system-TinVV
+     *
+     * @param id               The ID of the Medicine to update.
+     * @param name             The updated name of the Medicine.
+     * @param price            The updated price of the Medicine.
+     * @param quantity         The updated quantity of the Medicine.
+     * @param vat              The updated VAT (Value Added Tax) of the Medicine.
+     * @param note             The updated note for the Medicine.
+     * @param maker            The updated maker of the Medicine.
+     * @param activeElement    The updated active element of the Medicine.
+     * @param origin           The updated origin of the Medicine.
+     * @param retailProfits    The updated retail profits of the Medicine.
+     * @param kindOfMedicineId The updated ID of the associated KindOfMedicine.
+     */
     @Modifying
     @Query(value = "UPDATE medicine SET name = :name, price = :price, quantity = :quantity, vat = :vat, " +
             "note = :note, maker = :maker, active_element = :activeElement, origin = :origin, " +

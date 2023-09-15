@@ -14,11 +14,22 @@ public class MedicineService implements IMedicineService {
     @Autowired
     private IMedicineRepository iMedicineRepository;
 
+    /**
+     * Find a medicine by its ID-TinVV
+     *
+     * @param id The ID of the medicine to find.
+     * @return The Medicine object with the specified ID.
+     */
     @Override
     public Medicine findMedicineById(Long id) {
         return iMedicineRepository.findMedicineById(id);
     }
 
+    /**
+     * Edit an existing medicine-TinVV
+     *
+     * @param medicine The Medicine object containing the updated information.
+     */
     @Override
     public void editMedicine(Medicine medicine) {
         iMedicineRepository.updateMedicine(medicine.getId(), medicine.getName(), medicine.getPrice(),
@@ -27,6 +38,11 @@ public class MedicineService implements IMedicineService {
                 medicine.getKindOfMedicine().getId());
     }
 
+    /**
+     * Add a new medicine to the system-TinVV
+     *
+     * @param medicine The Medicine object to be added.
+     */
     @Override
     public void addMedicine(Medicine medicine) {
         UUID uuid = UUID.randomUUID();

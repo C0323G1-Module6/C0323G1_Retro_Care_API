@@ -29,6 +29,13 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+    /**
+     * Find a medicine by its ID-TinVV
+     *
+     * @param id The ID of the medicine to find.
+     * @return ResponseEntity with the corresponding HTTP status code.
+     *         - HttpStatus.OK if the medicine is found.
+     */
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity findMedicineById(@PathVariable("id") Long id) {
@@ -37,23 +44,43 @@ public class MedicineController {
         iMedicineService.findMedicineById(id);
         return new ResponseEntity<>( HttpStatus.OK);
     }
+    /**
+     * Add a new medicine to the system-TinVV
+     *
+     * @param medicineDto     The DTO object containing information about the new medicine.
+     * @param bindingResult   The result of the data binding and validation process.
+     * @return                ResponseEntity with the corresponding HTTP status code.
+     *                        - HttpStatus.OK if the medicine is successfully added.
+     *                        - HttpStatus.BAD_REQUEST if there are errors in the data validation process.
+     */
     @PostMapping("")
     @ResponseBody
     public ResponseEntity addMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
         }
+        // Create Medicine, UnitDetail, and ImageMedicine objects from medicineDto
         Medicine  medicine=new Medicine();
         UnitDetail unitDetail=new UnitDetail();
         ImageMedicine imageMedicine=new ImageMedicine();
         BeanUtils.copyProperties(medicineDto,medicine);
         BeanUtils.copyProperties(medicineDto.getUnitDetail(),unitDetail);
         BeanUtils.copyProperties(medicineDto.getImageMedicine(),imageMedicine);
+        // Call the services to add medicine, image, and unit detail information to the system
         iMedicineService.addMedicine(medicine);
         iImageMedicineService.addImageMedicine(imageMedicine);
         iUnitDetailService.addUnitDetail(unitDetail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+    /**
+     * Edit an existing medicine-TinVV
+     *
+     * @param medicineDto     The DTO object containing information about the edited medicine.
+     * @param bindingResult   The result of the data binding and validation process.
+     * @return                ResponseEntity with the corresponding HTTP status code.
+     *                        - HttpStatus.OK if the medicine is successfully edited.
+     *                        - HttpStatus.BAD_REQUEST if there are errors in the data validation process.
+     */
     @PutMapping("")
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult){
