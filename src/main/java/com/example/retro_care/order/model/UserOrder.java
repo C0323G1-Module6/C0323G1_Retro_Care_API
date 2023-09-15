@@ -18,7 +18,7 @@ public class UserOrder {
 
     @ManyToOne
     @JoinColumn(name = "order_id", referencedColumnName = "id")
-    private Order order;
+    private Orders orders;
 
 
     public void setId(Long id) {
