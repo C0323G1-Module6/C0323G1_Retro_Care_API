@@ -1,14 +1,12 @@
 package com.example.retro_care.order.model;
 
-import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class AppUser {
+public class OrderAppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,10 +15,10 @@ public class AppUser {
     private boolean flagDelete;
     private boolean flagOnline;
 
-    public AppUser() {
+    public OrderAppUser() {
     }
 
-    public AppUser(Long id, String userName, String password, boolean flagDelete, boolean flagOnline) {
+    public OrderAppUser(Long id, String userName, String password, boolean flagDelete, boolean flagOnline) {
         this.id = id;
         this.userName = userName;
         this.password = password;
