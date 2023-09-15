@@ -20,6 +20,7 @@ public class PrescriptionController {
     @Autowired
     private IIndicationService indicationService;
 
+
     @GetMapping("/prescription")
     public ResponseEntity<Page<Prescription>> getAllPrescription(@RequestParam(defaultValue = "0") int page,
                                                                  @RequestParam(defaultValue = "5") int size){
@@ -33,8 +34,8 @@ public class PrescriptionController {
 
     @PostMapping("/prescription/create")
     public ResponseEntity<?> createPrescription(@RequestBody Prescription prescription, @RequestBody Indication indication){
-        prescriptionService.createPrescription(prescription);
         indicationService.createIndication(indication);
+        prescriptionService.createPrescription(prescription);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

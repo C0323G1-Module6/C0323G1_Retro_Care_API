@@ -1,6 +1,8 @@
 package com.example.retro_care.medicine.service;
 
 import com.example.retro_care.medicine.model.Medicine;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IMedicineService {
     /**
@@ -24,4 +26,6 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
+    Page<Medicine> findAll(Pageable pageable);
+  
 }

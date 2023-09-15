@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     /**
@@ -70,4 +72,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
                         @Param("maker") String maker, @Param("activeElement") String activeElement,
                         @Param("origin") String origin, @Param("retailProfits") Float retailProfits,
                         @Param("kindOfMedicineId") Long kindOfMedicineId);
+
+    Page<Medicine> findAll(Pageable pageable);
+
 }
