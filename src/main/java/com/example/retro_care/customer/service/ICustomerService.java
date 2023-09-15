@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ICustomerService {
-    void saveCustomer(Customer customer);
+    Customer saveCustomer(Customer customer);
     void updateCustomer(Customer customer);
     Customer findCustomerById(Long id);
 
