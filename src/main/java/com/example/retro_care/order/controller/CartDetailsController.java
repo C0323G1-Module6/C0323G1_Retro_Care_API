@@ -1,13 +1,12 @@
 package com.example.retro_care.order.controller;
 
-
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @CrossOrigin
-@RequestMapping("/orders")
-public class OrderController {
+@RequestMapping("/carts")
+public class CartDetailsController {
 
 }

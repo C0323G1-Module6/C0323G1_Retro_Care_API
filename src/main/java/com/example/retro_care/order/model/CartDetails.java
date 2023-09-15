@@ -6,6 +6,9 @@ import com.example.retro_care.user.model.AppUser;
 import javax.persistence.*;
 
 @Entity
+@Table(indexes = {
+        @Index(name = "uniqueMultiIndex", columnList = "medicine, app_User", unique = true)
+})
 public class CartDetails {
 
 
@@ -14,6 +17,7 @@ public class CartDetails {
     private Long id;
 
 
+    @Column(name = "app_user")
     @ManyToOne
     private AppUser appUser;
 
