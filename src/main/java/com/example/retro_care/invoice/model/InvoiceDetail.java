@@ -3,16 +3,15 @@ package com.example.retro_care.invoice.model;
 import com.example.retro_care.medicine.model.Medicine;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class InvoiceDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-
     private Float discount;
-
+    private Date expiry;
     private Integer medicineQuantity;
 
     private String lot;
@@ -28,6 +27,17 @@ public class InvoiceDetail {
     private Invoice invoiceId;
 
     public InvoiceDetail() {
+    }
+
+    public InvoiceDetail(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
+        this.id = id;
+        this.discount = discount;
+        this.expiry = expiry;
+        this.medicineQuantity = medicineQuantity;
+        this.lot = lot;
+        this.flagDeleted = flagDeleted;
+        this.medicineId = medicineId;
+        this.invoiceId = invoiceId;
     }
 
     public Long getId() {
@@ -84,5 +94,13 @@ public class InvoiceDetail {
 
     public void setInvoiceId(Invoice invoiceId) {
         this.invoiceId = invoiceId;
+    }
+
+    public Date getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
     }
 }
