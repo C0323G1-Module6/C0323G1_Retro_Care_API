@@ -27,11 +27,21 @@ public class CustomerService implements ICustomerService {
         return customerRepository.findCustomerById(id);
     }
 
+    /**
+     * Author: QuyenHT
+     * Goal: get all customers
+     * return list of customers
+     */
     @Override
     public Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, Long appUserId, String sortItem) {
         return customerRepository.findAllCustomer(pageable, searchInput, code, address, appUserId, sortItem);
     }
 
+    /**
+     * Author: QuyenHT
+     * Goal: Delete customer by id
+     * return boolean
+     */
     @Override
     public boolean deleteCustomerById(Long id) {
         try {
