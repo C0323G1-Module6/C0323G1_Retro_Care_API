@@ -81,9 +81,9 @@ public class MedicineService implements IMedicineService {
     @Override
     public Boolean removeMedicine(Long id) {
         if (iMedicineRepository.findMedicineById(id) == null) {
-            return false;
+            return true;
         }
         iMedicineRepository.findMedicineById(id);
-        return true;
+        return false;
     }
 }

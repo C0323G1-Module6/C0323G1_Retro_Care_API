@@ -83,10 +83,10 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @return : Medicine list with pagination
      */
 //    @Modifying
-    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m " +
+    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +
             "    unit_detail ud ON m.id = ud.medicine_id " +
             " LEFT JOIN " +
-            "    unit u ON ud.unit_id = u.id ", nativeQuery = true)
+            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
     Page<Medicine> findAll(Pageable pageable);
 }
