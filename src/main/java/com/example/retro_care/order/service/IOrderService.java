@@ -1,5 +1,6 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.sun.tools.javac.util.List;
 import org.hibernate.criterion.Order;
@@ -18,7 +19,7 @@ public interface IOrderService {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    Page<Orders> getListOrder(Pageable pageable);
+    Page<IOrderProjection> getListOrder(Pageable pageable);
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
