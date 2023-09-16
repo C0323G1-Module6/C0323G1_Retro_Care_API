@@ -36,7 +36,7 @@ public class CartDetailsService implements ICartDetailsService{
 
     @Override
     public MedicineQuantityProjection checkQuantityBasedOnUnit(Long medicineId) {
-        return iCartDetailsRepository.checkQuantityBasedOnUnit(medicineId);
+        return iCartDetailsRepository.getQuantityBasedOnUnit(medicineId);
     }
 
     @Override
