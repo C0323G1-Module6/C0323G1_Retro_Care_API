@@ -1,5 +1,6 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.sun.tools.javac.util.List;
 import org.hibernate.criterion.Order;
@@ -18,7 +19,7 @@ public interface IOrderService {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    Page<Orders> getListOrder(Pageable pageable);
+    Page<IOrderProjection> getListOrder(Pageable pageable);
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -43,4 +44,39 @@ public interface IOrderService {
      * otherwise the original list will be returned.
      */
    List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create orders, order detail, user order when pay offline
+     * @param code
+     * @param customerUserId
+     * @param employeeUserId
+     */
+   void createOfflineOrders(String code,String note, Long customerUserId, Long employeeUserId);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order when pay
+     * @param code
+     * @param node
+     */
+   void createOrders(String code, String node);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order detail when pay
+     */
+   void createOrderDetail();
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only user order when pay
+     * @param orderId
+     * @param userId
+     */
+   void createUserOrder(Long orderId, Long userId);
 }
