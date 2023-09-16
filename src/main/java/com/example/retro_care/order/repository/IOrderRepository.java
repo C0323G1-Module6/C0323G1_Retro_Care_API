@@ -87,6 +87,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     Orders getLastInsertOrders();
 
 
+
     /**
      * author: VuNL
      * date create: 15/09/2023
@@ -169,7 +170,5 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = "SELECT * FROM orders WHERE datetime >= :startDateTime AND datetime <= :endDateTime", nativeQuery = true)
     List<Orders> findByDateTimeRange(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
 
-    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
-            "where name like :name% and flag_delete = false")
-    List<Medicine> findAllMedicineByName(@Param("name") String name);
+
 }

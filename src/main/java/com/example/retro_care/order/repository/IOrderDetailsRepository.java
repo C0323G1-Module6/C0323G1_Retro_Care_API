@@ -11,6 +11,7 @@ public interface IOrderDetailsRepository extends JpaRepository<OrderDetails, Lon
 
     /**
      * author: VuNL
+     * date create: 15/09/2023
      * function: create order detail when pay
      * @param orderDetails
      */

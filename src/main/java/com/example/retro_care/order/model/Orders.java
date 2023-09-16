@@ -1,7 +1,6 @@
 package com.example.retro_care.order.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -14,7 +13,7 @@ public class Orders {
     private String code;
 
 
-    private String dateTime;
+    private LocalDateTime dateTime;
 
     @Column(name = "flag_deleted")
     private Boolean flagDeleted;
@@ -24,7 +23,7 @@ public class Orders {
     public Orders() {
     }
 
-    public Orders(Long id, String code, String dateTime, Boolean flagDeleted, String note) {
+    public Orders(Long id, String code, LocalDateTime dateTime, Boolean flagDeleted, String note) {
         this.id = id;
         this.code = code;
         this.dateTime = dateTime;
@@ -40,11 +39,11 @@ public class Orders {
         this.code = code;
     }
 
-    public String getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(String dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 
