@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/invoice")
@@ -31,13 +33,14 @@ public class InvoiceController {
     public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDto invoiceDto) {
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
+        invoice.setCreationDate(new Date());
         Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-            invoiceDetail.setInvoiceId(selectedInvoice);
-            invoiceDetailService.createInvoiceDetail(invoiceDetail);
-        }
-//        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
-        return new ResponseEntity<>(selectedInvoice,HttpStatus.CREATED);
+        if (invoice.getInvoiceDetailSet() != null)
+            for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+                invoiceDetail.setInvoiceId(selectedInvoice);
+                invoiceDetailService.createInvoiceDetail(invoiceDetail);
+            }
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
     }
 
     /**
@@ -66,13 +69,31 @@ public class InvoiceController {
     public ResponseEntity<Invoice> editInvoice(@RequestBody InvoiceDto invoiceDto) {
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
+        if (invoice.getInvoiceDetailSet() == null) {
+            invoice.setFlagDeleted(true);
+            invoiceService.editInvoice(invoice);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
             if (invoiceDetail.getId() == null)
                 invoiceDetailService.createInvoiceDetail(invoiceDetail);
             else if (!invoiceDetailService.getInvoiceDetailById(invoiceDetail.getId()).equals(invoiceDetail))
                 invoiceDetailService.editInvoiceDetail(invoiceDetail);
+            else
+                invoiceDetailService.createInvoiceDetail(invoiceDetail);
         }
-        Invoice selectedInvoice = invoiceService.editInvoice(invoice);
-        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
+        invoiceService.editInvoice(invoice);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * @return
+     */
+    @GetMapping("/code")
+    public ResponseEntity<String> getCodeInvoice() {
+        String maxCode = invoiceService.findMaxCode();
+        if (maxCode == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>(maxCode, HttpStatus.OK);
     }
 }
