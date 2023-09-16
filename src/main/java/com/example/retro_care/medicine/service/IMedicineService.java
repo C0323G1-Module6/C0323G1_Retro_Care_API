@@ -32,8 +32,9 @@ public interface IMedicineService {
      * author: medicine_DaoPTA
      * workday: 15/09/2023
      *
-     * @param pageable
+     * @param pageable pagination of medication list
      * @return : Medicine list with pagination
      */
     Page<Medicine> findAll(Pageable pageable);
+    Boolean removeMedicine(Long id);
 }

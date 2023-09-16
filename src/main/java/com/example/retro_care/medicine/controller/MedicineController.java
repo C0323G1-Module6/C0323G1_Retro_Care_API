@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -125,5 +124,25 @@ public class MedicineController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicinePage,HttpStatus.OK);
+    }
+
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     *
+     * @param id Pass the id to get the object to delete
+     * @return ResponseEntity with the corresponding HTTP status code.
+     *         - HttpStatus.OK If I get the id and delete it
+     *         - HttpStatus.NO_CONTENT If I don't get the id
+     */
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deletedMedicine(@PathVariable("id") Long id){
+        if (id == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        iMedicineService.removeMedicine(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
