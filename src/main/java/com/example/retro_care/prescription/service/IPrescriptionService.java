@@ -10,4 +10,7 @@ public interface IPrescriptionService {
     Page<Prescription> findAllPrescription(Pageable pageable);
     void createPrescription(Prescription prescription);
     List<Prescription> getAll();
+    void removePrescription(Long id);
+    Prescription getPrescriptionById(Long id);
+    void editPrescription(Prescription prescription);
 }
