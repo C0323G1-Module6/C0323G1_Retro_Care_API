@@ -125,5 +125,10 @@ public class OrderService implements IOrderService {
 
     }
 
+    @Override
+    public void createOrderForUser(Long appUserId) {
+        iOrderRepository.createOrderForUser(appUserId);
+    }
+
 
 }

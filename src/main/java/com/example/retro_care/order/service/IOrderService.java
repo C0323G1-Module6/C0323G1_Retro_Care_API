@@ -3,11 +3,8 @@ package com.example.retro_care.order.service;
 import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.sun.tools.javac.util.List;
-import org.hibernate.criterion.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 public interface IOrderService {
@@ -79,4 +76,6 @@ public interface IOrderService {
      * @param userId
      */
    void createUserOrder(Long orderId, Long userId);
+    void createOrderForUser(Long appUserId);
+
 }

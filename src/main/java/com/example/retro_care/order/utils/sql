@@ -30,4 +30,26 @@ BEGIN
 
     -- delete the items from the cart
     DELETE FROM cart_details WHERE app_user_id = user_id;
+
+
+
+
+-------------------------
+CREATE PROCEDURE getCartDetailsForMail(IN user_id BIGINT)
+BEGIN
+SELECT c.email as customerEmail, m.name AS medicineName,
+            ( SELECT image_path
+            FROM image_medicine im
+            WHERE im.medicine_id = m.id
+            ORDER BY im.id
+            LIMIT 1) as medicineImage,
+            m.price as medicinePrice,
+            cd.quantity AS quantityInCart,
+            c.name AS customerName,
+            c.address AS address
+            FROM cart_details as cd
+            JOIN medicine m ON cd.medicine_id = m.id
+            JOIN app_user au ON cd.app_user_id = au.id
+            JOIN customer c ON au.id = c.app_user_id
+            WHERE cd.app_user_id = :user_id;
 END;

@@ -1,6 +1,5 @@
 package com.example.retro_care.order.model;
 
-
 import com.example.retro_care.order.projection.CartProjection;
 
 import java.util.List;

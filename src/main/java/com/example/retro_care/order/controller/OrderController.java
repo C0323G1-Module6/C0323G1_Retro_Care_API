@@ -3,7 +3,6 @@ package com.example.retro_care.order.controller;
 import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.service.IOrderService;
-import com.sun.tools.javac.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,29 +11,27 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import com.example.retro_care.order.model.EmailMessage;
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
-import com.example.retro_care.order.service.IOrderService;
 import com.example.retro_care.order.service.mail.IEmailSenderService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @Controller
 @CrossOrigin
 @RequestMapping("/api/orders")
 @RestController
-@RequestMapping("/api/orders")
 public class OrderController {
     @Autowired
     private IOrderService iOrderService;
+
+    @Autowired
+    private ICartDetailsService iCartDetailsService;
+
+    @Autowired
+    private IEmailSenderService iEmailSenderService;
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -106,14 +103,8 @@ public class OrderController {
 
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
-    @Autowired
-    private IOrderService iOrderService;
 
-    @Autowired
-    private ICartDetailsService iCartDetailsService;
 
-    @Autowired
-    private IEmailSenderService iEmailSenderService;
     @PostMapping()
     public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId){
         iOrderService.createOrderForUser(appUserId);
