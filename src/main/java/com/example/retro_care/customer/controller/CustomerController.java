@@ -89,7 +89,7 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = "", required = false) String groupValue,
+                                             @RequestParam(defaultValue = " is not null or app_user_id", required = false) String groupValue,
                                              @RequestParam(defaultValue = "code", required = false) String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
         Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
