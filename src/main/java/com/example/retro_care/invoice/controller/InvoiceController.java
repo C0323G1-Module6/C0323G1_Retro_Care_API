@@ -1,7 +1,11 @@
 package com.example.retro_care.invoice.controller;
 
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.service.IInvoiceDetailService;
 import com.example.retro_care.invoice.service.IInvoiceService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,19 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-@RestController
-@RequestMapping("/invoice")
-@CrossOrigin("*")
-import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.model.InvoiceDto;
-import com.example.retro_care.invoice.service.IInvoiceDetailService;
-import com.example.retro_care.invoice.service.IInvoiceService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
@@ -35,7 +26,9 @@ import org.springframework.web.bind.annotation.*;
 public class InvoiceController {
 
     @Autowired
-    private IInvoiceService invoiceService;
+    IInvoiceService invoiceService;
+    @Autowired
+    IInvoiceDetailService invoiceDetailService;
 
     /**
      * Create by: HuyHD;
@@ -57,6 +50,7 @@ public class InvoiceController {
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: delete invoice with invoice code ? ;
+     *
      * @param : id (id_invoice);
      * @return : new invoice list does not exist newly deleted element.
      */
@@ -76,9 +70,10 @@ public class InvoiceController {
     }
 
     /**
-     *Create by: HuyHD;
+     * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
+     *
      * @param start_date
      * @param end_date
      * @param start_time
@@ -100,10 +95,6 @@ public class InvoiceController {
         }
     }
 
-    @Autowired
-    IInvoiceService invoiceService;
-    @Autowired
-    IInvoiceDetailService invoiceDetailService;
 
     /**
      * Create an invoice with create invoiceDetail
@@ -122,7 +113,7 @@ public class InvoiceController {
             invoiceDetailService.createInvoiceDetail(invoiceDetail);
         }
 //        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
-        return new ResponseEntity<>(selectedInvoice,HttpStatus.CREATED);
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
     }
 
     /**

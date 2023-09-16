@@ -9,9 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
@@ -74,14 +71,6 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             @Param("end_time") String end_time,
             @Param("sort_column") String sort_column);
 
-import com.example.retro_care.invoice.model.Invoice;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
-
-public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     /**
      * create an Invoice
      * Code by CuongHLT
