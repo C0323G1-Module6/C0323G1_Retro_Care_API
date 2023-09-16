@@ -36,5 +36,5 @@ public interface IMedicineService {
      * @return : Medicine list with pagination
      */
     Page<Medicine> findAll(Pageable pageable);
-    boolean removeMedicine(Long id);
+    Boolean removeMedicine(Long id);
 }

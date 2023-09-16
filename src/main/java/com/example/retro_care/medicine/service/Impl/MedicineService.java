@@ -79,7 +79,7 @@ public class MedicineService implements IMedicineService {
      * @param id Pass the id to get the object to delete
      */
     @Override
-    public boolean removeMedicine(Long id) {
+    public Boolean removeMedicine(Long id) {
         if (iMedicineRepository.findMedicineById(id) == null) {
             return true;
         }
