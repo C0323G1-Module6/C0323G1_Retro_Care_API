@@ -107,7 +107,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
             " JOIN user_role on user_role.app_user_id = app_user.id" +
             " JOIN app_role on app_role.id = user_role.app_role_id" +
             " WHERE employee.flag_delete = true AND" +
-            " employee.name_employee LIKE concat('%',:name_employee,'%') OR app_role = :id_position", nativeQuery = true)
+            " employee.name_employee LIKE concat('%',:name_employee,'%') OR app_role.id = :id_position", nativeQuery = true)
     Page<Employee> searchEmployeeByNameAndRole(Pageable pageable, @Param("id_position") Long id, @Param("name_employee") String name);
 
     /**

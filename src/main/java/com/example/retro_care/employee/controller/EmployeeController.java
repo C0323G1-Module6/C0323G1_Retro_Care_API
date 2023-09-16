@@ -112,7 +112,7 @@ public class EmployeeController {
     public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                           @PathVariable(value = "limit", required = false) Integer limit,
                                                           @PathVariable(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit,Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, limit);
         Page<Employee> employees = employeeService.getListEmployee(pageable);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
