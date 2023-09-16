@@ -26,4 +26,14 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
+
+    /**
+     * Display list Medicine
+     * author: medicine_DaoPTA
+     * workday: 15/09/2023
+     *
+     * @param pageable
+     * @return : Medicine list with pagination
+     */
+    Page<Medicine> findAll(Pageable pageable);
 }

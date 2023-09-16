@@ -29,6 +29,9 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
+
+
     /**
      * Find a medicine by its ID-TinVV
      *
