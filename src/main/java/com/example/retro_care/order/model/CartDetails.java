@@ -16,15 +16,12 @@ public class CartDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
-
     @ManyToOne
-//    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
+    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUser;
 
-
     @ManyToOne
-//    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
 
     private Integer quantity;

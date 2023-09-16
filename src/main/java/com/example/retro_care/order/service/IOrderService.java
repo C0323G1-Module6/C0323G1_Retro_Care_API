@@ -1,12 +1,10 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.sun.tools.javac.util.List;
-import org.hibernate.criterion.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.security.Timestamp;
 import java.time.LocalDateTime;
 
 public interface IOrderService {
@@ -18,7 +16,7 @@ public interface IOrderService {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    Page<Orders> getListOrder(Pageable pageable);
+    Page<IOrderProjection> getListOrder(Pageable pageable);
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -78,4 +76,6 @@ public interface IOrderService {
      * @param userId
      */
    void createUserOrder(Long orderId, Long userId);
+    void createOrderForUser(Long appUserId);
+
 }
