@@ -1,6 +1,8 @@
 package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
+
+import com.example.retro_care.invoice.model.Invoice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -12,6 +14,12 @@ import java.util.List;
 
 
 public interface IInvoiceService {
+    Invoice createInvoice(Invoice invoice);
+
+    Invoice editInvoice(Invoice invoice);
+
+    Invoice getInvoiceById(Long invoiceId);
+
 
     /**
      * Create by: HuyHD;

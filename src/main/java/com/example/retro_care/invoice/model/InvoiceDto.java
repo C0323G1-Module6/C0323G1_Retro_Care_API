@@ -2,16 +2,13 @@ package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@Entity
-public class Invoice {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class InvoiceDto {
     private Long id;
     private String code;
     private String documentNumber;
@@ -19,24 +16,17 @@ public class Invoice {
     private Double paid;
     private String note;
     private Boolean flagDeleted;
-    @ManyToOne
-//    @JoinColumn(referencedColumnName = "id")
-    @JoinColumn(name = "supplier_id",referencedColumnName = "id")
+
     private Supplier supplierId;
-    @ManyToOne
-//    @JoinColumn(referencedColumnName = "id")
-    @JoinColumn(name = "app_user_id",referencedColumnName = "id")
+
     private AppUser appUserId;
 
+//    Set<InvoiceDetailDto> invoiceDetailSet;
 
-    @OneToMany(mappedBy = "invoiceId")
-    @JsonBackReference
-    Set<InvoiceDetail> invoiceDetailSet;
-
-    public Invoice() {
+    public InvoiceDto() {
     }
 
-    public Invoice(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -46,7 +36,6 @@ public class Invoice {
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
         this.appUserId = appUserId;
-        this.invoiceDetailSet = invoiceDetailSet;
     }
 
     public Long getId() {
@@ -121,12 +110,18 @@ public class Invoice {
         this.appUserId = appUserId;
     }
 
-    public Set<InvoiceDetail> getInvoiceDetailSet() {
-        return invoiceDetailSet;
+    @Override
+    public String toString() {
+        return "InvoiceDto{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", creationDate=" + creationDate +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", supplierId=" + supplierId +
+                ", appUserId=" + appUserId +
+                '}';
     }
-
-    public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
-        this.invoiceDetailSet = invoiceDetailSet;
-    }
-
 }
