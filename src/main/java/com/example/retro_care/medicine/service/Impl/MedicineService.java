@@ -59,8 +59,8 @@ public class MedicineService implements IMedicineService {
 
     /**
      * author: DaoPTA
-     * wordday: 16/09/2023
-     * create a method display list
+     * workday: 16/09/2023
+     * Create a method display list
      *
      * @param pageable
      * @return Display medicine list
@@ -68,5 +68,19 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<Medicine> findAll(Pageable pageable) {
         return iMedicineRepository.findAll(pageable);
+    }
+
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     * Create a method delete medicine
+     *
+     * @param id Pass the id to get the object to delete
+     */
+    @Override
+    public Boolean removeMedicine(Long id) {
+        iMedicineRepository.findMedicineById(id);
+        return true;
     }
 }
