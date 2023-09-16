@@ -33,9 +33,20 @@ public class PrescriptionController {
     }
 
     @PostMapping("/prescription/create")
-    public ResponseEntity<?> createPrescription(@RequestBody Prescription prescription, @RequestBody Indication indication){
-        indicationService.createIndication(indication);
+    public ResponseEntity<?> createPrescription(@RequestBody Prescription prescription){
         prescriptionService.createPrescription(prescription);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/prescription/delete/{id}")
+    public ResponseEntity<?> removePrescription(@PathVariable Long id){
+        prescriptionService.removePrescription(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PutMapping("/prescription/edit/{id}")
+    public ResponseEntity<?> editPrescription(@RequestBody Prescription prescription){
+        prescriptionService.editPrescription(prescription);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

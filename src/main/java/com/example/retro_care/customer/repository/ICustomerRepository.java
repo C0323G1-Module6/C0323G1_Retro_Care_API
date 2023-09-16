@@ -25,6 +25,8 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number", nativeQuery = true)
     Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code", nativeQuery = true)
+    Customer findCustomerByCode(@Param(value = "code") String code);
 
     /**
      * Author: QuyenHT

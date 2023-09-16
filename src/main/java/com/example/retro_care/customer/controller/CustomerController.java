@@ -1,5 +1,6 @@
 package com.example.retro_care.customer.controller;
 
+import com.example.retro_care.customer.dto.CreatCode;
 import com.example.retro_care.customer.dto.CustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.service.ICustomerService;
@@ -29,6 +30,14 @@ public class CustomerController {
     @GetMapping("/dto/create")
     public ResponseEntity<CustomerDto> getCustomerForCreate() {
         CustomerDto customerDto = new CustomerDto();
+        String customerCode = CreatCode.generateCustomerCode();
+        while (true) {
+            if (customerService.findCustomerByCode(customerCode) == null) {
+                break;
+            }
+        }
+        customerDto.setCode(customerCode);
+        System.out.println(customerDto.getCode());
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
@@ -63,6 +72,21 @@ public class CustomerController {
     public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
         customerService.updateCustomer(customer);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    /**
+     * Author: TinDT
+     * Goal: Send customers needing updates to the customer updates page
+     * * return HttpStatus
+     */
+    @GetMapping("/dto/update/{id}")
+    public ResponseEntity<CustomerDto> getCustomerForUpdate(@PathVariable Long id) {
+        CustomerDto customerDto = new CustomerDto();
+        Customer customer = customerService.findCustomerById(id);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        BeanUtils.copyProperties(customer,customerDto);
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
     /**

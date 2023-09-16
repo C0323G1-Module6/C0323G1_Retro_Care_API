@@ -43,6 +43,16 @@ public class CustomerService implements ICustomerService {
     public Customer findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
+    /**
+     * Author: TinDT
+     * Goal: find customer by code
+     * * return customer
+     */
+
+    @Override
+    public Customer findCustomerByCode(String code) {
+        return customerRepository.findCustomerByCode(code);
+    }
 
     /**
      * Author: QuyenHT

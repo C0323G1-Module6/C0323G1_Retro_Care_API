@@ -6,7 +6,7 @@ import org.springframework.validation.Validator;
 
 public class CustomerDto implements Validator {
     private Long id;
-    private String code;
+    private String code ;
     private String name;
     private String birthday;
     private String address;
