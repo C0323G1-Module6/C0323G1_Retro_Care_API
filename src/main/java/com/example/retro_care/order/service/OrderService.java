@@ -64,4 +64,54 @@ public class OrderService implements  IOrderService{
     public List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
         return iOrderRepository.findByDateTimeRange(startDateTime,endDateTime);
     }
+
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create orders, order detail, user order when pay offline
+     * @param code
+     * @param customerUserId
+     * @param employeeUserId
+     */
+    @Override
+    public void createOfflineOrders(String code, String note, Long customerUserId, Long employeeUserId) {
+
+    }
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order when pay
+     * @param code
+     * @param node
+     */
+    @Override
+    public void createOrders(String code, String node) {
+
+    }
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order detail when pay
+     */
+    @Override
+    public void createOrderDetail() {
+
+    }
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only user order when pay
+     * @param orderId
+     * @param userId
+     */
+    @Override
+    public void createUserOrder(Long orderId, Long userId) {
+
+    }
+
+
 }

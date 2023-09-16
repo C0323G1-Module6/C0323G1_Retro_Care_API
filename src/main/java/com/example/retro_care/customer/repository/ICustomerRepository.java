@@ -32,14 +32,14 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * return list of customers
      */
     @Query(value = " SELECT code, name, birth_day, address, phone_number, note," +
-            "CASE" +
+            "CASE " +
             "WHEN app_user_id is null then 'Khách offline' " +
             "ELSE 'Khách online' " +
             "END AS customer_type" +
-            "FROM retro_care.customer" +
-            "WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id :groupValue " +
+            " FROM retro_care.customer" +
+            " WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id :groupValue " +
             "ORDER BY :sortItem", nativeQuery = true)
-    Page<Customer> findAllCustomer(Pageable pageable, @Param("searchInput") String searchInput, @Param("code") String code, @Param("address") String address, @Param("appUserId") String groupValue, @Param("sortItem") String sortItem);
+    Page<Customer> findAllCustomer(Pageable pageable, @Param("searchInput") String searchInput, @Param("code") String code, @Param("address") String address, @Param("groupValue") String groupValue, @Param("sortItem") String sortItem);
 
     /**
      * Author: QuyenHT

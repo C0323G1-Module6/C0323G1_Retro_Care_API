@@ -43,4 +43,39 @@ public interface IOrderService {
      * otherwise the original list will be returned.
      */
    List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create orders, order detail, user order when pay offline
+     * @param code
+     * @param customerUserId
+     * @param employeeUserId
+     */
+   void createOfflineOrders(String code,String note, Long customerUserId, Long employeeUserId);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order when pay
+     * @param code
+     * @param node
+     */
+   void createOrders(String code, String node);
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only order detail when pay
+     */
+   void createOrderDetail();
+
+    /**
+     * author: VuNL
+     * date: 15/09/2023
+     * function: create only user order when pay
+     * @param orderId
+     * @param userId
+     */
+   void createUserOrder(Long orderId, Long userId);
 }
