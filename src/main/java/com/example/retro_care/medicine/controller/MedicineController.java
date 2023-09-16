@@ -104,6 +104,17 @@ public class MedicineController {
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * author: DaoPTA
+     * Medicine List
+     *
+     * @param page pagination of medication list
+     * @param size Divide the number of records per page
+     * @return ResponseEntity with the corresponding HTTP status code.
+     *         - HttpStatus.OK if the drug list has data.
+     *         - HttpStatus.NO_CONTENT if drug list has no data.
+     */
     @GetMapping("/api/medicine")
     @ResponseBody
     public ResponseEntity<Page<Medicine>> medicineList (@RequestParam(defaultValue = "0", required = false) int page,

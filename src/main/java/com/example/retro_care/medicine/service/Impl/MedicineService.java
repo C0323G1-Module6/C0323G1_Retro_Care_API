@@ -56,6 +56,15 @@ public class MedicineService implements IMedicineService {
                 medicine.getRetailProfits(), medicine.getKindOfMedicine().getId());
     }
 
+
+    /**
+     * author: DaoPTA
+     * wordday: 16/09/2023
+     * create a method display list
+     *
+     * @param pageable
+     * @return Display medicine list
+     */
     @Override
     public Page<Medicine> findAll(Pageable pageable) {
         return iMedicineRepository.findAll(pageable);
