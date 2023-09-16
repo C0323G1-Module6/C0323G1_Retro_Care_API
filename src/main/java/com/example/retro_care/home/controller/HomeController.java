@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/home")
+@RequestMapping("/api/home")
 @CrossOrigin
 public class HomeController {
     @Autowired
@@ -25,8 +25,7 @@ public class HomeController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Medicine>> searchMedicineHomepage(String name) {
-        return new ResponseEntity<>(homeService.searchMedicineForHomepage(name), HttpStatus.OK);
+    public ResponseEntity<List<Medicine>> searchMedicineForHomepage(String inputString) {
+        return new ResponseEntity<>(homeService.searchMedicineForHomepage(inputString), HttpStatus.OK);
     }
-
 }
