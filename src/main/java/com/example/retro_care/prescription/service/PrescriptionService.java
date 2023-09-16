@@ -28,4 +28,20 @@ public class PrescriptionService implements IPrescriptionService{
     public List<Prescription> getAll() {
         return prescriptionRepository.getAll();
     }
+
+    @Override
+    public void removePrescription(Long id) {
+        Prescription prescription = prescriptionRepository.getPrescriptionById(id);
+        prescription.setFlagDeleted(true);
+    }
+
+    @Override
+    public Prescription getPrescriptionById(Long id) {
+        return prescriptionRepository.getPrescriptionById(id);
+    }
+
+    @Override
+    public void editPrescription(Prescription prescription) {
+        prescriptionRepository.editPrescription(prescription);
+    }
 }
