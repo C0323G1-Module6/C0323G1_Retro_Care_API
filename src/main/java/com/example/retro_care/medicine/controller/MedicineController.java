@@ -134,15 +134,15 @@ public class MedicineController {
      * @param id Pass the id to get the object to delete
      * @return ResponseEntity with the corresponding HTTP status code.
      *         - HttpStatus.OK If I get the id and delete it
-     *         - HttpStatus.NO_CONTENT If I don't get the id
+     *         - HttpStatus.NO_CONTENT If I don't get the id or status of medicine is true
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<?> deletedMedicine(@PathVariable("id") Long id){
-        if (id == null){
+    public ResponseEntity<?> deleteMedicine(@RequestParam(value = "id", required = false) Long id){
+        if (iMedicineService.removeMedicine(id)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        iMedicineService.removeMedicine(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
