@@ -20,9 +20,11 @@ public class Invoice {
     private String note;
     private Boolean flagDeleted;
     @ManyToOne
+//    @JoinColumn(referencedColumnName = "id")
     @JoinColumn(name = "supplier_id",referencedColumnName = "id")
     private Supplier supplierId;
     @ManyToOne
+//    @JoinColumn(referencedColumnName = "id")
     @JoinColumn(name = "app_user_id",referencedColumnName = "id")
     private AppUser appUserId;
 
