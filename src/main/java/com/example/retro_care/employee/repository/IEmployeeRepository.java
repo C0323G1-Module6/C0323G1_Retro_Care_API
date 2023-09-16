@@ -37,13 +37,13 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     * @param note
     * @param flagDelete
     * @param appUserId
-    * @return Employee
+    * @return void
     */
     @Modifying
     @Transactional
     @Query(value = "insert into employee(code_employee,name_employee,address,phone_number,start_day,birthday,id_card,image,note,flag_delete,app_user_id) " +
             "value (:code_employee,:name_employee,:address,:phone_number,:start_day,:birthday,:id_card,:image,:note,:flag_delete,:app_user_id)",nativeQuery = true)
-    Employee addEmployee(@Param(value = "code_employee") String code,
+    void addEmployee(@Param(value = "code_employee") String code,
                          @Param(value = "name_employee") String name,
                          @Param(value = "address") String address,
                          @Param(value = "phone_number") String phoneNumber,
@@ -55,6 +55,34 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
                          @Param(value = "flag_delete") Boolean flagDelete,
                          @Param(value = "app_user_id") Long appUserId
     );
+   /**
+    * Author: TanNV
+    * Date: 16/09/2023
+    * Use to update employee
+    * @param name
+    * @param address
+    * @param phoneNumber
+    * @param startDay
+    * @param birthday
+    * @param idCard
+    * @param image
+    * @param note
+    * @return void
+    */
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = '2')",nativeQuery = true)
+   void updateEmployee(@Param(value = "name_employee") String name,
+                        @Param(value = "address") String address,
+                        @Param(value = "phone_number") String phoneNumber,
+                        @Param(value = "start_day") String startDay,
+                        @Param(value = "birthday") String birthday,
+                        @Param(value = "id_card") String idCard,
+                        @Param(value = "image") String image,
+                        @Param(value = "note") String note
+   );
+
+
     /**
      * Create: SonTT
      * Date create: 15/09/2023
