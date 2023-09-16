@@ -43,7 +43,6 @@ public class InvoiceController {
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: delete invoice with invoice code ? ;
-     *
      * @param : id (id_invoice);
      * @return : new invoice list does not exist newly deleted element.
      */
