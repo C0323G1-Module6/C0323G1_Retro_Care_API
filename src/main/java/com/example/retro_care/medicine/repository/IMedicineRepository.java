@@ -8,8 +8,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
-
 public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     /**
      * Find a Medicine by its ID-TinVV
@@ -77,26 +75,4 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
 
     Page<Medicine> findAll(Pageable pageable);
 
-    /**
-     * author: VuNL
-     * date create: 16/09/2023
-     * function: find medicine when sell offline
-     * @param name
-     * @return List medicine
-     */
-    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
-            "where name like :name% and flag_delete = false")
-    List<Medicine> getMedicineByNameWhenSell(@Param("name") String name);
-
-
-    /**
-     * author: VuNL
-     * date create: 16/09/2023
-     * function: find medicine in a prescription
-     * @param id
-     * @return List medicine
-     */
-    @Query(nativeQuery = true, value = "select m.id, m.code, m.name, m.price, m.quantity from medicine " +
-            "as m join indication on i m.id = i.medicine_id where i.prescription_id = :id and flag_delete = false")
-    List<Medicine> getMedicineByPrescriptionWhenSell(@Param("id")Long id);
 }
