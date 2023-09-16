@@ -10,6 +10,9 @@ import com.example.retro_care.medicine.service.IUnitDetailService;
 import com.example.retro_care.medicine.service.IUnitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -100,5 +103,16 @@ public class MedicineController {
         iImageMedicineService.updateImageMedicine(imageMedicine);
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/api/medicine")
+    @ResponseBody
+    public ResponseEntity<Page<Medicine>> medicineList (@RequestParam(defaultValue = "0", required = false) int page,
+                                                        @RequestParam(defaultValue = "5", required = false) int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Medicine> medicinePage = iMedicineService.findAll(pageable);
+        if (medicinePage.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(medicinePage,HttpStatus.OK);
     }
 }
