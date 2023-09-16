@@ -106,6 +106,10 @@ public class CustomerController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+        Customer customer = customerService.findCustomerById(id);
+        if (customer == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         boolean check = customerService.deleteCustomerById(id);
         if (check) {
             return new ResponseEntity<>(HttpStatus.OK);
