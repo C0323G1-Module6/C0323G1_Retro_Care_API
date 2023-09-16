@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface IHomeService {
     List<Medicine> findAllMedicineForHomepage();
-    List<Medicine> searchMedicineForHomepage(String name);
+    List<Medicine> searchMedicineForHomepage(String keyword);
 }

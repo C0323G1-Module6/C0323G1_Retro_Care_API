@@ -34,4 +34,21 @@ public class IndicationService implements IIndicationService {
         indication.setId(maxId()+1);
         indicationRepository.createIndication(indication);
     }
+
+    @Override
+    public Indication indicationById(Long idIndication) {
+        return indicationRepository.indicationById(idIndication);
+    }
+
+    @Override
+    public void removeIndication(Long idIndication) {
+        Indication indication = indicationRepository.indicationById(idIndication);
+        indication.setFlagDeleted(true);
+    }
+
+    @Override
+    public void editIndication(Indication indication) {
+        indicationRepository.editIndication(indication);
+    }
+
 }
