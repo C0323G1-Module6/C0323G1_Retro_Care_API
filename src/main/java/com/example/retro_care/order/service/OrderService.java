@@ -1,5 +1,6 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.repository.IOrderRepository;
 import com.sun.tools.javac.util.List;
@@ -26,8 +27,8 @@ public class OrderService implements  IOrderService{
      * @return : paginated order list with limit number of molecules per page.
      */
     @Override
-    public Page<Orders> getListOrder(Pageable pageable) {
-        return iOrderRepository.getAllList(pageable);
+    public Page<IOrderProjection> getListOrder(Pageable pageable) {
+        return iOrderRepository.getAllList1(pageable);
     }
 
     /**
