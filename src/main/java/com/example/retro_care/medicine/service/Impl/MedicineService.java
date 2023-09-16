@@ -4,6 +4,8 @@ import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.medicine.repository.IMedicineRepository;
 import com.example.retro_care.medicine.service.IMedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -52,5 +54,36 @@ public class MedicineService implements IMedicineService {
                 medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
                 medicine.getActiveElement(), medicine.getOrigin(),
                 medicine.getRetailProfits(), medicine.getKindOfMedicine().getId());
+    }
+
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     * Create a method display list
+     *
+     * @param pageable
+     * @return Display medicine list
+     */
+    @Override
+    public Page<Medicine> findAll(Pageable pageable) {
+        return iMedicineRepository.findAll(pageable);
+    }
+
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     * Create a method delete medicine
+     *
+     * @param id Pass the id to get the object to delete
+     */
+    @Override
+    public Boolean removeMedicine(Long id) {
+        if (iMedicineRepository.findMedicineById(id) == null) {
+            return true;
+        }
+        iMedicineRepository.findMedicineById(id);
+        return false;
     }
 }

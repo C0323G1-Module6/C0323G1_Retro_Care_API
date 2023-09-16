@@ -87,6 +87,14 @@ public class Medicine {
         this.kindOfMedicine = kindOfMedicine;
     }
 
+    public Medicine(Long id, String code, String name, Double price, Long quantity) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+    }
+
     public Set<UnitDetail> getUnitDetailSet() {
         return unitDetailSet;
     }
