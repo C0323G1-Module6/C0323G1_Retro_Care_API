@@ -115,3 +115,4 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "as m join indication on i m.id = i.medicine_id where i.prescription_id = :id and flag_delete = false")
     List<Medicine> getMedicineByPrescriptionWhenSell(@Param("id")Long id);
 }
+

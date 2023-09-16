@@ -28,6 +28,7 @@ public class CartDetailsController {
     public ResponseEntity<?> addToCartCart(@RequestParam("appUserId") Long appUserId,
                                                          @RequestParam("medicineId") Long medicineId,
                                                          @RequestParam("quantity") Integer quantity){
+
         iCartDetailsService.addToCart(appUserId, medicineId, quantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -47,8 +48,10 @@ public class CartDetailsController {
     @GetMapping("/checkQuantity")
     public ResponseEntity<?> checkQuantity(@RequestParam("medicineId") Long medicineId,
                                            @RequestParam("inputQuantity") Long inputQuantity){
+        System.out.println(medicineId);
+
         MedicineQuantityProjection quantityBasedOnUnit = iCartDetailsService.checkQuantityBasedOnUnit(medicineId);
-        if(quantityBasedOnUnit.getQuantity() > (inputQuantity * quantityBasedOnUnit.getConversionUnit())){
+        if(quantityBasedOnUnit.getQuantity() > (inputQuantity * quantityBasedOnUnit.getConversion_Rate())){
             return new ResponseEntity<>(HttpStatus.OK);
         }
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
