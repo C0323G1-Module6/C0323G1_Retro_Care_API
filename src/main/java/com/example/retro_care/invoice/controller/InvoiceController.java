@@ -29,16 +29,15 @@ public class InvoiceController {
      */
     @PostMapping("/create")
     public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDto invoiceDto) {
-//        Invoice invoice = new Invoice();
-//        BeanUtils.copyProperties(invoiceDto, invoice);
-//        Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-//        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-//            invoiceDetail.setInvoiceId(selectedInvoice);
-//            invoiceDetailService.createInvoiceDetail(invoiceDetail);
-//        }
-        System.out.println(invoiceDto);
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceDto, invoice);
+        Invoice selectedInvoice = invoiceService.createInvoice(invoice);
+        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+            invoiceDetail.setInvoiceId(selectedInvoice);
+            invoiceDetailService.createInvoiceDetail(invoiceDetail);
+        }
 //        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(selectedInvoice,HttpStatus.CREATED);
     }
 
     /**

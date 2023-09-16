@@ -8,7 +8,7 @@ import org.springframework.validation.Validator;
 import java.util.Date;
 import java.util.Set;
 
-public class InvoiceDto implements Validator {
+public class InvoiceDto {
     private Long id;
     private String code;
     private String documentNumber;
@@ -21,12 +21,12 @@ public class InvoiceDto implements Validator {
 
     private AppUser appUserId;
 
-    Set<InvoiceDetail> invoiceDetailSet;
+//    Set<InvoiceDetailDto> invoiceDetailSet;
 
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -36,7 +36,6 @@ public class InvoiceDto implements Validator {
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
         this.appUserId = appUserId;
-        this.invoiceDetailSet = invoiceDetailSet;
     }
 
     public Long getId() {
@@ -112,24 +111,6 @@ public class InvoiceDto implements Validator {
     }
 
     @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-        InvoiceDto invoiceDto = (InvoiceDto) target;
-    }
-
-    public Set<InvoiceDetail> getInvoiceDetailSet() {
-        return invoiceDetailSet;
-    }
-
-    public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
-        this.invoiceDetailSet = invoiceDetailSet;
-    }
-
-    @Override
     public String toString() {
         return "InvoiceDto{" +
                 "id=" + id +
@@ -141,7 +122,6 @@ public class InvoiceDto implements Validator {
                 ", flagDeleted=" + flagDeleted +
                 ", supplierId=" + supplierId +
                 ", appUserId=" + appUserId +
-                ", invoiceDetailSet=" + invoiceDetailSet +
                 '}';
     }
 }

@@ -15,9 +15,8 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param invoice
      * @return Invoice
      */
-    @Query(value = "Call create_invoice (:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.flagDeleted},:#{#invoice.supplierId},:#{#invoice.appUserId}) ", nativeQuery = true)
+    @Query(value = "Call create_invoice (:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.flagDeleted},:#{#invoice.supplierId.id},:#{#invoice.appUserId.id}) ", nativeQuery = true)
     @Transactional
-    @Modifying
     Invoice createInvoice(@Param("invoice") Invoice invoice);
 
     /**
