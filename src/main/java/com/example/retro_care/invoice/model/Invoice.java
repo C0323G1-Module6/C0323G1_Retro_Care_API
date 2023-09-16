@@ -19,10 +19,10 @@ public class Invoice {
     private String note;
     private Boolean flagDeleted;
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+//    @JoinColumn(referencedColumnName = "id")
     private Supplier supplierId;
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+//    @JoinColumn(referencedColumnName = "id")
     private AppUser appUserId;
 
     @OneToMany(mappedBy = "invoiceId")
