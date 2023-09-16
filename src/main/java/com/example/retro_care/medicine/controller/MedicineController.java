@@ -138,7 +138,7 @@ public class MedicineController {
      */
     @DeleteMapping("/{id}")
     @ResponseBody
-    public ResponseEntity<?> deleteMedicine(@RequestParam(value = "id", required = false) Long id){
+    public ResponseEntity<HttpStatus> deleteMedicine(@RequestParam(value = "id", required = false) Long id){
         if (iMedicineService.removeMedicine(id)){
             return new ResponseEntity<>(HttpStatus.OK);
         }else {
