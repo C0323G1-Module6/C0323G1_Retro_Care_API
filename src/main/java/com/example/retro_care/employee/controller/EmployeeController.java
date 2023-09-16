@@ -77,11 +77,11 @@ public class EmployeeController {
      * @param limit
      * @return ResponseEntity<?>
      */
-    @GetMapping("/get-list/{page}/{limit}")
+    @GetMapping("/get-list/{page}/{limit}/{sort}")
     public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                           @PathVariable(value = "limit", required = false) Integer limit,
-                                                          @RequestParam(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
+                                                          @PathVariable(value = "sort", required = false) String sort) {
+        Pageable pageable = PageRequest.of(page, limit,Sort.by(sort));
         Page<Employee> employees = employeeService.getListEmployee(pageable);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
