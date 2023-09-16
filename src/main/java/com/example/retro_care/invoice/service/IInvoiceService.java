@@ -1,6 +1,10 @@
 package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import java.util.List;
+
 
 import com.example.retro_care.invoice.model.Invoice;
 import org.springframework.data.domain.Page;
@@ -16,10 +20,11 @@ import java.util.List;
 public interface IInvoiceService {
     Invoice createInvoice(Invoice invoice);
 
-    Invoice editInvoice(Invoice invoice);
+    void editInvoice(Invoice invoice);
 
     Invoice getInvoiceById(Long invoiceId);
 
+    String findMaxCode();
 
     /**
      * Create by: HuyHD;

@@ -89,10 +89,10 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param invoice
      * @return Invoice
      */
-    @Query(value = "Call create_invoice (:#{#invoice.id},:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.flagDeleted},:#{#invoice.supplierId},:#{#invoice.appUserId})", nativeQuery = true)
+    @Query(value = "UPDATE invoice SET code = :#{#invoice.code},document_number= :#{#invoice.documentNumber},creation_date=:#{#invoice.creationDate},paid=:#{#invoice.paid},note=:#{#invoice.note},flag_deleted=:#{#invoice.flagDeleted},supplier_id=:#{#invoice.supplierId.id},app_user_id=:#{#invoice.appUserId.id} WHERE id=:#{#invoice.id}", nativeQuery = true)
     @Transactional
     @Modifying
-    Invoice editInvoice(@Param("invoice") Invoice invoice);
+    void editInvoice(@Param("invoice") Invoice invoice);
 
     /**
      * get an Invoice
@@ -103,5 +103,8 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      */
     @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId", nativeQuery = true)
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
+
+    @Query(value = "SELECT MAX(code) FROM invoice", nativeQuery = true)
+    String findMaxCode();
 
 }

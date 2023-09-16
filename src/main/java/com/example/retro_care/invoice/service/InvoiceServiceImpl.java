@@ -34,8 +34,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return Invoice
      */
     @Override
-    public Invoice editInvoice(Invoice invoice) {
-        return invoiceRepository.editInvoice(invoice);
+    public void editInvoice(Invoice invoice) {
+        invoiceRepository.editInvoice(invoice);
     }
 
     /**
@@ -50,6 +50,26 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.getInvoiceById(invoiceId);
     }
 
+    @Override
+    public String findMaxCode() {
+        String maxCode = invoiceRepository.findMaxCode();
+        if (maxCode == null) {
+            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
+        }
+
+        // Tách phần số từ code lớn nhất hiện tại
+        String numericPart = maxCode.substring(2);
+        int numericValue = Integer.parseInt(numericPart);
+
+        // Tăng giá trị số lên 1
+        numericValue++;
+
+        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HD"
+        String newNumericPart = String.format("%05d", numericValue);
+        String newCode = "HDN" + newNumericPart;
+
+        return newCode;
+    }
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023;
