@@ -156,13 +156,15 @@ public class MedicineController {
      * @param searchByName value when filtering
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search-name/{page}/{limit}")
-    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@PathVariable(value = "page", required = false) Integer page,
-                                                             @PathVariable(value = "limit", required = false) Integer limit,
-                                                             @PathVariable(value = "sort", required = false) String sort,
-                                                             @RequestParam(value = "searchByName", required = false) String searchByName){
+    @GetMapping("/search/{page}/{limit}")
+    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
+                                                             @RequestParam(value = "limit", required = false) Integer limit,
+                                                             @RequestParam(value = "sort", required = false) String sort,
+                                                             @RequestParam(value = "searchByName", required = false) String searchByName,
+                                                             @RequestParam(value = "searchByCode", required = false) String searchByCode,
+                                                             @RequestParam(value = "searchByActiveElement", required = false) String searchByActiveElement){
         Pageable pageable = PageRequest .of(page,limit, Sort.by(sort));
-        Page<Medicine> medicines = iMedicineService.searchByCodeMedicine(pageable, searchByName);
+        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable,searchByName,searchByCode,searchByActiveElement);
         if (medicines.isEmpty()){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
