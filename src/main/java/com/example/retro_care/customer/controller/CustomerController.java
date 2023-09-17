@@ -30,7 +30,7 @@ public class CustomerController {
     /**
      * Author: TinDT
      * Goal: get customer for page to create customer information
-     * return creation page  of customers
+     * return HttpStatus
      */
     @GetMapping("/dto/create")
     public ResponseEntity<CustomerDto> getCustomerForCreate() {
@@ -45,6 +45,8 @@ public class CustomerController {
         System.out.println(customerDto.getCode());
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
+
+
 
     /**
      * Author: TinDT
@@ -65,7 +67,7 @@ public class CustomerController {
         }
         BeanUtils.copyProperties(customerDto, customer);
         saveCustomer = customerService.saveCustomer(customer);
-            return new ResponseEntity<>(saveCustomer, HttpStatus.OK);
+            return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }
 
@@ -74,7 +76,7 @@ public class CustomerController {
      * Goal: update information of customer
      * * return HttpStatus
      */
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,BindingResult bindingResult) {
         new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
@@ -87,20 +89,9 @@ public class CustomerController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDto,customer);
         customerService.updateCustomer(customer);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
     }
-//    /**
-//     * Author: TinDT
-//     * Goal: Send customers needing updates to the customer updates page
-//     * * return HttpStatus
-//     */
-//    @GetMapping("/dto/update/{id}")
-//    public ResponseEntity<CustomerDto> getCustomerForUpdate(@PathVariable Long id) {
-//        CustomerDto customerDto = new CustomerDto();
-//        Customer customer = customerService.findCustomerById(id);
-//        BeanUtils.copyProperties(customer,customerDto);
-//        return new ResponseEntity<>(customerDto, HttpStatus.OK);
-//    }
+
 
     /**
      * Author: TinDT
