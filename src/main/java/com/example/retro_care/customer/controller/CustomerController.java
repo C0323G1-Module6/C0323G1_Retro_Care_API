@@ -116,11 +116,23 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = " is not null or app_user_id", required = false) String groupValue,
-                                             @RequestParam(defaultValue = "code", required = false) String sortItem) {
+                                             @RequestParam(defaultValue = " app_user_id is null or app_user_id is not null ", required = false) String groupValue,
+                                             @RequestParam(defaultValue = "code") String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
         Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
-        if (!customers.isEmpty()) {
+        System.out.println(customers.getContent());
+        if (customers.getTotalElements()!=0) {
+            return new ResponseEntity<>(customers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @GetMapping("/list-customer")
+    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false)int page,
+                                    @RequestParam(defaultValue = "", required = false) String searchName) {
+        Pageable pageable = PageRequest.of(page,5);
+        Page<Customer> customers = customerService.findAllByName(pageable, searchName);
+        System.out.println(customers.getContent());
+        if (customers.getTotalElements()!=0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
