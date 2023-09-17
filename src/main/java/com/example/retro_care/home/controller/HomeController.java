@@ -28,4 +28,10 @@ public class HomeController {
     public ResponseEntity<List<Medicine>> searchMedicineForHomepage(String inputString) {
         return new ResponseEntity<>(homeService.searchMedicineForHomepage(inputString), HttpStatus.OK);
     }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<List<Medicine>> findFavoriteMedicineForHomepage() {
+        return new ResponseEntity<>(homeService.findFavoriteMedicineForHomepage(), HttpStatus.OK);
+    }
+
 }
