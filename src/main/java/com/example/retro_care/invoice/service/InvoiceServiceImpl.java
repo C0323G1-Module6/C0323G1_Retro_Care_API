@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,26 +18,16 @@ public class InvoiceServiceImpl implements IInvoiceService {
     /**
      * create an Invoice
      * Code by CuongHLT
-     *
      * @param invoice
      * @return Invoice
      */
     @Override
     public Invoice createInvoice(Invoice invoice) {
+        invoice.setCreationDate(new Date());
+        invoice.setFlagDeleted(false);
         return invoiceRepository.createInvoice(invoice);
     }
 
-    /**
-     * edit an Invoice
-     * Code by CuongHLT
-     *
-     * @param invoice
-     * @return Invoice
-     */
-    @Override
-    public void editInvoice(Invoice invoice) {
-        invoiceRepository.editInvoice(invoice);
-    }
 
     /**
      * get an Invoice
@@ -50,6 +41,12 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.getInvoiceById(invoiceId);
     }
 
+    /**
+     * find and create Next code for invoice
+     * Code by CuongHLT
+     *
+     * @return Next code String
+     */
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();

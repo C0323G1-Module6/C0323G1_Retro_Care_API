@@ -9,8 +9,7 @@ import java.util.List;
 public interface IInvoiceDetailService {
     void createInvoiceDetail(InvoiceDetail invoiceDetail);
 
-    void deleteInvoiceDetail(Long invoiceDetailId);
+    void deleteInvoiceDetail(Long invoiceId);
 
-    InvoiceDetail getInvoiceDetailById(Long invoiceDetailId);
-    void editInvoiceDetail(InvoiceDetail invoiceDetail);
+    List<InvoiceDetail> getInvoiceDetailByInvoiceId(Long invoiceId);
 }

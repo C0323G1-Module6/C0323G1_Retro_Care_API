@@ -117,4 +117,18 @@ public class InvoiceDetail {
     public int hashCode() {
         return Objects.hash(getId(), getDiscount(), getExpiry(), getMedicineQuantity(), getLot(), getFlagDeleted(), getMedicineId(), getInvoiceId());
     }
+
+    @Override
+    public String toString() {
+        return "InvoiceDetail{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", expiry=" + expiry +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicineId=" + medicineId +
+                ", invoiceId=" + invoiceId +
+                '}';
+    }
 }

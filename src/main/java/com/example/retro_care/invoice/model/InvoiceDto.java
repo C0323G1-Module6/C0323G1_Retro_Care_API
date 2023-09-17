@@ -8,7 +8,7 @@ import org.springframework.validation.Validator;
 import java.util.Date;
 import java.util.Set;
 
-public class InvoiceDto {
+public class InvoiceDto implements Validator {
     private Long id;
     private String code;
     private String documentNumber;
@@ -21,12 +21,12 @@ public class InvoiceDto {
 
     private AppUser appUserId;
 
-//    Set<InvoiceDetailDto> invoiceDetailSet;
+    Set<InvoiceDetailDto> invoiceDetailSet;
 
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId) {
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetailDto> invoiceDetailSet) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -36,6 +36,7 @@ public class InvoiceDto {
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
         this.appUserId = appUserId;
+        this.invoiceDetailSet = invoiceDetailSet;
     }
 
     public Long getId() {
@@ -110,6 +111,14 @@ public class InvoiceDto {
         this.appUserId = appUserId;
     }
 
+    public Set<InvoiceDetailDto> getInvoiceDetailSet() {
+        return invoiceDetailSet;
+    }
+
+    public void setInvoiceDetailSet(Set<InvoiceDetailDto> invoiceDetailSet) {
+        this.invoiceDetailSet = invoiceDetailSet;
+    }
+
     @Override
     public String toString() {
         return "InvoiceDto{" +
@@ -123,5 +132,43 @@ public class InvoiceDto {
                 ", supplierId=" + supplierId +
                 ", appUserId=" + appUserId +
                 '}';
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        InvoiceDto invoiceDto = (InvoiceDto) target;
+        if (invoiceDto.getCode().equals("")) {
+            errors.rejectValue("code", null, "Không được để trống trường này");
+        } else if (!invoiceDto.getCode().matches("^HDN[0-9]{5}$")) {
+            errors.rejectValue("code", null, "Nhập không đúng định dạng");
+        }
+        if (invoiceDto.getPaid() == null) {
+            errors.rejectValue("set", null, "Không được để trống trường này");
+        } else if (invoiceDto.getPaid().isNaN()) {
+            errors.rejectValue("paid", null, "Không phải là số");
+        } else if (invoiceDto.getPaid() >= 0) {
+            errors.rejectValue("paid", null, "Giá trị phải lớn hơn hoặc bằng 0");
+        }
+
+        for (InvoiceDetailDto invoiceDetailDto: invoiceDto.getInvoiceDetailSet()) {
+            if (invoiceDetailDto.getDiscount() == null) {
+                errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
+            } else if (invoiceDetailDto.getDiscount().isNaN()) {
+                errors.rejectValue("invoiceDetailSet", null, "Không phải là số");
+            } else if (invoiceDetailDto.getDiscount() >= 0) {
+                errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
+            }
+            if (invoiceDetailDto.getMedicineQuantity() == null) {
+                errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
+            } else if (invoiceDetailDto.getMedicineQuantity() >= 0) {
+                errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
+            }
+        }
+
     }
 }

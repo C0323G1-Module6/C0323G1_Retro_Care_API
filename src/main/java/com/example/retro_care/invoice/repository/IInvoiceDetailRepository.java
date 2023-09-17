@@ -21,14 +21,13 @@ public interface IInvoiceDetailRepository extends JpaRepository<InvoiceDetail, L
      * Delete a invoiceDetail
      * code by CuongHLT
      *
-     * @param invoiceDetailId return void
+     * @param invoiceId return void
      */
-    @Query(value = "DELETE FROM invoice_detail WHERE invoid_id = :invoiceDetailId", nativeQuery = true)
-    void deleteInvoiceDetail(@Param("invoiceDetailId") Long invoiceDetailId);
+    @Query(value = "UPDATE invoice_detail set flag_deleted = 1 WHERE invoid_id = :invoiceId", nativeQuery = true)
+    void deleteInvoiceDetail(@Param("invoiceId") Long invoiceId);
 
-    @Query(value = "select id,discount, medicine_quantity, lot, flag_deleted,medicine_id,invoice_id from invoice_detail where id = :invoiceDetailId", nativeQuery = true)
-    InvoiceDetail getInvoiceDetailById(@Param("invoiceDetailId") Long invoiceDetailId);
 
-    @Query(value = "UPDATE invoice_detail SET discount=:#{#invoiceDetail.discount}, medicine_quantity=:#{#invoiceDetail.medicineQuantity}, lot=:#{#invoiceDetail.lot}, flag_deleted=:#{#invoiceDetail.flagDeleted},medicine_id=:#{#invoiceDetail.medicineId},invoice_id=:#{#invoiceDetail.invoiceId} WHERE id = :#{#invoiceDetail.id}", nativeQuery = true)
-    void editInvoiceDetail(@Param("invoiceDetail") InvoiceDetail invoiceDetail);
+    @Query(value = "select id,discount, medicine_quantity, lot, flag_deleted,medicine_id,invoice_id from invoice_detail where id = :invoiceId", nativeQuery = true)
+    List<InvoiceDetail> getInvoiceDetailByInvoiceId(@Param("invoiceId") Long invoiceId);
+
 }
