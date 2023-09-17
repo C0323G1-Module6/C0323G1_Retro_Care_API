@@ -20,12 +20,36 @@ public class UserOrder {
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Orders orders;
 
+    public UserOrder() {
+    }
+
+    public UserOrder(Long id, AppUser appUser, Orders orders) {
+        this.id = id;
+        this.appUser = appUser;
+        this.orders = orders;
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public Orders getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Orders orders) {
+        this.orders = orders;
     }
 }
