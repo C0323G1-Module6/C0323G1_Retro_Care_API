@@ -25,43 +25,57 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
-
+    /**
+     * method: configureGlobal
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * param: AuthenticationManagerBuilder auth
+     * return: void
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
         auth.userDetailsService(jwtUserDetailService).passwordEncoder(new BCryptPasswordEncoder());
     }
-
+    /**
+     * method: authenticationManagerBean
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: AuthenticationManager
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
-
+    /**
+     * method: passwordEncoder
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: PasswordEncoder
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
+    /**
+     * method: configure
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: void
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
 //        httpSecurity.csrf().disable().cors().and()
 //                .authorizeRequests()
 //                .antMatchers(
-//                        "/api/user/login-by-username",
-//                        "/api/user/register-by-customer",
-//                        "/api/user/register-by-manager",
-//                        "api/user/login-by-facebook")
+//                        "/api/user/login-by-username/**",
+//                        "/api/user/register-by-customer/**",
+//                        "/api/user/register-by-manager/**",
+//                        "/api/user/login-by-facebook/**",
+//                        "/api/user/logout/**")
 //                .permitAll()
 //                .anyRequest()
 //                .authenticated()
-//                .and()
-//                .logout()
-//                .logoutUrl("/api/user/logout")
-//                .deleteCookies("JWT")
-//                .logoutSuccessUrl("/home")
 //                .and()
 //                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
 //                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
