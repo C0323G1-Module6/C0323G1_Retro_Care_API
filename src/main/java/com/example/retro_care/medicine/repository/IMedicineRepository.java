@@ -164,7 +164,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      */
     @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
             "where name like :name% and flag_delete = false")
-    List<Medicine> getMedicineByNameWhenSell(@Param("name") String name);
+    List<Medicine> getMedicineByNameWhenSell(@Param("name") String name, Pageable pageable);
 
 
     /**
