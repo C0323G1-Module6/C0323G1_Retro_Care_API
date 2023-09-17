@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -142,5 +143,29 @@ public class MedicineController {
         }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    /**
+     * author: DaoPTA
+     * workday: 18/09/2023
+     * Search by name Medicine
+     *
+     * @param page Pagination after search
+     * @param limit Limit the number per page
+     * @param sort Arrange records in each page
+     * @param searchByName value when filtering
+     * @return ResponseEntity<?>
+     */
+    @GetMapping("/search-name/{page}/{limit}")
+    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@PathVariable(value = "page", required = false) Integer page,
+                                                             @PathVariable(value = "limit", required = false) Integer limit,
+                                                             @PathVariable(value = "sort", required = false) String sort,
+                                                             @RequestParam(value = "searchByName", required = false) String searchByName){
+        Pageable pageable = PageRequest .of(page,limit, Sort.by(sort));
+        Page<Medicine> medicines = iMedicineService.searchByCodeMedicine(pageable, searchByName);
+        if (medicines.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }
