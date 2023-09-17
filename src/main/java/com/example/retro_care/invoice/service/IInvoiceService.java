@@ -15,6 +15,14 @@ public interface IInvoiceService {
      */
     Invoice createInvoice(Invoice invoice);
 
+    /**
+     * Edit an Invoice
+     * Code by CuongHLT
+     * @param invoice
+     * @return void
+     */
+    void editInvoice(Invoice invoice);
+
     Invoice getInvoiceById(Long invoiceId);
     /**
      * find and create Next code for invoice

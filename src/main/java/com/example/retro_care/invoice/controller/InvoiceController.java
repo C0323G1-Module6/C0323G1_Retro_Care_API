@@ -1,9 +1,7 @@
 package com.example.retro_care.invoice.controller;
 
 import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDto;
-import com.example.retro_care.invoice.service.IInvoiceDetailService;
 import com.example.retro_care.invoice.service.IInvoiceService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -27,8 +26,6 @@ public class InvoiceController {
 
     @Autowired
     IInvoiceService invoiceService;
-    @Autowired
-    IInvoiceDetailService invoiceDetailService;
 
     /**
      * Create by: HuyHD;
@@ -117,10 +114,6 @@ public class InvoiceController {
         BeanUtils.copyProperties(invoiceDto, invoice);
         if (invoice.getInvoiceDetailSet() != null) {
             Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-            for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-                invoiceDetail.setInvoiceId(selectedInvoice);
-                invoiceDetailService.createInvoiceDetail(invoiceDetail);
-            }
             return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
         } else
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -161,21 +154,10 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoice.getInvoiceDetailSet() == null) {
-            if (invoiceDetailService.getInvoiceDetailByInvoiceId(invoice.getId()) != null)
-                invoiceDetailService.deleteInvoiceDetail(invoice.getId());
-            else
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            invoiceService.deleteInvoice(invoice.getId());
-        } else {
-            invoiceService.deleteInvoice(invoice.getId());
-            invoiceDetailService.deleteInvoiceDetail(invoice.getId());
-            Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-            for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-                invoiceDetail.setInvoiceId(selectedInvoice);
-                invoiceDetailService.createInvoiceDetail(invoiceDetail);
-            }
-        }
+        if (invoiceService.getInvoiceById(invoice.getId()) != null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        else
+            invoiceService.editInvoice(invoice);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
