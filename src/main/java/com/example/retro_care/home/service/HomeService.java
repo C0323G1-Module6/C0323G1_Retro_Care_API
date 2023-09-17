@@ -22,4 +22,9 @@ public class HomeService implements IHomeService {
         String keyword = '%' + inputString + '%';
         return homeRepository.searchMedicineForHomepage(keyword);
     }
+
+    @Override
+    public List<Medicine> findFavoriteMedicineForHomepage() {
+        return homeRepository.findFavoriteMedicineForHomepage();
+    }
 }
