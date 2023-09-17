@@ -12,17 +12,31 @@ public class HomeService implements IHomeService {
     @Autowired
     private HomeRepository homeRepository;
 
+    /**
+     * @return List all medicine that do not have flag_deleted
+     * @author HuyL
+     */
     @Override
     public List<Medicine> findAllMedicineForHomepage() {
         return homeRepository.findAllMedicineForHomepage();
     }
 
-    @Override
-    public List<Medicine> searchMedicineForHomepage(String inputString) {
-        String keyword = '%' + inputString + '%';
-        return homeRepository.searchMedicineForHomepage(keyword);
+    /**
+     * @param keyword is the search string
+     * @param type    is the kind of medicine
+     * @return list all medicine related to keyword and type and do not have flag_deleted
+     * @author HuyL
+     */
+    public List<Medicine> searchMedicineForHomepage(String keyword, String type) {
+        String keywordParam = '%' + keyword + '%';
+        String typeParam = '%' + type + '%';
+        return homeRepository.searchMedicineForHomepage(keywordParam, typeParam);
     }
 
+    /**
+     * @return 30 medicines that have the most sale quantity
+     * @author HuyL
+     */
     @Override
     public List<Medicine> findFavoriteMedicineForHomepage() {
         return homeRepository.findFavoriteMedicineForHomepage();
