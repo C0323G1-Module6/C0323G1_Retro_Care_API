@@ -93,6 +93,9 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId and flag_deleted = 0", nativeQuery = true)
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
 
+    @Query(value = "UPDATE invoice SET document_number = :#{#invoice.documentNumber},creation_date = :#{#invoice.creationDate},paid = :#{#invoice.paid},note = :#{#invoice.note},supplier_id =:#{#invoice.supplierId.id} ,app_user_id= :#{#invoice.appUserId.id} where id = :#{#invoice.id}", nativeQuery = true)
+    Invoice editInvoice(@Param("invoice") Invoice invoice);
+
     /**
      * find Max code in DB
      * Code by CuongHLT
