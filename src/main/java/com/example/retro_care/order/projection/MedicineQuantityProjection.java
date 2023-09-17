@@ -4,6 +4,6 @@ public interface MedicineQuantityProjection {
     Long getId();
     String getName();
     Integer getQuantity();
-    Integer getConversionUnit();
+    Long getConversion_Rate();
 
 }

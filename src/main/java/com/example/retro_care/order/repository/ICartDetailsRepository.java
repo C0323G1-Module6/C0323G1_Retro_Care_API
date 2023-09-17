@@ -18,11 +18,13 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
 
 
     @Modifying
-    @Query(nativeQuery = true, value = "insert into cart_details (app_user_id, medicine_id, newQuantity)" +
-            " VALUES (:appUserId, :medicineId, :quantity) " +
-            "ON DUPLICATE KEY UPDATE quantity = quantity + VALUES(:newQuantity)")
+    @Query(nativeQuery = true, value = "insert into cart_details (app_user_id, medicine_id, quantity)" +
+            " VALUES (:appUserId, :medicineId, :newQuantity) " +
+            "ON DUPLICATE KEY UPDATE quantity = quantity + :newQuantity")
     void addToCartFromDetailsAndHome(@Param("appUserId") Long appUserId,
                                      @Param("medicineId") Long medicineId, @Param("newQuantity") Integer newQuantity);
+
+
 
 
     @Modifying
@@ -41,11 +43,11 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     void deleteCartDetailsById(@Param("cartId") Long cartId);
 
 
-    @Query(nativeQuery = true, value = "SELECT m.id, m.name, m.quantity, ud.conversion_unit "+
+    @Query(nativeQuery = true, value = "SELECT m.id, m.name, m.quantity, ud.conversion_rate "+
             "FROM medicine AS m" +
             " JOIN unit_detail AS ud ON m.id = ud.medicine_id" +
             " WHERE m.id = :medicineId")
-    MedicineQuantityProjection checkQuantityBasedOnUnit(@Param("medicineId") Long medicineId);
+    MedicineQuantityProjection getQuantityBasedOnUnit(@Param("medicineId") Long medicineId);
 
     @Query(nativeQuery = true, value = "call getCartDetailsForMail(:appUserId)")
     List<CartProjection> findCartDetailsByUserId(@Param("appUserId") Long appUserId);

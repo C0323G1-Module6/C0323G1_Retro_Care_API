@@ -39,9 +39,9 @@ public class EmployeeService implements IEmployeeService{
      * @return this employee have id
      */
     @Override
-    public Employee addEmployee(Employee employee) {
+    public void addEmployee(Employee employee) {
 
-        return employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
+        employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
                 employee.getNote(),employee.isFlagDelete(),employee.getAppUser().getId());
@@ -98,5 +98,31 @@ public class EmployeeService implements IEmployeeService{
             employeeRepository.deleteEmployeeById(id);
             return true;
         }
+    }
+
+    /**
+     * Author: TanNV
+     * Date:16/09/2023
+     * Get employee by id
+     * @param id
+     * @return
+     */
+    @Override
+    public Employee getById(Long id) {
+        return employeeRepository.findEmployeeById(id);
+    }
+
+    /**
+     * Author: TanNV
+     * Date:16/09/2023
+     * update employee
+     * @param employee
+     */
+    @Override
+    public void updateEmployee(Employee employee) {
+        employeeRepository.updateEmployee(employee.getNameEmployee(),
+                employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
+                employee.getBirthday(),employee.getIdCard(),employee.getImage(),
+                employee.getNote());
     }
 }

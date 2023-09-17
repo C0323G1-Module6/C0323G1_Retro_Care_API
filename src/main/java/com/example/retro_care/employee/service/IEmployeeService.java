@@ -21,9 +21,9 @@ public interface IEmployeeService {
     * Date create: 15/09/2023
     * Save employee
     * @param employee
-    * @return employee
+    * @return void
     */
-    Employee addEmployee(Employee employee);
+    void addEmployee(Employee employee);
     /**
      * Create: SonTT
      * Date create: 15/09/2023
@@ -60,4 +60,21 @@ public interface IEmployeeService {
      * @return boolean
      */
     boolean deleteEmployee(Long id);
+
+ /**
+  * Author: TanNV
+  * Date:16/09/2023
+  * Get employee by id
+  * @param id
+  * @return employee
+  */
+ Employee getById(Long id);
+
+ /**
+  * Author: TanNV
+  * Date:16/09/2023
+  * update employee
+  * @param employee
+  */
+ void updateEmployee(Employee employee);
 }
