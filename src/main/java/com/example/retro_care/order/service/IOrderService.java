@@ -76,6 +76,13 @@ public interface IOrderService {
      * @param userId
      */
    void createUserOrder(Long orderId, Long userId);
-    void createOrderForUser(Long appUserId);
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     * @param : appUserId, loyaltyPoint;
+     */
+    void createOrderForUser(Long appUserId, Long loyaltyPoint);
 
 }
