@@ -3,6 +3,12 @@ package com.example.retro_care.invoice.service;
 import com.example.retro_care.invoice.model.Invoice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import java.util.List;
+
+
+import com.example.retro_care.invoice.model.Invoice;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +18,21 @@ import java.util.List;
 
 
 public interface IInvoiceService {
+    /**
+     * create an Invoice
+     * Code by CuongHLT
+     * @param invoice
+     * @return Invoice instance
+     */
+    Invoice createInvoice(Invoice invoice);
+
+    Invoice getInvoiceById(Long invoiceId);
+    /**
+     * find and create Next code for invoice
+     * Code by CuongHLT
+     * @return Next code String
+     */
+    String findMaxCode();
 
     /**
      * Create by: HuyHD;

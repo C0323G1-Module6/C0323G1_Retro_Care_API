@@ -9,9 +9,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
@@ -73,5 +70,36 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             @Param("start_time") String start_time,
             @Param("end_time") String end_time,
             @Param("sort_column") String sort_column);
+
+    /**
+     * create an Invoice
+     * Code by CuongHLT
+     *
+     * @param invoice
+     * @return Invoice
+     */
+    @Query(value = "Call create_invoice (:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.flagDeleted},:#{#invoice.supplierId.id},:#{#invoice.appUserId.id}) ", nativeQuery = true)
+    @Transactional
+    Invoice createInvoice(@Param("invoice") Invoice invoice);
+
+
+    /**
+     * get an Invoice
+     * Code by CuongHLT
+     *
+     * @param invoiceId a number
+     * @return Invoice
+     */
+    @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId", nativeQuery = true)
+    Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
+
+    /**
+     * find Max code in DB
+     * Code by CuongHLT
+     *
+     * @return Next code String
+     */
+    @Query(value = "SELECT MAX(code) FROM invoice", nativeQuery = true)
+    String findMaxCode();
 
 }

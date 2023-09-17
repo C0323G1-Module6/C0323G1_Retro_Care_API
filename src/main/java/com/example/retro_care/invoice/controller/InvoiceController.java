@@ -1,27 +1,34 @@
 package com.example.retro_care.invoice.controller;
 
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.service.IInvoiceDetailService;
 import com.example.retro_care.invoice.service.IInvoiceService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalTime;
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/invoice")
 @CrossOrigin("*")
+@RequestMapping("/api/invoice")
 public class InvoiceController {
 
     @Autowired
-    private IInvoiceService invoiceService;
+    IInvoiceService invoiceService;
+    @Autowired
+    IInvoiceDetailService invoiceDetailService;
 
     /**
      * Create by: HuyHD;
@@ -43,6 +50,7 @@ public class InvoiceController {
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: delete invoice with invoice code ? ;
+     *
      * @param : id (id_invoice);
      * @return : new invoice list does not exist newly deleted element.
      */
@@ -62,9 +70,10 @@ public class InvoiceController {
     }
 
     /**
-     *Create by: HuyHD;
+     * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
+     *
      * @param start_date
      * @param end_date
      * @param start_time
@@ -86,4 +95,101 @@ public class InvoiceController {
         }
     }
 
+
+    /**
+     * Create an invoice with create invoiceDetail
+     * Code by CuongHLT
+     *
+     * @param invoiceDto
+     * @return a ResponseEntity
+     */
+    @PostMapping("/create")
+    public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        new InvoiceDto().validate(invoiceDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> err = new HashMap<>();
+            for (FieldError e : bindingResult.getFieldErrors()) {
+                err.put(e.getField(), e.getDefaultMessage());
+            }
+            return new ResponseEntity<>(err, HttpStatus.NOT_ACCEPTABLE);
+        }
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceDto, invoice);
+        if (invoice.getInvoiceDetailSet() != null) {
+            Invoice selectedInvoice = invoiceService.createInvoice(invoice);
+            for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+                invoiceDetail.setInvoiceId(selectedInvoice);
+                invoiceDetailService.createInvoiceDetail(invoiceDetail);
+            }
+            return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
+        } else
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+    }
+
+    /**
+     * get an invoice for edit
+     * Code by CuongHLT
+     *
+     * @param invoiceId
+     * @return an invoice
+     */
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long invoiceId) {
+        Invoice invoice = invoiceService.getInvoiceById(invoiceId);
+        if (invoice == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(invoice, HttpStatus.OK);
+    }
+
+    /**
+     * Edit an invoice with id
+     * Code by CuongHLT
+     *
+     * @param invoiceDto
+     * @return an ResponseEntity
+     */
+    @PutMapping("/edit")
+    public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        new InvoiceDto().validate(invoiceDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> err = new HashMap<>();
+            for (FieldError e : bindingResult.getFieldErrors()) {
+                err.put(e.getField(), e.getDefaultMessage());
+            }
+            return new ResponseEntity<>(err, HttpStatus.NOT_ACCEPTABLE);
+        }
+        Invoice invoice = new Invoice();
+        BeanUtils.copyProperties(invoiceDto, invoice);
+        if (invoice.getInvoiceDetailSet() == null) {
+            if (invoiceDetailService.getInvoiceDetailByInvoiceId(invoice.getId()) != null)
+                invoiceDetailService.deleteInvoiceDetail(invoice.getId());
+            else
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            invoiceService.deleteInvoice(invoice.getId());
+        } else {
+            invoiceService.deleteInvoice(invoice.getId());
+            invoiceDetailService.deleteInvoiceDetail(invoice.getId());
+            Invoice selectedInvoice = invoiceService.createInvoice(invoice);
+            for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+                invoiceDetail.setInvoiceId(selectedInvoice);
+                invoiceDetailService.createInvoiceDetail(invoiceDetail);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * Get a next code for invoice
+     * Code by CuongHLT
+     *
+     * @return an ResponseEntity
+     */
+    @GetMapping("/code")
+    public ResponseEntity<String> getCodeInvoice() {
+        String maxCode = invoiceService.findMaxCode();
+        if (maxCode == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(maxCode, HttpStatus.OK);
+    }
 }
