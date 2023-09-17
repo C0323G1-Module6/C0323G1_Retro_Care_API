@@ -34,7 +34,16 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * Goal: get all customers
      * return list of customers
      */
-    @Query(value = " SELECT code, name, birth_day, address, phone_number, note, CASE WHEN app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type FROM retro_care.customer WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id = :groupValue ORDER BY :sortItem ", nativeQuery = true)
+    @Query(value = " SELECT c.code, c.name, c.birth_day, c.address, c.phone_number, c.note, " +
+            "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type " +
+            "FROM retro_care.customer c " +
+            "WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND (c.app_user_id = :groupValue) " +
+            "ORDER BY " +
+            "CASE :sortItem WHEN 'code' THEN c.code " +
+            "               WHEN 'name' THEN c.name " +
+            "               ELSE c.code " +
+            "END",
+            countQuery = " SELECT COUNT(c.id) from retro_care.customer c WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND (c.app_user_id = :groupValue)", nativeQuery = true)
     Page<Customer> findAllCustomer(Pageable pageable, @Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem);
 
 
