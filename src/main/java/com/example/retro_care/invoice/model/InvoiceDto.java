@@ -156,7 +156,7 @@ public class InvoiceDto implements Validator {
             errors.rejectValue("paid", null, "Giá trị phải lớn hơn hoặc bằng 0");
         }
 
-        for (InvoiceDetail invoiceDetail: invoiceDto.getInvoiceDetailSet()) {
+        for (InvoiceDetail invoiceDetail : invoiceDto.getInvoiceDetailSet()) {
             if (invoiceDetail.getDiscount() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
             } else if (invoiceDetail.getDiscount().isNaN()) {

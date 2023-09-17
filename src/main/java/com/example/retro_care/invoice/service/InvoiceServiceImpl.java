@@ -82,6 +82,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
         return newCode;
     }
+
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023;

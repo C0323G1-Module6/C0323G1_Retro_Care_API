@@ -35,6 +35,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     @Modifying
     @Query(value = "update invoice set flag_deleted = true where id = :id", nativeQuery = true)
     void deleteInvoice(@Param("id") Long id);
+
     @Query(nativeQuery = true, value = "select * from ivoice where id = :id")
     Invoice findByIdInvoice(@Param("id") Long id);
 
@@ -45,6 +46,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * Create by: HuyHD;
      * Date create: 15/09/2023;
      * Function: Search by invoice creation time, and sort by column;
+     *
      * @param start_date
      * @param end_date
      * @param start_time
