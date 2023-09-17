@@ -12,6 +12,12 @@ public class PatientService implements IPatientService{
     @Autowired
     private IPatientRepository patientRepository;
 
+    /**
+     * Author: ThanhKN
+     * Goal:get all patient
+     * Return patient
+     * Date:17/09/2023
+     */
     @Override
     public List<Patient> getAllPatient() {
         return patientRepository.getAllPatient();
