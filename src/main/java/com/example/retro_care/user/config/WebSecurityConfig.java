@@ -65,22 +65,22 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.csrf().disable().cors().and()
-                .authorizeRequests()
-                .antMatchers(
-                        "/api/user/login-by-username/**",
-                        "/api/user/register-by-customer/**",
-                        "/api/user/register-by-manager/**",
-                        "/api/user/login-by-facebook/**",
-                        "/api/user/logout/**")
-                .permitAll()
-                .anyRequest()
-                .authenticated()
-                .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.csrf().disable().cors().and()
+//                .authorizeRequests()
+//                .antMatchers(
+//                        "/api/user/login-by-username/**",
+//                        "/api/user/register-by-customer/**",
+//                        "/api/user/register-by-manager/**",
+//                        "/api/user/login-by-facebook/**",
+//                        "/api/user/logout/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 }
