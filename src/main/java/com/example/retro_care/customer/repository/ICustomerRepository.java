@@ -25,6 +25,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
 
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number", nativeQuery = true)
     Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
+
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code", nativeQuery = true)
     Customer findCustomerByCode(@Param(value = "code") String code);
 
@@ -33,16 +34,11 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * Goal: get all customers
      * return list of customers
      */
-    @Query(value = " SELECT code, name, birth_day, address, phone_number, note," +
-            "CASE " +
-            "WHEN app_user_id is null then 'Khách offline' " +
-            "ELSE 'Khách online' " +
-            "END AS customer_type" +
-            " FROM retro_care.customer" +
-            " WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id :groupValue " +
-            "ORDER BY :sortItem", nativeQuery = true)
-    Page<Customer> findAllCustomer(Pageable pageable, @Param("searchInput") String searchInput, @Param("code") String code, @Param("address") String address, @Param("groupValue") String groupValue, @Param("sortItem") String sortItem);
+    @Query(value = " SELECT code, name, birth_day, address, phone_number, note, CASE WHEN app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type FROM retro_care.customer WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id = :groupValue ORDER BY :sortItem ", nativeQuery = true)
+    Page<Customer> findAllCustomer(Pageable pageable, @Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem);
 
+
+    Page<Customer> findCustomerByNameContaining(Pageable pageable, String searchName);
     /**
      * Author: QuyenHT
      * Goal: Delete customer by id
@@ -51,5 +47,5 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying
     @Transactional
     @Query(value = " UPDATE retro_care.customer set flag_deleted = false WHERE id = :id ", nativeQuery = true)
-    void removeCustomer(@Param("id") Long id);
+    void removeCustomer(@Param(value = "id") Long id);
 }
