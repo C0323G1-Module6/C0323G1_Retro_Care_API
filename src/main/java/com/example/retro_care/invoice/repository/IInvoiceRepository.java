@@ -90,7 +90,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param invoiceId a number
      * @return Invoice
      */
-    @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId", nativeQuery = true)
+    @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId and flag_deleted = 0", nativeQuery = true)
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
 
     /**
