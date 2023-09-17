@@ -92,6 +92,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
     Page<Medicine> findAll(Pageable pageable);
 
+    @Query(value = "update medicine set flag_deleted = true where medicine.id = :id",nativeQuery = true)
+    void deleteMedicineById(@Param("id") Long id);
+
     /**
      * author: VuNL
      * date create: 16/09/2023
