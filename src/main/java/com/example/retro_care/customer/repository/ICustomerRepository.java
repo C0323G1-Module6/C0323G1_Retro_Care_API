@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,0,:note,true,:app_user_id)", nativeQuery = true)
-    void saveCustomer(@Param(value = "code") String code, @Param(value = "name") String name, @Param(value = "birth_day") String birthDay, @Param(value = "address") String address, @Param(value = "phone_number") String phoneNumber, @Param(value = "email") String email, @Param(value = "note") String note, @Param(value = "app_user_id") Long appUserId);
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:#{#customer.code},:#{#customer.name},:#{#customer.birthDay},:#{#customer.address},:#{#customer.phoneNumber},:#{#customer.email},0,:#{#customer.note},true,:#{#customer.appUser.id})", nativeQuery = true)
+    void saveCustomer(@Param(value = "customer") Customer customer);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE retro_care.customer set name =:name,birth_day=:birth_day,address=:address,phone_number=:phone_number,email=:email,note=:note,flag_deleted = true WHERE id =:id", nativeQuery = true)
-    void updateCustomer(@Param(value = "name") String name, @Param(value = "birth_day") String birthDay, @Param(value = "address") String address, @Param(value = "phone_number") String phoneNumber, @Param(value = "email") String email, @Param(value = "note") String note, @Param(value = "id") Long id);
+    @Query(value = "UPDATE retro_care.customer set name= :#{#customer.name},birth_day = :#{#customer.birthDay},address = :#{#customer.address},phone_number = :#{#customer.phoneNumber},email = :#{#customer.email},flag_deleted = true WHERE id =:#{#customer.id}", nativeQuery = true)
+    void updateCustomer(@Param(value = "customer") Customer customer);
 
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id", nativeQuery = true)
     Customer findCustomerById(@Param(value = "id") Long id);
