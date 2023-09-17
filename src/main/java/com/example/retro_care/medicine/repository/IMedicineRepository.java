@@ -93,6 +93,16 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     Page<Medicine> findAll(Pageable pageable);
 
     /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     * Delete medicine
+     *
+     * @param id Search medicine by id to delete
+     */
+    @Query(value = "update medicine set flag_deleted = true where medicine.id = :id",nativeQuery = true)
+    void deleteMedicineById(@Param("id") Long id);
+
+    /**
      * author: VuNL
      * date create: 16/09/2023
      * function: find medicine when sell offline
