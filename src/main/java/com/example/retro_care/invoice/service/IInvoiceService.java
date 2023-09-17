@@ -18,12 +18,20 @@ import java.util.List;
 
 
 public interface IInvoiceService {
+    /**
+     * create an Invoice
+     * Code by CuongHLT
+     * @param invoice
+     * @return Invoice instance
+     */
     Invoice createInvoice(Invoice invoice);
 
-    void editInvoice(Invoice invoice);
-
     Invoice getInvoiceById(Long invoiceId);
-
+    /**
+     * find and create Next code for invoice
+     * Code by CuongHLT
+     * @return Next code String
+     */
     String findMaxCode();
 
     /**

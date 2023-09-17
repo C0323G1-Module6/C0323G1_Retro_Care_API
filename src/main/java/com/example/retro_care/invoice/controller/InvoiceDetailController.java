@@ -12,20 +12,20 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@CrossOrigin("*")
-@RequestMapping("/api/invoiceDetail")
+//@RestController
+//@CrossOrigin("*")
+//@RequestMapping("/api/invoiceDetail")
 public class InvoiceDetailController {
-    @Autowired
-    IInvoiceDetailService invoiceDetailService;
+//    @Autowired
+//    IInvoiceDetailService invoiceDetailService;
 
-    @DeleteMapping("/{invoiceDetailId}")
-    public ResponseEntity deleteInvoiceDetail(@PathVariable Long invoiceDetailId) {
-        if (invoiceDetailService.getInvoiceDetailById(invoiceDetailId) == null)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        invoiceDetailService.deleteInvoiceDetail(invoiceDetailId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
+//    @DeleteMapping("/{invoiceDetailId}")
+//    public ResponseEntity deleteInvoiceDetail(@PathVariable Long invoiceDetailId) {
+//        if (invoiceDetailService.getInvoiceDetailById(invoiceDetailId) == null)
+//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+//        invoiceDetailService.deleteInvoiceDetail(invoiceDetailId);
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
 //    @PostMapping("/create")
 //    public ResponseEntity createInvoiceDetail(@RequestBody List<InvoiceDetailDto> invoiceDetailDtoList) {

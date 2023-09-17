@@ -28,21 +28,16 @@ public class InvoiceDetailServiceImpl implements IInvoiceDetailService {
      * Delete a invoiceDetail
      * code by CuongHLT
      *
-     * @param invoiceDetailId return void
+     * @param invoiceId return void
      */
     @Override
-    public void deleteInvoiceDetail(Long invoiceDetailId) {
-        invoiceDetailRepository.deleteInvoiceDetail(invoiceDetailId);
+    public void deleteInvoiceDetail(Long invoiceId) {
+        invoiceDetailRepository.deleteInvoiceDetail(invoiceId);
     }
 
     @Override
-    public InvoiceDetail getInvoiceDetailById(Long invoiceDetailId) {
-        return invoiceDetailRepository.getInvoiceDetailById(invoiceDetailId);
-    }
-
-    @Override
-    public void editInvoiceDetail(InvoiceDetail invoiceDetail) {
-        invoiceDetailRepository.editInvoiceDetail(invoiceDetail);
+    public List<InvoiceDetail> getInvoiceDetailByInvoiceId(Long invoiceDetailId) {
+        return invoiceDetailRepository.getInvoiceDetailByInvoiceId(invoiceDetailId);
     }
 
 }
