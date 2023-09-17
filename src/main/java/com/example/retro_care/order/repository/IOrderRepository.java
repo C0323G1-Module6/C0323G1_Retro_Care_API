@@ -173,8 +173,14 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     @Query(value = "SELECT * FROM orders WHERE datetime >= :startDateTime AND datetime <= :endDateTime", nativeQuery = true)
     List<Orders> findByDateTimeRange(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     * @param : appUserId, loyaltyPoint;
+     */
     @Modifying
-    @Query(nativeQuery = true, value = "call createOrder(:appUserId)")
-    void createOrderForUser(@Param("appUserId") Long appUserId);
+    @Query(nativeQuery = true, value = "call createOrder(:appUserId, :loyaltyPoint)")
+    void createOrderForUser(@Param("appUserId") Long appUserId,@Param("loyaltyPoint") Long loyaltyPoint);
 
 }

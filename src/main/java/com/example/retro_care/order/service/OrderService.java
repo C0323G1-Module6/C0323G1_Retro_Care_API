@@ -4,13 +4,10 @@ import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.repository.IOrderRepository;
 import com.sun.tools.javac.util.List;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.security.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -125,9 +122,15 @@ public class OrderService implements IOrderService {
 
     }
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     * @param : appUserId, loyaltyPoint;
+     */
     @Override
-    public void createOrderForUser(Long appUserId) {
-        iOrderRepository.createOrderForUser(appUserId);
+    public void createOrderForUser(Long appUserId, Long loyaltyPoint) {
+        iOrderRepository.createOrderForUser(appUserId, loyaltyPoint);
     }
 
 

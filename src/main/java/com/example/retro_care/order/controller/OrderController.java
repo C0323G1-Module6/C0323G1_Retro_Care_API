@@ -104,9 +104,16 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
-
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create order and update loyalty point, then send email as billing;
+     * @param : appUserId, loyalty point;
+     * @return : HTTPStatus;
+     */
     @PostMapping("/create")
-    public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId){
+    public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId,
+                                            @RequestParam("loyaltyPoint") Long loyaltyPoint){
 
         // prepare and send email
         List<CartProjection> cartsForBill = iCartDetailsService.findCartDetailsByUserId(appUserId);
@@ -116,7 +123,7 @@ public class OrderController {
         EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, cartsForBill);
         iEmailSenderService.sendEmail(emailMessage);
         // after sending mail then create order and clear cart
-        iOrderService.createOrderForUser(appUserId);
+        iOrderService.createOrderForUser(appUserId,loyaltyPoint);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
