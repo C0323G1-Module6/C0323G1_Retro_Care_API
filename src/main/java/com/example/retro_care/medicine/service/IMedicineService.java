@@ -36,5 +36,14 @@ public interface IMedicineService {
      * @return : Medicine list with pagination
      */
     Page<Medicine> findAll(Pageable pageable);
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     * Delete medicine
+     *
+     * @param id Search medicine by id to delete
+     * @return Boolean
+     */
     Boolean removeMedicine(Long id);
 }
