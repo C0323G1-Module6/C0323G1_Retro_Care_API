@@ -13,7 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
 @CrossOrigin("*")
@@ -47,19 +52,20 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PostMapping("/create")
-    public ResponseEntity<Customer> saveCustomer(@RequestBody CustomerDto customerDto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveCustomer(@Valid  @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
         Customer saveCustomer;
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            Map<String,String> errors = new HashMap<>();
+            for (FieldError err: bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
         }
         BeanUtils.copyProperties(customerDto, customer);
         saveCustomer = customerService.saveCustomer(customer);
-        if (saveCustomer != null) {
             return new ResponseEntity<>(saveCustomer, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
 
@@ -69,25 +75,32 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PatchMapping("/update")
-    public ResponseEntity<Customer> updateCustomer(@RequestBody Customer customer) {
-        customerService.updateCustomer(customer);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-    /**
-     * Author: TinDT
-     * Goal: Send customers needing updates to the customer updates page
-     * * return HttpStatus
-     */
-    @GetMapping("/dto/update/{id}")
-    public ResponseEntity<CustomerDto> getCustomerForUpdate(@PathVariable Long id) {
-        CustomerDto customerDto = new CustomerDto();
-        Customer customer = customerService.findCustomerById(id);
-        if (customer == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,BindingResult bindingResult) {
+        new CustomerDto().validate(customerDto,bindingResult);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err: bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        BeanUtils.copyProperties(customer,customerDto);
-        return new ResponseEntity<>(customerDto, HttpStatus.OK);
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerDto,customer);
+        customerService.updateCustomer(customer);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+//    /**
+//     * Author: TinDT
+//     * Goal: Send customers needing updates to the customer updates page
+//     * * return HttpStatus
+//     */
+//    @GetMapping("/dto/update/{id}")
+//    public ResponseEntity<CustomerDto> getCustomerForUpdate(@PathVariable Long id) {
+//        CustomerDto customerDto = new CustomerDto();
+//        Customer customer = customerService.findCustomerById(id);
+//        BeanUtils.copyProperties(customer,customerDto);
+//        return new ResponseEntity<>(customerDto, HttpStatus.OK);
+//    }
 
     /**
      * Author: TinDT
@@ -95,12 +108,11 @@ public class CustomerController {
      * * return HttpStatus
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> detailCustomer(@PathVariable Long id) {
+    public ResponseEntity<?> detailCustomer(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
-        if (customer != null) {
-            return new ResponseEntity<>(customer, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        CustomerDto customerDto = new CustomerDto();
+        BeanUtils.copyProperties(customer, customerDto);
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
     /**
