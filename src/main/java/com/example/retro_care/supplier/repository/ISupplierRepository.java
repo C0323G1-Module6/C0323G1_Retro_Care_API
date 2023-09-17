@@ -1,6 +1,7 @@
 package com.example.retro_care.supplier.repository;
 
 import com.example.retro_care.supplier.model.IInvoiceProjection;
+import com.example.retro_care.supplier.model.ISupplierProjection;
 import com.example.retro_care.supplier.model.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,16 +20,16 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      * date create: 14/09/2023
      *
      * @param: Pageable pageable
-     * return Page<Supplier>
+     * return Page<ISupplierProjection>
      */
     @Query(nativeQuery = true,
             value = "SELECT\n" +
-                    "    s.id,\n" +
-                    "    s.code,\n" +
-                    "    s.name,\n" +
-                    "    s.phone_number,\n" +
-                    "    s.address,\n" +
-                    "    s.note,\n" +
+                    "    s.id as idSupplier,\n" +
+                    "    s.code as codeSupplier,\n" +
+                    "    s.name as nameSupplier,\n" +
+                    "    s.phone_number as phoneNumber,\n" +
+                    "    s.address as addressSupplier,\n" +
+                    "    s.note as noteSupplier,\n" +
                     "    IFNULL(total_invoice_detail_amount - total_paid_amount, 0) AS debt\n" +
                     "FROM\n" +
                     "    supplier s\n" +
@@ -62,8 +63,8 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "            supplier_id\n" +
                     "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
                     "WHERE\n" +
-                    "    s.flag_deleted = 0;")
-    Page<Supplier> getListSupplier(Pageable pageable);
+                    "    s.flag_deleted = false;")
+    Page<ISupplierProjection> getListSupplier(Pageable pageable);
     /**
      * method :createSupplier()
      * created by :ThanhVH
@@ -75,7 +76,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(nativeQuery = true,
             value = "INSERT INTO supplier(code, name, email, address, phone_number, note, flag_deleted)" +
                     "VALUES (:#{#supplier.code},#{#supplier.name},#{#supplier.email},#{#supplier.address}," +
-                    "#{#supplier.phone},#{#supplier.note},false);")
+                    "#{#supplier.phoneNumber},#{#supplier.note},false);")
     void createSupplier(@Param("supplier") Supplier supplier);
     /**
      * method :updateSupplierById()
@@ -90,7 +91,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                    " name = #{#supplier.name}," +
                    " email = #{#supplier.email}," +
                    " address = #{#supplier.address}," +
-                   " phone_number = #{#supplier.phone}," +
+                   " phone_number = #{#supplier.phoneNumber}," +
                    " note = #{#supplier.note}," +
                    " WHERE (id = #{#supplier.id});")
     void updateSupplierById(@Param("supplier") Supplier supplier);
@@ -116,8 +117,8 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
 
     @Query(nativeQuery = true,
            value = "select supplier.id,supplier.code,supplier.name,supplier.email, supplier.address," +
-                   "supplier.tel,supplier.note,supplier.flag_deleted" +
-                   " from supplier where id_supplier = :id and flag_deleted = false")
+                   "supplier.phone_number,supplier.note,supplier.flag_deleted" +
+                   " from supplier where id = :id and flag_deleted = false")
     Supplier getSupplierById(@Param("id") Long id);
     /**
      * method :findAllListInvoiceByIdSupplier()

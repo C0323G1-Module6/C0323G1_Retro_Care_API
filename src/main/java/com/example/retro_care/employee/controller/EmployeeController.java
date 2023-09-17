@@ -49,25 +49,56 @@ public class EmployeeController {
      * @return Response entity
      */
     @PostMapping("/create")
-    public ResponseEntity<Employee> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
+    public ResponseEntity<String> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);
-        Employee employee1 = employeeService.addEmployee(employee);
-        if (employee1 == null) {
+        employeeService.addEmployee(employee);
+        return new ResponseEntity<>("Create successfully", HttpStatus.OK);
+    }
+
+    /**
+     * Author: TanNV
+     * Date: 15/09/2023
+     * Use to get employee by id and return Http status OK if it can find it else  return http status NO_CONTENT
+     * @param id
+     * @return Reponse entity
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        Employee employee = employeeService.getById(id);
+        if(employee==null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(employee1, HttpStatus.OK);
+        return new ResponseEntity<>(employee,HttpStatus.OK);
     }
-//    @GetMapping("/{id}")
-//    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
-//        Employee employee = employeeService.getById(id);
-//        return new ResponseEntity<>(employee,HttpStatus.OK);
-//    }
 
+    /**
+     * Author: TanNV
+     * Date: 16/09/2023
+     * Receive data and validate, if there is an error, return BAD_REQUEST,
+     * then save the employee to the DB. If saved successfully, return OK
+     * @param id id employee
+     * @param employeeDto validate info
+     * @param bindingResult return error
+     * @return Responese Entity with message
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<String> updateEmployee(@PathVariable Long id,
+                                                   @RequestBody EmployeeDto employeeDto,
+                                                   BindingResult bindingResult){
+        new EmployeeDto().validate(employeeDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
+        }
+        Employee employee = employeeService.getById(id);
+        BeanUtils.copyProperties(employeeDto, employee);
+        employeeService.updateEmployee(employee);
+        return new ResponseEntity<>("Update successfully",HttpStatus.OK);
+    }
     /**
      * Create: SonTT
      * Date create: 15/09/2023
@@ -77,11 +108,11 @@ public class EmployeeController {
      * @param limit
      * @return ResponseEntity<?>
      */
-    @GetMapping("/get-list/{page}/{limit}")
+    @GetMapping("/get-list/{page}/{limit}/{sort}")
     public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                           @PathVariable(value = "limit", required = false) Integer limit,
-                                                          @RequestParam(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
+                                                          @PathVariable(value = "sort", required = false) String sort) {
+        Pageable pageable = PageRequest.of(page, limit);
         Page<Employee> employees = employeeService.getListEmployee(pageable);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -89,6 +120,7 @@ public class EmployeeController {
             return new ResponseEntity<>(employees, HttpStatus.OK);
         }
     }
+
 
     /**
      * Create: SonTT
