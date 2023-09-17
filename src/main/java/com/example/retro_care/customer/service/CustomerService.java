@@ -24,6 +24,11 @@ public class CustomerService implements ICustomerService {
         return checkingCustomer;
     }
 
+    @Override
+    public Page<Customer> findAllByName(Pageable pageable, String searchName) {
+        return customerRepository.findCustomerByNameContaining(pageable,searchName);
+    }
+
     /**
      * Author: TinDT
      * Goal: update for customer
