@@ -136,13 +136,13 @@ public class EmployeeController {
      * @param nameEmployee
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search-list")
-    public ResponseEntity<Page<Employee>> searchEmployee(@RequestParam(value = "page", required = false) Integer page,
-                                                         @RequestParam(value = "limit", required = false) Integer limit,
-                                                         @RequestParam(value = "sort", required = false) String sort,
+    @GetMapping("/search-list/{page}/{limit}/{sort}")
+    public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
+                                                         @PathVariable(value = "limit", required = false) Integer limit,
+                                                         @PathVariable(value = "sort", required = false) String sort,
                                                          @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, limit,  Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees = employeeService.searchEmployee(pageable, idRole, nameEmployee);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -159,7 +159,7 @@ public class EmployeeController {
      * @param id
      * @return ResponseEntity<>
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete-employee")
     public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam(value = "id", required = false) Long id) {
         if (employeeService.deleteEmployee(id)) {
             return new ResponseEntity<>(HttpStatus.OK);

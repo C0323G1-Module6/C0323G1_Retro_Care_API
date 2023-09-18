@@ -90,10 +90,11 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * @param pageable
      * @return Page with data Employee
      */
-    @Query(value = "SELECT e.*, use.id, use.user_name, role.name FROM employee e " +
-            "JOIN app_user use on use.id = e.app_user_id " +
-            "JOIN user_role ur on ur.app_user_id = use.id " +
-            "JOIN app_role role on role.id = ur.app_role_id WHERE e.flag_delete = true", nativeQuery = true)
+    @Query(value = "SELECT e.* ,uses.user_name FROM employee e " +
+            "JOIN app_user uses on uses.id = e.app_user_id " +
+            "JOIN user_role ur on ur.app_user_id = uses.id " +
+            "JOIN app_role role on role.id = ur.app_role_id " +
+            "WHERE e.flag_delete = true", nativeQuery = true)
     Page<Employee> getListEmployee(Pageable pageable);
 
     /**
@@ -105,9 +106,9 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * @param name
      * @return Page with data Employee
      */
-    @Query(value = "SELECT e.*, use.id, use.user_name, role.name FROM employee e" +
-            " JOIN app_user use on use.id = e.app_user_id" +
-            " JOIN user_role ur on ur.app_user_id = use.id" +
+    @Query(value = "SELECT e.*, uses.id, uses.user_name, role.name FROM employee e" +
+            " JOIN app_user uses on uses.id = e.app_user_id" +
+            " JOIN user_role ur on ur.app_user_id = uses.id" +
             " JOIN app_role role on role.id = ur.app_role_id" +
             " WHERE e.flag_delete = true AND" +
             " e.name_employee LIKE concat('%',:name_employee,'%') OR role.id = :id_position", nativeQuery = true)
@@ -138,6 +139,8 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * Function: delete employee with id
      * @param id
      */
+    @Transactional
+    @Modifying
     @Query(value = "update employee set flag_delete = false where employee.id = :id",nativeQuery = true)
     void deleteEmployeeById(@Param("id") Long id);
 }
