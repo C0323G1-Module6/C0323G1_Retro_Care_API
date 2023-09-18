@@ -1,8 +1,10 @@
 package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 
@@ -10,23 +12,27 @@ public interface IInvoiceService {
     /**
      * create an Invoice
      * Code by CuongHLT
+     *
      * @param invoice
      * @return Invoice instance
      */
-    Invoice createInvoice(Invoice invoice);
+    Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto);
 
     /**
      * Edit an Invoice
      * Code by CuongHLT
+     *
      * @param invoice
      * @return void
      */
-    void editInvoice(Invoice invoice);
+    Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto);
 
     Invoice getInvoiceById(Long invoiceId);
+
     /**
      * find and create Next code for invoice
      * Code by CuongHLT
+     *
      * @return Next code String
      */
     String findMaxCode();
@@ -40,8 +46,11 @@ public interface IInvoiceService {
      * @return : paginated invoice list with limit number of molecules per page.
      */
     Page<Invoice> findAllInvoice(Pageable pageable);
+
     void deleteInvoice(Long id);
+
     Invoice findById(Long id);
+
     List<Invoice> searchInvoice(String start_date,
                                 String end_date,
                                 String start_time,

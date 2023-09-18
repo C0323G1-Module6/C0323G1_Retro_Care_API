@@ -12,21 +12,18 @@ public class InvoiceDetailDto {
 
     private String lot;
 
-    private Boolean flagDeleted;
-
     private Long medicineId;
 
 
     public InvoiceDetailDto() {
     }
 
-    public InvoiceDetailDto(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Long medicineId) {
+    public InvoiceDetailDto(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Long medicineId) {
         this.id = id;
         this.discount = discount;
         this.expiry = expiry;
         this.medicineQuantity = medicineQuantity;
         this.lot = lot;
-        this.flagDeleted = flagDeleted;
         this.medicineId = medicineId;
     }
 
@@ -68,14 +65,6 @@ public class InvoiceDetailDto {
 
     public void setLot(String lot) {
         this.lot = lot;
-    }
-
-    public Boolean getFlagDeleted() {
-        return flagDeleted;
-    }
-
-    public void setFlagDeleted(Boolean flagDeleted) {
-        this.flagDeleted = flagDeleted;
     }
 
     public Long getMedicineId() {

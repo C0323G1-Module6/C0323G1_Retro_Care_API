@@ -1,14 +1,12 @@
 package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.medicine.model.Medicine;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Date;
+
 @Entity
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="id")
 public class InvoiceDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +20,11 @@ public class InvoiceDetail {
     private Boolean flagDeleted;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicineId;
 
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
     private Invoice invoiceId;
 
     public InvoiceDetail() {

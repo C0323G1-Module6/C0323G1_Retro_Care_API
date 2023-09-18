@@ -1,11 +1,5 @@
 package com.example.retro_care.invoice.model;
 
-import com.example.retro_care.supplier.model.Supplier;
-import com.example.retro_care.user.model.AppUser;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -23,14 +17,13 @@ public class InvoiceDto implements Validator {
 
     private Long supplierId;
 
-    private Long appUserId;
 
     Set<InvoiceDetailDto> invoiceDetailDtoSet;
 
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Long supplierId, Long appUserId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -39,7 +32,6 @@ public class InvoiceDto implements Validator {
         this.note = note;
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
-        this.appUserId = appUserId;
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
 
@@ -107,20 +99,27 @@ public class InvoiceDto implements Validator {
         this.supplierId = supplierId;
     }
 
-    public Long getAppUserId() {
-        return appUserId;
-    }
-
-    public void setAppUserId(Long appUserId) {
-        this.appUserId = appUserId;
-    }
-
     public Set<InvoiceDetailDto> getInvoiceDetailDtoSet() {
         return invoiceDetailDtoSet;
     }
 
     public void setInvoiceDetailDtoSet(Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceDto{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", creationDate=" + creationDate +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", supplierId=" + supplierId +
+                ", invoiceDetailDtoSet=" + invoiceDetailDtoSet +
+                '}';
     }
 
     @Override
@@ -131,22 +130,30 @@ public class InvoiceDto implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         InvoiceDto invoiceDto = (InvoiceDto) target;
-        if (invoiceDto.getCode().equals("")) {
+
+        if (invoiceDto.getCode() == null) {
+            errors.rejectValue("code", null, "Không được để trống trường này");
+        } else if (invoiceDto.getCode().equals("")) {
             errors.rejectValue("code", null, "Không được để trống trường này");
         } else if (!invoiceDto.getCode().matches("^HDN[0-9]{5}$")) {
             errors.rejectValue("code", null, "Nhập không đúng định dạng");
         }
 
-        if (invoiceDto.getDocumentNumber().equals("")) {
-            errors.rejectValue("code", null, "Không được để trống trường này");
+        if (invoiceDto.getFlagDeleted() == null) {
+            errors.rejectValue("flagDeleted", null, "Có lỗi đang xảy ra");
+        }
+        if (invoiceDto.getDocumentNumber() == null) {
+            errors.rejectValue("documentNumber", null, "Không được để trống trường này");
+        } else if (invoiceDto.getDocumentNumber().equals("")) {
+            errors.rejectValue("documentNumber", null, "Không được để trống trường này");
         } else if (invoiceDto.getDocumentNumber().length() > 50) {
-            errors.rejectValue("code", null, "Nhập nội dung quá dài");
+            errors.rejectValue("documentNumber", null, "Nhập nội dung quá dài");
         } else if (invoiceDto.getDocumentNumber().length() < 5) {
-            errors.rejectValue("code", null, "Nhập nội dung quá ngắn");
+            errors.rejectValue("documentNumber", null, "Nhập nội dung quá ngắn");
         }
 
         if (invoiceDto.getPaid() == null) {
-            errors.rejectValue("set", null, "Không được để trống trường này");
+            errors.rejectValue("paid", null, "Không được để trống trường này");
         } else if (invoiceDto.getPaid().isNaN()) {
             errors.rejectValue("paid", null, "Không phải là số");
         } else if (invoiceDto.getPaid() < 0) {
@@ -154,7 +161,11 @@ public class InvoiceDto implements Validator {
         } else if (invoiceDto.getPaid() >= Double.MAX_VALUE) {
             errors.rejectValue("paid", null, "Giá trị quá lớn");
         }
-
+        if (invoiceDto.getSupplierId() == null) {
+            errors.rejectValue("supplierId", null, "Không được để trống trường này");
+        }
+        if (invoiceDto.getInvoiceDetailDtoSet() == null)
+            return;
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
             if (invoiceDetailDto.getDiscount() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");

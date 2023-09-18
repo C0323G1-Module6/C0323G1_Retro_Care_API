@@ -34,6 +34,7 @@ public class Invoice {
 
 
     @OneToMany(mappedBy = "invoiceId")
+    @JsonBackReference
     Set<InvoiceDetail> invoiceDetailSet;
 
     public Invoice() {
@@ -144,4 +145,19 @@ public class Invoice {
         this.invoiceDetailSet = invoiceDetailSet;
     }
 
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", creationDate=" + creationDate +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", supplierId=" + supplierId +
+                ", appUserId=" + appUserId +
+                ", invoiceDetailSet=" + invoiceDetailSet +
+                '}';
+    }
 }
