@@ -39,11 +39,22 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_name_1() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?search=null"))
+                        MockMvcRequestBuilders.get("/customers/api/list?search={searchInput}/",""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
-
+    /**
+     * Creator: Hoang Thi Quyen
+     * Goal: [name]=null
+     * @Throw: Exception
+     */
+    @Test
+    public void getAllCustomers_name_2() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/customers/api/list?search={searchInput}/"," "))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
     /**
      * Creator: Hoang Thi Quyen
      * Goal: [name] is not exist in DB
@@ -52,7 +63,7 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_name_3() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?search=ghien"))
+                        MockMvcRequestBuilders.get("/customers/api/list?search={searchInput}","ghien"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -120,19 +131,19 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_address_7() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?address=null"))
+                        MockMvcRequestBuilders.get("/customers/api/list?address={address}/",""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
     /**
      * Creator: Hoang Thi Quyen
-     * Goal: [address]=""
+     * Goal: [address]=" "
      * @Throw: Exception
      */
     @Test
     public void getAllCustomers_address_8() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?address={address}",""))
+                        MockMvcRequestBuilders.get("/customers/api/list?address={address}/"," "))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -159,7 +170,5 @@ public class CustomerController_getAllCustomers {
                 .andExpect(jsonPath("content[4].phoneNumber").value("0913148554"))
                 .andExpect(jsonPath("content[4].birthDay").value("1997-01-01"))
                 .andExpect(jsonPath("content[4].address").value("Quận 7, Hồ Chí Minh"));
-        ;
     }
-
 }
