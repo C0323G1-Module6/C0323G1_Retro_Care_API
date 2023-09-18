@@ -33,7 +33,8 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getId());
+        System.out.println(customer);
+        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
     }
 
     /**

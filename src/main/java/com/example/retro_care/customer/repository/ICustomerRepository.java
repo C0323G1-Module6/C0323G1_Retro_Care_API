@@ -24,8 +24,8 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "UPDATE retro_care.customer set name = :name,birth_day = :birth_day ,address = :address ,phone_number = :phone_number,email = :email ,flag_deleted = true WHERE id =:id", nativeQuery = true)
-    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "id")Long id);
+    @Query(value = "UPDATE retro_care.customer set name = :name,birth_day = :birth_day ,address = :address ,phone_number = :phone_number,email = :email,note= :note  WHERE id =:id", nativeQuery = true)
+    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "note")String note,@Param(value = "id")Long id);
     /**
      * Author: TinDT
      * Goal: find customers by id

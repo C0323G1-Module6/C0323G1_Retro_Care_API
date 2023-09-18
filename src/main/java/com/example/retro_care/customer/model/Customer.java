@@ -135,4 +135,21 @@ public class Customer {
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", birthDay='" + birthDay + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", point=" + point +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", appUser=" + appUser +
+                '}';
+    }
 }

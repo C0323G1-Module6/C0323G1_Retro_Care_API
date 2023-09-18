@@ -4,13 +4,20 @@ import com.example.retro_care.user.model.AppUser;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 public class CustomerDto implements Validator {
     private Long id;
     private String code ;
     private String name;
+    @NotNull(message = "Vui lòng bổ sung ngày sinh khách hàng")
     private String birthday;
+    @NotNull(message = "Vui lòng bổ sung địa chỉ  khách hàng")
     private String address;
+    @NotNull(message = "Vui lòng bổ sung số điện thoại khách hàng")
     private String phoneNumber;
+    @NotNull(message = "Vui lòng bổ sung email khách hàng")
     private String email;
     private Long point;
     private String note;
@@ -129,26 +136,50 @@ public class CustomerDto implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
+
         CustomerDto customerDto = (CustomerDto) target;
         // Check name
-        if (customerDto.getName().trim().equals("")) {
+        if (customerDto.getName()==null){
+            errors.rejectValue("name", null, "Vui lòng bổ sung tên khách hàng!");
+        }
+        else if (customerDto.getName().trim().equals("")) {
             errors.rejectValue("name", null, "Không được để trống tên!");
-        } else if (customerDto.getName().length() > 255) {
-            errors.rejectValue("name", null, "Tên quá dài! Không nhập quá 255 ký tự!");
+        } else if (customerDto.getName().length() > 100) {
+            errors.rejectValue("name", null, "Tên quá dài! Không nhập quá 100 ký tự!");
         } else if (!customerDto.getName().matches("^[a-zA-zÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ]*$")) {
             errors.rejectValue("name", null, "Tên không được chứa ký tự đặc biệt!");
         }
+         //Check address
+        if (customerDto.getAddress()==null){
+            errors.rejectValue("address", null, "Vui lòng bổ sung địa chỉ khách hàng!");
+        }else if (customerDto.getAddress().trim().equals("")) {
+            errors.rejectValue("address", null, "Không được để trống địa chỉ!");
+        }else if (customerDto.getAddress().length() > 100) {
+            errors.rejectValue("address", null, "Địa chỉ quá dài! Không nhập quá 100 ký tự!");
+        }
         // Check birthday
         if (customerDto.getBirthday() == null) {
-            errors.rejectValue("birthday", null, "Không được để trống ngày sinh!");
-        }
+            errors.rejectValue("birthday", null, "Vui lòng bổ sung  ngày sinh khách hàng!");
+        }else if (customerDto.getBirthday().trim().equals("")){
+            errors.rejectValue("birthday", null, "Không được để trống ngày sinh khách hàng!");}
+//
         // Check number phone
-        if (customerDto.getPhoneNumber().trim().equals("")) {
-            errors.rejectValue("customerPhoneNumber", null, "Không được để trống số điện thoại");
-        } else if (!customerDto.getPhoneNumber().matches("^(84|0[3|5|7|8|9])+([0-9]{8})\\b$")) {
-            errors.rejectValue("customerPhoneNumber", null, "Bạn nhập sai định dạng số điện thoại!");
-        }else if(customerDto.getPhoneNumber().length()>100){
-            errors.rejectValue("address",null,"Quá ký tự cho phép");}
-
+        if (customerDto.getPhoneNumber() == null){
+            errors.rejectValue("phoneNumber", null, "Vui lòng bổ sung số điện thoại");
+        }else if (customerDto.getPhoneNumber().trim().equals("")) {
+            errors.rejectValue("phoneNumber", null, "Không được để trống số điện thoại");
+        } else if (customerDto.getPhoneNumber().length() > 11) {
+            errors.rejectValue("phoneNumber",null,"Quá ký tự cho phép");}
+             else if (!customerDto.getPhoneNumber().matches("^(84|0[3|5|7|8|9])+([0-9]{8})\\b$")) {
+                errors.rejectValue("phoneNumber", null, "Bạn nhập sai định dạng số điện thoại!");}
+             // Check email
+        if (customerDto.getEmail() == null){
+            errors.rejectValue("email", null, "Vui lòng bổ sung email khách hàng");
+        }else if (customerDto.getEmail().trim().equals("")) {
+            errors.rejectValue("email", null, "Không được để trống email");
+        } else if (customerDto.getEmail().length() > 50) {
+            errors.rejectValue("email",null,"Quá ký tự cho phép");}
+        else if (!customerDto.getEmail().matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
+            errors.rejectValue("email", null, "Bạn nhập sai định dạng email!");}
     }
 }

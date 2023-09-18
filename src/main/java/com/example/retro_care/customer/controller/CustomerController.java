@@ -1,6 +1,6 @@
 package com.example.retro_care.customer.controller;
 
-import com.example.retro_care.customer.dto.CreatCode;
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.customer.dto.CustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.service.ICustomerService;
@@ -35,7 +35,7 @@ public class CustomerController {
     @GetMapping("/dto/create")
     public ResponseEntity<CustomerDto> getCustomerForCreate() {
         CustomerDto customerDto = new CustomerDto();
-        String customerCode = CreatCode.generateCustomerCode();
+        String customerCode = FormatCustomer.generateCustomerCode();
         while (true) {
             if (customerService.findCustomerByCode(customerCode) == null) {
                 break;
@@ -76,8 +76,8 @@ public class CustomerController {
      * Goal: update information of customer
      * * return HttpStatus
      */
-    @PutMapping("/update")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,BindingResult bindingResult) {
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
         new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -86,8 +86,13 @@ public class CustomerController {
             }
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        Customer customer = new Customer();
+        Customer customer= customerService.findCustomerById(id);
+        System.out.println(customer);
+        if (customer==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         BeanUtils.copyProperties(customerDto,customer);
+        customer.setId(id);
         customerService.updateCustomer(customer);
         return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
     }
