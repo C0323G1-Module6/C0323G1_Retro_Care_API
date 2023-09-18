@@ -16,6 +16,7 @@ public class CustomerRestController_getInfoCustomer {
     @Autowired
     private MockMvc mockMvc;
 
+
     @Test
     public void getInfoCustomer_id_1() throws Exception {
         this.mockMvc.perform(

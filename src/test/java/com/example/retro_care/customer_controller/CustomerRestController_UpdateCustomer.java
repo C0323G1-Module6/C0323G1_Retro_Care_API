@@ -39,7 +39,7 @@ public class CustomerRestController_UpdateCustomer {
         customerDto.setNote("Khách vip");
         this.mockMvc.perform(
                         MockMvcRequestBuilders.patch("/customers/api/update/1")
-                                .content(this.objectMapper.writeValueAsString(customerDto))
+                                 .content(this.objectMapper.writeValueAsString(customerDto))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
     }
