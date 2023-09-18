@@ -175,9 +175,10 @@ public class MedicineController {
                                                          @RequestParam(defaultValue = "",name = "searchByNameKindOf", required = false) String searchByNameKindOf) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
         Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement,searchByNameKindOf);
-        if (medicines == null) {
+        if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        System.out.println(medicines);
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }

@@ -156,10 +156,11 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
 //    Page<Medicine> searchByKindOfName(@Param("searchByNameKindOf") String searchByNameKindOf ,Pageable pageable);
 
     @Query(value = "SELECT " +
-            " m.name AS medicine_name," +
-            " m.code AS medicine_code," +
-            " k.name AS kind_of_medicine_name," +
-            " m.active_element AS medicine_active_element" +
+            " m.id, m.maker, m.note, m.origin, m.price, m.quantity, m.retail_profits, m.vat, m.flag_deleted," +
+            " m.name," +
+            " m.code," +
+            " m.active_element," +
+            " m.kind_of_medicine_id" +
             " FROM" +
             " medicine m" +
             " INNER JOIN" +
