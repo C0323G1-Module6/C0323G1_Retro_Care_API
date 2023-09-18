@@ -15,7 +15,7 @@ public class Customer {
     @Column(columnDefinition = "varchar(100)")
     private String name;
     @Column(name = "birth_day", columnDefinition = "date")
-    private String birthday;
+    private String birthDay;
     @Column(columnDefinition = "varchar(255)")
     private String address;
     @Column(name = "phone_number",columnDefinition = "varchar(20)")
@@ -38,7 +38,7 @@ public class Customer {
         this.id = id;
         this.code = code;
         this.name = name;
-        this.birthday = birthday;
+        this.birthDay = birthday;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -73,11 +73,11 @@ public class Customer {
     }
 
     public String getBirthday() {
-        return birthday;
+        return birthDay;
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.birthDay = birthday;
     }
 
     public String getAddress() {
