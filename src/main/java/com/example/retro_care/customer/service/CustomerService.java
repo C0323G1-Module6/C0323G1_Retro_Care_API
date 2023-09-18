@@ -12,19 +12,46 @@ public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
 
+    /**
+     * Author: TinDT
+     * Goal: create customer
+     * * return customer
+     */
     @Override
-    public void saveCustomer(Customer customer) {
-        customerRepository.saveCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getAppUser().getId());
+    public Customer saveCustomer(Customer customer) {
+        customerRepository.saveCustomer(customer);
+        Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
+        return checkingCustomer;
     }
 
+    /**
+     * Author: TinDT
+     * Goal: update for customer
+     * * return
+     */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getId());
+        customerRepository.updateCustomer(customer);
     }
 
+    /**
+     * Author: TinDT
+     * Goal: find customer by id
+     * * return customer
+     */
     @Override
     public Customer findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
+    }
+    /**
+     * Author: TinDT
+     * Goal: find customer by code
+     * * return customer
+     */
+
+    @Override
+    public Customer findCustomerByCode(String code) {
+        return customerRepository.findCustomerByCode(code);
     }
 
     /**
@@ -33,8 +60,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, Long appUserId, String sortItem) {
-        return customerRepository.findAllCustomer(pageable, searchInput, code, address, appUserId, sortItem);
+    public Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, String groupValue, String sortItem) {
+        return customerRepository.findAllCustomer(pageable, searchInput, code, address, groupValue, sortItem);
     }
 
     /**

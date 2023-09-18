@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -24,33 +25,69 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+    /**
+     * method: configureGlobal
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * param: AuthenticationManagerBuilder auth
+     * return: void
+     */
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        // configure AuthenticationManager so that it knows from where to load
-        // user for matching credentials
-        // Use BCryptPasswordEncoder
         auth.userDetailsService(jwtUserDetailService).passwordEncoder(new BCryptPasswordEncoder());
     }
+    /**
+     * method: authenticationManagerBean
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: AuthenticationManager
+     */
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+
     }
+
+    /**
+     * method: passwordEncoder
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: PasswordEncoder
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+    /**
+     * method: configure
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * return: void
+     */
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // We don't need CSRF for this example
-        httpSecurity.csrf().disable().cors().and()
-                // dont authenticate this particular request
-                .authorizeRequests().antMatchers("/api/login").permitAll().
-                // all other requests need to be authenticated
-                        anyRequest().authenticated().and().
-                // make sure we use stateless session; session won't be used to
-                // store user's state.
-                        exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
-        // Add a filter to validate the tokens with every request
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.csrf().disable().cors().and()
+//                .authorizeRequests()
+//                .antMatchers(
+//                        "/api/user/login-by-username/**",
+//                        "/api/user/register-by-customer/**",
+//                        "/api/user/register-by-manager/**",
+//                        "/api/user/login-by-facebook/**",
+//                        "/api/user/logout/**")
+//                .permitAll()
+//                .anyRequest()
+//                .authenticated()
+//                .and()
+//                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//
+//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity
+                .authorizeRequests()
+                .anyRequest().permitAll()
+                .and()
+                .csrf().disable();
     }
 
 }

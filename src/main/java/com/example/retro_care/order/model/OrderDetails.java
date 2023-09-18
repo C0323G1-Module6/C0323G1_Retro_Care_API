@@ -12,12 +12,15 @@ public class OrderDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     private Double currentPrice;
 
     @ManyToOne
-    private Order order;
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
+    private Orders orders;
 
     @ManyToOne
+    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicine;
 
     private Integer quantity;
@@ -33,12 +36,12 @@ public class OrderDetails {
         this.currentPrice = currentPrice;
     }
 
-    public Order getOrder() {
-        return order;
+    public Orders getOrder() {
+        return orders;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(Orders orders) {
+        this.orders = orders;
     }
 
     public Medicine getMedicine() {

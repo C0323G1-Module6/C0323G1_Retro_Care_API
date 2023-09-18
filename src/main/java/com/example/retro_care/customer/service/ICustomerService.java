@@ -5,10 +5,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ICustomerService {
-    void saveCustomer(Customer customer);
+    Customer saveCustomer(Customer customer);
     void updateCustomer(Customer customer);
     Customer findCustomerById(Long id);
+    Customer findCustomerByCode(String code);
 
-    Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, Long appUserId,String sortItem);
+    Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, String groupValue,String sortItem);
     boolean deleteCustomerById(Long id);
 }

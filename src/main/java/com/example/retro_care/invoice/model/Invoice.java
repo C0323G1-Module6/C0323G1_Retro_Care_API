@@ -2,6 +2,7 @@ package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -19,13 +20,17 @@ public class Invoice {
     private String note;
     private Boolean flagDeleted;
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+//    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplierId;
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+//    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUserId;
 
+
     @OneToMany(mappedBy = "invoiceId")
+    @JsonBackReference
     Set<InvoiceDetail> invoiceDetailSet;
 
     public Invoice() {
@@ -122,5 +127,21 @@ public class Invoice {
 
     public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
         this.invoiceDetailSet = invoiceDetailSet;
+    }
+
+    @Override
+    public String toString() {
+        return "Invoice{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", creationDate=" + creationDate +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", supplierId=" + supplierId +
+                ", appUserId=" + appUserId +
+                ", invoiceDetailSet=" + invoiceDetailSet +
+                '}';
     }
 }

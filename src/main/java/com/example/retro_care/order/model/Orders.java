@@ -1,14 +1,10 @@
 package com.example.retro_care.order.model;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.time.LocalDate;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-public class Order {
+public class Orders {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,13 +12,23 @@ public class Order {
 
     private String code;
 
-    private LocalDate dateTime;
 
+    private LocalDateTime dateTime;
+
+    @Column(name = "flag_deleted")
     private Boolean flagDeleted;
 
-    private String note;
+    private String  note;
 
-    public Order() {
+    public Orders() {
+    }
+
+    public Orders(Long id, String code, LocalDateTime dateTime, Boolean flagDeleted, String note) {
+        this.id = id;
+        this.code = code;
+        this.dateTime = dateTime;
+        this.flagDeleted = flagDeleted;
+        this.note = note;
     }
 
     public String getCode() {
@@ -33,11 +39,11 @@ public class Order {
         this.code = code;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

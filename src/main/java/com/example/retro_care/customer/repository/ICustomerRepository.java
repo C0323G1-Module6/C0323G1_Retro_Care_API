@@ -9,18 +9,24 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface ICustomerRepository extends JpaRepository<Customer,Long> {
+public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO retro_care.customer(name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUE(:name,:birth_day,:address,:phone_number,:email,0,:note,true,:app_user_id)", nativeQuery = true)
-    void saveCustomer(@Param(value = "name") String name, @Param(value = "birth_day") String birthDay, @Param(value = "address") String address, @Param(value = "phone_number") String phoneNumber, @Param(value = "email") String email, @Param(value = "note") String note, @Param(value = "app_user_id") Long appUserId);
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:#{#customer.code},:#{#customer.name},:#{#customer.birthDay},:#{#customer.address},:#{#customer.phoneNumber},:#{#customer.email},0,:#{#customer.note},true,:#{#customer.appUser.id})", nativeQuery = true)
+    void saveCustomer(@Param(value = "customer") Customer customer);
 
     @Modifying
     @Transactional
-    @Query(value = "UPDATE retro_care.customer set name =:name,birth_day=:birth_day,address=:address,phone_number=:phone_number,email=:email,note=:note,flag_deleted = true WHERE id =:id", nativeQuery = true)
-    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day")String birthDay,@Param(value = "address")String address,@Param(value = "phone_number")String phoneNumber,@Param(value = "email")String email,@Param(value = "note")String note,@Param(value = "id")Long id);
-    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id",nativeQuery = true)
+    @Query(value = "UPDATE retro_care.customer set name= :#{#customer.name},birth_day = :#{#customer.birthDay},address = :#{#customer.address},phone_number = :#{#customer.phoneNumber},email = :#{#customer.email},flag_deleted = true WHERE id =:#{#customer.id}", nativeQuery = true)
+    void updateCustomer(@Param(value = "customer") Customer customer);
+
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id", nativeQuery = true)
     Customer findCustomerById(@Param(value = "id") Long id);
+
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number", nativeQuery = true)
+    Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code", nativeQuery = true)
+    Customer findCustomerByCode(@Param(value = "code") String code);
 
     /**
      * Author: QuyenHT
@@ -28,14 +34,14 @@ public interface ICustomerRepository extends JpaRepository<Customer,Long> {
      * return list of customers
      */
     @Query(value = " SELECT code, name, birth_day, address, phone_number, note," +
-            "CASE" +
+            "CASE " +
             "WHEN app_user_id is null then 'Khách offline' " +
             "ELSE 'Khách online' " +
             "END AS customer_type" +
-            "FROM retro_care.customer" +
-            "WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id = :appUserId " +
+            " FROM retro_care.customer" +
+            " WHERE name LIKE :searchInput AND code LIKE :code AND address like :address AND app_user_id :groupValue " +
             "ORDER BY :sortItem", nativeQuery = true)
-    Page<Customer> findAllCustomer(Pageable pageable,@Param("searchInput")String searchInput, @Param("code")String code,@Param("address") String address,@Param("appUserId") Long appUserId, @Param("sortItem") String sortItem);
+    Page<Customer> findAllCustomer(Pageable pageable, @Param("searchInput") String searchInput, @Param("code") String code, @Param("address") String address, @Param("groupValue") String groupValue, @Param("sortItem") String sortItem);
 
     /**
      * Author: QuyenHT

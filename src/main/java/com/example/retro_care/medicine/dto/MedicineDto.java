@@ -23,6 +23,10 @@ public class MedicineDto implements Validator {
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
+
+
+
+
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
@@ -38,7 +42,7 @@ public class MedicineDto implements Validator {
     public MedicineDto() {
     }
 
-    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine) {
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine, UnitDetail unitDetail, ImageMedicine imageMedicine) {
         this.id = id;
         this.code = code;
         this.name = name;

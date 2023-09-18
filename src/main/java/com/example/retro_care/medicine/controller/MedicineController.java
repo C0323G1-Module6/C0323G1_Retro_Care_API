@@ -9,6 +9,10 @@ import com.example.retro_care.medicine.service.IMedicineService;
 import com.example.retro_care.medicine.service.IUnitDetailService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -27,6 +31,9 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
+
+
     /**
      * Find a medicine by its ID-TinVV
      *
@@ -95,5 +102,72 @@ public class MedicineController {
         iImageMedicineService.updateImageMedicine(imageMedicine);
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * author: DaoPTA
+     * Medicine List
+     *
+     * @param page pagination of medication list
+     * @param size Divide the number of records per page
+     * @return ResponseEntity with the corresponding HTTP status code.
+     *         - HttpStatus.OK if the drug list has data.
+     *         - HttpStatus.NO_CONTENT if drug list has no data.
+     */
+    @GetMapping("/api/medicine")
+    @ResponseBody
+    public ResponseEntity<Page<Medicine>> medicineList (@RequestParam(defaultValue = "0", required = false) int page,
+                                                        @RequestParam(defaultValue = "5", required = false) int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Medicine> medicinePage = iMedicineService.findAll(pageable);
+        if (medicinePage.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(medicinePage,HttpStatus.OK);
+    }
+
+
+    /**
+     * author: DaoPTA
+     * workday: 16/09/2023
+     *
+     * @param id Pass the id to get the object to delete
+     * @return ResponseEntity with the corresponding HTTP status code.
+     *         - HttpStatus.OK If I get the id and delete it
+     *         - HttpStatus.NO_CONTENT If I don't get the id or status of medicine is true
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Page<Medicine>> deleteMedicine(@PathVariable Long id){
+        if (iMedicineService.removeMedicine(id)){
+            return new ResponseEntity<>(HttpStatus.OK);
+        }else {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
+
+    /**
+     * author: DaoPTA
+     * workday: 18/09/2023
+     * Search by name Medicine
+     *
+     * @param page Pagination after search
+     * @param limit Limit the number per page
+     * @param sort Arrange records in each page
+     * @param searchByName value when filtering
+     * @return ResponseEntity<?>
+     */
+    @GetMapping("/search/{page}/{limit}")
+    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
+                                                             @RequestParam(value = "limit", required = false) Integer limit,
+                                                             @RequestParam(value = "sort", required = false) String sort,
+                                                             @RequestParam(value = "searchByName", required = false) String searchByName,
+                                                             @RequestParam(value = "searchByCode", required = false) String searchByCode,
+                                                             @RequestParam(value = "searchByActiveElement", required = false) String searchByActiveElement){
+        Pageable pageable = PageRequest .of(page,limit, Sort.by(sort));
+        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable,searchByName,searchByCode,searchByActiveElement);
+        if (medicines.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }
