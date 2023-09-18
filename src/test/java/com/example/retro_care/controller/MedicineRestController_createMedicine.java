@@ -8,6 +8,8 @@ import com.example.retro_care.medicine.model.Unit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,8 +17,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class MedicineRestController_editMedicine {
-
+@SpringBootTest
+@AutoConfigureMockMvc
+public class MedicineRestController_createMedicine {
+    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
@@ -28,7 +32,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_success_24() throws Exception {
+    public void createMedicine_success_18() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -57,7 +61,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -71,7 +75,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_name_19() throws Exception {
+    public void createMedicine_name_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -99,7 +103,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -113,7 +117,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_name_20() throws Exception {
+    public void createMedicine_name_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -142,7 +146,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -156,7 +160,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_name_21() throws Exception {
+    public void createMedicine_name_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -185,7 +189,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -199,7 +203,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_name_22() throws Exception {
+    public void createMedicine_name_16() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -228,7 +232,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -242,7 +246,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_name_23() throws Exception {
+    public void createMedicine_name_17() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -276,7 +280,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -290,7 +294,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_code_19() throws Exception {
+    public void createMedicine_code_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -318,7 +322,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -332,7 +336,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_code_20() throws Exception {
+    public void createMedicine_code_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -361,7 +365,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -375,7 +379,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_code_21() throws Exception {
+    public void createMedicine_code_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -404,7 +408,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -418,7 +422,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_code_22() throws Exception {
+    public void createMedicine_code_16() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -447,7 +451,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -461,7 +465,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_code_23() throws Exception {
+    public void createMedicine_code_17() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -490,7 +494,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -504,7 +508,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_price_19() throws Exception {
+    public void createMedicine_price_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -532,7 +536,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -546,7 +550,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_price_21() throws Exception {
+    public void createMedicine_price_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -575,7 +579,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -589,7 +593,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_vat_21() throws Exception {
+    public void createMedicine_vat_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -618,7 +622,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -632,7 +636,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_vate_19() throws Exception {
+    public void createMedicine_vate_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -660,7 +664,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -674,7 +678,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_note_19() throws Exception {
+    public void createMedicine_note_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -702,7 +706,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -716,7 +720,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_quantity_19() throws Exception {
+    public void createMedicine_quantity_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -744,7 +748,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -758,7 +762,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_maker_19() throws Exception {
+    public void createMedicine_maker_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -786,7 +790,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -800,7 +804,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_maker_22() throws Exception {
+    public void createMedicine_maker_16() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -829,7 +833,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -843,7 +847,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_maker_23() throws Exception {
+    public void createMedicine_maker_17() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -877,7 +881,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -891,7 +895,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_activeElement_19() throws Exception {
+    public void createMedicine_activeElement_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -919,7 +923,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -933,7 +937,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_activeElement_20() throws Exception {
+    public void createMedicine_activeElement_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -962,7 +966,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -976,7 +980,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_origin_19() throws Exception {
+    public void createMedicine_origin_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1004,7 +1008,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1018,7 +1022,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_origin_20() throws Exception {
+    public void createMedicine_origin_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1047,7 +1051,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1061,7 +1065,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_origin_21() throws Exception {
+    public void createMedicine_origin_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1090,7 +1094,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1104,7 +1108,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_origin_23() throws Exception {
+    public void createMedicine_origin_17() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1138,7 +1142,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1152,7 +1156,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_retailProfits_19() throws Exception {
+    public void createMedicine_retailProfits_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1180,7 +1184,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1194,7 +1198,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_retailProfits_20() throws Exception {
+    public void createMedicine_retailProfits_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1223,7 +1227,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1237,7 +1241,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_retailProfits_21() throws Exception {
+    public void createMedicine_retailProfits_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1266,7 +1270,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1280,7 +1284,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_kindOfMedicine_19() throws Exception {
+    public void createMedicine_kindOfMedicine_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1307,7 +1311,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1321,7 +1325,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_kindOfMedicine_20() throws Exception {
+    public void createMedicine_kindOfMedicine_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1349,7 +1353,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1363,7 +1367,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_kindOfMedicine_21() throws Exception {
+    public void createMedicine_kindOfMedicine_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1392,7 +1396,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1406,7 +1410,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionRate_19() throws Exception {
+    public void createMedicine_conversionRate_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1434,7 +1438,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1448,7 +1452,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionRate_20() throws Exception {
+    public void createMedicine_conversionRate_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1477,7 +1481,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1491,7 +1495,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionRate_21() throws Exception {
+    public void createMedicine_conversionRate_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1520,7 +1524,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1534,7 +1538,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionUnit_19() throws Exception {
+    public void createMedicine_conversionUnit_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1562,7 +1566,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1576,7 +1580,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionUnit_20() throws Exception {
+    public void createMedicine_conversionUnit_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1605,7 +1609,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1619,7 +1623,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionUnit_21() throws Exception {
+    public void createMedicine_conversionUnit_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1648,7 +1652,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1662,7 +1666,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_conversionUnit_23() throws Exception {
+    public void createMedicine_conversionUnit_17() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1696,7 +1700,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1710,7 +1714,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_unit_19() throws Exception {
+    public void createMedicine_unit_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1737,7 +1741,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1751,7 +1755,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_unit_20() throws Exception {
+    public void createMedicine_unit_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1779,7 +1783,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1793,7 +1797,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_unit_22() throws Exception {
+    public void createMedicine_unit_15() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1822,7 +1826,7 @@ public class MedicineRestController_editMedicine {
         imageMedicine.setFlagDeleted(false);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1836,7 +1840,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_imagePath_19() throws Exception {
+    public void createMedicine_imagePath_13() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1863,7 +1867,7 @@ public class MedicineRestController_editMedicine {
         medicineDto.setUnitDetailDto(unitDetailDto);
         imageMedicine.setFlagDeleted(false);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
@@ -1877,7 +1881,7 @@ public class MedicineRestController_editMedicine {
      * @Date 18/09/2023
      */
     @Test
-    public void editMedicine_imagePath_20() throws Exception {
+    public void createMedicine_imagePath_14() throws Exception {
         MedicineDto medicineDto = new MedicineDto();
         UnitDetailDto unitDetailDto = new UnitDetailDto();
         ImageMedicine imageMedicine = new ImageMedicine();
@@ -1904,7 +1908,7 @@ public class MedicineRestController_editMedicine {
         medicineDto.setUnitDetailDto(unitDetailDto);
         medicineDto.setImageMedicine(imageMedicine);
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
+                        .post("/api/medicine")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())

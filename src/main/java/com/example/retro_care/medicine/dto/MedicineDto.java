@@ -8,13 +8,17 @@ import org.springframework.validation.Validator;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 
 public class MedicineDto implements Validator {
     private Long id;
-
+    @Size(max = 8)
+    @Pattern(regexp = "^[0-9][a-z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
+    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
     @Min(value = 1, message = "Giá không được nhỏ hơn 1")
     private Double price;
@@ -22,9 +26,11 @@ public class MedicineDto implements Validator {
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
+    @Size(max = 255,message = "Nhà sản xuất không được vượt quá 255 kí tự")
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
+    @Size(max = 50,message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
     @Min(value = 1, message = "Lợi nhuận bán lẻ không được nhỏ hơn 1")
     private Float retailProfits;
