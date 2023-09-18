@@ -150,7 +150,7 @@ public class CustomerDto implements Validator {
             errors.rejectValue("name", null, "Tên không được chứa ký tự đặc biệt!");
         }
          //Check address
-        if (customerDto.getAddress()==null){
+        if (customerDto.getAddress() == null){
             errors.rejectValue("address", null, "Vui lòng bổ sung địa chỉ khách hàng!");
         }else if (customerDto.getAddress().trim().equals("")) {
             errors.rejectValue("address", null, "Không được để trống địa chỉ!");

@@ -87,9 +87,9 @@ public class CustomerController {
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         Customer customer= customerService.findCustomerById(id);
-        System.out.println(customer);
+//        System.out.println(customer);
         if (customer==null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Không tìm thấy thông tin khách hàng",HttpStatus.NOT_FOUND);
         }
         BeanUtils.copyProperties(customerDto,customer);
         customer.setId(id);
@@ -106,8 +106,11 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> detailCustomer(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
+        if (customer == null){
+            return new ResponseEntity<>("Không tìm thấy khách hàng", HttpStatus.NOT_FOUND);
+        }
         CustomerDto customerDto = new CustomerDto();
-        BeanUtils.copyProperties(customer, customerDto);
+                BeanUtils.copyProperties(customer, customerDto);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 

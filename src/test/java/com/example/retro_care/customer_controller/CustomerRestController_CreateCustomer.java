@@ -407,7 +407,7 @@ public class CustomerRestController_CreateCustomer {
                 .andExpect(status().is4xxClientError());
     }
     /**
-     * This function is used to check the validity of a more specific email field that is null
+     * This function is used to check the validity of a more specific email field that is empty
      * * Author: TinDT
      */
     @Test
