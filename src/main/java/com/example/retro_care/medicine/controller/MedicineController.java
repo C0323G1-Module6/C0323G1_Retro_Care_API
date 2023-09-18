@@ -7,12 +7,10 @@ import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.service.IImageMedicineService;
 import com.example.retro_care.medicine.service.IMedicineService;
 import com.example.retro_care.medicine.service.IUnitDetailService;
-import com.example.retro_care.medicine.service.IUnitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,7 +62,7 @@ public class MedicineController {
         UnitDetail unitDetail=new UnitDetail();
         ImageMedicine imageMedicine=new ImageMedicine();
         BeanUtils.copyProperties(medicineDto,medicine);
-        BeanUtils.copyProperties(medicineDto.getUnitDetail(),unitDetail);
+        BeanUtils.copyProperties(medicineDto.getUnitDetailDto(),unitDetail);
         BeanUtils.copyProperties(medicineDto.getImageMedicine(),imageMedicine);
         // Call the services to add medicine, image, and unit detail information to the system
         iMedicineService.addMedicine(medicine);
@@ -91,7 +89,7 @@ public class MedicineController {
         UnitDetail unitDetail=new UnitDetail();
         ImageMedicine imageMedicine=new ImageMedicine();
         BeanUtils.copyProperties(medicineDto,medicine);
-        BeanUtils.copyProperties(medicineDto.getUnitDetail(),unitDetail);
+        BeanUtils.copyProperties(medicineDto.getUnitDetailDto(),unitDetail);
         BeanUtils.copyProperties(medicineDto.getImageMedicine(),imageMedicine);
         iMedicineService.editMedicine(medicine);
         iImageMedicineService.updateImageMedicine(imageMedicine);
