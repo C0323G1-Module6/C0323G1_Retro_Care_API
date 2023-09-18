@@ -26,6 +26,7 @@ public class KindOfMedicineController_getCreationForm {
 
     /**
      * Check case null name
+     * Author: CaoNV
      * @throws Exception
      */
 
@@ -47,6 +48,7 @@ public class KindOfMedicineController_getCreationForm {
 
     /**
      * Check case empty name
+     * Author: CaoNV
      * @throws Exception
      */
 @Test
@@ -66,6 +68,7 @@ public class KindOfMedicineController_getCreationForm {
     }
     /**
      * Check case wrong format name
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
@@ -85,6 +88,7 @@ public class KindOfMedicineController_getCreationForm {
     }
     /**
      * Check case over max length name
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
@@ -104,6 +108,7 @@ public class KindOfMedicineController_getCreationForm {
     }
     /**
      * Check case pass name
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
