@@ -133,7 +133,7 @@ public class CustomerController {
         if (customers.getTotalElements()!=0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
     @GetMapping("/list-customer")
     public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false)int page,
