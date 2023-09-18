@@ -95,6 +95,7 @@ public class AppUserController {
                 .body(new JwtResponse(jwtToken));
 
     }
+
     /**
      * method loginByFacebook
      * Creater NhatNHH
@@ -104,9 +105,16 @@ public class AppUserController {
      */
     @PostMapping("/login-by-facebook")
     public ResponseEntity<?> loginByFacebook(@RequestBody FacebookMailRequest facebookMailRequest) {
+        if (facebookMailRequest == null ||
+                facebookMailRequest.getFacebookMail() == null ||
+                facebookMailRequest.getFacebookMail().trim().equals("")) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Đăng nhập thất bại");
+        }
         String facebookMail = facebookMailRequest.getFacebookMail();
         Boolean checkExistAppUser = appUserService.existsByUsername(facebookMail);
-        if(!checkExistAppUser){
+        if (!checkExistAppUser) {
             AppUser appUser = new AppUser();
             appUser.setUserName(facebookMail);
             String randomPassword = RandomStringGenerator.generateRandomString();
@@ -122,6 +130,7 @@ public class AppUserController {
                 .ok()
                 .body(new JwtResponse(jwtToken));
     }
+
     /**
      * method registerByCustomer
      * Creater NhatNHH
@@ -131,7 +140,7 @@ public class AppUserController {
      */
     @PostMapping("/register-by-customer")
     public ResponseEntity<?> registerByCustomer(@Valid @RequestBody AppUserDto appUserDto,
-                                      BindingResult bindingResult) {
+                                                BindingResult bindingResult) {
         new AppUserDto().validate(appUserDto, bindingResult);
         ValidateAppUser.checkValidateConfirmAppUserPassword(appUserDto.getConfirmPassword(), bindingResult);
         Map<String, String> errorsMap = new HashMap<>();
@@ -177,7 +186,7 @@ public class AppUserController {
     public ResponseEntity<?> registerByManager(@RequestParam String userName) {
         //check validate userName
         String errMsg = ValidateAppUser.checkValidateOnlyAppUserName(userName);
-        if (!errMsg.equals("")){
+        if (!errMsg.equals("")) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(errMsg);
@@ -200,6 +209,7 @@ public class AppUserController {
         }
         return ResponseEntity.ok("Đăng ký thành công");
     }
+
     /**
      * method logout
      * Creater NhatNHH
@@ -207,10 +217,10 @@ public class AppUserController {
      * param String userName
      * return ResponseEntity.ok(Logout Success)
      */
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestParam String userName){
+    @GetMapping("/logout/{userName}")
+    public ResponseEntity<?> logout(@PathVariable String userName) {
         Boolean logout = appUserService.logout(userName);
-        if(logout){
+        if (logout) {
             return ResponseEntity.ok("Đăng xuất thành công");
         }
         return ResponseEntity
