@@ -2,23 +2,15 @@ package com.example.retro_care;
 
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDto;
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.supplier.model.Supplier;
-import com.example.retro_care.user.model.AppUser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -38,7 +30,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_13() throws Exception {
+    public void editInvoice_19() throws Exception {
         InvoiceDto invoiceDto = new InvoiceDto();
         this.mockMvc.perform(
                         MockMvcRequestBuilders
@@ -54,7 +46,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_code_14() throws Exception {
+    public void editInvoice_code_20() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -82,7 +74,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_code_15() throws Exception {
+    public void editInvoice_code_19() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -110,7 +102,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_documentNumber_14() throws Exception {
+    public void editInvoice_documentNumber_20() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -137,7 +129,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_documentNumber_16() throws Exception {
+    public void editInvoice_documentNumber_23() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -165,7 +157,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_documentNumber_17() throws Exception {
+    public void editInvoice_documentNumber_22() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -193,7 +185,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_paid_14() throws Exception {
+    public void editInvoice_paid_19() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -220,7 +212,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_paid_16() throws Exception {
+    public void editInvoice_paid_22() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -249,7 +241,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_paid_17() throws Exception {
+    public void editInvoice_paid_23() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -277,7 +269,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_flagDeleted_13() throws Exception {
+    public void editInvoice_flagDeleted_19() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -304,7 +296,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_supplierId_13() throws Exception {
+    public void editInvoice_supplierId_19() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
@@ -332,7 +324,7 @@ public class InvoiceController_EditInvoice {
      * @throws Exception
      */
     @Test
-    public void editInvoice_18() throws Exception {
+    public void editInvoice_24() throws Exception {
 //        edit invoiceDto and set base info
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.setId(10L);
