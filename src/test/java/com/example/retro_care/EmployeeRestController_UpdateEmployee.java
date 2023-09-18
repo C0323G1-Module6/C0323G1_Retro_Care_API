@@ -30,7 +30,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_name_25() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee(null);
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -56,7 +56,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_name_26() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -82,7 +82,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_name_27() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("123456");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -108,7 +108,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_name_28() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -134,7 +134,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_address_29() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress(null);
         employeeDto.setBirthday("2002-02-02");
@@ -160,7 +160,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_address_30() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("");
         employeeDto.setBirthday("2002-02-02");
@@ -186,7 +186,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_address_31() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         employeeDto.setBirthday("2002-02-02");
@@ -212,7 +212,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_birthday_32() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday(null);
@@ -238,7 +238,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_birthday_33() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("");
@@ -264,7 +264,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_startDay_34() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday(null);
@@ -290,7 +290,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_startDay_35() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("");
@@ -316,7 +316,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_idCard_36() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -342,7 +342,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_idCard_37() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -368,7 +368,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_idCArd_38() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -394,7 +394,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_idCArd_39() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -420,7 +420,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_phoneNumber_40() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -446,7 +446,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_phoneNumber_41() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -472,7 +472,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_phoneNumber_42() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -498,7 +498,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_phoneNumber_43() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -524,7 +524,7 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_id_44() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
+        employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee("Tan");
         employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
@@ -550,9 +550,9 @@ public class EmployeeRestController_UpdateEmployee {
     @Test
     public void update_employee_all_item_45() throws Exception{
         EmployeeDto employeeDto = new EmployeeDto();
-        
-        employeeDto.setNameEmployee("Tan Nguyen");
-        employeeDto.setAddress("123 NVL,Da Nang");
+        employeeDto.setCodeEmployee("NV004");
+        employeeDto.setNameEmployee("Tan Nguyen Van");
+        employeeDto.setAddress("123 NVL");
         employeeDto.setBirthday("2002-02-02");
         employeeDto.setNote("");
         employeeDto.setIdCard("012345678");
