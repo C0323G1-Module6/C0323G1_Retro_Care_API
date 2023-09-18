@@ -65,6 +65,14 @@ public class CartDetailsController {
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get list medicine by name
+     * @param name
+     * @return list medicine
+     */
     @GetMapping("/getMedicine")
     public ResponseEntity<?> getMedicine(@RequestParam("name") String name) {
         List<IMedicineWhenSell> list = iCartDetailsService.getMedicineByNameWhenOrder(name);
@@ -72,29 +80,62 @@ public class CartDetailsController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all cart details by user
+     * @param id
+     * @return
+     */
     @GetMapping("/getAllCartDetailsByUser")
     public ResponseEntity<?> getAllCartDetailByUser(@RequestParam("id") Long id) {
         List<ICartDetailProjectionWhenSell> list = iCartDetailsService.getAllCardByAppUserId(id);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get prescription by name
+     * @param name
+     * @return list prescription
+     */
     @GetMapping("/getPrescriptionByName")
-    public ResponseEntity<?> getAllPrescriptionByName(@RequestParam("name") String name){
+    public ResponseEntity<?> getAllPrescriptionByName(@RequestParam("name") String name) {
         List<IPrescriptionProjectionOrder> list = iCartDetailsService.getAllPrescriptionByName(name);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get prescription by sumptoms
+     * @param symptoms
+     * @return list prescription
+     */
     @GetMapping("/getPrescriptionBySymptoms")
-    public ResponseEntity<?> getAllPrescriptionBySymptoms(@RequestParam("symptoms") String symptoms){
+    public ResponseEntity<?> getAllPrescriptionBySymptoms(@RequestParam("symptoms") String symptoms) {
         List<IPrescriptionProjectionOrder> list = iCartDetailsService.getAllPrescriptionBySymptoms(symptoms);
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get indication by prescription id
+     * @param id
+     * @return list indication
+     */
     @GetMapping("/getIndication")
-    public ResponseEntity<?> getAllIndication(@RequestParam("id") Long id){
+    public ResponseEntity<?> getAllIndication(@RequestParam("id") Long id) {
         List<IIndicationProjectionOrder> list = iCartDetailsService.getAllIndicationByPrescriptionId(id);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
-
 
 }

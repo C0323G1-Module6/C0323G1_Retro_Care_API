@@ -114,4 +114,15 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     List<IIndicationProjectionOrder> getAllIndicationByPrescriptionId(@Param("id") Long id);
 
 
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get name and user app id of customer from phone number
+     * @param phone
+     * @return name and app user id
+     */
+    @Query(nativeQuery = true, value = "select c.name, c.app_user_id from customer c " +
+            "where c.phone_number = :phone and c.flag_deleted = false")
+    ICustomerProjectionWhenSell getCustomerName(@Param("phone") String phone);
+
 }
