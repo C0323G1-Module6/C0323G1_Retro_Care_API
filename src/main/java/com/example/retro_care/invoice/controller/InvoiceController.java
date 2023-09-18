@@ -18,10 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -83,7 +80,10 @@ public class InvoiceController {
             return false;
         }
     }
-
+    private boolean isValidSortColumn(String sort_column) {
+        List<String> validSortColumns = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+        return validSortColumns.contains(sort_column);
+    }
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -126,7 +126,9 @@ public class InvoiceController {
         } else {
             pageable = Pageable.unpaged();
         }
-
+        if (sort_column != null && !isValidSortColumn(sort_column)) {
+            return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
+        }
         Page<Invoice> invoices = invoiceService.searchInvoice(pageable, start_date, end_date, start_time, end_time, sort_column);
 
         if (invoices.isEmpty()) {

@@ -20,14 +20,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Test case searches for employees with incorrect "start_date" parameters
-     */
-
-
-    /**
-     * Create by: HuyHD;
-     * Date create: 18/09/2023
-     * Lỗi dữ liệu start_date nhập rỗng
+     * Error entering empty start_date data
      * @throws Exception
      */
     @Test
@@ -45,7 +38,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi nhập liệu không đúng định dạng
+     * Error entering data in incorrect format
      * @throws Exception
      */
     @Test
@@ -62,7 +55,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * lỗi nhập dữ liệu ngày bắt đầu là tương lai
+     * error entering data start date is future
      * @throws Exception
      */
     @Test
@@ -78,7 +71,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường start_date thành công nhưng không có trong database.
+     * The search with the start_date field was successful but not in the database.
      * @throws Exception
      */
     @Test
@@ -94,7 +87,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường start_day thành công.
+     * Search with start_day field succeeds.
      * @throws Exception
      */
     @Test
@@ -118,7 +111,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu end_date nhập rỗng
+     * Error entering empty end_date data
      * @throws Exception
      */
     @Test
@@ -135,7 +128,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu end_date không đúng định dạng
+     * End_date data malformed error
      * @throws Exception
      */
     @Test
@@ -152,7 +145,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * lỗi nhập dữ liệu ngày đến là quá khứ
+     * Arrival date data entry errors are a thing of the past
      * @throws Exception
      */
     @Test
@@ -168,7 +161,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường end_date thành công nhưng không có trong database.
+     * The search with the end_date field was successful but not in the database.
      * @throws Exception
      */
     @Test
@@ -184,7 +177,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường start_day thành công.
+     * Search with start_day field succeeds.
      * @throws Exception
      */
     @Test
@@ -208,7 +201,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu start_time nhập rỗng
+     * Error entering empty start_time data
      * @throws Exception
      */
     @Test
@@ -225,7 +218,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu start_time không đúng định dạng
+     * Error start_time data is not in correct format
      * @throws Exception
      */
     @Test
@@ -241,7 +234,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường start_time thành công nhưng không có trong database.
+     * The search with the start_time field was successful but not in the database.
      * @throws Exception
      */
     @Test
@@ -258,7 +251,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường start_time thành công.
+     * Search with start_time field succeeds.
      * @throws Exception
      */
     @Test
@@ -282,7 +275,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu end_time nhập rỗng
+     * Error entering empty end_time data
      * @throws Exception
      */
     @Test
@@ -299,7 +292,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Lỗi dữ liệu end_time không đúng định dạng
+     * End_time data malformed error
      * @throws Exception
      */
     @Test
@@ -315,7 +308,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường end_time thành công nhưng không có trong database.
+     * The search with the end_time field was successful but not in the database.
      * @throws Exception
      */
     @Test
@@ -332,7 +325,8 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
-     * Tìm kiếm với trường end_time thành công.
+     *
+     * Search with end_time field succeeds.
      * @throws Exception
      */
     @Test
@@ -357,6 +351,7 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
+     * Successful invoice search from date "2023-09-09" to date "2023-09-20"
      * @throws Exception
      */
     @Test
@@ -383,6 +378,8 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
+     * Successful invoice search from date "2023-09-09" to date "2023-09-20" and
+     * created from the hour "08:00:00"
      * @throws Exception
      */
     @Test
@@ -410,6 +407,8 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
+     * Successful invoice search from date "2023-09-09" to date "2023-09-20" and
+     * created before "16:00:00"
      * @throws Exception
      */
     @Test
@@ -437,6 +436,8 @@ public class InvoiceController_SearchInvoice {
     /**
      * Create by: HuyHD;
      * Date create: 18/09/2023
+     * Successful invoice search from date "2023-09-09" to date "2023-09-20" and
+     * created from time "08:00:00" to time "16:00:00"
      * @throws Exception
      */
     @Test
@@ -462,13 +463,104 @@ public class InvoiceController_SearchInvoice {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    /**
+     * Create by: HuyHD;
+     * Date create: 18/09/2023
+     * Error Input data is empty
+     * @throws Exception
+     */
+    @Test
+    public void searchInvoice_96() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/api/invoice/search")
+                                .param("sort_column", "")
+                )
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+    /**
+     * Create by: HuyHD;
+     * Date create: 18/09/2023
+     * Error Input data is incorrect
+     * @throws Exception
+     */
+    @Test
+    public void searchInvoice_97() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/api/invoice/search")
+                                .param("sort_column", "zxc")
+                )
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+    /**
+     * Create by: HuyHD;
+     * Date create: 18/09/2023
+     * Sort by documentNumber
+     * @throws Exception
+     */
+    @Test
+    public void searchInvoice_98() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/api/invoice/search")
+                                .param("sort_column", "2")
+                )
+                .andDo(print())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(5))
+                .andExpect(jsonPath("content[0].id").value(5))
+                .andExpect(jsonPath("content[0].code").value("HD005"))
+                .andExpect(jsonPath("content[0].documentNumber").value(369855))
+                .andExpect(jsonPath("content[4].id").value(3))
+                .andExpect(jsonPath("content[4].code").value("HD003"))
+                .andExpect(jsonPath("content[4].documentNumber").value(369844))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    /**
+     * Create by: HuyHD;
+     * Date create: 18/09/2023
+     * Search with complete information
+     * @throws Exception
+     */
+    @Test
+    public void searchInvoice_11_9() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders
+                                .get("/api/invoice/search")
+                                .param("strar_date", "2023-09-09")
+                                .param("end_date", "2023-09-20")
+                                .param("start_time", "08:00:00")
+                                .param("end_time", "16:00:00")
+                                .param("sort_column", "2")
+
+                )
+                .andDo(print())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("content[0].id").value(2))
+                .andExpect(jsonPath("content[0].code").value("HD002"))
+                .andExpect(jsonPath("content[0].documentNumber").value(369853))
+                .andExpect(jsonPath("content[2].id").value(4))
+                .andExpect(jsonPath("content[2].code").value("HD004"))
+                .andExpect(jsonPath("content[2].documentNumber").value(369847))
+                .andExpect(status().is2xxSuccessful());
+    }
+
+    /**
+     * Create by: HuyHD;
+     * Date create: 18/09/2023
+     * Search when there is no input data
+     * @throws Exception
+     */
     @Test
     public void searchInvoice_99() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders
                                 .get("/api/invoice/search")
-
-
                 )
                 .andDo(print())
                 .andExpect(jsonPath("totalPages").value(1))
