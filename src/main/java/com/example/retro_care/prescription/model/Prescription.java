@@ -24,7 +24,7 @@ public class Prescription {
     @Column(columnDefinition = "varchar(255)")
     private String note;
     private Integer duration;
-    @Column(columnDefinition = "BIT(1)")
+    @Column(columnDefinition = "BIT(0)")
     private Boolean flagDeleted;
     @ManyToOne
     @JoinColumn(name = "patient_id")
@@ -138,5 +138,20 @@ public class Prescription {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", symptoms='" + symptoms + '\'' +
+                ", note='" + note + '\'' +
+                ", duration=" + duration +
+                ", flagDeleted=" + flagDeleted +
+                ", patient=" + patient +
+                ", indicationSet=" + indicationSet +
+                '}';
     }
 }

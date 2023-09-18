@@ -1,0 +1,70 @@
+ALTER TABLE cart_details
+    ADD UNIQUE INDEX user_medicine_index (app_user_id, medicine_id);
+
+
+-------------------------------------------------------------------------
+CREATE PROCEDURE createOrder(IN user_id BIGINT)
+BEGIN
+    -- create a new order
+    INSERT INTO orders (date_time, flag_deleted)
+    VALUES (NOW(), 0);
+
+    -- get the ID of the new added order
+    SET @order_id = LAST_INSERT_ID();
+
+    -- uupdate the 'code' field with the prefix 'KOL' and the orderId
+    UPDATE orders
+    SET code = CONCAT('KOL', @order_id)
+    WHERE id = @order_id;
+
+    -- insert a new row into user_order
+    INSERT INTO user_order (app_user_id, order_id)
+    VALUES (user_id, @order_id);
+
+    -- Create new order details for each item in the cart
+    INSERT INTO order_details (order_id, medicine_id, quantity, current_price)
+    SELECT @order_id, cd.medicine_id, cd.quantity, m2.price
+    FROM cart_details cd
+    inner join medicine m2 on m2.id = cd.medicine_id
+    WHERE app_user_id = user_id;
+
+    -- update the quantity in the medicine table
+    UPDATE medicine AS m
+        INNER JOIN cart_details AS c ON m.id = c.medicine_id
+    SET m.quantity = m.quantity - c.quantity
+    WHERE c.app_user_id = user_id;
+
+    -- delete the items from the cart
+    DELETE FROM cart_details WHERE app_user_id = user_id;
+
+END;
+
+
+
+
+-------------------------------------------------------------------------
+drop procedure createOrder;
+
+
+-------------------------------------------------------------------------
+
+CREATE PROCEDURE getCartDetailsForMail(IN user_id BIGINT)
+BEGIN
+    SELECT c.email as customerEmail, m.name AS medicineName,
+           ( SELECT image_path
+             FROM image_medicine im
+             WHERE im.medicine_id = m.id
+             ORDER BY im.id
+             LIMIT 1) as medicineImage,
+           m.price as medicinePrice,
+           cd.quantity AS quantityInCart,
+           c.name AS customerName,
+           c.address AS address
+    FROM cart_details as cd
+             JOIN medicine m ON cd.medicine_id = m.id
+             JOIN app_user au ON cd.app_user_id = au.id
+             JOIN customer c ON au.id = c.app_user_id
+    WHERE cd.app_user_id = user_id;
+END;
+
+-- alter

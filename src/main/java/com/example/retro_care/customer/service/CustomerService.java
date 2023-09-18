@@ -19,7 +19,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        customerRepository.saveCustomer(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getAppUser().getId());
+        customerRepository.saveCustomer(customer);
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
     }
@@ -31,7 +31,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getId());
+        customerRepository.updateCustomer(customer);
     }
 
     /**
@@ -42,6 +42,16 @@ public class CustomerService implements ICustomerService {
     @Override
     public Customer findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
+    }
+    /**
+     * Author: TinDT
+     * Goal: find customer by code
+     * * return customer
+     */
+
+    @Override
+    public Customer findCustomerByCode(String code) {
+        return customerRepository.findCustomerByCode(code);
     }
 
     /**
