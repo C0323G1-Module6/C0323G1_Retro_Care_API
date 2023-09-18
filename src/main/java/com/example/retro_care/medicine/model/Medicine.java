@@ -64,6 +64,7 @@ public class Medicine {
     public Medicine() {
     }
 
+
     public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note,
                     String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted,
                     Set<UnitDetail> unitDetailSet, Set<ImageMedicine> imageMedicines, Set<Indication> indicationSet,
@@ -213,4 +214,6 @@ public class Medicine {
     public void setKindOfMedicine(KindOfMedicine kindOfMedicine) {
         this.kindOfMedicine = kindOfMedicine;
     }
+
 }
+
