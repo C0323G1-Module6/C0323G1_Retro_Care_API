@@ -114,7 +114,7 @@ public class MedicineController {
      *         - HttpStatus.OK if the drug list has data.
      *         - HttpStatus.NO_CONTENT if drug list has no data.
      */
-    @GetMapping("")
+    @GetMapping("/get-medicine")
     @ResponseBody
     public ResponseEntity<Page<Medicine>> medicineList (@RequestParam(defaultValue = "0", required = false) int page,
                                                         @RequestParam(defaultValue = "5", required = false) int size){
