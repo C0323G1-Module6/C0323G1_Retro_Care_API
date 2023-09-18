@@ -503,7 +503,7 @@ public class EmployeeRestController_CreateEmployee {
         employeeDto.setBirthday("2002-02-02");
         employeeDto.setNote("");
         employeeDto.setIdCard("012345678");
-        employeeDto.setPhoneNumber("asdasd");
+        employeeDto.setPhoneNumber("asdasda");
         employeeDto.setStartDay("2023-09-18");
         employeeDto.setImage("");
         this.mockMvc.perform(

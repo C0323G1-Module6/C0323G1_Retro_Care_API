@@ -32,7 +32,7 @@ public class EmployeeRestController_UpdateEmployee {
         EmployeeDto employeeDto = new EmployeeDto();
         employeeDto.setCodeEmployee("NV004");
         employeeDto.setNameEmployee(null);
-        employeeDto.setAddress("123 NVL");
+        employeeDto.setAddress("123 NVLL");
         employeeDto.setBirthday("2002-02-02");
         employeeDto.setNote("");
         employeeDto.setIdCard("123456789");
