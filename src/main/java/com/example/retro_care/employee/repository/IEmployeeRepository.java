@@ -71,7 +71,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     */
    @Modifying
    @Transactional
-   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = '2')",nativeQuery = true)
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
    void updateEmployee(@Param(value = "name_employee") String name,
                         @Param(value = "address") String address,
                         @Param(value = "phone_number") String phoneNumber,
@@ -79,7 +79,9 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
                         @Param(value = "birthday") String birthday,
                         @Param(value = "id_card") String idCard,
                         @Param(value = "image") String image,
-                        @Param(value = "note") String note
+                        @Param(value = "note") String note,
+                        @Param(value = "id") Long id
+
    );
 
 
