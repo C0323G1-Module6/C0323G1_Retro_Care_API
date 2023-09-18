@@ -142,7 +142,7 @@ public class InvoiceController {
      * @param invoiceDto
      * @return an ResponseEntity
      */
-    @PutMapping("/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -168,7 +168,7 @@ public class InvoiceController {
      * @return an ResponseEntity
      */
     @GetMapping("/code")
-    public ResponseEntity<String> getCodeInvoice() {
+        public ResponseEntity<String> getCodeInvoice() {
         String maxCode = invoiceService.findMaxCode();
         if (maxCode == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

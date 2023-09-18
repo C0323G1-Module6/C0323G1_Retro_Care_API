@@ -2,6 +2,10 @@ package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -17,17 +21,16 @@ public class InvoiceDto implements Validator {
     private String note;
     private Boolean flagDeleted;
 
-    private Supplier supplierId;
+    private Long supplierId;
 
-    private AppUser appUserId;
+    private Long appUserId;
 
-    Set<InvoiceDetail> invoiceDetailSet;
+    Set<InvoiceDetailDto> invoiceDetailDtoSet;
 
     public InvoiceDto() {
     }
 
-
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Long supplierId, Long appUserId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -37,7 +40,7 @@ public class InvoiceDto implements Validator {
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
         this.appUserId = appUserId;
-        this.invoiceDetailSet = invoiceDetailSet;
+        this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
 
     public Long getId() {
@@ -96,43 +99,28 @@ public class InvoiceDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public Supplier getSupplierId() {
+    public Long getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Supplier supplierId) {
+    public void setSupplierId(Long supplierId) {
         this.supplierId = supplierId;
     }
 
-    public AppUser getAppUserId() {
+    public Long getAppUserId() {
         return appUserId;
     }
 
-    public void setAppUserId(AppUser appUserId) {
+    public void setAppUserId(Long appUserId) {
         this.appUserId = appUserId;
     }
 
-    public Set<InvoiceDetail> getInvoiceDetailSet() {
-        return invoiceDetailSet;
+    public Set<InvoiceDetailDto> getInvoiceDetailDtoSet() {
+        return invoiceDetailDtoSet;
     }
 
-    public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
-        this.invoiceDetailSet = invoiceDetailSet;
-    }
-
-    @Override
-    public String toString() {
-        return "InvoiceDto{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", documentNumber='" + documentNumber + '\'' +
-                ", creationDate=" + creationDate +
-                ", paid=" + paid +
-                ", note='" + note + '\'' +
-                ", flagDeleted=" + flagDeleted +
-                ", supplierId=" + supplierId +
-                ", appUserId=" + appUserId +
-                '}';
+    public void setInvoiceDetailDtoSet(Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+        this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
 
     @Override
@@ -148,26 +136,41 @@ public class InvoiceDto implements Validator {
         } else if (!invoiceDto.getCode().matches("^HDN[0-9]{5}$")) {
             errors.rejectValue("code", null, "Nhập không đúng định dạng");
         }
+
+        if (invoiceDto.getDocumentNumber().equals("")) {
+            errors.rejectValue("code", null, "Không được để trống trường này");
+        } else if (invoiceDto.getDocumentNumber().length() > 50) {
+            errors.rejectValue("code", null, "Nhập nội dung quá dài");
+        } else if (invoiceDto.getDocumentNumber().length() < 5) {
+            errors.rejectValue("code", null, "Nhập nội dung quá ngắn");
+        }
+
         if (invoiceDto.getPaid() == null) {
             errors.rejectValue("set", null, "Không được để trống trường này");
         } else if (invoiceDto.getPaid().isNaN()) {
             errors.rejectValue("paid", null, "Không phải là số");
-        } else if (invoiceDto.getPaid() >= 0) {
+        } else if (invoiceDto.getPaid() < 0) {
             errors.rejectValue("paid", null, "Giá trị phải lớn hơn hoặc bằng 0");
+        } else if (invoiceDto.getPaid() >= Double.MAX_VALUE) {
+            errors.rejectValue("paid", null, "Giá trị quá lớn");
         }
 
-        for (InvoiceDetail invoiceDetail: invoiceDto.getInvoiceDetailSet()) {
-            if (invoiceDetail.getDiscount() == null) {
+        for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
+            if (invoiceDetailDto.getDiscount() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetail.getDiscount().isNaN()) {
+            } else if (invoiceDetailDto.getDiscount().isNaN()) {
                 errors.rejectValue("invoiceDetailSet", null, "Không phải là số");
-            } else if (invoiceDetail.getDiscount() >= 0) {
+            } else if (invoiceDetailDto.getDiscount() < 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
+            } else if (invoiceDetailDto.getDiscount() >= Float.MAX_VALUE) {
+                errors.rejectValue("invoiceDetailSet", null, "Giá trị quá lớn");
             }
-            if (invoiceDetail.getMedicineQuantity() == null) {
+            if (invoiceDetailDto.getMedicineQuantity() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetail.getMedicineQuantity() >= 0) {
+            } else if (invoiceDetailDto.getMedicineQuantity() < 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
+            } else if (invoiceDetailDto.getMedicineQuantity() >= Integer.MAX_VALUE) {
+                errors.rejectValue("invoiceDetailSet", null, "Giá trị quá lớn");
             }
         }
 
