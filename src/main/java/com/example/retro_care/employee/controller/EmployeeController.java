@@ -5,6 +5,7 @@ import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import com.example.retro_care.employee.service.IEmployeeService;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
+
+import static java.util.Collections.sort;
 
 @RestController
 @CrossOrigin("*")
@@ -112,7 +115,7 @@ public class EmployeeController {
     public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                           @PathVariable(value = "limit", required = false) Integer limit,
                                                           @PathVariable(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees = employeeService.getListEmployee(pageable);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -126,7 +129,6 @@ public class EmployeeController {
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Call the database to retrieve paginated data with fields idRole and employee name
-     *
      * @param page
      * @param limit
      * @param sort
@@ -134,10 +136,10 @@ public class EmployeeController {
      * @param nameEmployee
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search-list/{page}/{limit}")
-    public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
-                                                         @PathVariable(value = "limit", required = false) Integer limit,
-                                                         @PathVariable(value = "sort", required = false) String sort,
+    @GetMapping("/search-list")
+    public ResponseEntity<Page<Employee>> searchEmployee(@RequestParam(value = "page", required = false) Integer page,
+                                                         @RequestParam(value = "limit", required = false) Integer limit,
+                                                         @RequestParam(value = "sort", required = false) String sort,
                                                          @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
