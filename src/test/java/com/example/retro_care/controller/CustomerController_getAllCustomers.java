@@ -78,7 +78,7 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_code_8() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?code=''"))
+                        MockMvcRequestBuilders.get("/customers/api/list?code={code}",""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -91,7 +91,7 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_code_9() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?code=abc"))
+                        MockMvcRequestBuilders.get("/customers/api/list?code={code}","abc"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -104,7 +104,7 @@ public class CustomerController_getAllCustomers {
     @Test
     public void getAllCustomers_code_11() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?code=KL012"))
+                        MockMvcRequestBuilders.get("/customers/api/list?code={code}","KL012"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("content[0].name").value("Thị Hạnh Yến"))

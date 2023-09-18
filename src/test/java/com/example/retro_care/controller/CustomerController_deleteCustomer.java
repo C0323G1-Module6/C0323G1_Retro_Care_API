@@ -18,49 +18,37 @@ public class CustomerController_deleteCustomer {
 
     /**
      * Creator: Hoang Thi Quyen
-     * Goal: [id]= null
-     * @Throw: Exception
-     */
-    @Test
-    public void deleteCustomers_25() throws Exception {
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/delete/null"))
-                .andDo(print())
-                .andExpect(status().is4xxClientError());
-    }
-    /**
-     * Creator: Hoang Thi Quyen
      * Goal: [id]= ""
      * @Throw: Exception
      */
     @Test
     public void deleteCustomers_26() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/delete/"))
+                        MockMvcRequestBuilders.delete("/customers/api/delete/{id}",""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
     /**
      * Creator: Hoang Thi Quyen
-     * Goal: [id]= not exist
+     * Goal: [id]= not exist in DB
      * @Throw: Exception
      */
     @Test
     public void deleteCustomers_27() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/delete/100"))
+                        MockMvcRequestBuilders.delete("/customers/api/delete/{id}",100))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
     /**
      * Creator: Hoang Thi Quyen
-     * Goal: [id]= exist, successful
+     * Goal: [id]= exist in DB, successful
      * @Throw: Exception
      */
     @Test
     public void deleteCustomers_28() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/delete/1"))
+                        MockMvcRequestBuilders.delete("/customers/api/delete/{id}",13))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
