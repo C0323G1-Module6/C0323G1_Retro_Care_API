@@ -23,7 +23,7 @@ public class KindOfMedicineController_editKindOfMedicine {
 
     /**
      * Check case null name
-     *
+     *Author: CaoNV
      * @throws Exception
      */
 
@@ -45,7 +45,7 @@ public class KindOfMedicineController_editKindOfMedicine {
 
     /**
      * Check case empty name
-     *
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
@@ -66,7 +66,7 @@ public class KindOfMedicineController_editKindOfMedicine {
 
     /**
      * Check case wrong format name
-     *
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
@@ -87,7 +87,7 @@ public class KindOfMedicineController_editKindOfMedicine {
 
     /**
      * Check case over max length name
-     *
+     * Author: CaoNV
      * @throws Exception
      */
     @Test
@@ -108,7 +108,7 @@ public class KindOfMedicineController_editKindOfMedicine {
 
     /**
      * Check case pass name
-     *
+     * Author: CaoNV
      * @throws Exception
      */
     @Test

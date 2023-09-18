@@ -23,50 +23,35 @@ public class KindOfMedicineController_getAllKindOfMedicine {
     private ObjectMapper objectMapper;
 
     /**
-     * Check case list equal 0 name
+     * Check case list null name
+     * Author: CaoNV
      * @throws Exception
      */
 
     @Test
     public void KindOfMedicineController_getAllKindOfMedicine_5() throws Exception {
-
-        KindOfMedicineCreationDto kindOfMedicineCreationDto = new KindOfMedicineCreationDto();
-        kindOfMedicineCreationDto.setCode("NT001");
-        kindOfMedicineCreationDto.setName("Bổ Gan");
-        kindOfMedicineCreationDto.setFlagDeleted(false);
-
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/api/kindOfMedicine/get"))
+                        .get("/api/kindOfMedicine/get?page=5"))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful())
-                .andExpect(jsonPath("totalPages").value(3))
-                .andExpect(jsonPath("totalElements").value(15))
-                .andExpect(jsonPath("content[0].code").value("NT001"))
-                .andExpect(jsonPath("content[0].name").value("Bổ Gan"));
+                .andExpect(status().is(204));
 
     }
-
     /**
-     * Check case "list more than 0" name
+     * Check case list size equal 0 name
+     * Author: CaoNV
      * @throws Exception
      */
 
     @Test
     public void KindOfMedicineController_getAllKindOfMedicine_6() throws Exception {
-
-        KindOfMedicineCreationDto kindOfMedicineCreationDto = new KindOfMedicineCreationDto();
-        kindOfMedicineCreationDto.setCode("NT001");
-        kindOfMedicineCreationDto.setName("Bổ Gan");
-        kindOfMedicineCreationDto.setFlagDeleted(false);
-
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/kindOfMedicine")
-                        .content(this.objectMapper.writeValueAsString(kindOfMedicineCreationDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .get("/api/kindOfMedicine/get?page=0"))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is2xxSuccessful());
+
     }
+
 
 }

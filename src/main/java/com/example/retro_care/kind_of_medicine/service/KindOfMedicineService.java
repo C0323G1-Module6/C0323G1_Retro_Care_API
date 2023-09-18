@@ -21,7 +21,7 @@ public class KindOfMedicineService implements IKindOfMedicineService {
 
     @Override
     public Page<KindOfMedicine> getPageKindOfMedicine(Pageable pageable, String searchCode, String searchName) {
-        return null;
+        return kindOfMedicineRepository.findAll(pageable);
     }
 
     @Override
