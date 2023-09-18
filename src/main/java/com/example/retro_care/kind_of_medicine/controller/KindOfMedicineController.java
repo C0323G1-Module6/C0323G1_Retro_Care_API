@@ -92,15 +92,17 @@ public class KindOfMedicineController {
     }
 
     // Pagination
-    @Transactional
     @GetMapping("/get")
     public ResponseEntity<Page<?>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0") Integer page,
                                                                      @RequestParam(value = "searchCode", defaultValue = "") String searchCode,
                                                                      @RequestParam(value = "searchName", defaultValue = "") String searchName) {
         Pageable pageable = PageRequest.of(page, 3, Sort.by(Sort.Order.asc("id")));
         Page<IKindOfMedicineDto> contractsPage = kindOfMedicineService.getPageKindOfMedicine(pageable, "%"+searchCode+"%", "%"+searchName+"%");
-        if (contractsPage == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (contractsPage.getTotalElements() == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if(page > contractsPage.getTotalPages()-1){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(contractsPage, HttpStatus.OK);
 
