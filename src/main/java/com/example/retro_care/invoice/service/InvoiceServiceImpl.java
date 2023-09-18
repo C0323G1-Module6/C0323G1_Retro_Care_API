@@ -1,7 +1,10 @@
 package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,10 +17,13 @@ import java.util.List;
 public class InvoiceServiceImpl implements IInvoiceService {
     @Autowired
     IInvoiceRepository invoiceRepository;
+    @Autowired
+    IInvoiceDetailRepository invoiceDetailRepository;
 
     /**
-     * create an Invoice
+     * create an Invoice and call method for create InvoiceDetail
      * Code by CuongHLT
+     *
      * @param invoice
      * @return Invoice
      */
@@ -25,7 +31,16 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Invoice createInvoice(Invoice invoice) {
         invoice.setCreationDate(new Date());
         invoice.setFlagDeleted(false);
+        invoice.setAppUserId(new AppUser());
+        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+            invoiceDetail.setInvoiceId(invoice);
+            invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+        }
         return invoiceRepository.createInvoice(invoice);
+    }
+
+    public void editInvoice(Invoice invoice) {
+        invoiceRepository.editInvoice(invoice);
     }
 
 
@@ -67,6 +82,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
 
         return newCode;
     }
+
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023;

@@ -21,12 +21,13 @@ public class InvoiceDto implements Validator {
 
     private AppUser appUserId;
 
-    Set<InvoiceDetailDto> invoiceDetailSet;
+    Set<InvoiceDetail> invoiceDetailSet;
 
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetailDto> invoiceDetailSet) {
+
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -111,11 +112,11 @@ public class InvoiceDto implements Validator {
         this.appUserId = appUserId;
     }
 
-    public Set<InvoiceDetailDto> getInvoiceDetailSet() {
+    public Set<InvoiceDetail> getInvoiceDetailSet() {
         return invoiceDetailSet;
     }
 
-    public void setInvoiceDetailSet(Set<InvoiceDetailDto> invoiceDetailSet) {
+    public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
         this.invoiceDetailSet = invoiceDetailSet;
     }
 
@@ -155,17 +156,17 @@ public class InvoiceDto implements Validator {
             errors.rejectValue("paid", null, "Giá trị phải lớn hơn hoặc bằng 0");
         }
 
-        for (InvoiceDetailDto invoiceDetailDto: invoiceDto.getInvoiceDetailSet()) {
-            if (invoiceDetailDto.getDiscount() == null) {
+        for (InvoiceDetail invoiceDetail : invoiceDto.getInvoiceDetailSet()) {
+            if (invoiceDetail.getDiscount() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetailDto.getDiscount().isNaN()) {
+            } else if (invoiceDetail.getDiscount().isNaN()) {
                 errors.rejectValue("invoiceDetailSet", null, "Không phải là số");
-            } else if (invoiceDetailDto.getDiscount() >= 0) {
+            } else if (invoiceDetail.getDiscount() >= 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
             }
-            if (invoiceDetailDto.getMedicineQuantity() == null) {
+            if (invoiceDetail.getMedicineQuantity() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetailDto.getMedicineQuantity() >= 0) {
+            } else if (invoiceDetail.getMedicineQuantity() >= 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
             }
         }

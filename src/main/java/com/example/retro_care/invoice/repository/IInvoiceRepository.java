@@ -35,6 +35,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     @Modifying
     @Query(value = "update invoice set flag_deleted = true where id = :id", nativeQuery = true)
     void deleteInvoice(@Param("id") Long id);
+
     @Query(nativeQuery = true, value = "select * from ivoice where id = :id")
     Invoice findByIdInvoice(@Param("id") Long id);
 
@@ -45,6 +46,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * Create by: HuyHD;
      * Date create: 15/09/2023;
      * Function: Search by invoice creation time, and sort by column;
+     *
      * @param start_date
      * @param end_date
      * @param start_time
@@ -90,8 +92,11 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param invoiceId a number
      * @return Invoice
      */
-    @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId", nativeQuery = true)
+    @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId and flag_deleted = 0", nativeQuery = true)
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
+
+    @Query(value = "UPDATE invoice SET document_number = :#{#invoice.documentNumber},creation_date = :#{#invoice.creationDate},paid = :#{#invoice.paid},note = :#{#invoice.note},supplier_id =:#{#invoice.supplierId.id} ,app_user_id= :#{#invoice.appUserId.id} where id = :#{#invoice.id}", nativeQuery = true)
+    Invoice editInvoice(@Param("invoice") Invoice invoice);
 
     /**
      * find Max code in DB

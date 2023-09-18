@@ -1,10 +1,8 @@
 package com.example.retro_care.medicine.dto;
 
-import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.UnitDetail;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -21,6 +19,10 @@ public class MedicineDto implements Validator {
     private Long quantity;
     private Float vat;
     private String note;
+
+
+
+
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
@@ -34,7 +36,7 @@ public class MedicineDto implements Validator {
     public MedicineDto() {
     }
 
-    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine) {
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine, UnitDetail unitDetail, ImageMedicine imageMedicine) {
         this.id = id;
         this.code = code;
         this.name = name;
