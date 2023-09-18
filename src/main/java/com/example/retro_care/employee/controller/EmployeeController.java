@@ -53,6 +53,7 @@ public class EmployeeController {
      */
     @PostMapping("/create")
     public ResponseEntity<String> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
+        System.out.println("employeeDto");
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
@@ -72,9 +73,12 @@ public class EmployeeController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        if(id==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Employee employee = employeeService.getById(id);
         if(employee==null){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(employee,HttpStatus.OK);
     }
@@ -89,7 +93,7 @@ public class EmployeeController {
      * @param bindingResult return error
      * @return Responese Entity with message
      */
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable Long id,
                                                    @RequestBody EmployeeDto employeeDto,
                                                    BindingResult bindingResult){
@@ -98,6 +102,9 @@ public class EmployeeController {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
         Employee employee = employeeService.getById(id);
+        if(employee==null){
+            return new ResponseEntity<>("Không tìm thấy",HttpStatus.NOT_FOUND);
+        }
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.updateEmployee(employee);
         return new ResponseEntity<>("Update successfully",HttpStatus.OK);
