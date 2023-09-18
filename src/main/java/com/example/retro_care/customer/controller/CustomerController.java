@@ -2,6 +2,7 @@ package com.example.retro_care.customer.controller;
 
 import com.example.retro_care.customer.dto.CreatCode;
 import com.example.retro_care.customer.dto.CustomerDto;
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.service.ICustomerService;
 import org.springframework.beans.BeanUtils;
@@ -116,11 +117,10 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = " app_user_id is null or app_user_id is not null ", required = false) String groupValue,
-                                             @RequestParam(defaultValue = "code") String sortItem) {
+                                             @RequestParam(defaultValue = "" ) String groupValue,
+                                             @RequestParam(defaultValue = "" ) String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
-        System.out.println(customers.getContent());
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem, pageable);
         if (customers.getTotalElements()!=0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }

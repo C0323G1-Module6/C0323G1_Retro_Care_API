@@ -1,5 +1,6 @@
 package com.example.retro_care.customer.repository;
 
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -53,20 +54,29 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * Goal: get all customers
      * return list of customers
      */
-    @Query(value = " SELECT c.code, c.name, c.birth_day, c.address, c.phone_number, c.note, " +
+    @Query(value = " SELECT c.code, c.name, c.birth_day as birthDay, c.address, c.phone_number as phoneNumber, c.note, " +
             "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type " +
             "FROM retro_care.customer c " +
-            "WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND (c.app_user_id = :groupValue) " +
+            "WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
+            "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
+            "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
+            "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
+            "END " +
             "ORDER BY " +
-            "CASE :sortItem WHEN 'code' THEN c.code " +
-            "               WHEN 'name' THEN c.name " +
-            "               ELSE c.code " +
-            "END",
-            countQuery = " SELECT COUNT(c.id) from retro_care.customer c WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND (c.app_user_id = :groupValue)", nativeQuery = true)
-    Page<Customer> findAllCustomer(Pageable pageable, @Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem);
+            "CASE WHEN :sortItem = 'code' THEN c.code " +
+            "     WHEN :sortItem = 'name' THEN c.name " +
+            "     ELSE c.code " +
+            "END ",
+            countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
+                    "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
+                    "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
+                    "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
+                    "END ", nativeQuery = true)
+    Page<ICustomerDto> findAllCustomer(@Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem, Pageable pageable);
 
 
     Page<Customer> findCustomerByNameContaining(Pageable pageable, String searchName);
+
     /**
      * Author: QuyenHT
      * Goal: Delete customer by id
