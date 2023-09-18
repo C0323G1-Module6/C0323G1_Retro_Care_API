@@ -176,7 +176,7 @@ public class MedicineController {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
         Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement,searchByNameKindOf);
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }

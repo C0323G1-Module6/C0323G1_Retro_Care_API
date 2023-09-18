@@ -27,7 +27,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByName_07() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByName/null"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByName=null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -42,7 +42,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByCode_07() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByCode/null"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByCode=null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -57,7 +57,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByActiveElement_07() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByActiveElement/null"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByActiveElement=null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -72,7 +72,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByKindOfMedicine_07() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByNameKindOf/null"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByNameKindOf=null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -87,7 +87,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByName_08() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByName/"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByName=''"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -102,7 +102,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByCode_08() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByCode/"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByCode=''"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -117,7 +117,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByActiveElement_08() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByActiveElement/"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByActiveElement=''"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -132,7 +132,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByKindOfMedicine_08() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByNameKindOf/"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByNameKindOf=''"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -147,7 +147,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByName_09() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByName/anhdao"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByName=anhdao"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -162,7 +162,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByCode_09() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByCode/B00001"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByCode=B00001"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -177,7 +177,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByActiveElement_09() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByActiveElement/anhdao"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByActiveElement=anhdao"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -192,7 +192,7 @@ public class MedicineController_searchMedicine {
     @Test
     public void searchMedicineByKindOfMedicine_09() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/medicine/search/searchByNameKindOf/anhdao"))
+                        MockMvcRequestBuilders.get("/api/medicine/search?searchByNameKindOf=anhdao"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -208,7 +208,7 @@ public class MedicineController_searchMedicine {
     public void searchMedicineByName_11() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders.get(
-                                "/api/medicine/search/searchByName/Pandol"))
+                                "/api/medicine/search?searchByName=Pandol"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("totalPages").value(1))
