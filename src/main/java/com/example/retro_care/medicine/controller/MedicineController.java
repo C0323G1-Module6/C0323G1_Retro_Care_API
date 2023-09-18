@@ -156,8 +156,8 @@ public class MedicineController {
      * @param searchByName value when filtering
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search/{page}/{limit}")
-    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
+    @GetMapping("/search/{page}/{limit}/{sort}")
+    public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(value = "page", required = false) Integer page,
                                                              @RequestParam(value = "limit", required = false) Integer limit,
                                                              @RequestParam(value = "sort", required = false) String sort,
                                                              @RequestParam(value = "searchByName", required = false) String searchByName,
