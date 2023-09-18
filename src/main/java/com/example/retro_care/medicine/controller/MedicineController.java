@@ -7,12 +7,12 @@ import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.service.IImageMedicineService;
 import com.example.retro_care.medicine.service.IMedicineService;
 import com.example.retro_care.medicine.service.IUnitDetailService;
-import com.example.retro_care.medicine.service.IUnitService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -143,5 +143,31 @@ public class MedicineController {
         }else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+    }
+
+    /**
+     * author: DaoPTA
+     * workday: 18/09/2023
+     * Search by name Medicine
+     *
+     * @param page Pagination after search
+     * @param limit Limit the number per page
+     * @param sort Arrange records in each page
+     * @param searchByName value when filtering
+     * @return ResponseEntity<?>
+     */
+    @GetMapping("/search/{page}/{limit}")
+    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
+                                                             @RequestParam(value = "limit", required = false) Integer limit,
+                                                             @RequestParam(value = "sort", required = false) String sort,
+                                                             @RequestParam(value = "searchByName", required = false) String searchByName,
+                                                             @RequestParam(value = "searchByCode", required = false) String searchByCode,
+                                                             @RequestParam(value = "searchByActiveElement", required = false) String searchByActiveElement){
+        Pageable pageable = PageRequest .of(page,limit, Sort.by(sort));
+        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable,searchByName,searchByCode,searchByActiveElement);
+        if (medicines.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }
