@@ -38,7 +38,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     @Query(value = " SELECT c.code, c.name, c.birth_day as birthDay, c.address, c.phone_number as phoneNumber, c.note, " +
             "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type " +
             "FROM retro_care.customer c " +
-            "WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
+            "WHERE c.flag_deleted = 1 AND c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
             "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
             "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
             "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
