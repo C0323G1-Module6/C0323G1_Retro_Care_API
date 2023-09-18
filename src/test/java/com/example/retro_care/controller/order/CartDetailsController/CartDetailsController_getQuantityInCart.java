@@ -13,63 +13,64 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class CartDetailsController_checkQuantity {
+public class CartDetailsController_getQuantityInCart {
+
     @Autowired
     private MockMvc mockMvc;
 
     /**
      * This function is used to test the case when
-     * both 2 request params(medicineId, inputQuantity) are provided with null values
-     * during the check-quantity process
+     * both 2 request params(appUserId, medicineId) are provided with null values
+     * during the get-quantity-in-cart process
      * @author HanhNLM
      * @Time 18/09/2023
      */
     @Test
-    public void checkQuantity_1() throws Exception {
+    public void getQuantityInCart_1() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.
-                        get("/api/carts/check-quantity?medicineId=null&inputQuantity=null"))
+                        get("/api/carts/get-quantity-in-cart?appUserId=null&medicineId=null"))
                 .andDo(print()).andExpect(status().is4xxClientError());
     }
 
     /**
      * This function is used to test the case when
-     * both 2 request params(medicineId, inputQuantity) are provided with no values
-     * during the check-quantity process
+     * both 2 request params(appUserId, medicineId) are provided with no values
+     * during the get-quantity-in-cart process
      * @author HanhNLM
      * @Time 18/09/2023
      */
     @Test
-    public void checkQuantity_2() throws Exception {
+    public void getQuantityInCart_2() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.
-                        get("/api/carts/check-quantity?medicineId=&inputQuantity="))
+                        get("/api/carts/get-quantity-in-cart?appUserId=&medicineId="))
                 .andDo(print()).andExpect(status().is4xxClientError());
     }
 
     /**
      * This function is used to test the case when
-     * both 2 request params(medicineId, inputQuantity) are provided with no equivalent values in DB
-     * during the check-quantity process
+     * both 2 request params(appUserId, medicineId) are provided with no equivalent values in DB
+     * during the get-quantity-in-cart process
      * @author HanhNLM
      * @Time 18/09/2023
      */
     @Test
-    public void checkQuantity_3() throws Exception {
+    public void getQuantityInCart_3() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.
-                        get("/api/carts/check-quantity?medicineId=222&inputQuantity=777"))
+                        get("/api/carts/get-quantity-in-cart?appUserId=222&medicineId=777"))
                 .andDo(print()).andExpect(status().is4xxClientError());
     }
 
     /**
      * This function is used to test the case when
-     * both 2 request params(medicineId, inputQuantity) are validly provided
-     * during the check-quantity process
+     * both 2 request params(appUserId, medicineId) are provided with valid values in DB
+     * during the get-quantity-in-cart process
      * @author HanhNLM
      * @Time 18/09/2023
      */
     @Test
-    public void checkQuantity_4() throws Exception {
+    public void getQuantityInCart_4() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.
-                        get("/api/carts/check-quantity?medicineId=1&inputQuantity=1"))
+                        get("/api/carts/get-quantity-in-cart?appUserId=1&medicineId=1"))
                 .andDo(print()).andExpect(status().is2xxSuccessful());
     }
 }
