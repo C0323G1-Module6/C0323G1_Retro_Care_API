@@ -147,6 +147,8 @@ public class CustomerDto implements Validator {
             errors.rejectValue("customerPhoneNumber", null, "Không được để trống số điện thoại");
         } else if (!customerDto.getPhoneNumber().matches("^(84|0[3|5|7|8|9])+([0-9]{8})\\b$")) {
             errors.rejectValue("customerPhoneNumber", null, "Bạn nhập sai định dạng số điện thoại!");
-        }
+        }else if(customerDto.getPhoneNumber().length()>100){
+            errors.rejectValue("address",null,"Quá ký tự cho phép");}
+
     }
 }
