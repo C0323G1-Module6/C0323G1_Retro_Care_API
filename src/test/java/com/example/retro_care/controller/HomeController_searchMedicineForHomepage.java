@@ -18,33 +18,15 @@ public class HomeController_searchMedicineForHomepage {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private IHomeService homeService;
-
     /**
-     * Test NOT_FOUND status with keyword search is "!@%23$%25%5E%26"
-     * @throws Exception 404 error
+     * Test NOT_FOUND status with type of medicine is "xxxxxxxxxx" and keyword is "xxxxxxxxxx"
+     * @throws Exception Not Found
      * @author HuyL
      */
     @Test
-    public void searchMedicineForHomepage_5() throws Exception{
+    public void searchMedicineForHomepage_5() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/home/search")
-                                .param("keyword", "!@%23$%25%5E%26"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    /**
-     * Test NOT_FOUND status with type of medicine is "!@%23$%25%5E%26"
-     * @throws Exception 404 error
-     * @author HuyL
-     */
-    @Test
-    public void searchMedicineForHomepage_5_2() throws Exception {
-        this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/home/search")
-                                .param("type", "!@%23$%25%5E%26"))
+                        MockMvcRequestBuilders.get("/api/home/search?type=xxxxxxxxxxx&keyword=xxxxxxxxxx"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -60,6 +42,32 @@ public class HomeController_searchMedicineForHomepage {
                         MockMvcRequestBuilders.get("/api/home/search")
                                 .param("type", "")
                                 .param("keyword", ""))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test NOT_FOUND status with keyword search is "xxxxxxxxxx" and type is default ""
+     * @throws Exception Ok status
+     * @author HuyL
+     */
+    @Test
+    public void searchMedicineForHomepage_99() throws Exception{
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/home/search?keyword=xxxxxxxxxx"))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    /**
+     * Test NOT_FOUND status with keyword type is "xxxxxxxxxx" and keyword is default ""
+     * @throws Exception Ok status
+     * @author HuyL
+     */
+    @Test
+    public void searchMedicineForHomepage_98() throws Exception{
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/home/search?type=xxxxxxxxxx"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

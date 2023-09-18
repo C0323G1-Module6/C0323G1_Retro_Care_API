@@ -1,17 +1,12 @@
 package com.example.retro_care.controller;
 
-import com.example.retro_care.home.service.IHomeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collections;
-
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -21,12 +16,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HomeController_findAllMedicineForHomepage {
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private IHomeService homeService;
 
     /**
      * Test for get list with size > 0
-     *
      * @throws Exception successful
      * @author HuyL
      */
@@ -47,8 +39,7 @@ public class HomeController_findAllMedicineForHomepage {
 
     /**
      * Test for wrong url
-     *
-     * @throws Exception 404
+     * @throws Exception 404 Not Found
      * @author HuyL
      */
     @Test
@@ -56,20 +47,22 @@ public class HomeController_findAllMedicineForHomepage {
         this.mockMvc.perform(
                         MockMvcRequestBuilders.get(("/api/home_wrong_url/")))
                 .andDo(print())
+                .andExpect(jsonPath("$").doesNotExist())
                 .andExpect(status().is4xxClientError());
     }
 
 
     /**
-     * Test NOT_FOUND status by create a mock of the homeService to call findAllMedicineForHomepage() methods
-     * @throws Exception 404 Error
+     * Test NOT_FOUND status by empty database
+     * @throws Exception NOT_FOUND
      * @author HuyL
      */
     @Test
     public void findAllMedicineForHomepage_99() throws Exception {
-        when(homeService.findAllMedicineForHomepage()).thenReturn(Collections.emptyList());
+//        Database had empty
         mockMvc.perform(MockMvcRequestBuilders.get("/api/home/"))
                 .andDo(print())
+                .andExpect(jsonPath("$").isEmpty())
                 .andExpect(status().isNotFound());
     }
 }
