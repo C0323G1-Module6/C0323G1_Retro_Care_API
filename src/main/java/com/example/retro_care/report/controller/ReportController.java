@@ -5,9 +5,14 @@ import com.example.retro_care.report.service.IReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -18,22 +23,35 @@ public class ReportController {
 
     /**
      * Author: DuyTV
-     * Goal: Get data report base on start date, end date àn name of report
+     * Goal: Get data report base on start date, end date and name of report
      * Date created: 15/09/2023
-     * @param startDate
-     * @param endDate
+     *
+     * @param validateDto
+     * @param bindingResult
      * @param reportName
      * @return ResponseEntity includes report data and HttpStatus
      */
 
     @GetMapping("/general")
-    public ResponseEntity<List<?>> findReport(@RequestParam(defaultValue = "",required = false) String startDate,
-                                              @RequestParam(defaultValue = "",required = false) String endDate,
-                                              @RequestParam(defaultValue = "",required = false) String reportName) {
+    public ResponseEntity<?> findReport(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult,
+                                        @RequestParam(defaultValue = "", required = false) String reportName) {
+
+        new ValidateDto().validate(validateDto, bindingResult);
+        Map<String, String> errorsMap = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(errorsMap);
+        }
+        String startDate = validateDto.getStartDate();
+        String endDate = validateDto.getEndDate();
+
         switch (reportName) {
             case "revenue":
                 List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
-                System.out.println(revenueList);
                 if (revenueList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
@@ -63,7 +81,7 @@ public class ReportController {
                 }
                 return new ResponseEntity<>(bestSellerMedicineList, HttpStatus.OK);
             case "saleDiary":
-                List<SaleDiary> saleDiaryList = reportService.findSaleDiary(startDate,endDate);
+                List<SaleDiary> saleDiaryList = reportService.findSaleDiary(startDate, endDate);
                 if (saleDiaryList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
@@ -85,14 +103,27 @@ public class ReportController {
      * Author: DuyTV
      * Goal: Get data report of revenue to make revenue - profit chart
      * Date created: 15/09/2023
-     * @param startDate
-     * @param endDate
+     *
+     * @param validateDto
+     * @param bindingResult
      * @return ResponseEntity includes revenue data, HttpStatus
      */
 
+
     @GetMapping("/chart/revenue")
-    public ResponseEntity<List<Revenue>> findRevenue(@RequestParam(defaultValue = "") String startDate,
-                                                     @RequestParam(defaultValue = "") String endDate) {
+    public ResponseEntity<?> findRevenue(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult) {
+        new ValidateDto().validate(validateDto, bindingResult);
+        Map<String, String> errorsMap = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(errorsMap);
+        }
+        String startDate = validateDto.getStartDate();
+        String endDate = validateDto.getEndDate();
         List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
         if (revenueList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -100,23 +131,35 @@ public class ReportController {
         return new ResponseEntity<>(revenueList, HttpStatus.OK);
     }
 
+
     /**
      * Author: DuyTV
      * Goal: Get data report of profit to make revenue - profit chart
      * Date created: 15/09/2023
-     * @param startDate
-     * @param endDate
+     *
+     * @param validateDto
+     * @param bindingResult
      * @return ResponseEntity includes revenue data, HttpStatus
      */
     @GetMapping("/chart/profit")
-    public ResponseEntity<List<Profit>> findProfit(@RequestParam(defaultValue = "") String startDate,
-                                                   @RequestParam(defaultValue = "") String endDate) {
+    public ResponseEntity<?> findProfit(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult) {
+        new ValidateDto().validate(validateDto, bindingResult);
+        Map<String, String> errorsMap = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(errorsMap);
+        }
+        String startDate = validateDto.getStartDate();
+        String endDate = validateDto.getEndDate();
         List<Profit> profitList = reportService.findProfit(startDate, endDate);
         if (profitList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(profitList, HttpStatus.OK);
     }
-
 
 }
