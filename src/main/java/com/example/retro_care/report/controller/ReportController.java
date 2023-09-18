@@ -16,13 +16,24 @@ public class ReportController {
     @Autowired
     private IReportService reportService;
 
+    /**
+     * Author: DuyTV
+     * Goal: Get data report base on start date, end date àn name of report
+     * Date created: 15/09/2023
+     * @param startDate
+     * @param endDate
+     * @param reportName
+     * @return ResponseEntity includes report data and HttpStatus
+     */
+
     @GetMapping("/general")
-    public ResponseEntity<List<?>> findReport(@RequestParam(defaultValue = "") String startDate,
-                                              @RequestParam(defaultValue = "") String endDate,
-                                              @RequestParam(defaultValue = "") String reportName) {
+    public ResponseEntity<List<?>> findReport(@RequestParam(defaultValue = "",required = false) String startDate,
+                                              @RequestParam(defaultValue = "",required = false) String endDate,
+                                              @RequestParam(defaultValue = "",required = false) String reportName) {
         switch (reportName) {
             case "revenue":
                 List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
+                System.out.println(revenueList);
                 if (revenueList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
@@ -52,7 +63,7 @@ public class ReportController {
                 }
                 return new ResponseEntity<>(bestSellerMedicineList, HttpStatus.OK);
             case "saleDiary":
-                List<SaleDiary> saleDiaryList = reportService.findSaleDiary();
+                List<SaleDiary> saleDiaryList = reportService.findSaleDiary(startDate,endDate);
                 if (saleDiaryList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
@@ -70,6 +81,15 @@ public class ReportController {
 
     }
 
+    /**
+     * Author: DuyTV
+     * Goal: Get data report of revenue to make revenue - profit chart
+     * Date created: 15/09/2023
+     * @param startDate
+     * @param endDate
+     * @return ResponseEntity includes revenue data, HttpStatus
+     */
+
     @GetMapping("/chart/revenue")
     public ResponseEntity<List<Revenue>> findRevenue(@RequestParam(defaultValue = "") String startDate,
                                                      @RequestParam(defaultValue = "") String endDate) {
@@ -80,6 +100,14 @@ public class ReportController {
         return new ResponseEntity<>(revenueList, HttpStatus.OK);
     }
 
+    /**
+     * Author: DuyTV
+     * Goal: Get data report of profit to make revenue - profit chart
+     * Date created: 15/09/2023
+     * @param startDate
+     * @param endDate
+     * @return ResponseEntity includes revenue data, HttpStatus
+     */
     @GetMapping("/chart/profit")
     public ResponseEntity<List<Profit>> findProfit(@RequestParam(defaultValue = "") String startDate,
                                                    @RequestParam(defaultValue = "") String endDate) {
