@@ -49,9 +49,11 @@ public interface IInvoiceService {
 
     Invoice findById(Long id);
 
-    List<Invoice> searchInvoice(String start_date,
+   Page<Invoice> searchInvoice(Pageable pageable,
+                               String start_date,
                                 String end_date,
                                 String start_time,
                                 String end_time,
-                                String sort_column);
+                                String sort_column
+                              );
 }

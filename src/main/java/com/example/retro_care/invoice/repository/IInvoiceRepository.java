@@ -65,13 +65,14 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "  WHEN :sort_column = 'code' THEN code\n" +
             "  WHEN :sort_column = 'creation_date' THEN creation_date\n" +
             "  WHEN :sort_column = 'paid' THEN paid\n" +
-            "END ASC;")
-    List<Invoice> searchInvoice(
+            "END ASC")
+    Page<Invoice> searchInvoice(Pageable pageable,
             @Param("start_date") String start_date,
             @Param("end_date") String end_date,
             @Param("start_time") String start_time,
             @Param("end_time") String end_time,
-            @Param("sort_column") String sort_column);
+            @Param("sort_column") String sort_column
+            );
 
     /**
      * create an Invoice

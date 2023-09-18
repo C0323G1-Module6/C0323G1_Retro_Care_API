@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -127,8 +129,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return
      */
     @Override
-    public List<Invoice> searchInvoice(String start_date, String end_date, String start_time, String
+    public Page<Invoice> searchInvoice(Pageable pageable,String start_date, String end_date, String start_time, String
             end_time, String sort_column) {
-        return invoiceRepository.searchInvoice(start_date, end_date, start_time, end_time, sort_column);
+        return invoiceRepository.searchInvoice(pageable, start_date, end_date, start_time, end_time, sort_column);
     }
+
 }
