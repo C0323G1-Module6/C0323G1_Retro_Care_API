@@ -152,7 +152,7 @@ public class CustomerController {
      * Goal: Delete customer by id
      * return HttpStatus
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null) {
