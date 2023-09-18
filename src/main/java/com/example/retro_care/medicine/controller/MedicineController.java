@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/medicine")
+@RequestMapping("/api/medicine")
 public class MedicineController {
     @Autowired
     private IMedicineService iMedicineService;
@@ -86,7 +86,7 @@ public class MedicineController {
      *                        - HttpStatus.OK if the medicine is successfully edited.
      *                        - HttpStatus.BAD_REQUEST if there are errors in the data validation process.
      */
-    @PutMapping("")
+    @PatchMapping("/{id}")
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
@@ -114,7 +114,7 @@ public class MedicineController {
      *         - HttpStatus.OK if the drug list has data.
      *         - HttpStatus.NO_CONTENT if drug list has no data.
      */
-    @GetMapping("/api/medicine")
+    @GetMapping("")
     @ResponseBody
     public ResponseEntity<Page<Medicine>> medicineList (@RequestParam(defaultValue = "0", required = false) int page,
                                                         @RequestParam(defaultValue = "5", required = false) int size){
