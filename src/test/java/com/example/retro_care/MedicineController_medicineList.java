@@ -21,7 +21,7 @@ public class MedicineController_medicineList {
     private MockMvc mockMvc;
 
     /**
-     * Empty list medicine
+     * This function is used to check that the return list is 0
      * author: DaoPTA
      * workday: 18/09/2023
      *
@@ -35,6 +35,14 @@ public class MedicineController_medicineList {
                 .andExpect(status().is4xxClientError());
     }
 
+
+    /**
+     * This method is used to check the returned list has size > 0
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
     @Test
     public void listMedicine_6() throws Exception{
             this.mockMvc.perform(MockMvcRequestBuilders.get("/api/medicine/get-medicine?page=0&limit=5"))

@@ -16,6 +16,15 @@ public class MedicineController_deleteMedicine {
     @Autowired
     private MockMvc mockMvc;
 
+
+    /**
+     * This function is used to test when cartId is provided
+     * with valid value in database during the delete medicine
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
     @Test
     public void deleteMedicine_28() throws Exception {
         this.mockMvc.perform(
@@ -24,6 +33,14 @@ public class MedicineController_deleteMedicine {
                 .andExpect(status().is2xxSuccessful());
     }
 
+    /**
+     * This function is used to test when medicineId is provided
+     * with no value during the delete medicine
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
     @Test
     public void deleteMedicine_26() throws Exception {
         this.mockMvc.perform(
@@ -32,6 +49,14 @@ public class MedicineController_deleteMedicine {
                 .andExpect(status().is4xxClientError());
     }
 
+    /**
+     * This function is used to test when medicineId is provided
+     * with no equivalent value in database during the delete medicine
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
     @Test
     public void deleteMedicine_27() throws Exception {
         this.mockMvc.perform(
@@ -40,6 +65,14 @@ public class MedicineController_deleteMedicine {
                 .andExpect(status().is4xxClientError());
     }
 
+    /**
+     * This function is used to test when medicineId is provided
+     * with null value during the display medicine
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
     @Test
     public void deleteMedicine_25() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders

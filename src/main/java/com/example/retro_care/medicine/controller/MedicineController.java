@@ -165,15 +165,16 @@ public class MedicineController {
      * @param searchByName value when filtering
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search/{page}/{limit}/{sort}")
+    @GetMapping("/search")
     public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                          @RequestParam(defaultValue = "5", required = false) Integer limit,
-                                                         @RequestParam(value = "sort", required = false) String sort,
-                                                         @RequestParam(value = "searchByName", required = false) String searchByName,
-                                                         @RequestParam(value = "searchByCode", required = false) String searchByCode,
-                                                         @RequestParam(value = "searchByActiveElement", required = false) String searchByActiveElement) {
+                                                         @RequestParam(defaultValue = "code", required = false) String sort,
+                                                         @RequestParam(defaultValue = "",value = "searchByName", required = false) String searchByName,
+                                                         @RequestParam(defaultValue = "",value = "searchByCode", required = false) String searchByCode,
+                                                         @RequestParam(defaultValue = "",value = "searchByActiveElement", required = false) String searchByActiveElement,
+                                                         @RequestParam(defaultValue = "",value = "searchByNameKindOf", required = false) String searchByNameKindOf) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement);
+        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement,searchByNameKindOf);
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -94,6 +94,6 @@ public interface IMedicineService {
 //     * @return the drug group of the drug approximated by the filter
 //     */
 //    Page<Medicine> searchByKind(Pageable pageable,String searchByNameKindOf);
-
-    Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement);
+//
+    Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf);
 }

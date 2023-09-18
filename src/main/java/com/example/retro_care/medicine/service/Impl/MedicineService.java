@@ -90,8 +90,8 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
-    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement) {
-        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement, pageable);
+    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf) {
+        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement,searchByNameKindOf ,pageable);
     }
 
 //    /**
