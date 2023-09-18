@@ -79,7 +79,7 @@ public class MedicineController {
      *                        - HttpStatus.OK if the medicine is successfully edited.
      *                        - HttpStatus.BAD_REQUEST if there are errors in the data validation process.
      */
-    @PutMapping("")
+    @PatchMapping("/{id}")
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()){
