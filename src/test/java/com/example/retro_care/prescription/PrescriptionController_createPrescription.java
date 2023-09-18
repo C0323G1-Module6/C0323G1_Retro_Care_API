@@ -23,6 +23,12 @@ public class PrescriptionController_createPrescription {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * method :createPrescription_13
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with prescription is null
+     */
     @Test
     public void createPrescription_13() throws Exception {
         this.mockMvc.perform(
@@ -32,6 +38,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_code_14
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with code is empty
+     */
     @Test
     public void createPrescription_code_14() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -48,7 +60,12 @@ public class PrescriptionController_createPrescription {
                 .andExpect(status().is4xxClientError()
                 );
     }
-
+    /**
+     * method :createPrescription_name_14
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with name is empty
+     */
     @Test
     public void createPrescription_name_14() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -66,6 +83,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_symptoms_14
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with symptoms is empty
+     */
     @Test
     public void createPrescription_symptoms_14() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -88,6 +111,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_code_16
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with symptoms have length > 50
+     */
     @Test
     public void createPrescription_symptoms_16() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -109,7 +138,12 @@ public class PrescriptionController_createPrescription {
                 .andExpect(status().is4xxClientError()
                 );
     }
-
+    /**
+     * method :createPrescription_note_16
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with note have length > 50
+     */
     @Test
     public void createPrescription_note_16() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -132,6 +166,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_name_16
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with name have length > 25
+     */
     @Test
     public void createPrescription_name_16() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -154,6 +194,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_code_16
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with code have length > 6
+     */
     @Test
     public void createPrescription_code_16() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -176,6 +222,12 @@ public class PrescriptionController_createPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_duration_17
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription with duration <0
+     */
     @Test
     public void createPrescription_duration_17() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -197,7 +249,12 @@ public class PrescriptionController_createPrescription {
                 .andExpect(status().is4xxClientError()
                 );
     }
-
+    /**
+     * method :createPrescription_18
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: create prescription successful
+     */
     @Test
     public void createPrescription_18() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();

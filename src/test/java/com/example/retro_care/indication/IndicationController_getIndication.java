@@ -1,4 +1,4 @@
-package com.example.retro_care.prescription;
+package com.example.retro_care.indication;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,37 +12,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PrescriptionController_getAllPrescription {
+public class IndicationController_getIndication {
     @Autowired
     private MockMvc mockMvc;
 
-    /**
-     * method :getAllPrescription_6
-     * created by :ThanhKn
-     * date create: 18/09/2023
-     * goal: get list prescription size >0
-     */
     @Test
-    public void getAllPrescription_6() throws Exception {
+    public void getIndication_2() throws Exception {
         this.mockMvc.perform(
-                MockMvcRequestBuilders.get("/prescription?page=0"))
+                MockMvcRequestBuilders.get("/indication/{id}",""))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful()
+                .andExpect(status().is4xxClientError()
         );
     }
 
-    /**
-     * method :getAllPrescription_5
-     * created by :ThanhKn
-     * date create: 18/09/2023
-     * goal: get list prescription size =0
-     */
     @Test
-    public void getAllPrescription_5() throws Exception {
+    public void getIndication_3() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/prescription?page=1"))
+                        MockMvcRequestBuilders.get("/indication/{id}",30))
                 .andDo(print())
                 .andExpect(status().is(204)
+                );
+    }
+
+    @Test
+    public void getIndication_4() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/indication/{id}",1))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful()
                 );
     }
 }

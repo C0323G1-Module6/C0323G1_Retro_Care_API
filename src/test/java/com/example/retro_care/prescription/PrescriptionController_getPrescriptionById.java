@@ -12,37 +12,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class PrescriptionController_getAllPrescription {
+public class PrescriptionController_getPrescriptionById {
     @Autowired
     private MockMvc mockMvc;
 
     /**
-     * method :getAllPrescription_6
+     * method :getPrescriptionById_4
      * created by :ThanhKn
      * date create: 18/09/2023
-     * goal: get list prescription size >0
+     * goal: get prescription by id with id have list prescription
      */
     @Test
-    public void getAllPrescription_6() throws Exception {
+    public void getPrescriptionById_4() throws Exception {
         this.mockMvc.perform(
-                MockMvcRequestBuilders.get("/prescription?page=0"))
+                MockMvcRequestBuilders.get("/prescription/{id}",6))
                 .andDo(print())
-                .andExpect(status().is2xxSuccessful()
-        );
+                .andExpect(status().is2xxSuccessful());
     }
 
     /**
-     * method :getAllPrescription_5
+     * method :getPrescriptionById_3
      * created by :ThanhKn
      * date create: 18/09/2023
-     * goal: get list prescription size =0
+     * goal: get prescription by id with id no have list prescription
      */
     @Test
-    public void getAllPrescription_5() throws Exception {
+    public void getPrescriptionById_3() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/prescription?page=1"))
+                        MockMvcRequestBuilders.get("/prescription/{id}",100))
                 .andDo(print())
-                .andExpect(status().is(204)
-                );
+                .andExpect(status().is4xxClientError());
     }
 }

@@ -22,6 +22,12 @@ public class PrescriptionController_editPrescription {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * method :editPrescription_19
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with prescription is empty
+     */
     @Test
     public void editPrescription_19() throws Exception{
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -34,6 +40,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_code_20
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with code is empty
+     */
     @Test
     public void editPrescription_code_20() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -51,6 +63,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_code_20
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with name is empty
+     */
     @Test
     public void editPrescription_name_20() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -68,6 +86,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_symptoms_20
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with symptoms is empty
+     */
     @Test
     public void editPrescription_symptoms_20() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -90,6 +114,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_symptoms_22
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with symptoms have length > 50
+     */
     @Test
     public void editPrescription_symptoms_22() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -112,6 +142,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_note_22
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with note have length > 50
+     */
     @Test
     public void editPrescription_note_22() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -134,6 +170,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_name_22
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with name have length > 25
+     */
     @Test
     public void editPrescription_name_22() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -156,6 +198,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_code_22
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with code have length > 6
+     */
     @Test
     public void editPrescription_code_22() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -178,6 +226,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :createPrescription_duration_23
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription with duration <0
+     */
     @Test
     public void editPrescription_duration_23() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();
@@ -200,6 +254,12 @@ public class PrescriptionController_editPrescription {
                 );
     }
 
+    /**
+     * method :editPrescription_24
+     * created by :ThanhKn
+     * date create: 18/09/2023
+     * goal: edit prescription is successful
+     */
     @Test
     public void editPrescription_24() throws Exception {
         PrescriptionDto prescriptionDto = new PrescriptionDto();

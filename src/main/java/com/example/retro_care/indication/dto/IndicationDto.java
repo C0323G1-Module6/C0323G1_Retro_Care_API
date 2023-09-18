@@ -1,49 +1,23 @@
-package com.example.retro_care.indication.model;
+package com.example.retro_care.indication.dto;
 
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.prescription.model.Prescription;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.persistence.*;
 
-/*
-* Create entity Indication
-* */
-@Entity
-public class Indication {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class IndicationDto implements Validator {
     private Long id;
     private Integer dosage;
     private Integer frequency;
-    @Column(columnDefinition = "BIT(1)")
     private Boolean flagDeleted;
-    @ManyToOne
-    @JoinColumn(name = "prescription_id")
     private Prescription prescription;
-    @ManyToOne
-    @JoinColumn(name = "medicine_id")
     private Medicine medicine;
 
-    public Indication() {
+    public IndicationDto() {
     }
 
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
-    }
-
-    public Indication(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription) {
-        this.id = id;
-        this.dosage = dosage;
-        this.frequency = frequency;
-        this.flagDeleted = flagDeleted;
-        this.prescription = prescription;
-    }
-
-    public Indication(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription, Medicine medicine) {
+    public IndicationDto(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription, Medicine medicine) {
         this.id = id;
         this.dosage = dosage;
         this.frequency = frequency;
@@ -88,15 +62,37 @@ public class Indication {
         return prescription;
     }
 
-//    public Medicine getMedicine() {
-//        return medicine;
-//    }
-//
-//    public void setMedicine(Medicine medicine) {
-//        this.medicine = medicine;
-//    }
-
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;
+    }
+
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+        IndicationDto indicationDto = (IndicationDto) target;
+
+        if(indicationDto.getDosage() == null){
+            errors.rejectValue("dosage",null,"Không được để trống");
+        } else if (indicationDto.getDosage()<=0) {
+            errors.rejectValue("dosage",null,"Không được nhỏ hơn 0");
+        }
+
+        if(indicationDto.getFrequency() == null){
+            errors.rejectValue("frequency",null,"Không được để trống");
+        } else if (indicationDto.getDosage()<=0) {
+            errors.rejectValue("frequency",null,"Không được nhỏ hơn 0");
+        }
     }
 }
