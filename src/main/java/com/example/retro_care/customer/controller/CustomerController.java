@@ -2,6 +2,7 @@ package com.example.retro_care.customer.controller;
 
 import com.example.retro_care.customer.dto.CreatCode;
 import com.example.retro_care.customer.dto.CustomerDto;
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.service.ICustomerService;
 import org.springframework.beans.BeanUtils;
@@ -30,7 +31,7 @@ public class CustomerController {
     /**
      * Author: TinDT
      * Goal: get customer for page to create customer information
-     * return creation page  of customers
+     * return HttpStatus
      */
     @GetMapping("/dto/create")
     public ResponseEntity<CustomerDto> getCustomerForCreate() {
@@ -45,6 +46,8 @@ public class CustomerController {
         System.out.println(customerDto.getCode());
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
+
+
 
     /**
      * Author: TinDT
@@ -65,7 +68,7 @@ public class CustomerController {
         }
         BeanUtils.copyProperties(customerDto, customer);
         saveCustomer = customerService.saveCustomer(customer);
-            return new ResponseEntity<>(saveCustomer, HttpStatus.OK);
+            return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }
 
@@ -74,7 +77,7 @@ public class CustomerController {
      * Goal: update information of customer
      * * return HttpStatus
      */
-    @PatchMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,BindingResult bindingResult) {
         new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
@@ -87,20 +90,9 @@ public class CustomerController {
         Customer customer = new Customer();
         BeanUtils.copyProperties(customerDto,customer);
         customerService.updateCustomer(customer);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
     }
-//    /**
-//     * Author: TinDT
-//     * Goal: Send customers needing updates to the customer updates page
-//     * * return HttpStatus
-//     */
-//    @GetMapping("/dto/update/{id}")
-//    public ResponseEntity<CustomerDto> getCustomerForUpdate(@PathVariable Long id) {
-//        CustomerDto customerDto = new CustomerDto();
-//        Customer customer = customerService.findCustomerById(id);
-//        BeanUtils.copyProperties(customer,customerDto);
-//        return new ResponseEntity<>(customerDto, HttpStatus.OK);
-//    }
+
 
     /**
      * Author: TinDT
@@ -125,11 +117,22 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = " is not null or app_user_id", required = false) String groupValue,
-                                             @RequestParam(defaultValue = "code", required = false) String sortItem) {
+                                             @RequestParam(defaultValue = "" ) String groupValue,
+                                             @RequestParam(defaultValue = "" ) String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
-        if (!customers.isEmpty()) {
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem, pageable);
+        if (customers.getTotalElements()!=0) {
+            return new ResponseEntity<>(customers, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+    @GetMapping("/list-customer")
+    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false)int page,
+                                    @RequestParam(defaultValue = "", required = false) String searchName) {
+        Pageable pageable = PageRequest.of(page,5);
+        Page<Customer> customers = customerService.findAllByName(pageable, searchName);
+        System.out.println(customers.getContent());
+        if (customers.getTotalElements()!=0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
