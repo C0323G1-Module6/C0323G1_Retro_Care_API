@@ -26,6 +26,9 @@ public class UnitDetailDto implements Validator {
         this.unit = unit;
     }
 
+    public UnitDetailDto() {
+    }
+
     public Long getId() {
         return id;
     }

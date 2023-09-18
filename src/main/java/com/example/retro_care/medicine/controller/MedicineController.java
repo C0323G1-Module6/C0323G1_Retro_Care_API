@@ -23,7 +23,7 @@ import javax.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/medicine")
+@RequestMapping("/api/medicine")
 public class MedicineController {
     @Autowired
     private IMedicineService iMedicineService;
@@ -86,7 +86,7 @@ public class MedicineController {
      *                        - HttpStatus.OK if the medicine is successfully edited.
      *                        - HttpStatus.BAD_REQUEST if there are errors in the data validation process.
      */
-    @PutMapping("")
+    @PatchMapping("/{id}")
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult){
         if (bindingResult.hasErrors()){

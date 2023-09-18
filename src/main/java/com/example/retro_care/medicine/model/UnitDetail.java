@@ -7,6 +7,7 @@ import javax.persistence.*;
 public class UnitDetail {
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "flag_deleted")
