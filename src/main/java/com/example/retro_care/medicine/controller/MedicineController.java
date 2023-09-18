@@ -169,13 +169,13 @@ public class MedicineController {
     public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                          @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                          @RequestParam(defaultValue = "code", required = false) String sort,
-                                                         @RequestParam(defaultValue = "",value = "searchByName", required = false) String searchByName,
-                                                         @RequestParam(defaultValue = "",value = "searchByCode", required = false) String searchByCode,
-                                                         @RequestParam(defaultValue = "",value = "searchByActiveElement", required = false) String searchByActiveElement,
-                                                         @RequestParam(defaultValue = "",value = "searchByNameKindOf", required = false) String searchByNameKindOf) {
+                                                         @RequestParam(defaultValue = "",name = "searchByName", required = false) String searchByName,
+                                                         @RequestParam(defaultValue = "",name = "searchByCode", required = false) String searchByCode,
+                                                         @RequestParam(defaultValue = "",name = "searchByActiveElement", required = false) String searchByActiveElement,
+                                                         @RequestParam(defaultValue = "",name = "searchByNameKindOf", required = false) String searchByNameKindOf) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
         Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement,searchByNameKindOf);
-        if (medicines.isEmpty()) {
+        if (medicines == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(medicines, HttpStatus.OK);

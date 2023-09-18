@@ -213,7 +213,96 @@ public class MedicineController_searchMedicine {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("totalPages").value(1))
                 .andExpect(jsonPath("totalElements").value(3))
-                .andExpect(jsonPath("content[0].id").value(11))
+                .andExpect(jsonPath("content[0].id").value(1))
+                .andExpect(jsonPath("content[0].activeElement").value("ok"))
+                .andExpect(jsonPath("content[0].code").value("T00001"))
+                .andExpect(jsonPath("content[0].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[0].name").value("Pandol"))
+                .andExpect(jsonPath("content[0].note").value("Ngon"))
+                .andExpect(jsonPath("content[0].origin").value("VietNam"))
+                .andExpect(jsonPath("content[0].price").value("15000.1"))
+                .andExpect(jsonPath("content[0].quantity").value("100"))
+                .andExpect(jsonPath("content[0].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[0].vat").value("5.1"))
+                .andExpect(jsonPath("content[0].kindOfMedicine.id").value(2));
+    }
+
+    /**
+     * List of seaweed, search searchByCode(T00001)
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
+    @Test
+    public void searchMedicineByCode_11() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                "/api/medicine/search?searchByCode=T00001"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("content[0].id").value(1))
+                .andExpect(jsonPath("content[0].activeElement").value("ok"))
+                .andExpect(jsonPath("content[0].code").value("T00001"))
+                .andExpect(jsonPath("content[0].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[0].name").value("Pandol"))
+                .andExpect(jsonPath("content[0].note").value("Ngon"))
+                .andExpect(jsonPath("content[0].origin").value("VietNam"))
+                .andExpect(jsonPath("content[0].price").value("15000.1"))
+                .andExpect(jsonPath("content[0].quantity").value("100"))
+                .andExpect(jsonPath("content[0].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[0].vat").value("5.1"))
+                .andExpect(jsonPath("content[0].kindOfMedicine.id").value("2"));
+    }
+
+    /**
+     * List of seaweed, search searchByActiveElement(Anh Dao)
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
+    @Test
+    public void searchMedicineByActiveElement_11() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                "/api/medicine/search?searchByActiveElement=Anh Dao"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("content[0].id").value(1))
+                .andExpect(jsonPath("content[0].activeElement").value("ok"))
+                .andExpect(jsonPath("content[0].code").value("T00001"))
+                .andExpect(jsonPath("content[0].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[0].name").value("Pandol"))
+                .andExpect(jsonPath("content[0].note").value("Ngon"))
+                .andExpect(jsonPath("content[0].origin").value("VietNam"))
+                .andExpect(jsonPath("content[0].price").value("15000.1"))
+                .andExpect(jsonPath("content[0].quantity").value("100"))
+                .andExpect(jsonPath("content[0].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[0].vat").value("5.1"))
+                .andExpect(jsonPath("content[0].kindOfMedicine.id").value("2"));
+    }
+    /**
+     * List of seaweed, search searchByActiveElement(Anh Dao)
+     * author: DaoPTA
+     * workday: 18/09/2023
+     *
+     * @throws Exception
+     */
+    @Test
+    public void searchMedicineByKindOfMedicine_11() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get(
+                                "/api/medicine/search?searchByNameKindOf=Bo"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(3))
+                .andExpect(jsonPath("content[0].id").value(1))
                 .andExpect(jsonPath("content[0].activeElement").value("ok"))
                 .andExpect(jsonPath("content[0].code").value("T00001"))
                 .andExpect(jsonPath("content[0].maker").value("Anh Dao"))

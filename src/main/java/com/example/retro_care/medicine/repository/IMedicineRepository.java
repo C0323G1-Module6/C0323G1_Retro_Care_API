@@ -166,8 +166,8 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             " kind_of_medicine k ON m.kind_of_medicine_id = k.id" +
             " WHERE" +
             " m.flag_deleted = false" +
-            " AND (m.name LIKE CONCAT('%', :searchByName ,'%')  AND m.code LIKE CONCAT('%', :searchByCode ,'%') " +
-            " AND m.active_element LIKE CONCAT('%', :searchByActiveElement ,'%') AND k.name LIKE CONCAT('%', :searchByNameKindOf ,'%')) " +
+            " AND (m.name LIKE CONCAT('%', :searchByName,'%')  AND m.code LIKE CONCAT('%', :searchByCode,'%') " +
+            " AND m.active_element LIKE CONCAT('%', :searchByActiveElement,'%') AND k.name LIKE CONCAT('%', :searchByNameKindOf,'%')) " +
             "",nativeQuery = true)
     Page<Medicine> searchMedicine(@Param("searchByName") String searchByName,
                                   @Param("searchByCode") String searchByCode,
