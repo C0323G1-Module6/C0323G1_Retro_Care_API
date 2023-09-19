@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
@@ -54,4 +55,37 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
     @Transactional
     @Query(value = "update app_user set flag_online = 0 where user_name = :userName ",nativeQuery = true)
     Integer updateAppUserIsOffline(@Param("userName") String userName);
+
+    /**
+     * method: updateAppUserIsOffline
+     * Creater: NhatNHH
+     * Date: 18-09-2023
+     * param: String userName
+     * return: Long
+     */
+    @Query(value = " select au.id from retro_care.app_user au where au.user_name = :userName ",nativeQuery = true)
+    Long findIdByUserName(@Param("userName") String userName);
+
+    /**
+     * method: updateAppUserIsOffline
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * param: String userName
+     * return: Integer
+     */
+    @Query(value =  " select r.id from app_role r where r.name = :name " ,nativeQuery = true)
+    Long findAppRoleIdByName(@Param("name")String name);
+
+    /**
+     * method: updateAppUserIsOffline
+     * Creater: NhatNHH
+     * Date: 15-09-2023
+     * param: String userName
+     * return: void
+     */
+    @Modifying
+    @Transactional
+    @Query(value = " call addRoleForAppUser(:appRoleId,:appUserId) ",nativeQuery = true)
+    void insertRoleForCustomer(@Param("appRoleId") Long appRoleId,@Param("appUserId") Long appUserId);
+
 }
