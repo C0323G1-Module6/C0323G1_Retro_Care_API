@@ -18,7 +18,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.social.facebook.api.Facebook;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -52,14 +51,17 @@ public class AppUserController {
                                             BindingResult bindingResult) {
 
         new AppUserDto().validate(appUserDto, bindingResult);
-        Map<String, String> errorsMap = new HashMap<>();
+//        Map<String, String> errorsMap = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
+//            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
+//            }
+//            return ResponseEntity
+//                    .status(HttpStatus.NOT_ACCEPTABLE)
+//                    .body(errorsMap);
             return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(errorsMap);
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body("Đăng nhập thất bại");
         }
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -120,7 +122,7 @@ public class AppUserController {
             String randomPassword = RandomStringGenerator.generateRandomString();
             System.out.println(randomPassword);
             appUser.setPassword(passwordEncoder.encode(randomPassword));
-            appUserService.createNewAppUser(appUser);
+            appUserService.createNewAppUser(appUser,"ROLE_CUSTOMER");
         }
         UserDetails userDetails = appUserService.loadUserByUsername(facebookMail);
 
@@ -144,6 +146,9 @@ public class AppUserController {
         new AppUserDto().validate(appUserDto, bindingResult);
         ValidateAppUser.checkValidateConfirmAppUserPassword(appUserDto.getConfirmPassword(), bindingResult);
         Map<String, String> errorsMap = new HashMap<>();
+        if (!ValidateAppUser.checkVerificationPassword(appUserDto.getPassword(), appUserDto.getConfirmPassword())) {
+            bindingResult.rejectValue("confirmPassword",null,"Mật khẩu không khớp");
+        }
         if (bindingResult.hasErrors()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
@@ -152,12 +157,6 @@ public class AppUserController {
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(errorsMap);
         }
-        if (!ValidateAppUser.checkVerificationPassword(appUserDto.getPassword(), appUserDto.getConfirmPassword())) {
-            return ResponseEntity
-                    .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body("Mật khẩu không khớp, vui lòng nhập lại");
-        }
-
         Boolean existsByUsername = appUserService.existsByUsername(appUserDto.getUserName());
         if (existsByUsername) {
             return ResponseEntity
@@ -168,7 +167,7 @@ public class AppUserController {
         AppUser appUser = new AppUser();
         BeanUtils.copyProperties(appUserDto, appUser);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
-        Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser);
+        Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_CUSTOMER");
         if (!checkAddNewAppUser) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đăng ký thất bại, vui lòng chờ trong giây lất");
         }
@@ -201,7 +200,7 @@ public class AppUserController {
         AppUser appUser = new AppUser();
         appUser.setUserName(userName);
         appUser.setPassword(passwordEncoder.encode("123"));
-        Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser);
+        Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_EMPLOYEE");
         if (!checkAddNewAppUser) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
