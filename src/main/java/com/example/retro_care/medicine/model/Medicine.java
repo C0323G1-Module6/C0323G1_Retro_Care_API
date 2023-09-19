@@ -47,14 +47,14 @@ public class Medicine {
 
     @Column(name = "flag_deleted")
     private Boolean flagDeleted;
-    @JsonBackReference
+//    @JsonBackReference
     @OneToMany(mappedBy = "medicine")
     private Set<UnitDetail> unitDetailSet;
-    @JsonBackReference
+//    @JsonBackReference
     @OneToMany(mappedBy = "medicine")
     private Set<ImageMedicine> imageMedicines;
 
-    @JsonBackReference
+//    @JsonBackReference
     @OneToMany(mappedBy = "medicine")
     private Set<Indication> indicationSet;
 

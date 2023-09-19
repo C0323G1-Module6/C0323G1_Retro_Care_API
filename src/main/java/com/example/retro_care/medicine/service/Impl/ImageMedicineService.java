@@ -6,7 +6,7 @@ import com.example.retro_care.medicine.service.IImageMedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class ImageMedicineService implements IImageMedicineService {
@@ -30,7 +30,7 @@ public class ImageMedicineService implements IImageMedicineService {
      * @return A list of ImageMedicine objects associated with the given Medicine ID.
      */
     @Override
-    public List<ImageMedicine> findImageMedicineByMedicineId(Long medicineId) {
+    public Set<ImageMedicine> findImageMedicineByMedicineId(Long medicineId) {
         return iImageMedicineRepository.findImageMedicineByMedicineId(medicineId);
     }
 

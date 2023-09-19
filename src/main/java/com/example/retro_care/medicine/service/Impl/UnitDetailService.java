@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UnitDetailService implements IUnitDetailService {
@@ -21,7 +22,7 @@ public class UnitDetailService implements IUnitDetailService {
      * @return A list of UnitDetail objects associated with the given Medicine ID.
      */
     @Override
-    public List<UnitDetail> findUnitDetailByMedicineId(Long medicineId) {
+    public Set<UnitDetail> findUnitDetailByMedicineId(Long medicineId) {
         return iUnitDetailRepository.findUnitDetailByMedicineId(medicineId);
     }
 

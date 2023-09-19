@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Set;
 
 public interface IUnitDetailRepository extends JpaRepository<UnitDetail, Long> {
     /**
@@ -45,5 +45,5 @@ public interface IUnitDetailRepository extends JpaRepository<UnitDetail, Long> {
      */
     @Query(value = "SELECT u.conversion_unit, u.conversion_rate, u.unit_id FROM unit_detail as u WHERE " +
             "medicine_id = :medicineId", nativeQuery = true)
-    List<UnitDetail> findUnitDetailByMedicineId(@Param("medicineId") Long medicineId);
+    Set<UnitDetail> findUnitDetailByMedicineId(@Param("medicineId") Long medicineId);
 }

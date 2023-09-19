@@ -3,6 +3,7 @@ package com.example.retro_care.medicine.service;
 import com.example.retro_care.medicine.model.ImageMedicine;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IImageMedicineService {
     /**
@@ -18,7 +19,7 @@ public interface IImageMedicineService {
      * @param medicineId The ID of the Medicine.
      * @return A list of ImageMedicine objects associated with the given Medicine ID.
      */
-    List<ImageMedicine> findImageMedicineByMedicineId(Long medicineId);
+    Set<ImageMedicine> findImageMedicineByMedicineId(Long medicineId);
 
     /**
      * Update an existing ImageMedicine-TinVV

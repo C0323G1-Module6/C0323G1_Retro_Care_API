@@ -4,6 +4,7 @@ import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.UnitDetail;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IUnitDetailService {
     /**
@@ -12,7 +13,7 @@ public interface IUnitDetailService {
      * @param medicineId The ID of the Medicine.
      * @return A list of UnitDetail objects associated with the given Medicine ID.
      */
-    List<UnitDetail> findUnitDetailByMedicineId(Long medicineId);
+    Set<UnitDetail> findUnitDetailByMedicineId(Long medicineId);
 
     /**
      * Add a new UnitDetail-TinVV

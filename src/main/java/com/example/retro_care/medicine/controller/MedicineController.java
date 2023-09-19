@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/medicine")
@@ -43,10 +44,12 @@ public class MedicineController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity findMedicineById(@PathVariable("id") Long id) {
-        iImageMedicineService.findImageMedicineByMedicineId(id);
-        iUnitDetailService.findUnitDetailByMedicineId(id);
-        iMedicineService.findMedicineById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+//        Set<ImageMedicine> imageMedicines = iImageMedicineService.findImageMedicineByMedicineId(id);
+//        Set<UnitDetail> unitDetails = iUnitDetailService.findUnitDetailByMedicineId(id);
+        Medicine medicine = iMedicineService.findMedicineById(id);
+//        medicine.setImageMedicines(imageMedicines);
+//        medicine.setUnitDetailSet(unitDetails);
+        return new ResponseEntity<>(iMedicineService.findMedicineById(id),HttpStatus.OK);
     }
 
     /**
