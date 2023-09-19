@@ -32,6 +32,7 @@ public class ReportController {
      * @return ResponseEntity includes report data and HttpStatus
      */
 
+
     @GetMapping("/general")
     public ResponseEntity<?> findReport(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult,
                                         @RequestParam(defaultValue = "", required = false) String reportName) {
