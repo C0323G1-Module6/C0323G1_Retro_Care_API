@@ -15,6 +15,14 @@ import javax.transaction.Transactional;
 
 @Repository
 public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine, Long> {
+    /**
+     * method :findAllKindOfMedicine()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: Long id
+     * return KndOfMedicine
+     */
     //    List
     @Query(nativeQuery = true, value =
             "select k.id,k.code,k.name " +
@@ -25,7 +33,14 @@ public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine,
     Page<IKindOfMedicineDto> findAllKindOfMedicine(Pageable pageable,
                                                    @Param("searchCode") String searchCode,
                                                    @Param("searchName") String searchName);
-
+    /**
+     * method :deleteKindOfMedicineById()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: Long id
+     * return void
+     */
     //Delete
     @Transactional
     @Modifying
@@ -36,15 +51,15 @@ public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine,
 // get by id
 
     /**
-     * method :getSupplierById()
+     * method :getKindOfMedicineById()
      * created by :CaoNv
      * date create: 14/09/2023
      *
      * @param: Long id
-     * return KndOfMedicine
+     * return KindOfMedicine
      */
 
     @Query(nativeQuery = true,
             value = "select kind_of_medicine.id,kind_of_medicine.code,kind_of_medicine.name from kind_of_medicine where id = :id and flag_deleted = false")
-    Supplier getSupplierById(@Param("id") Long id);
+    KindOfMedicine getKindOfMedicineById(@Param("id") Long id);
 }
