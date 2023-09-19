@@ -128,6 +128,15 @@ public class MedicineController {
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
+    @GetMapping("/get-list")
+    @ResponseBody
+    public ResponseEntity<List<Medicine>> getListMedicine(){
+        List<Medicine> medicines = iMedicineService.getAll();
+        if (medicines.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(medicines, HttpStatus.OK);
+    }
 
     /**
      * author: DaoPTA
@@ -169,12 +178,12 @@ public class MedicineController {
     public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                          @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                          @RequestParam(defaultValue = "code", required = false) String sort,
-                                                         @RequestParam(defaultValue = "",name = "searchByName", required = false) String searchByName,
-                                                         @RequestParam(defaultValue = "",name = "searchByCode", required = false) String searchByCode,
-                                                         @RequestParam(defaultValue = "",name = "searchByActiveElement", required = false) String searchByActiveElement,
-                                                         @RequestParam(defaultValue = "",name = "searchByNameKindOf", required = false) String searchByNameKindOf) {
+                                                         @RequestParam(defaultValue = "", name = "searchByName", required = false) String searchByName,
+                                                         @RequestParam(defaultValue = "", name = "searchByCode", required = false) String searchByCode,
+                                                         @RequestParam(defaultValue = "", name = "searchByActiveElement", required = false) String searchByActiveElement,
+                                                         @RequestParam(defaultValue = "", name = "searchByNameKindOf", required = false) String searchByNameKindOf) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement,searchByNameKindOf);
+        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement, searchByNameKindOf);
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
