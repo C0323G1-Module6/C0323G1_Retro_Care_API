@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
@@ -80,7 +80,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * @param invoice
      * @return Invoice
      */
-    @Query(value = "Call create_invoice (:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.flagDeleted},:#{#invoice.supplierId.id},:#{#invoice.appUserId.id}) ", nativeQuery = true)
+    @Query(value = "Call create_invoice (:#{#invoice.code},:#{#invoice.documentNumber},:#{#invoice.creationDate},:#{#invoice.paid},:#{#invoice.note},0,:#{#invoice.supplierId.id},:#{#invoice.appUserId.id}) ", nativeQuery = true)
     @Transactional
     Invoice createInvoice(@Param("invoice") Invoice invoice);
 
@@ -95,7 +95,8 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     @Query(value = "select id,code,document_number,creation_date,paid,note,flag_deleted,supplier_id,app_user_id from invoice where id = :invoiceId and flag_deleted = 0", nativeQuery = true)
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
 
-    @Query(value = "UPDATE invoice SET document_number = :#{#invoice.documentNumber},creation_date = :#{#invoice.creationDate},paid = :#{#invoice.paid},note = :#{#invoice.note},supplier_id =:#{#invoice.supplierId.id} ,app_user_id= :#{#invoice.appUserId.id} where id = :#{#invoice.id}", nativeQuery = true)
+    @Transactional
+    @Query(value = "call edit_invoice(:#{#invoice.id},:#{#invoice.code},:#{#invoice.documentNumber}, :#{#invoice.creationDate}, :#{#invoice.paid},:#{#invoice.note},0,:#{#invoice.supplierId.id})", nativeQuery = true)
     Invoice editInvoice(@Param("invoice") Invoice invoice);
 
     /**
