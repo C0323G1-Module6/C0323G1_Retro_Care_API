@@ -56,7 +56,7 @@ public class CustomerController {
     @PostMapping("/create")
     public ResponseEntity<?> saveCustomer(@Valid  @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
-        Customer saveCustomer;
+        Customer customerCheck = new Customer();
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String,String> errors = new HashMap<>();
@@ -65,8 +65,18 @@ public class CustomerController {
             }
             return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
         }
+
+
+//        customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
+//        if (customerCheck != null){
+//            return new ResponseEntity<>("email đã được đăng ký",HttpStatus.NOT_ACCEPTABLE);
+//        }
+//        customerCheck = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+//        if (customerCheck != null){
+//            return new ResponseEntity<>("Số điện thoại đã được đăng ký",HttpStatus.NOT_ACCEPTABLE);
+//        }
         BeanUtils.copyProperties(customerDto, customer);
-        saveCustomer = customerService.saveCustomer(customer);
+         customerService.saveCustomer(customer);
             return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }

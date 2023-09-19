@@ -16,8 +16,8 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted,:app_user_id)", nativeQuery = true)
-    void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted, @Param(value = "app_user_id") Long appUserId);
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted)", nativeQuery = true)
+    void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted);
     /**
      * Author: TinDT
      * Goal: update customers
@@ -40,6 +40,13 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number", nativeQuery = true)
     Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
+    /**
+     * Author: TinDT
+     * Goal: find customers by email
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where email =:email", nativeQuery = true)
+    Customer findCustomerByEmail(@Param(value = "email") String email);
     /**
      * Author: TinDT
      * Goal: find customers by code

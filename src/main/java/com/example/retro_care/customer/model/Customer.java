@@ -10,7 +10,7 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(20)")
+    @Column(columnDefinition = "varchar(20)", unique = true)
     private String code;
     @Column(columnDefinition = "varchar(100)")
     private String name;
@@ -18,9 +18,9 @@ public class Customer {
     private String birthDay;
     @Column(columnDefinition = "varchar(255)")
     private String address;
-    @Column(name = "phone_number",columnDefinition = "varchar(20)")
+    @Column(name = "phone_number",columnDefinition = "varchar(20)", unique = true)
     private String phoneNumber;
-    @Column(columnDefinition = "varchar(100)")
+    @Column(columnDefinition = "varchar(100)", unique = true)
     private String email;
     private Long point;
     @Column(columnDefinition = "text")
@@ -47,7 +47,14 @@ public class Customer {
         this.flagDeleted = flagDeleted;
         this.appUser = appUser;
     }
-
+    // HANHNLM 's constructor
+    public Customer(String name, String phoneNumber, String email, String address, String note){
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.note = note;
+    }
     public Long getId() {
         return id;
     }
