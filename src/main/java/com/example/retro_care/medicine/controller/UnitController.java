@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/unit")
+@RequestMapping("/api/unit")
 public class UnitController {
     @Autowired
     private IUnitService iUnitService;

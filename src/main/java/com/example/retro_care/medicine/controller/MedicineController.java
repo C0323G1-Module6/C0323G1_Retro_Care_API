@@ -73,7 +73,7 @@ public class MedicineController {
         ImageMedicine imageMedicine = new ImageMedicine();
         BeanUtils.copyProperties(medicineDto, medicine);
         BeanUtils.copyProperties(medicineDto.getUnitDetailDto(), unitDetail);
-        BeanUtils.copyProperties(medicineDto.getImageMedicine(), imageMedicine);
+        BeanUtils.copyProperties(medicineDto.getImageMedicineDto(), imageMedicine);
         // Call the services to add medicine, image, and unit detail information to the system
         iMedicineService.addMedicine(medicine);
         iImageMedicineService.addImageMedicine(imageMedicine);
@@ -101,7 +101,7 @@ public class MedicineController {
         ImageMedicine imageMedicine = new ImageMedicine();
         BeanUtils.copyProperties(medicineDto, medicine);
         BeanUtils.copyProperties(medicineDto.getUnitDetailDto(), unitDetail);
-        BeanUtils.copyProperties(medicineDto.getImageMedicine(), imageMedicine);
+        BeanUtils.copyProperties(medicineDto.getImageMedicineDto(), imageMedicine);
         iMedicineService.editMedicine(medicine);
         iImageMedicineService.updateImageMedicine(imageMedicine);
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail);

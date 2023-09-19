@@ -14,16 +14,16 @@ public class UnitDetailDto implements Validator {
     @Min(value = 1, message = "Tỷ lệ quy đổi không được nhỏ hơn 1")
     private Long conversionRate;
     private String conversionUnit;
-    private Medicine medicine;
-    private Unit unit;
+    private MedicineDto medicineDto;
+    private UnitDto unitDto;
 
-    public UnitDetailDto(Long id, Boolean flagDeleted, Long conversionRate, String conversionUnit, Medicine medicine, Unit unit) {
+    public UnitDetailDto(Long id, Boolean flagDeleted, Long conversionRate, String conversionUnit, MedicineDto medicineDto, UnitDto unitDto) {
         this.id = id;
         this.flagDeleted = flagDeleted;
         this.conversionRate = conversionRate;
         this.conversionUnit = conversionUnit;
-        this.medicine = medicine;
-        this.unit = unit;
+        this.medicineDto = medicineDto;
+        this.unitDto = unitDto;
     }
 
     public UnitDetailDto() {
@@ -61,20 +61,20 @@ public class UnitDetailDto implements Validator {
         this.conversionUnit = conversionUnit;
     }
 
-    public Medicine getMedicine() {
-        return medicine;
+    public MedicineDto getMedicineDto() {
+        return medicineDto;
     }
 
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
+    public void setMedicineDto(MedicineDto medicineDto) {
+        this.medicineDto = medicineDto;
     }
 
-    public Unit getUnit() {
-        return unit;
+    public UnitDto getUnitDto() {
+        return unitDto;
     }
 
-    public void setUnit(Unit unit) {
-        this.unit = unit;
+    public void setUnitDto(UnitDto unitDto) {
+        this.unitDto = unitDto;
     }
 
     @Override

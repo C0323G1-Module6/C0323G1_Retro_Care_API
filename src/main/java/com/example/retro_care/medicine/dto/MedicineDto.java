@@ -1,7 +1,4 @@
 package com.example.retro_care.medicine.dto;
-
-import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
-import com.example.retro_care.medicine.model.ImageMedicine;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -26,26 +23,24 @@ public class MedicineDto implements Validator {
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
-    @Size(max = 255,message = "Nhà sản xuất không được vượt quá 255 kí tự")
+    @Size(max = 255, message = "Nhà sản xuất không được vượt quá 255 kí tự")
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
-    @Size(max = 50,message = "Xuất xứ không được vượt quá 50 kí tự")
+    @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
     @Min(value = 1, message = "Lợi nhuận bán lẻ không được nhỏ hơn 1")
     private Float retailProfits;
     private Boolean flagDeleted;
-    private KindOfMedicine kindOfMedicine;
+    private KindOfMedicineDto kindOfMedicineDto;
     @Valid
     private UnitDetailDto unitDetailDto;
-    private ImageMedicine imageMedicine;
+    private ImageMedicineDto imageMedicineDto;
 
     public MedicineDto() {
     }
 
-    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note,
-                       String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted,
-                       KindOfMedicine kindOfMedicine, UnitDetailDto unitDetailDto, ImageMedicine imageMedicine) {
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicineDto kindOfMedicineDto, UnitDetailDto unitDetailDto, ImageMedicineDto imageMedicineDto) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -58,9 +53,9 @@ public class MedicineDto implements Validator {
         this.origin = origin;
         this.retailProfits = retailProfits;
         this.flagDeleted = flagDeleted;
-        this.kindOfMedicine = kindOfMedicine;
+        this.kindOfMedicineDto = kindOfMedicineDto;
         this.unitDetailDto = unitDetailDto;
-        this.imageMedicine = imageMedicine;
+        this.imageMedicineDto = imageMedicineDto;
     }
 
     public Long getId() {
@@ -159,12 +154,12 @@ public class MedicineDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public KindOfMedicine getKindOfMedicine() {
-        return kindOfMedicine;
+    public KindOfMedicineDto getKindOfMedicineDto() {
+        return kindOfMedicineDto;
     }
 
-    public void setKindOfMedicine(KindOfMedicine kindOfMedicine) {
-        this.kindOfMedicine = kindOfMedicine;
+    public void setKindOfMedicineDto(KindOfMedicineDto kindOfMedicineDto) {
+        this.kindOfMedicineDto = kindOfMedicineDto;
     }
 
     public UnitDetailDto getUnitDetailDto() {
@@ -175,12 +170,12 @@ public class MedicineDto implements Validator {
         this.unitDetailDto = unitDetailDto;
     }
 
-    public ImageMedicine getImageMedicine() {
-        return imageMedicine;
+    public ImageMedicineDto getImageMedicineDto() {
+        return imageMedicineDto;
     }
 
-    public void setImageMedicine(ImageMedicine imageMedicine) {
-        this.imageMedicine = imageMedicine;
+    public void setImageMedicineDto(ImageMedicineDto imageMedicineDto) {
+        this.imageMedicineDto = imageMedicineDto;
     }
 
     @Override
