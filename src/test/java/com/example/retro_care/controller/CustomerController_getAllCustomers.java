@@ -194,24 +194,24 @@ public class CustomerController_getAllCustomers {
                 .andExpect(jsonPath("content[4].birthDay").value("2000-01-03"));
     }
 
-
     /**
      * Creator: Hoang Thi Quyen
      * Goal: 4xx error
-     * @Param: [phone]=null
+     * @Param: [phoneNumber]=null
      * @Throw: Exception
      */
     @Test
     public void getAllCustomers_phoneNumber_7() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/customers/api/list?phoneNumber={phoneNumber}", ""))
+                        MockMvcRequestBuilders.get("/customers/api/list?phoneNumber={phoneNumber}", "null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
+
     /**
      * Creator: Hoang Thi Quyen
      * Goal: 4xx error
-     * @Param: [phone]=" "
+     * @Param: [phoneNumber]=" "
      * @Throw: Exception
      */
     @Test
@@ -220,6 +220,38 @@ public class CustomerController_getAllCustomers {
                         MockMvcRequestBuilders.get("/customers/api/list?phoneNumber={phoneNumber}", " "))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+    /**
+     * Creator: Hoang Thi Quyen
+     * Goal: 4xx error
+     * @Param: [phoneNumber] is not exist in DB
+     * @Throw: Exception
+     */
+    @Test
+    public void getAllCustomers_phoneNumber_9() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/customers/api/list?phoneNumber={phoneNumber}", "0913118511"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+    }
+    /**
+     * Creator: Hoang Thi Quyen
+     * Goal: successful
+     * @Param: [phoneNumber] is exists in DB
+     * @Throw: Exception
+     */
+    @Test
+    public void getAllCustomers_phoneNumber_11() throws Exception {
+        this.mockMvc.perform(
+                        MockMvcRequestBuilders.get("/customers/api/list?phoneNumber={phoneNumber}", "0913118550"))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("totalPages").value(1))
+                .andExpect(jsonPath("totalElements").value(1))
+                .andExpect(jsonPath("content[0].code").value("KL008"))
+                .andExpect(jsonPath("content[0].name").value("Đàm Minh Nhật Ngọc"))
+                .andExpect(jsonPath("content[0].birthDay").value("2000-01-01"))
+                .andExpect(jsonPath("content[0].address").value("Sơn Trà, Đà Nẵng"));
     }
 
     /**
