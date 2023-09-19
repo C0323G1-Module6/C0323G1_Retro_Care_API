@@ -16,10 +16,23 @@ public class IndicationService implements IIndicationService {
     @Autowired
     private IPrescriptionService prescriptionService;
 
+    /**
+     * Author: ThanhKN
+     * Goal:get list indication by id prescription
+     * Date:17/09/2023
+     * return list of indication
+     * @param idPrescription
+     */
     @Override
     public List<Indication> getAllIndication(Long idPrescription) {
         return indicationRepository.getAllIndication(idPrescription);
     }
+    /**
+     * Author: ThanhKN
+     * Goal:get id max of prescription
+     * Date:17/09/2023
+     * return id max of prescription
+     */
     Long maxId(){
         List<Prescription> prescriptionList = prescriptionService.getAll();
         Long idMax = prescriptionList.get(0).getId();
@@ -29,9 +42,58 @@ public class IndicationService implements IIndicationService {
             }
         }return idMax;
     }
+    /**
+     * Author: ThanhKN
+     * Goal:Create indication
+     * Date:17/09/2023
+     * @param indication
+     * return void
+     */
     @Override
     public void createIndication(Indication indication) {
         indication.setId(maxId()+1);
         indicationRepository.createIndication(indication);
     }
+
+    /**
+     * Author: ThanhKN
+     * Goal:get indication by id
+     * Date:17/09/2023
+     * @param idIndication
+     * return indication
+     */
+    @Override
+    public Indication indicationById(Long idIndication) {
+        return indicationRepository.indicationById(idIndication);
+    }
+
+    /**
+     * Author: ThanhKN
+     * Goal:remove indication by id
+     * Date:17/09/2023
+     * @param idIndication
+     * return void
+     */
+    @Override
+    public void removeIndication(Long idIndication) {
+        indicationRepository.removePrescription(idIndication);
+    }
+
+    /**
+     * Author: ThanhKN
+     * Goal:edit indication
+     * Date:17/09/2023
+     * @param indication
+     * return void
+     */
+    @Override
+    public void editIndication(Indication indication) {
+        indicationRepository.editIndication(indication);
+    }
+
+    @Override
+    public List<Indication> getAll() {
+        return indicationRepository.findAll();
+    }
+
 }

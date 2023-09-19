@@ -1,11 +1,8 @@
 package com.example.retro_care.employee.service;
 
 import com.example.retro_care.employee.model.Employee;
-import com.example.retro_care.user.model.AppRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
-import java.util.List;
 
 public interface IEmployeeService {
    /**
@@ -20,10 +17,12 @@ public interface IEmployeeService {
     * Author: TanNV
     * Date create: 15/09/2023
     * Save employee
+    *
     * @param employee
-    * @return employee
+    * @param userId
+    * @return void
     */
-    Employee addEmployee(Employee employee);
+    void addEmployee(Employee employee, Long userId);
     /**
      * Create: SonTT
      * Date create: 15/09/2023
@@ -38,19 +37,19 @@ public interface IEmployeeService {
      * Date create: 15/09/2023
      * Function: Create a method that takes data and returns it to the Page
      * @param pageable
-     * @param id
      * @param name
      * @return Page
      */
-    Page<Employee> searchEmployee(Pageable pageable, Long id , String name);
+    Page<Employee> searchEmployee(Pageable pageable, String name);
 
     /**
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Get data AppUser from database
+     *
      * @return List
      */
-    List<AppRole> getRole();
+    Employee findEmployee(Long id);
 
     /**
      * Create: SonTT
@@ -60,4 +59,21 @@ public interface IEmployeeService {
      * @return boolean
      */
     boolean deleteEmployee(Long id);
+
+ /**
+  * Author: TanNV
+  * Date:16/09/2023
+  * Get employee by id
+  * @param id
+  * @return employee
+  */
+ Employee getById(Long id);
+
+ /**
+  * Author: TanNV
+  * Date:16/09/2023
+  * update employee
+  * @param employee
+  */
+ void updateEmployee(Employee employee);
 }

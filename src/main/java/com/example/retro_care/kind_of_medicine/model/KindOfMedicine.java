@@ -18,6 +18,7 @@ public class KindOfMedicine {
 
     @JsonBackReference
     @OneToMany(mappedBy = "kindOfMedicine")
+    @JsonBackReference
     private Set<Medicine> medicineSet;
 
     public KindOfMedicine() {
