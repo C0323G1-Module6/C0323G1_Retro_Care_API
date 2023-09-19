@@ -55,4 +55,11 @@ public interface IInvoiceService {
                                      String endTime,
                                      String sortColumn
                               );
+    Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
+                                String startDate,
+                                String endDate,
+                                String startTime,
+                                String endTime,
+                                String sortColumn
+    );
 }

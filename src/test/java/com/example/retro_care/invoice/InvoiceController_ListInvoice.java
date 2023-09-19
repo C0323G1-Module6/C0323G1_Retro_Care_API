@@ -83,9 +83,11 @@ public class InvoiceController_ListInvoice {
                 .andExpect(jsonPath("content[0].id").value(5))
                 .andExpect(jsonPath("content[0].code").value("HD005"))
                 .andExpect(jsonPath("content[0].documentNumber").value(369855))
+                .andExpect(jsonPath("content[0].paid").value(500000))
                 .andExpect(jsonPath("content[1].id").value(4))
                 .andExpect(jsonPath("content[1].code").value("HD004"))
                 .andExpect(jsonPath("content[1].documentNumber").value(369847))
+                .andExpect(jsonPath("content[1].paid").value(300000))
                 .andExpect(status().is2xxSuccessful());
 
     }
