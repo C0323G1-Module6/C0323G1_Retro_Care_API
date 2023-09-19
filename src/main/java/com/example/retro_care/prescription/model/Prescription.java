@@ -25,7 +25,6 @@ public class Prescription {
     @Column(columnDefinition = "varchar(50)")
     private String note;
     private Integer duration;
-    @Column(columnDefinition = "BIT(0)")
     private Boolean flagDeleted;
     @ManyToOne
     @JoinColumn(name = "patient_id")

@@ -98,6 +98,4 @@ public class AppUserService implements IAppUserService {
         return appUserRepository.findIdByUserName(userName);
     }
 
-
-
 }

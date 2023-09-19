@@ -25,7 +25,7 @@ public class PrescriptionController_deletePrescription {
     @Test
     public void removePrescription_28() throws Exception{
         this.mockMvc.perform(
-                MockMvcRequestBuilders.delete("/prescription/delete/{id}",1))
+                MockMvcRequestBuilders.delete("/prescription/delete/{id}",10))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful()
         );
