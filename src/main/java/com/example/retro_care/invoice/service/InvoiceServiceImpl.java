@@ -2,14 +2,9 @@ package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.model.InvoiceDetailDto;
-import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,38 +28,19 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return Invoice
      */
     @Override
-    public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
+    public Invoice createInvoice(Invoice invoice) {
         invoice.setCreationDate(new Date());
-//        Set AppUserId
+        invoice.setFlagDeleted(false);
         invoice.setAppUserId(new AppUser());
-
-        Supplier supplier = new Supplier();
-        supplier.setId(invoiceDto.getSupplierId());
-        invoice.setSupplierId(supplier);
-        Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
-        System.out.println(selectedInvoice);
-        for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
-            InvoiceDetail invoiceDetail = new InvoiceDetail();
-            Medicine medicine = new Medicine();
-            medicine.setId(invoiceDetailDto.getMedicineId());
-            BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
-            invoiceDetail.setMedicineId(medicine);
-            invoiceDetail.setInvoiceId(selectedInvoice);
+        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+            invoiceDetail.setInvoiceId(invoice);
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
         }
-        return selectedInvoice;
+        return invoiceRepository.createInvoice(invoice);
     }
 
-    public Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto) {
-//        invoice.setCreationDate(new Date());
-//        Set AppUserId
-        AppUser appUser = new AppUser();
-        appUser.setId(1L);
-        invoice.setAppUserId(appUser);
-        Supplier supplier = new Supplier();
-        supplier.setId(invoiceDto.getSupplierId());
-        invoice.setSupplierId(supplier);
-        return invoiceRepository.editInvoice(invoice);
+    public void editInvoice(Invoice invoice) {
+        invoiceRepository.editInvoice(invoice);
     }
 
 

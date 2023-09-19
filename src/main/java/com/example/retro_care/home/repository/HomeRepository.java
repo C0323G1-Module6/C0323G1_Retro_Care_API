@@ -10,7 +10,6 @@ import java.util.List;
 
 public interface HomeRepository extends JpaRepository<Medicine,Long> {
     /**
-     * Find all medicines for homepage
      * @author HuyL
      * @return List all medicine that do not have flag_deleted
      */
@@ -29,7 +28,6 @@ public interface HomeRepository extends JpaRepository<Medicine,Long> {
     List<Medicine> findAllMedicineForHomepage();
 
     /**
-     * Search medicines with name or type input string
      * @author HuyL
      * @param keyword is the search string
      * @param type is the kind of medicine
@@ -54,24 +52,23 @@ public interface HomeRepository extends JpaRepository<Medicine,Long> {
     List<Medicine> searchMedicineForHomepage(@Param("keyword") String keyword, @Param("type") String type);
 
     /**
-     * Find favorite medicine base on their sale quantities
      * @return 30 medicines that have the most sale quantity
      * @author HuyL
      */
     @Query(value = " SELECT " +
-            "    medicine.id, " +
-            "    medicine.*, " +
-            "    SUM(order_details.quantity) AS total_sale_quantity " +
-            "FROM " +
-            "    order_details " +
-            "JOIN " +
-            "    medicine ON order_details.medicine_id = medicine.id " +
-            "WHERE " +
-            "    medicine.flag_deleted = false " +
-            "GROUP BY " +
-            "    medicine.id, medicine.name " +
-            "ORDER BY " +
+            "    m.id AS medicine_id, " +
+            "    m.name AS medicine_name, " +
+            "    SUM(od.quantity) AS total_sale_quantity " +
+            " FROM " +
+            "    order_details od  " +
+            " WHERE " +
+            "    m.flag_deleted = false " +
+            " JOIN " +
+            "    medicine m ON od.medicine_id = m.id " +
+            " GROUP BY " +
+            "    m.id, m.name " +
+            " ORDER BY " +
             "    total_sale_quantity DESC " +
-            "LIMIT 30 ; ", nativeQuery = true)
+            "LIMIT 30; ", nativeQuery = true)
     List<Medicine> findFavoriteMedicineForHomepage();
 }

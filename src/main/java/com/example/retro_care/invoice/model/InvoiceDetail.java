@@ -4,6 +4,7 @@ import com.example.retro_care.medicine.model.Medicine;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 public class InvoiceDetail {
@@ -19,33 +20,14 @@ public class InvoiceDetail {
     private Boolean flagDeleted;
 
     @ManyToOne
-    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private Medicine medicineId;
 
     @ManyToOne
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+    @JoinColumn(referencedColumnName = "id")
     private Invoice invoiceId;
 
     public InvoiceDetail() {
-    }
-
-    public InvoiceDetail(Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
-        this.discount = discount;
-        this.expiry = expiry;
-        this.medicineQuantity = medicineQuantity;
-        this.lot = lot;
-        this.flagDeleted = flagDeleted;
-        this.medicineId = medicineId;
-        this.invoiceId = invoiceId;
-    }
-
-    public InvoiceDetail(Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId) {
-        this.discount = discount;
-        this.expiry = expiry;
-        this.medicineQuantity = medicineQuantity;
-        this.lot = lot;
-        this.flagDeleted = flagDeleted;
-        this.medicineId = medicineId;
     }
 
     public InvoiceDetail(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
@@ -123,4 +105,30 @@ public class InvoiceDetail {
         this.expiry = expiry;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof InvoiceDetail)) return false;
+        InvoiceDetail that = (InvoiceDetail) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getDiscount(), that.getDiscount()) && Objects.equals(getExpiry(), that.getExpiry()) && Objects.equals(getMedicineQuantity(), that.getMedicineQuantity()) && Objects.equals(getLot(), that.getLot()) && Objects.equals(getFlagDeleted(), that.getFlagDeleted()) && Objects.equals(getMedicineId(), that.getMedicineId()) && Objects.equals(getInvoiceId(), that.getInvoiceId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getDiscount(), getExpiry(), getMedicineQuantity(), getLot(), getFlagDeleted(), getMedicineId(), getInvoiceId());
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceDetail{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", expiry=" + expiry +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicineId=" + medicineId +
+                ", invoiceId=" + invoiceId +
+                '}';
+    }
 }

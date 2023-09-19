@@ -36,18 +36,6 @@ public class Invoice {
     public Invoice() {
     }
 
-    public Invoice(String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
-        this.code = code;
-        this.documentNumber = documentNumber;
-        this.creationDate = creationDate;
-        this.paid = paid;
-        this.note = note;
-        this.flagDeleted = flagDeleted;
-        this.supplierId = supplierId;
-        this.appUserId = appUserId;
-        this.invoiceDetailSet = invoiceDetailSet;
-    }
-
     public Invoice(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
         this.id = id;
         this.code = code;

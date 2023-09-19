@@ -57,25 +57,23 @@ public class CustomerController {
     @PostMapping("/create")
     public ResponseEntity<?> saveCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
-        Customer customerCheck = new Customer();
+        Map<String, String> errors = new HashMap<>();
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
+            }
+        Customer customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
+            if (customerCheck != null){
+                errors.put("email","Email đã được đăng ký");
+            }
+            Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+            if (customerCheckPhone != null) {
+                errors.put("phoneNumber", "Số điện thoại đã được đăng ký");
             }
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
 
-
-//        customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
-//        if (customerCheck != null){
-//            return new ResponseEntity<>("email đã được đăng ký",HttpStatus.NOT_ACCEPTABLE);
-//        }
-//        customerCheck = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
-//        if (customerCheck != null){
-//            return new ResponseEntity<>("Số điện thoại đã được đăng ký",HttpStatus.NOT_ACCEPTABLE);
-//        }
         BeanUtils.copyProperties(customerDto, customer);
          customerService.saveCustomer(customer);
 
@@ -90,17 +88,27 @@ public class CustomerController {
      */
     @PatchMapping("/update/{id}")
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
+        Customer customer= customerService.findCustomerById(id);
         new CustomerDto().validate(customerDto,bindingResult);
-
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
+            if (customer.getEmail().equals(customerDto.getEmail())){
+                Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
+                if (customerCheckEmail != null){
+                    errors.put("email","Email đã được đăng ký");
+                }
+            }
+            if (customer.getPhoneNumber().equals(customerDto.getPhoneNumber())){
+                Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+                if (customerCheckPhone != null){
+                    errors.put("phoneNumber","Số điện thoại đã được đăng ký");
+                }
+            }
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        Customer customer= customerService.findCustomerById(id);
-//        System.out.println(customer);
         if (customer==null){
             return new ResponseEntity<>("Không tìm thấy thông tin khách hàng",HttpStatus.NOT_FOUND);
         }

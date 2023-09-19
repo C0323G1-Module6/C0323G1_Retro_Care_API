@@ -69,7 +69,7 @@ public class MedicineController {
         UnitDetail unitDetail=new UnitDetail();
         ImageMedicine imageMedicine=new ImageMedicine();
         BeanUtils.copyProperties(medicineDto,medicine);
-        BeanUtils.copyProperties(medicineDto.getUnitDetailDto(),unitDetail);
+        BeanUtils.copyProperties(medicineDto.getUnitDetail(),unitDetail);
         BeanUtils.copyProperties(medicineDto.getImageMedicine(),imageMedicine);
         // Call the services to add medicine, image, and unit detail information to the system
         iMedicineService.addMedicine(medicine);
@@ -96,7 +96,7 @@ public class MedicineController {
         UnitDetail unitDetail=new UnitDetail();
         ImageMedicine imageMedicine=new ImageMedicine();
         BeanUtils.copyProperties(medicineDto,medicine);
-        BeanUtils.copyProperties(medicineDto.getUnitDetailDto(),unitDetail);
+        BeanUtils.copyProperties(medicineDto.getUnitDetail(),unitDetail);
         BeanUtils.copyProperties(medicineDto.getImageMedicine(),imageMedicine);
         iMedicineService.editMedicine(medicine);
         iImageMedicineService.updateImageMedicine(imageMedicine);
@@ -156,8 +156,8 @@ public class MedicineController {
      * @param searchByName value when filtering
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search/{page}/{limit}/{sort}")
-    public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(value = "page", required = false) Integer page,
+    @GetMapping("/search/{page}/{limit}")
+    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
                                                              @RequestParam(value = "limit", required = false) Integer limit,
                                                              @RequestParam(value = "sort", required = false) String sort,
                                                              @RequestParam(value = "searchByName", required = false) String searchByName,

@@ -1,7 +1,6 @@
 package com.example.retro_care.invoice.service;
 
 import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -15,7 +14,7 @@ public interface IInvoiceService {
      * @param invoice
      * @return Invoice instance
      */
-    Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto);
+    Invoice createInvoice(Invoice invoice);
 
     /**
      * Edit an Invoice
@@ -24,7 +23,7 @@ public interface IInvoiceService {
      * @param invoice
      * @return void
      */
-    Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto);
+    void editInvoice(Invoice invoice);
 
     Invoice getInvoiceById(Long invoiceId);
 

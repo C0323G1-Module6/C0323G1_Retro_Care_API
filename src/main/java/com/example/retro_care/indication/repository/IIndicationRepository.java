@@ -15,9 +15,7 @@ public interface IIndicationRepository extends JpaRepository<Indication, Long> {
      * Return List indication
      * Date:17/09/2023
      */
-    @Modifying
-    @Transactional
-    @Query(value = "select i.id,i.dosage,i.frequency,i.prescription_id,i.flag_deleted, i.medicine_id " +
+    @Query(value = "select i.id,i.dosage,i.frequency,i.prescription_id,i.flag_deleted " +
             "from indication i where i.prescription_id = :#{#idPrescription} and i.flag_deleted = 0 ;", nativeQuery = true)
     List<Indication> getAllIndication(Long idPrescription);
 
@@ -30,7 +28,7 @@ public interface IIndicationRepository extends JpaRepository<Indication, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO indication (dosage, frequency, flag_deleted, prescription_id) " +
+    @Query(value = "INSERT INTO indication (dosage, frequency, flag_deleted, prescription_id, medicine_id) " +
             "values (:#{#indication.dosage},:#{#indication.frequency},:#{#indication.flagDeleted},:#{#indication.prescription},:#{#indication.medicine})", nativeQuery = true)
     void createIndication(Indication indication);
 

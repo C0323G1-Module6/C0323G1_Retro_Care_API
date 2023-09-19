@@ -1,5 +1,7 @@
 package com.example.retro_care.invoice.model;
 
+import com.example.retro_care.supplier.model.Supplier;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -15,15 +17,17 @@ public class InvoiceDto implements Validator {
     private String note;
     private Boolean flagDeleted;
 
-    private Long supplierId;
+    private Supplier supplierId;
 
+    private AppUser appUserId;
 
-    Set<InvoiceDetailDto> invoiceDetailDtoSet;
+    Set<InvoiceDetail> invoiceDetailSet;
 
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+
+    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Supplier supplierId, AppUser appUserId, Set<InvoiceDetail> invoiceDetailSet) {
         this.id = id;
         this.code = code;
         this.documentNumber = documentNumber;
@@ -32,7 +36,8 @@ public class InvoiceDto implements Validator {
         this.note = note;
         this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
-        this.invoiceDetailDtoSet = invoiceDetailDtoSet;
+        this.appUserId = appUserId;
+        this.invoiceDetailSet = invoiceDetailSet;
     }
 
     public Long getId() {
@@ -91,20 +96,28 @@ public class InvoiceDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public Long getSupplierId() {
+    public Supplier getSupplierId() {
         return supplierId;
     }
 
-    public void setSupplierId(Long supplierId) {
+    public void setSupplierId(Supplier supplierId) {
         this.supplierId = supplierId;
     }
 
-    public Set<InvoiceDetailDto> getInvoiceDetailDtoSet() {
-        return invoiceDetailDtoSet;
+    public AppUser getAppUserId() {
+        return appUserId;
     }
 
-    public void setInvoiceDetailDtoSet(Set<InvoiceDetailDto> invoiceDetailDtoSet) {
-        this.invoiceDetailDtoSet = invoiceDetailDtoSet;
+    public void setAppUserId(AppUser appUserId) {
+        this.appUserId = appUserId;
+    }
+
+    public Set<InvoiceDetail> getInvoiceDetailSet() {
+        return invoiceDetailSet;
+    }
+
+    public void setInvoiceDetailSet(Set<InvoiceDetail> invoiceDetailSet) {
+        this.invoiceDetailSet = invoiceDetailSet;
     }
 
     @Override
@@ -118,7 +131,7 @@ public class InvoiceDto implements Validator {
                 ", note='" + note + '\'' +
                 ", flagDeleted=" + flagDeleted +
                 ", supplierId=" + supplierId +
-                ", invoiceDetailDtoSet=" + invoiceDetailDtoSet +
+                ", appUserId=" + appUserId +
                 '}';
     }
 
@@ -130,58 +143,31 @@ public class InvoiceDto implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         InvoiceDto invoiceDto = (InvoiceDto) target;
-
-        if (invoiceDto.getCode() == null) {
-            errors.rejectValue("code", null, "Không được để trống trường này");
-        } else if (invoiceDto.getCode().equals("")) {
+        if (invoiceDto.getCode().equals("")) {
             errors.rejectValue("code", null, "Không được để trống trường này");
         } else if (!invoiceDto.getCode().matches("^HDN[0-9]{5}$")) {
             errors.rejectValue("code", null, "Nhập không đúng định dạng");
         }
-
-        if (invoiceDto.getFlagDeleted() == null) {
-            errors.rejectValue("flagDeleted", null, "Có lỗi đang xảy ra");
-        }
-        if (invoiceDto.getDocumentNumber() == null) {
-            errors.rejectValue("documentNumber", null, "Không được để trống trường này");
-        } else if (invoiceDto.getDocumentNumber().equals("")) {
-            errors.rejectValue("documentNumber", null, "Không được để trống trường này");
-        } else if (invoiceDto.getDocumentNumber().length() > 50) {
-            errors.rejectValue("documentNumber", null, "Nhập nội dung quá dài");
-        } else if (invoiceDto.getDocumentNumber().length() < 5) {
-            errors.rejectValue("documentNumber", null, "Nhập nội dung quá ngắn");
-        }
-
         if (invoiceDto.getPaid() == null) {
-            errors.rejectValue("paid", null, "Không được để trống trường này");
+            errors.rejectValue("set", null, "Không được để trống trường này");
         } else if (invoiceDto.getPaid().isNaN()) {
             errors.rejectValue("paid", null, "Không phải là số");
-        } else if (invoiceDto.getPaid() < 0) {
+        } else if (invoiceDto.getPaid() >= 0) {
             errors.rejectValue("paid", null, "Giá trị phải lớn hơn hoặc bằng 0");
-        } else if (invoiceDto.getPaid() >= Double.MAX_VALUE) {
-            errors.rejectValue("paid", null, "Giá trị quá lớn");
         }
-        if (invoiceDto.getSupplierId() == null) {
-            errors.rejectValue("supplierId", null, "Không được để trống trường này");
-        }
-        if (invoiceDto.getInvoiceDetailDtoSet() == null)
-            return;
-        for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
-            if (invoiceDetailDto.getDiscount() == null) {
+
+        for (InvoiceDetail invoiceDetail : invoiceDto.getInvoiceDetailSet()) {
+            if (invoiceDetail.getDiscount() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetailDto.getDiscount().isNaN()) {
+            } else if (invoiceDetail.getDiscount().isNaN()) {
                 errors.rejectValue("invoiceDetailSet", null, "Không phải là số");
-            } else if (invoiceDetailDto.getDiscount() < 0) {
+            } else if (invoiceDetail.getDiscount() >= 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
-            } else if (invoiceDetailDto.getDiscount() >= Float.MAX_VALUE) {
-                errors.rejectValue("invoiceDetailSet", null, "Giá trị quá lớn");
             }
-            if (invoiceDetailDto.getMedicineQuantity() == null) {
+            if (invoiceDetail.getMedicineQuantity() == null) {
                 errors.rejectValue("invoiceDetailSet", null, "Không được để trống trường này");
-            } else if (invoiceDetailDto.getMedicineQuantity() < 0) {
+            } else if (invoiceDetail.getMedicineQuantity() >= 0) {
                 errors.rejectValue("invoiceDetailSet", null, "Giá trị phải lớn hơn hoặc bằng 0");
-            } else if (invoiceDetailDto.getMedicineQuantity() >= Integer.MAX_VALUE) {
-                errors.rejectValue("invoiceDetailSet", null, "Giá trị quá lớn");
             }
         }
 

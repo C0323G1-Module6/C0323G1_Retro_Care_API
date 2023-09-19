@@ -6,8 +6,6 @@ import com.example.retro_care.medicine.model.UnitDetail;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 
 
@@ -17,10 +15,8 @@ public class MedicineDto implements Validator {
     private String code;
     @NotBlank(message = "Không được để trống trường này")
     private String name;
-    @Min(value = 1, message = "Giá không được nhỏ hơn 1")
     private Double price;
     private Long quantity;
-    @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
 
@@ -31,12 +27,10 @@ public class MedicineDto implements Validator {
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
     private String origin;
-    @Min(value = 1, message = "Lợi nhuận bán lẻ không được nhỏ hơn 1")
     private Float retailProfits;
     private Boolean flagDeleted;
     private KindOfMedicine kindOfMedicine;
-    @Valid
-    private UnitDetailDto unitDetailDto;
+    private UnitDetail unitDetail;
     private ImageMedicine imageMedicine;
 
     public MedicineDto() {
@@ -56,7 +50,7 @@ public class MedicineDto implements Validator {
         this.retailProfits = retailProfits;
         this.flagDeleted = flagDeleted;
         this.kindOfMedicine = kindOfMedicine;
-        this.unitDetailDto = unitDetailDto;
+        this.unitDetail = unitDetail;
         this.imageMedicine = imageMedicine;
     }
 
@@ -164,12 +158,12 @@ public class MedicineDto implements Validator {
         this.kindOfMedicine = kindOfMedicine;
     }
 
-    public UnitDetailDto getUnitDetailDto() {
-        return unitDetailDto;
+    public UnitDetail getUnitDetail() {
+        return unitDetail;
     }
 
-    public void setUnitDetailDto(UnitDetailDto unitDetailDto) {
-        this.unitDetailDto = unitDetailDto;
+    public void setUnitDetail(UnitDetail unitDetail) {
+        this.unitDetail = unitDetail;
     }
 
     public ImageMedicine getImageMedicine() {

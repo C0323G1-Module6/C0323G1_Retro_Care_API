@@ -169,6 +169,10 @@ public class CustomerDto implements Validator {
             errors.rejectValue("birthday", null, "Không để trống ngày sinh khách hàng!");
         } else if (!customerDto.getBirthday().matches("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
             errors.rejectValue("birthday", null, "Nhập không đúng định dạng ngày sinh !");
+        } else if (!FormatCustomer.isDateValidAndBeforeCurrent(customerDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Vượt quá thời gian thực tế !");
+        }else if (!FormatCustomer.check18YearsOld(customerDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Cảnh báo chưa đủ 18 tuổi !");
         }
 //
         // Check number phone

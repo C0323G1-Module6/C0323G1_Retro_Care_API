@@ -4,7 +4,6 @@ import com.example.retro_care.invoice.model.InvoiceDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface IInvoiceDetailRepository extends JpaRepository<InvoiceDetail, Long> {
     /**
@@ -13,8 +12,6 @@ public interface IInvoiceDetailRepository extends JpaRepository<InvoiceDetail, L
      *
      * @param invoiceDetail Return void
      */
-    @Transactional
-    @Query(value = "INSERT INTO `invoice_detail` (`discount`, `medicine_quantity`, `lot`, `flag_deleted`, `medicine_id`, `invoice_id`)" +
-            " VALUES (:#{#invoiceDetail.discount},:#{#invoiceDetail.medicineQuantity},:#{#invoiceDetail.lot},0,:#{#invoiceDetail.medicineId.id},:#{#invoiceDetail.invoiceId.id})", nativeQuery = true)
+    @Query(value = "INSERT INTO `invoice_detail` (`discount`, `medicine_quantity`, `lot`, `flag_deleted`, `medicine_id`, `invoice_id`) VALUES (:#{#invoiceDetail.discount},:#{#invoiceDetail.medicineQuantity}, :#{#invoiceDetail.lot},0, :#{#invoiceDetail.medicineId}, :#{#invoiceDetail.invoiceId});", nativeQuery = true)
     void createInvoiceDetail(@Param("invoiceDetail") InvoiceDetail invoiceDetail);
 }
