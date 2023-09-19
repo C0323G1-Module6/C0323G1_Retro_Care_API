@@ -1,5 +1,6 @@
 package com.example.retro_care.order.controller;
 
+import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -58,8 +63,11 @@ public class CartDetailsController {
      */
     @DeleteMapping("/delete-all")
     public ResponseEntity<?> clearAllCartFrom(@RequestParam("appUserId") Long appUserId){
-        iCartDetailsService.clearAllCartFromUser(appUserId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if( iCartDetailsService.clearAllCartFromUser(appUserId) > 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     /**
@@ -71,8 +79,11 @@ public class CartDetailsController {
      */
     @DeleteMapping("/delete-cart")
     public ResponseEntity<?> clearACartFrom(@RequestParam("cartId") Long cartId){
-        iCartDetailsService.deleteCartDetailsById(cartId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (iCartDetailsService.deleteCartDetailsById(cartId) > 0){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
     }
 
     /**
@@ -145,4 +156,29 @@ public class CartDetailsController {
     }
 
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 18/09/2023;
+     * Function: get availability of products and show if products aren't enuf when user clicks on 'proceed payment' btn;
+     * @param : appUserId;
+     * @return : loyalty point;
+     */
+    @GetMapping("/check-availability")
+    public ResponseEntity<?> checkAvailability(@RequestParam("appUserId") Long appUserId){
+        List<CartProjection> carts = iCartDetailsService.findCartDetailsByUserId(appUserId);
+        Map<Long, Long> meds = new HashMap<>();
+        MedicineProjection temp;
+        for (CartProjection med: carts) {
+            temp = iCartDetailsService.getMedicineToCheckAndDisplay(med.getMedicineId());
+            // hihii
+                if(med.getQuantityInCart() * temp.getConversion_Rate() > temp.getQuantity()){
+                    if(temp.getQuantity() >= temp.getConversion_Rate()) {
+                        meds.put(temp.getId(), (temp.getQuantity()/ temp.getConversion_Rate()));
+                    } else {
+                        meds.put(temp.getId(), 0L);
+                    }
+                }
+        }
+        return new ResponseEntity<>(meds, HttpStatus.OK);
+    }
 }

@@ -44,8 +44,8 @@ public class CartDetailsService implements ICartDetailsService{
      * @param : appUserId;
      */
     @Override
-    public void clearAllCartFromUser(Long appUserId) {
-            iCartDetailsRepository.clearAllCartFromUser(appUserId);
+    public int clearAllCartFromUser(Long appUserId) {
+        return iCartDetailsRepository.clearAllCartFromUser(appUserId);
     }
 
     /**
@@ -55,8 +55,8 @@ public class CartDetailsService implements ICartDetailsService{
      * @param : cartId;
      */
     @Override
-    public void deleteCartDetailsById(Long cartId) {
-        iCartDetailsRepository.deleteCartDetailsById(cartId);
+    public int deleteCartDetailsById(Long cartId) {
+        return iCartDetailsRepository.deleteCartDetailsById(cartId);
     }
 
     /**

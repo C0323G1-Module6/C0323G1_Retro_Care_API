@@ -1,6 +1,7 @@
+-- HanhNLM procedure Query SQL - altered 199 1700
+
 ALTER TABLE cart_details
     ADD UNIQUE INDEX user_medicine_index (app_user_id, medicine_id);
-
 
 -------------------------------------------------------------------------
 CREATE PROCEDURE createOrder(IN user_id BIGINT, IN loyaltyPoint BIGINT)
@@ -54,7 +55,8 @@ drop procedure getCartDetailsForMail;
 
 CREATE PROCEDURE getCartDetailsForMail(IN user_id BIGINT)
 BEGIN
-    SELECT cd.id as cartId, m.id as medicineId, c.email as customerEmail, m.name AS medicineName,
+    SELECT c.id as customerId, c.phone_number as phoneNumber,
+     cd.id as cartId, m.id as medicineId, c.email as customerEmail, m.name AS medicineName,
            ( SELECT image_path
              FROM image_medicine im
              WHERE im.medicine_id = m.id
@@ -72,9 +74,8 @@ BEGIN
     WHERE cd.app_user_id = user_id;
 END;
 
-
 -----
 SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
 --------
 
--- altered 179 23.59
+-- altered 199 17:00

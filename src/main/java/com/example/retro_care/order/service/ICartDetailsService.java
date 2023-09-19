@@ -1,7 +1,6 @@
 package com.example.retro_care.order.service;
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public interface ICartDetailsService {
      * Function: clears all products in cart;
      * @param : appUserId;
      */
-    void clearAllCartFromUser(Long appUserId);
+    int clearAllCartFromUser(Long appUserId);
 
     /**
      * Create by: HanhNLM;
@@ -36,7 +35,7 @@ public interface ICartDetailsService {
      * Function: delete a specific product in cart;
      * @param : cartId;
      */
-    void deleteCartDetailsById(Long cartId);
+    int deleteCartDetailsById(Long cartId);
 
     /**
      * Create by: HanhNLM;
