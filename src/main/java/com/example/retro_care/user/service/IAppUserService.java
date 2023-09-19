@@ -9,10 +9,10 @@ import org.springframework.validation.BindingResult;
 import java.util.Map;
 
 public interface IAppUserService extends UserDetailsService {
-    UserDetails loadUserByAppUserDto(AppUser appUser);
 
     Boolean existsByUsername(String userName);
 
     Boolean createNewAppUser(AppUser appUser);
 
+    Boolean logout(String userName);
 }
