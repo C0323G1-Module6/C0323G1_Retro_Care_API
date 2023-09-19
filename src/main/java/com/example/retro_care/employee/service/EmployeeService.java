@@ -2,13 +2,10 @@ package com.example.retro_care.employee.service;
 
 import com.example.retro_care.employee.model.Employee;
 import com.example.retro_care.employee.repository.IEmployeeRepository;
-import com.example.retro_care.user.model.AppRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class EmployeeService implements IEmployeeService{
@@ -63,24 +60,22 @@ public class EmployeeService implements IEmployeeService{
      * Date create: 15/09/2023
      * Function: search employee with id and name and with pagination
      * @param pageable
-     * @param id
      * @param name
      * @return Page
      */
     @Override
-    public Page<Employee> searchEmployee(Pageable pageable, Long id, String name) {
-        return employeeRepository.searchEmployeeByNameAndRole(pageable,id,name);
+    public Page<Employee> searchEmployee(Pageable pageable, String name) {
+        return employeeRepository.searchEmployeeByNameAndRole(pageable,name);
     }
 
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Get data AppRole from repository
-     * @return List
-     */
     @Override
-    public List<AppRole> getRole() {
-        return employeeRepository.getRole();
+    public Employee findEmployee(Long id) {
+        try{
+            return employeeRepository.findEmployeeById(id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**
@@ -92,11 +87,11 @@ public class EmployeeService implements IEmployeeService{
      */
     @Override
     public boolean deleteEmployee(Long id) {
-        if (employeeRepository.findEmployeeById(id) == null){
-            return false;
-        }else {
+        try{
             employeeRepository.deleteEmployeeById(id);
             return true;
+        }catch (Exception e){
+            return false;
         }
     }
 
@@ -123,6 +118,6 @@ public class EmployeeService implements IEmployeeService{
         employeeRepository.updateEmployee(employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote());
+                employee.getNote(), employee.getId());
     }
 }

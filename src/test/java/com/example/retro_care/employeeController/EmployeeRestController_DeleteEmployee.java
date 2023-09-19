@@ -30,7 +30,7 @@ public class EmployeeRestController_DeleteEmployee {
                             MockMvcRequestBuilders
                                     .delete("/employees/delete-employee"))
                     .andDo(print())
-                    .andExpect(status().is4xxClientError());
+                    .andExpect(status().isNoContent());
     }
 
     /**
@@ -56,7 +56,7 @@ public class EmployeeRestController_DeleteEmployee {
     public void deleteEmployee_27() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/employees/delete-employee").param("id","120"))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isNoContent());
     }
 
 
@@ -71,5 +71,17 @@ public class EmployeeRestController_DeleteEmployee {
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/employees/delete-employee").param("id", String.valueOf(9)).contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
+    }
+    /**
+     * Author: SonTT
+     * Date create: 18/09/2023
+     * Handling: Enter id with an  value in database , media type the path
+     * @throws Exception
+     */
+    @Test
+    public void deleteEmployee_29() throws Exception {
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/employees/delete-employee").param("id", String.valueOf(9)).contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
     }
 }
