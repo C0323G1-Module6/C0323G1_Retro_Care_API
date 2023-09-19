@@ -18,7 +18,7 @@ public class MedicineDto implements Validator {
     @Pattern(regexp = "^[0-9][a-z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
-    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
+//    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
     @Min(value = 1, message = "Giá không được nhỏ hơn 1")
     private Double price;

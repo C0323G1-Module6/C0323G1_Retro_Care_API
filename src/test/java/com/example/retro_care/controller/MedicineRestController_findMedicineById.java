@@ -81,7 +81,7 @@ public class MedicineRestController_findMedicineById {
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("id").value(4))
                 .andExpect(jsonPath("code").value("MED001"))
-                .andExpect(jsonPath("nameCustomer").value("Medicine"))
+                .andExpect(jsonPath("name").value("Medicine 1"))
                 .andExpect(jsonPath("price").value(10.5))
                 .andExpect(jsonPath("quantity").value(100))
                 .andExpect(jsonPath("vat").value(0.1))
@@ -90,8 +90,11 @@ public class MedicineRestController_findMedicineById {
                 .andExpect(jsonPath("activeElement").value("Active Element 1"))
                 .andExpect(jsonPath("origin").value("Origin 1"))
                 .andExpect(jsonPath("retailProfits").value(0.2))
-                .andExpect(jsonPath("kindOfMedicine").value(3))
-                .andExpect(jsonPath("flagDeleted").value(3));
+                .andExpect(jsonPath("kindOfMedicine.id").value(3))
+                .andExpect(jsonPath("kindOfMedicine.code").value("MED001"))
+                .andExpect(jsonPath("kindOfMedicine.name").value("sdfg"))
+                .andExpect(jsonPath("kindOfMedicine.flagDeleted").value(false))
+                .andExpect(jsonPath("flagDeleted").value(false));
     }
 
     /**

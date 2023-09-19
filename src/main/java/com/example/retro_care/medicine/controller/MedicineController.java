@@ -19,7 +19,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-
+import java.util.Set;
 
 
 @RestController
@@ -44,12 +44,12 @@ public class MedicineController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity findMedicineById(@PathVariable("id") Long id) {
-//        Set<ImageMedicine> imageMedicines = iImageMedicineService.findImageMedicineByMedicineId(id);
-//        Set<UnitDetail> unitDetails = iUnitDetailService.findUnitDetailByMedicineId(id);
+        Set<ImageMedicine> imageMedicines = iImageMedicineService.findImageMedicineByMedicineId(id);
+        Set<UnitDetail> unitDetails = iUnitDetailService.findUnitDetailByMedicineId(id);
         Medicine medicine = iMedicineService.findMedicineById(id);
-//        medicine.setImageMedicines(imageMedicines);
-//        medicine.setUnitDetailSet(unitDetails);
-        return new ResponseEntity<>(iMedicineService.findMedicineById(id),HttpStatus.OK);
+        medicine.setImageMedicines(imageMedicines);
+        medicine.setUnitDetailSet(unitDetails);
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
 
     /**

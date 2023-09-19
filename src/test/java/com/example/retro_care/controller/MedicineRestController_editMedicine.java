@@ -8,61 +8,21 @@ import com.example.retro_care.medicine.model.Unit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+@SpringBootTest
+@AutoConfigureMockMvc
 public class MedicineRestController_editMedicine {
-
+    @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
-
-    /**
-     * this function success
-     *
-     * @author TinVV
-     * @Date 18/09/2023
-     */
-    @Test
-    public void editMedicine_success_24() throws Exception {
-        MedicineDto medicineDto = new MedicineDto();
-        UnitDetailDto unitDetailDto = new UnitDetailDto();
-        ImageMedicine imageMedicine = new ImageMedicine();
-        KindOfMedicine kindOfMedicine = new KindOfMedicine();
-        Unit unit = new Unit();
-        medicineDto.setCode("00343834");
-        medicineDto.setName("Thuoc bo mat");
-        medicineDto.setPrice(500.0);
-        medicineDto.setQuantity(30L);
-        medicineDto.setVat(2F);
-        medicineDto.setNote("Oke");
-        medicineDto.setMaker("Vo Van Tin");
-        medicineDto.setActiveElement("vitaminC");
-        medicineDto.setOrigin("Viet Nam");
-        medicineDto.setRetailProfits(10F);
-        medicineDto.setFlagDeleted(false);
-        kindOfMedicine.setId(3L);
-        medicineDto.setKindOfMedicine(kindOfMedicine);
-        unitDetailDto.setFlagDeleted(false);
-        unitDetailDto.setConversionRate(10L);
-        unitDetailDto.setConversionUnit("vỉ");
-        unit.setId(1L);
-        unitDetailDto.setUnit(unit);
-        medicineDto.setUnitDetailDto(unitDetailDto);
-        imageMedicine.setImagePath("https://tse2.mm.bing.net/th?id=OIP.55xrJdT3ckz5UX55xcVb7QHaLH&pid=Api&P=0&h=180");
-        imageMedicine.setFlagDeleted(false);
-        medicineDto.setImageMedicine(imageMedicine);
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .patch("/api/medicine/{id}", "4")
-                        .content(this.objectMapper.writeValueAsString(medicineDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-    }
 
     /**
      * this function use to test the validation of field name more specific is null
@@ -101,7 +61,7 @@ public class MedicineRestController_editMedicine {
         this.mockMvc.perform(MockMvcRequestBuilders
                         .patch("/api/medicine/{id}", "4")
                         .content(this.objectMapper.writeValueAsString(medicineDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE).accept(MediaType.APPLICATION_JSON).characterEncoding("UTF-8"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -1701,6 +1661,49 @@ public class MedicineRestController_editMedicine {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    /**
+     * this function success
+     *
+     * @author TinVV
+     * @Date 18/09/2023
+     */
+    @Test
+    public void editMedicine_success_24() throws Exception {
+        MedicineDto medicineDto = new MedicineDto();
+        UnitDetailDto unitDetailDto = new UnitDetailDto();
+        ImageMedicine imageMedicine = new ImageMedicine();
+        KindOfMedicine kindOfMedicine = new KindOfMedicine();
+        Unit unit = new Unit();
+        medicineDto.setCode("00343834");
+        medicineDto.setName("Thuoc bo mat");
+        medicineDto.setPrice(500.0);
+        medicineDto.setQuantity(30L);
+        medicineDto.setVat(2F);
+        medicineDto.setNote("Oke");
+        medicineDto.setMaker("Vo Van Tin");
+        medicineDto.setActiveElement("vitaminC");
+        medicineDto.setOrigin("Viet Nam");
+        medicineDto.setRetailProfits(10F);
+        medicineDto.setFlagDeleted(false);
+        kindOfMedicine.setId(3L);
+        medicineDto.setKindOfMedicine(kindOfMedicine);
+        unitDetailDto.setFlagDeleted(false);
+        unitDetailDto.setConversionRate(10L);
+        unitDetailDto.setConversionUnit("vỉ");
+        unit.setId(1L);
+        unitDetailDto.setUnit(unit);
+        medicineDto.setUnitDetailDto(unitDetailDto);
+        imageMedicine.setImagePath("https://tse2.mm.bing.net/th?id=OIP.55xrJdT3ckz5UX55xcVb7QHaLH&pid=Api&P=0&h=180");
+        imageMedicine.setFlagDeleted(false);
+        medicineDto.setImageMedicine(imageMedicine);
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .patch("/api/medicine/{id}", "4")
+                        .content(this.objectMapper.writeValueAsString(medicineDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
     }
 
     /**

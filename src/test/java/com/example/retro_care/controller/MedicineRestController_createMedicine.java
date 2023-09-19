@@ -26,49 +26,6 @@ public class MedicineRestController_createMedicine {
     private ObjectMapper objectMapper;
 
     /**
-     * this function success
-     *
-     * @author TinVV
-     * @Date 18/09/2023
-     */
-    @Test
-    public void createMedicine_success_18() throws Exception {
-        MedicineDto medicineDto = new MedicineDto();
-        UnitDetailDto unitDetailDto = new UnitDetailDto();
-        ImageMedicine imageMedicine = new ImageMedicine();
-        KindOfMedicine kindOfMedicine = new KindOfMedicine();
-        Unit unit = new Unit();
-        medicineDto.setCode("00343834");
-        medicineDto.setName("Thuoc bo mat");
-        medicineDto.setPrice(500.0);
-        medicineDto.setQuantity(30L);
-        medicineDto.setVat(2F);
-        medicineDto.setNote("Oke");
-        medicineDto.setMaker("Vo Van Tin");
-        medicineDto.setActiveElement("vitaminC");
-        medicineDto.setOrigin("Viet Nam");
-        medicineDto.setRetailProfits(10F);
-        medicineDto.setFlagDeleted(false);
-        kindOfMedicine.setId(3L);
-        medicineDto.setKindOfMedicine(kindOfMedicine);
-        unitDetailDto.setFlagDeleted(false);
-        unitDetailDto.setConversionRate(10L);
-        unitDetailDto.setConversionUnit("vỉ");
-        unit.setId(1L);
-        unitDetailDto.setUnit(unit);
-        medicineDto.setUnitDetailDto(unitDetailDto);
-        imageMedicine.setImagePath("https://tse2.mm.bing.net/th?id=OIP.55xrJdT3ckz5UX55xcVb7QHaLH&pid=Api&P=0&h=180");
-        imageMedicine.setFlagDeleted(false);
-        medicineDto.setImageMedicine(imageMedicine);
-        this.mockMvc.perform(MockMvcRequestBuilders
-                        .post("/api/medicine")
-                        .content(this.objectMapper.writeValueAsString(medicineDto))
-                        .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print())
-                .andExpect(status().is2xxSuccessful());
-    }
-
-    /**
      * this function use to test the validation of field name more specific is null
      *
      * @author TinVV
@@ -1232,6 +1189,49 @@ public class MedicineRestController_createMedicine {
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    /**
+     * this function success
+     *
+     * @author TinVV
+     * @Date 18/09/2023
+     */
+    @Test
+    public void createMedicine_success_18() throws Exception {
+        MedicineDto medicineDto = new MedicineDto();
+        UnitDetailDto unitDetailDto = new UnitDetailDto();
+        ImageMedicine imageMedicine = new ImageMedicine();
+        KindOfMedicine kindOfMedicine = new KindOfMedicine();
+        Unit unit = new Unit();
+        medicineDto.setCode("00343834");
+        medicineDto.setName("Thuoc bo mat");
+        medicineDto.setPrice(500.0);
+        medicineDto.setQuantity(30L);
+        medicineDto.setVat(2F);
+        medicineDto.setNote("Oke");
+        medicineDto.setMaker("Vo Van Tin");
+        medicineDto.setActiveElement("vitaminC");
+        medicineDto.setOrigin("Viet Nam");
+        medicineDto.setRetailProfits(10F);
+        medicineDto.setFlagDeleted(false);
+        kindOfMedicine.setId(3L);
+        medicineDto.setKindOfMedicine(kindOfMedicine);
+        unitDetailDto.setFlagDeleted(false);
+        unitDetailDto.setConversionRate(10L);
+        unitDetailDto.setConversionUnit("vỉ");
+        unit.setId(1L);
+        unitDetailDto.setUnit(unit);
+        medicineDto.setUnitDetailDto(unitDetailDto);
+        imageMedicine.setImagePath("https://tse2.mm.bing.net/th?id=OIP.55xrJdT3ckz5UX55xcVb7QHaLH&pid=Api&P=0&h=180");
+        imageMedicine.setFlagDeleted(false);
+        medicineDto.setImageMedicine(imageMedicine);
+        this.mockMvc.perform(MockMvcRequestBuilders
+                        .post("/api/medicine")
+                        .content(this.objectMapper.writeValueAsString(medicineDto))
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andDo(print())
+                .andExpect(status().is2xxSuccessful());
     }
 
     /**

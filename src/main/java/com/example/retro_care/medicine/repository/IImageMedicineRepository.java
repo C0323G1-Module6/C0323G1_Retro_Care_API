@@ -6,7 +6,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
 import java.util.Set;
 
 public interface IImageMedicineRepository extends JpaRepository<ImageMedicine, Long> {
@@ -37,6 +36,6 @@ public interface IImageMedicineRepository extends JpaRepository<ImageMedicine, L
      * @param medicineId The ID of the medicine.
      * @return A list of ImageMedicine objects associated with the given medicine ID.
      */
-    @Query(value = "SELECT i.id, i.image_path FROM image_medicine as i WHERE medicine_id = :medicineId", nativeQuery = true)
+    @Query(value = "SELECT i.id, i.image_path, i.medicine_id, i.flag_deleted FROM image_medicine as i WHERE medicine_id = :medicineId", nativeQuery = true)
     Set<ImageMedicine> findImageMedicineByMedicineId(@Param("medicineId") Long medicineId);
 }

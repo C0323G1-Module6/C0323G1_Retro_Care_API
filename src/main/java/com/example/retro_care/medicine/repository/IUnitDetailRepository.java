@@ -43,7 +43,7 @@ public interface IUnitDetailRepository extends JpaRepository<UnitDetail, Long> {
      * @param medicineId The ID of the Medicine.
      * @return A list of UnitDetail objects associated with the given Medicine ID.
      */
-    @Query(value = "SELECT u.conversion_unit, u.conversion_rate, u.unit_id FROM unit_detail as u WHERE " +
-            "medicine_id = :medicineId", nativeQuery = true)
+    @Query(value = "SELECT u.id,u.conversion_unit, u.conversion_rate, u.unit_id , u.flag_deleted,u.medicine_id FROM unit_detail as u WHERE " +
+            "u.medicine_id = :medicineId", nativeQuery = true)
     Set<UnitDetail> findUnitDetailByMedicineId(@Param("medicineId") Long medicineId);
 }
