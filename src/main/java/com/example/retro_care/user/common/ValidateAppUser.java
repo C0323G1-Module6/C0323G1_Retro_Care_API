@@ -7,7 +7,7 @@ public class ValidateAppUser {
         if (name == null || name.trim().length() == 0) {
             errors.rejectValue("userName", null, "Không để trống tài khoản");
         } else if (name.length() > 100) {
-            errors.rejectValue("userName", null, "Số lượng ký tự bé hoặc bằng hơn 100");
+            errors.rejectValue("userName", null, "Số lượng ký tự bé hơn hoặc bằng 100");
         } else if (name.length() < 3) {
             errors.rejectValue("userName", null, "Số lượng ký tự phải lớn hơn hoặc bằng 3 ");
         }
@@ -17,7 +17,7 @@ public class ValidateAppUser {
         if (password == null || password.trim().length() == 0) {
             errors.rejectValue("password", null, "Không để trống mật khẩu");
         } else if (password.length() > 100) {
-            errors.rejectValue("password", null, "Số lượng ký tự bé hoặc bằng hơn 100");
+            errors.rejectValue("password", null, "Số lượng ký tự bé hơn hoặc bằng 100");
         } else if (password.length() < 3) {
             errors.rejectValue("password", null, "Số lượng ký tự phải lớn hơn hoặc bằng 3 ");
         }
@@ -27,7 +27,7 @@ public class ValidateAppUser {
         if (confirmPassword == null || confirmPassword.trim().length() == 0) {
             errors.rejectValue("confirmPassword", null, "Không để trống mật khẩu");
         } else if (confirmPassword.length() > 100) {
-            errors.rejectValue("confirmPassword", null, "Số lượng ký tự bé hoặc bằng hơn 100");
+            errors.rejectValue("confirmPassword", null, "Số lượng ký tự bé hơn hoặc bằng 100");
         } else if (confirmPassword.length() < 3) {
             errors.rejectValue("confirmPassword", null, "Số lượng ký tự phải lớn hơn hoặc bằng 3 ");
         }
