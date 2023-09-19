@@ -2,10 +2,13 @@ package com.example.retro_care.employee.service;
 
 import com.example.retro_care.employee.model.Employee;
 import com.example.retro_care.employee.repository.IEmployeeRepository;
+import com.example.retro_care.user.model.AppRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class EmployeeService implements IEmployeeService{
@@ -21,6 +24,7 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public String getNextCode() {
         String code = employeeRepository.getLastCodeEmployee();
+        System.out.println(code);
         if(code==null){
             return "NV001";
         }
@@ -32,16 +36,18 @@ public class EmployeeService implements IEmployeeService{
     /**
      * author: TanNV
      * this function use to give employee to repository and save this employee
+     *
      * @param employee
+     * @param userId
      * @return this employee have id
      */
     @Override
-    public void addEmployee(Employee employee) {
+    public void addEmployee(Employee employee, Long userId) {
 
         employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.isFlagDelete(),employee.getAppUser().getId());
+                employee.getNote(),employee.isFlagDelete(),userId);
     }
   /**
      * Create: SonTT
@@ -68,6 +74,12 @@ public class EmployeeService implements IEmployeeService{
         return employeeRepository.searchEmployeeByNameAndRole(pageable,name);
     }
 
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Get data AppRole from repository
+     * @return List
+     */
     @Override
     public Employee findEmployee(Long id) {
         try{
@@ -118,6 +130,6 @@ public class EmployeeService implements IEmployeeService{
         employeeRepository.updateEmployee(employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(), employee.getId());
+                employee.getNote(),employee.getId());
     }
 }

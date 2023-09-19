@@ -17,10 +17,12 @@ public interface IEmployeeService {
     * Author: TanNV
     * Date create: 15/09/2023
     * Save employee
+    *
     * @param employee
+    * @param userId
     * @return void
     */
-    void addEmployee(Employee employee);
+    void addEmployee(Employee employee, Long userId);
     /**
      * Create: SonTT
      * Date create: 15/09/2023

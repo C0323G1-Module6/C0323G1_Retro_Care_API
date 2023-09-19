@@ -3,6 +3,8 @@ package com.example.retro_care.employee.controller;
 
 import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
+import com.example.retro_care.user.model.AppUser;
+import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +28,8 @@ import static java.util.Collections.sort;
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
-
+    @Autowired
+    private IAppUserService appUserService;
     /**
      * Author: TanNV
      * Date: 15/09/2023
@@ -56,11 +59,12 @@ public class EmployeeController {
         System.out.println("employeeDto");
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
+        Long userId = appUserService.findAppUserIdByUserName(employeeDto.getAppUser());
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);
-        employeeService.addEmployee(employee);
+        employeeService.addEmployee(employee,userId);
         return new ResponseEntity<>("Create successfully", HttpStatus.OK);
     }
 
@@ -68,20 +72,19 @@ public class EmployeeController {
      * Author: TanNV
      * Date: 15/09/2023
      * Use to get employee by id and return Http status OK if it can find it else  return http status NO_CONTENT
-     *
      * @param id
      * @return Reponse entity
      */
     @GetMapping("/{id}")
-    public ResponseEntity<Employee> getEmployee(@PathVariable Long id) {
-        if (id == null) {
+    public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        if(id==null){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Employee employee = employeeService.getById(id);
-        if (employee == null) {
+        if(employee==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(employee, HttpStatus.OK);
+        return new ResponseEntity<>(employee,HttpStatus.OK);
     }
 
     /**
@@ -89,27 +92,29 @@ public class EmployeeController {
      * Date: 16/09/2023
      * Receive data and validate, if there is an error, return BAD_REQUEST,
      * then save the employee to the DB. If saved successfully, return OK
-     *
-     * @param id            id employee
-     * @param employeeDto   validate info
+     * @param id id employee
+     * @param employeeDto validate info
      * @param bindingResult return error
      * @return Responese Entity with message
      */
     @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable Long id,
-                                                 @RequestBody EmployeeDto employeeDto,
-                                                 BindingResult bindingResult) {
+                                                   @RequestBody EmployeeDto employeeDto,
+                                                   BindingResult bindingResult){
+        if (id == null){
+            return new ResponseEntity<>("Không có id",HttpStatus.BAD_REQUEST);
+        }
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(bindingResult.getAllErrors().toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
         Employee employee = employeeService.getById(id);
-        if (employee == null) {
-            return new ResponseEntity<>("Không tìm thấy", HttpStatus.NOT_FOUND);
+        if(employee==null){
+            return new ResponseEntity<>("Không tìm thấy",HttpStatus.NOT_FOUND);
         }
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.updateEmployee(employee);
-        return new ResponseEntity<>("Update successfully", HttpStatus.OK);
+        return new ResponseEntity<>("Update thành công",HttpStatus.OK);
     }
 
 
@@ -117,10 +122,10 @@ public class EmployeeController {
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Call the database to retrieve paginated data with fields idRole and employee name
-     *
      * @param page
      * @param limit
      * @param sort
+     * @param idRole
      * @param nameEmployee
      * @return ResponseEntity<?>
      */
@@ -128,6 +133,7 @@ public class EmployeeController {
     public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                          @PathVariable(value = "limit", required = false) Integer limit,
                                                          @PathVariable(value = "sort", required = false) String sort,
+                                                         @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees;
@@ -153,7 +159,6 @@ public class EmployeeController {
      * Create:SonTT
      * Date create: 15/09/2023
      * Function: with the correct input parameter id true then return HttpStatus.OK otherwise return false
-     *
      * @param id
      * @return ResponseEntity<>
      */
