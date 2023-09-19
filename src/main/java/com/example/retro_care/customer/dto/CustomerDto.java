@@ -209,6 +209,7 @@ public class CustomerDto implements Validator {
         } else if (!customerDto.getCode().matches("^KH-\\d+$")) {
             errors.rejectValue("code",null,"Mã code không đúng định dạng");
         }
+
     }
         
         

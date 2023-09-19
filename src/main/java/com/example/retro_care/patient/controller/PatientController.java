@@ -26,6 +26,9 @@ public class PatientController {
     @GetMapping("/patient")
     public ResponseEntity<List<Patient>> getAllPatient(){
         List<Patient> patientList = patientService.getAllPatient();
+        if(patientList.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         return new ResponseEntity<>(patientList, HttpStatus.OK);
     }
 }

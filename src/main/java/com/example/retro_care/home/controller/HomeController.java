@@ -17,6 +17,7 @@ public class HomeController {
     private IHomeService homeService;
 
     /**
+     * Find all medicines for homepage
      * @return List all medicine that do not have flag_deleted
      * @author HuyL
      */
@@ -32,6 +33,7 @@ public class HomeController {
     }
 
     /**
+     * Search medicines with name or type input string
      * @param keyword is the search string, get from the request param API
      * @param type    is the kind of medicine, get from the request param API
      * @return list all medicine related to keyword and type and do not have flag_deleted
@@ -51,6 +53,7 @@ public class HomeController {
     }
 
     /**
+     * Find favorite medicine base on their sale quantities
      * @return 30 medicines that have the most sale quantity
      * @author HuyL
      */

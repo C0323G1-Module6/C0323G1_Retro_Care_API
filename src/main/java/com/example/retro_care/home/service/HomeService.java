@@ -13,6 +13,7 @@ public class HomeService implements IHomeService {
     private HomeRepository homeRepository;
 
     /**
+     * Find all medicines for homepage
      * @return List all medicine that do not have flag_deleted
      * @author HuyL
      */
@@ -22,6 +23,7 @@ public class HomeService implements IHomeService {
     }
 
     /**
+     * Search medicines with name or type input string
      * @param keyword is the search string
      * @param type    is the kind of medicine
      * @return list all medicine related to keyword and type and do not have flag_deleted
@@ -34,6 +36,7 @@ public class HomeService implements IHomeService {
     }
 
     /**
+     * Find favorite medicine base on their sale quantities
      * @return 30 medicines that have the most sale quantity
      * @author HuyL
      */
