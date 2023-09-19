@@ -1,5 +1,6 @@
 package com.example.retro_care.invoice.controller;
 
+import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.service.IInvoiceService;
@@ -46,6 +47,18 @@ public class InvoiceController {
         return new ResponseEntity<>(invoiceService.findAllInvoice(pageable), HttpStatus.OK);
     }
 
+    @GetMapping("/result")
+    public ResponseEntity<Page<IInvoiceResult>> getListInvoiceResult(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
+        Page<IInvoiceResult> invoicePage = invoiceService.findAllInvoiceResult(pageable);
+
+        if (invoicePage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (page < 0 || page >= invoicePage.getTotalPages()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(invoicePage, HttpStatus.OK);
+    }
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -88,35 +101,36 @@ public class InvoiceController {
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
-     *
-     * @param start_date
-     * @param end_date
-     * @param start_time
-     * @param end_time
-     * @param sort_column
+     * @param page page number
+     * @param size number record in page
+     * @param startDate
+     * @param endDate
+     * @param startTime
+     * @param endTime
+     * @param sortColumn
      * @return
      */
     @GetMapping("/search")
     public ResponseEntity<?> searchInvoice(@RequestParam(required = false) Integer page,
                                            @RequestParam(required = false) Integer size,
-                                           @RequestParam(required = false) String start_date,
-                                           @RequestParam(required = false) String end_date,
-                                           @RequestParam(required = false) String start_time,
-                                           @RequestParam(required = false) String end_time,
-                                           @RequestParam(required = false) String sort_column) {
-        if (start_date != null && !isValidDateFormat(start_date, "yyyy-MM-dd")) {
+                                           @RequestParam(required = false) String startDate,
+                                           @RequestParam(required = false) String endDate,
+                                           @RequestParam(required = false) String startTime,
+                                           @RequestParam(required = false) String endTime,
+                                           @RequestParam(required = false) String sortColumn) {
+        if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
             return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
         }
 
-        if (end_date != null && !isValidDateFormat(end_date, "yyyy-MM-dd")) {
+        if (endDate != null && !isValidDateFormat(endDate, "yyyy-MM-dd")) {
             return new ResponseEntity<>("Invalid end_date format", HttpStatus.BAD_REQUEST);
         }
 
-        if (start_time != null && !isValidDateFormat(start_time, "HH:mm:ss")) {
+        if (startTime != null && !isValidDateFormat(startTime, "HH:mm:ss")) {
             return new ResponseEntity<>("Invalid start_time format", HttpStatus.BAD_REQUEST);
         }
 
-        if (end_time != null && !isValidDateFormat(end_time, "HH:mm:ss")) {
+        if (endTime != null && !isValidDateFormat(endTime, "HH:mm:ss")) {
             return new ResponseEntity<>("Invalid end_time format", HttpStatus.BAD_REQUEST);
         }
 
@@ -126,10 +140,10 @@ public class InvoiceController {
         } else {
             pageable = Pageable.unpaged();
         }
-        if (sort_column != null && !isValidSortColumn(sort_column)) {
+        if (sortColumn != null && !isValidSortColumn(sortColumn)) {
             return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
         }
-        Page<Invoice> invoices = invoiceService.searchInvoice(pageable, start_date, end_date, start_time, end_time, sort_column);
+        Page<Invoice> invoices = invoiceService.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

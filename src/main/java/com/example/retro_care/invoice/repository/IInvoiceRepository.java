@@ -1,6 +1,8 @@
 package com.example.retro_care.invoice.repository;
 
+import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     /**
@@ -33,6 +34,20 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             " i.supplier_id,i.document_number, i.note, i.paid", nativeQuery = true)
     Page<Invoice> findAllInvoice(Pageable pageable);
 
+    @Query(value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
+            "s.name, s.address , DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
+            "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
+            "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
+            "FROM invoice i " +
+            "JOIN invoice_detail ind ON i.id = ind.invoice_id_id " +
+            "JOIN medicine m ON m.id = ind.medicine_id_id " +
+            "JOIN supplier s ON s.id = i.supplier_id " +
+            "WHERE i.flag_deleted = false " +
+            "GROUP BY i.id, i.app_user_id_id, i.creation_date, i.flag_deleted, i.code, i.paid, " +
+            "i.supplier_id_id, i.document_number, i.note, i.paid " +
+            "ORDER BY i.code DESC",
+            nativeQuery = true)
+    Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable);
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -88,11 +103,11 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "  WHEN :sort_column = '7' THEN i.supplier_id_id\n" +
             "END DESC")
     Page<Invoice> searchInvoice(Pageable pageable,
-                                @Param("start_date") String start_date,
-                                @Param("end_date") String end_date,
-                                @Param("start_time") String start_time,
-                                @Param("end_time") String end_time,
-                                @Param("sort_column") String sort_column);
+                                @Param("start_date") String startDate,
+                                @Param("end_date") String endDate,
+                                @Param("start_time") String startTime,
+                                @Param("end_time") String endTime,
+                                @Param("sort_column") String sortColumn);
 
     /**
      * create an Invoice
