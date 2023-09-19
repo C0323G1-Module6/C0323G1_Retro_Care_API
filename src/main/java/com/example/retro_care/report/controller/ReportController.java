@@ -18,6 +18,7 @@ import java.util.Map;
 @CrossOrigin("*")
 @RequestMapping("/api/report")
 public class ReportController {
+
     @Autowired
     private IReportService reportService;
 
