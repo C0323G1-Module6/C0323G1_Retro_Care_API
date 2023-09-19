@@ -1,6 +1,7 @@
 package com.example.retro_care.kind_of_medicine.model;
 
-import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.model.Medicine
+        ;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class KindOfMedicine {
     private  String name;
     private Boolean flagDeleted;
 
-//    @JsonBackReference
+    @JsonBackReference
     @OneToMany(mappedBy = "kindOfMedicine")
     @JsonBackReference
     private Set<Medicine> medicineSet;
@@ -29,6 +30,12 @@ public class KindOfMedicine {
         this.name = name;
         this.flagDeleted = flagDeleted;
         this.medicineSet = medicineSet;
+    }
+
+    public KindOfMedicine(Long id, String code, String name) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
     }
 
     public Long getId() {
