@@ -1,5 +1,8 @@
 package com.example.retro_care.customer.dto;
 
+import com.example.retro_care.customer.service.CustomerService;
+import com.example.retro_care.customer.service.ICustomerService;
+
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Random;
@@ -17,6 +20,7 @@ public class FormatCustomer {
     public static String generateCustomerCode() {
         // Tạo một dãy số bất kỳ
         Random random = new Random();
+        ICustomerService customerService = new CustomerService();
         int randomNumber = random.nextInt(10000); // Giới hạn số ngẫu nhiên trong khoảng từ 0 đến 9999
         return "KH-" + randomNumber;
     }
@@ -25,30 +29,34 @@ public class FormatCustomer {
      * Goal:  Check if the date format is 18 years old or not
      */
     public static boolean check18YearsOld(String dateStr) {
-        // Định dạng ngày tháng
         LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // Chuyển đổi chuỗi ngày tháng thành LocalDate
-        LocalDate inputDate = LocalDate.parse(dateStr);
+        // Chuyển đổi chuỗi thời gian thành LocalDate
+        LocalDate date = LocalDate.parse(dateStr, formatter);
 
         // Trừ đi 18 năm từ ngày hiện tại
         LocalDate date18YearsAgo = currentDate.minusYears(18);
         // So sánh ngày tháng năm 18 năm trước
-        return inputDate.isBefore(date18YearsAgo);
+        return date.isBefore(date18YearsAgo);
     }
     /**
      * Author: TinDT
      * Goal:  Check the validity of the date
      */
     public static boolean isDateValidAndBeforeCurrent(String dateStr) {
-
-        // Lấy ngày tháng năm hiện tại
         LocalDate currentDate = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        // Chuyển đổi chuỗi ngày tháng thành LocalDate
-        LocalDate inputDate = LocalDate.parse(dateStr);
+        // Chuyển đổi chuỗi thời gian thành LocalDate
+        LocalDate date = LocalDate.parse(dateStr, formatter);
 
-        // So sánh ngày tháng năm hiện tại và ngày tháng năm từ chuỗi đầu vào
-        return inputDate.isBefore(currentDate);
+        // Kiểm tra xem thời gian có vượt quá thời gian hiện tại không
+        if (date.isAfter(currentDate)) {
+            return false;
+        }
+
+        return true;
     }
+
 }
