@@ -2,7 +2,6 @@ package com.example.retro_care.kind_of_medicine.repository;
 
 import com.example.retro_care.kind_of_medicine.dto.IKindOfMedicineDto;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
-import com.example.retro_care.supplier.model.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

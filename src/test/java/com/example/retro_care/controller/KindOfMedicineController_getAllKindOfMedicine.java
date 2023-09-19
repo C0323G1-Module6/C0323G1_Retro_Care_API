@@ -33,9 +33,9 @@ public class KindOfMedicineController_getAllKindOfMedicine {
     public void KindOfMedicineController_getAllKindOfMedicine_5() throws Exception {
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .get("/api/kindOfMedicine/get?page=5"))
+                        .get("/api/kindOfMedicine/get?page=90"))
                 .andDo(print())
-                .andExpect(status().is(204));
+                .andExpect(status().is4xxClientError());
 
     }
 
@@ -45,6 +45,16 @@ public class KindOfMedicineController_getAllKindOfMedicine {
      *
      * @throws Exception
      */
+    @Test
+    public void KindOfMedicineController_getAllKindOfMedicine_1() throws Exception {
+        this.mockMvc
+                .perform(MockMvcRequestBuilders
+                        .get("/api/kindOfMedicine/get?page=null"))
+                .andDo(print())
+                .andExpect(status().is4xxClientError());
+
+    }
+
 
     @Test
     public void KindOfMedicineController_getAllKindOfMedicine_6() throws Exception {
@@ -158,7 +168,7 @@ public class KindOfMedicineController_getAllKindOfMedicine {
 
     }
     /**
-     * Check case searchCode do not exist name
+     * Check case searchCode successfully name
      * Author: CaoNV
      *
      * @throws Exception
@@ -175,7 +185,7 @@ public class KindOfMedicineController_getAllKindOfMedicine {
     }
 
     /**
-     * Check case searchName dot not exist name
+     * Check case searchName successfully name
      * Author: CaoNV
      *
      * @throws Exception

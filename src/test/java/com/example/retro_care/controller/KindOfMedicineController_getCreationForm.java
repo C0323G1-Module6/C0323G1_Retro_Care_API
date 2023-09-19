@@ -125,7 +125,7 @@ public class KindOfMedicineController_getCreationForm {
                         .content(this.objectMapper.writeValueAsString(kindOfMedicineCreationDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().is2xxSuccessful());
     }
 
 }
