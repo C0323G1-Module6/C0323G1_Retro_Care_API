@@ -10,4 +10,5 @@ public interface IIndicationService {
     Indication indicationById(Long idIndication);
     void removeIndication(Long idIndication);
     void editIndication(Indication indication);
+    List<Indication> getAll();
 }

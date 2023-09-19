@@ -6,6 +6,7 @@ import javax.persistence.*;
 @Table(name = "image_medicine")
 public class ImageMedicine {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
