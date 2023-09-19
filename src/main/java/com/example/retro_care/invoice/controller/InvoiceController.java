@@ -42,15 +42,7 @@ public class InvoiceController {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated invoice list with limit number of molecules per page.
      */
-    @GetMapping("")
-    public ResponseEntity<Page<Invoice>> getListInvoice(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
-        if (invoiceService.findAllInvoice(pageable).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (page < 0 ) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(invoiceService.findAllInvoice(pageable), HttpStatus.OK);
-    }
+
 
     @GetMapping("/result")
     public ResponseEntity<Page<IInvoiceResult>> getListInvoiceResult(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
@@ -115,47 +107,7 @@ public class InvoiceController {
      * @param sortColumn
      * @return
      */
-    @GetMapping("/search")
-    public ResponseEntity<?> searchInvoice(@RequestParam(required = false) Integer page,
-                                           @RequestParam(required = false) Integer size,
-                                           @RequestParam(required = false) String startDate,
-                                           @RequestParam(required = false) String endDate,
-                                           @RequestParam(required = false) String startTime,
-                                           @RequestParam(required = false) String endTime,
-                                           @RequestParam(required = false) String sortColumn) {
-        if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
-            return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
-        }
 
-        if (endDate != null && !isValidDateFormat(endDate, "yyyy-MM-dd")) {
-            return new ResponseEntity<>("Invalid end_date format", HttpStatus.BAD_REQUEST);
-        }
-
-        if (startTime != null && !isValidDateFormat(startTime, "HH:mm:ss")) {
-            return new ResponseEntity<>("Invalid start_time format", HttpStatus.BAD_REQUEST);
-        }
-
-        if (endTime != null && !isValidDateFormat(endTime, "HH:mm:ss")) {
-            return new ResponseEntity<>("Invalid end_time format", HttpStatus.BAD_REQUEST);
-        }
-
-        Pageable pageable;
-        if (page != null && size != null) {
-            pageable = PageRequest.of(page, size);
-        } else {
-            pageable = Pageable.unpaged();
-        }
-        if (sortColumn != null && !isValidSortColumn(sortColumn)) {
-            return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
-        }
-        Page<Invoice> invoices = invoiceService.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
-
-        if (invoices.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        } else {
-            return new ResponseEntity<>(invoices, HttpStatus.OK);
-        }
-    }
     @GetMapping("/search/result")
     public ResponseEntity<?> searchInvoiceResult(@RequestParam(required = false) Integer page,
                                            @RequestParam(required = false) Integer size,

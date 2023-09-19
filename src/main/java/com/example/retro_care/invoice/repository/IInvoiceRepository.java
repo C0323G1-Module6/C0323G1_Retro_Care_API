@@ -21,18 +21,6 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *                 {@literal null}.
      * @return
      */
-    @Query(value = "SELECT i.id,i.app_user_id, i.code,i.creation_date,i.flag_deleted,i.paid,i.supplier_id," +
-            " DATE(i.creation_date) as creation_day, TIME(i.creation_date) as creation_time,\n" +
-            "       i.document_number, i.note, sum(m.price * ind.medicine_quantity) as total,\n" +
-            "       (sum(m.price * ind.medicine_quantity) - i.paid) as bill_owed\n" +
-            "FROM invoice i\n" +
-            "         JOIN invoice_detail ind ON i.id = ind.invoice_id_id\n" +
-            "         JOIN medicine m ON m.id = ind.medicine_id_id\n" +
-            "WHERE i.flag_deleted = false\n" +
-            "GROUP BY i.id,i.app_user_id,i.creation_date,i.flag_deleted, i.code, i.creation_date,i.paid," +
-            " i.supplier_id,i.document_number, i.note, i.paid", nativeQuery = true)
-    Page<Invoice> findAllInvoice(Pageable pageable);
-
     @Query(value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
             "s.name, s.address , DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
             "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
@@ -73,37 +61,6 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *
      * @return
      */
-    @Query(nativeQuery = true, value = "SELECT i.id,i.app_user_id, i.code,i.creation_date,i.flag_deleted,i.paid,i.supplier_id," +
-            " DATE(i.creation_date) as creation_day, TIME(i.creation_date) as creation_time,\n" +
-            "       i.document_number, i.note, sum(m.price * ind.medicine_quantity) as total,\n" +
-            "       (sum(m.price * ind.medicine_quantity) - i.paid) as bill_owed\n" +
-            "FROM invoice i\n" +
-            "         JOIN invoice_detail ind ON i.id = ind.invoice_id_id\n" +
-            "         JOIN medicine m ON m.id = ind.medicine_id_id\n" +
-            "WHERE i.flag_deleted = false\n" +
-
-            "  AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL)\n" +
-            "  AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL)\n" +
-            "  AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL)\n" +
-            "  AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL)\n" +
-            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.creation_date, i.paid," +
-            " i.supplier_id, i.document_number, i.note, i.paid\n" +
-            "ORDER BY CASE\n" +
-            "  WHEN :sort_column = '1' THEN i.code\n" +
-            "  WHEN :sort_column = '2' THEN i.document_number\n" +
-            "  WHEN :sort_column = '3' THEN creation_time\n" +
-            "  WHEN :sort_column = '4' THEN creation_day\n" +
-            "  WHEN :sort_column = '5' THEN total\n" +
-            "  WHEN :sort_column = '6' THEN bill_owed\n" +
-            "  WHEN :sort_column = '7' THEN i.supplier_id_id\n" +
-            "END DESC")
-    Page<Invoice> searchInvoice(Pageable pageable,
-                                @Param("start_date") String startDate,
-                                @Param("end_date") String endDate,
-                                @Param("start_time") String startTime,
-                                @Param("end_time") String endTime,
-                                @Param("sort_column") String sortColumn);
-
     @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
             "s.name, s.address, DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
             "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +

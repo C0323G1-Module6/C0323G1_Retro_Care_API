@@ -117,11 +117,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<Invoice> findAllInvoice(Pageable pageable) {
-        return invoiceRepository.findAllInvoice(pageable);
-    }
-
-    @Override
     public Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable) {
         return invoiceRepository.findAllInvoiceResult(pageable);
     }
@@ -158,11 +153,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return
      */
 
-    @Override
-    public Page<Invoice> searchInvoice(Pageable pageable, String startDate, String endDate, String startTime, String
-            endTime, String sortColumn) {
-        return invoiceRepository.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
-    }
     @Override
     public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String
             endTime, String sortColumn) {
