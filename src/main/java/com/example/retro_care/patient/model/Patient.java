@@ -1,6 +1,7 @@
 package com.example.retro_care.patient.model;
 
 import com.example.retro_care.prescription.model.Prescription;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -13,9 +14,10 @@ public class Patient {
     private Long id;
     @Column(columnDefinition = "varchar(255)")
     private String name;
-    @Column(columnDefinition = "BIT(1)")
+
     private Boolean flagDeleted;
     @OneToMany(mappedBy = "patient")
+    @JsonBackReference
     private Set<Prescription> prescriptionSet;
 
     public Patient() {

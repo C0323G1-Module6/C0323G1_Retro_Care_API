@@ -12,14 +12,36 @@ public class HomeService implements IHomeService {
     @Autowired
     private HomeRepository homeRepository;
 
+    /**
+     * Find all medicines for homepage
+     * @return List all medicine that do not have flag_deleted
+     * @author HuyL
+     */
     @Override
     public List<Medicine> findAllMedicineForHomepage() {
         return homeRepository.findAllMedicineForHomepage();
     }
 
+    /**
+     * Search medicines with name or type input string
+     * @param keyword is the search string
+     * @param type    is the kind of medicine
+     * @return list all medicine related to keyword and type and do not have flag_deleted
+     * @author HuyL
+     */
+    public List<Medicine> searchMedicineForHomepage(String keyword, String type) {
+        String keywordParam = '%' + keyword + '%';
+        String typeParam = '%' + type + '%';
+        return homeRepository.searchMedicineForHomepage(keywordParam, typeParam);
+    }
+
+    /**
+     * Find favorite medicine base on their sale quantities
+     * @return 30 medicines that have the most sale quantity
+     * @author HuyL
+     */
     @Override
-    public List<Medicine> searchMedicineForHomepage(String inputString) {
-        String keyword = '%' + inputString + '%';
-        return homeRepository.searchMedicineForHomepage(keyword);
+    public List<Medicine> findFavoriteMedicineForHomepage() {
+        return homeRepository.findFavoriteMedicineForHomepage();
     }
 }

@@ -81,9 +81,71 @@ public class MedicineService implements IMedicineService {
     @Override
     public Boolean removeMedicine(Long id) {
         if (iMedicineRepository.findMedicineById(id) == null) {
-            return true;
+            return false;
         }
-        iMedicineRepository.findMedicineById(id);
-        return false;
+        iMedicineRepository.deleteMedicineById(id);
+        return true;
     }
+
+    @Override
+    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement) {
+        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement, pageable);
+    }
+
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search for drugs by medicine code
+//     *
+//     * @param pageable Pagination after search
+//     * @param searchByCode Parameters used to search
+//     * @return approximate drug code with filter.
+//     */
+//    @Override
+//    public Page<Medicine> searchByCodeMedicine(Pageable pageable, String searchByCode) {
+//        return iMedicineRepository.searchCode(searchByCode, pageable);
+//    }
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/06/2023
+//     * Search by medicine name
+//     *
+//     * @param pageable Pagination after search
+//     * @param searchByName Parameters used to search
+//     * @return the drug name that approximates the filter
+//     */
+//    @Override
+//    public Page<Medicine> searchByNameMedicine(Pageable pageable, String searchByName) {
+//        return iMedicineRepository.searchName(searchByName, pageable);
+//    }
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by active element of medicine
+//     *
+//     * @param pageable Pagination after search
+//     * @param searchByActiveElement Parameters used to search
+//     * @return the drug's active ingredient approximated by the filter
+//     */
+//    @Override
+//    public Page<Medicine> searchActiveElement(Pageable pageable, String searchByActiveElement) {
+//        return iMedicineRepository.searchActiveElement(searchByActiveElement, pageable);
+//    }
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by kind of medicine
+//     *
+//     * @param pageable Pagination after search
+//     * @param searchByNameKindOf Parameters used to search
+//     * @return the drug group of the drug approximated by the filter
+//     */
+//    @Override
+//    public Page<Medicine> searchByKind(Pageable pageable, String searchByNameKindOf) {
+//        return iMedicineRepository.searchByKindOfName(searchByNameKindOf, pageable);
+//    }
+
 }
