@@ -2,6 +2,7 @@ package com.example.retro_care.customer.controller;
 
 import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.customer.dto.CustomerDto;
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.service.ICustomerService;
 import org.springframework.beans.BeanUtils;
@@ -54,17 +55,17 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PostMapping("/create")
-    public ResponseEntity<?> saveCustomer(@Valid  @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
+    public ResponseEntity<?> saveCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
         Customer customerCheck = new Customer();
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            Map<String,String> errors = new HashMap<>();
-            for (FieldError err: bindingResult.getFieldErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
-
             return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
+
         }
 
 //        customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
@@ -77,6 +78,7 @@ public class CustomerController {
 //        }
         BeanUtils.copyProperties(customerDto, customer);
          customerService.saveCustomer(customer);
+
             return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }
@@ -91,7 +93,7 @@ public class CustomerController {
         new CustomerDto().validate(customerDto,bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
-            for (FieldError err: bindingResult.getFieldErrors()) {
+            for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
@@ -103,6 +105,7 @@ public class CustomerController {
         }
         BeanUtils.copyProperties(customerDto,customer);
         customer.setId(id);
+
         customerService.updateCustomer(customer);
         return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
     }
@@ -134,23 +137,25 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String search,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-                                             @RequestParam(defaultValue = " app_user_id is null or app_user_id is not null ", required = false) String groupValue,
-                                             @RequestParam(defaultValue = "code") String sortItem) {
+
+                                             @RequestParam(defaultValue = "", required = false) String phoneNumber,
+                                             @RequestParam(defaultValue = "") String groupValue,
+                                             @RequestParam(defaultValue = "") String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllCustomer(pageable, "%" + search + "%", "%" + code + "%", "%" + address + "%", groupValue, sortItem);
-        System.out.println(customers.getContent());
-        if (customers.getTotalElements()!=0) {
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + search + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
+        if (customers.getTotalElements() != 0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
     @GetMapping("/list-customer")
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false)int page,
+    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false) int page,
                                     @RequestParam(defaultValue = "", required = false) String searchName) {
-        Pageable pageable = PageRequest.of(page,5);
+        Pageable pageable = PageRequest.of(page, 5);
         Page<Customer> customers = customerService.findAllByName(pageable, searchName);
         System.out.println(customers.getContent());
-        if (customers.getTotalElements()!=0) {
+        if (customers.getTotalElements() != 0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -161,7 +166,7 @@ public class CustomerController {
      * Goal: Delete customer by id
      * return HttpStatus
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null) {

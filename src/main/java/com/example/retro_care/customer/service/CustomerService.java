@@ -1,5 +1,6 @@
 package com.example.retro_care.customer.service;
 
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.repository.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class CustomerService implements ICustomerService {
         customer.setFlagDeleted(true);
         customer.setPoint(0l);
         customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
+
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
     }
@@ -40,6 +42,7 @@ public class CustomerService implements ICustomerService {
     public void updateCustomer(Customer customer) {
         System.out.println(customer);
         customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
+
     }
 
     /**
@@ -86,8 +89,9 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, String groupValue, String sortItem) {
-        return customerRepository.findAllCustomer(pageable, searchInput, code, address, groupValue, sortItem);
+    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
+
     }
 
     /**
