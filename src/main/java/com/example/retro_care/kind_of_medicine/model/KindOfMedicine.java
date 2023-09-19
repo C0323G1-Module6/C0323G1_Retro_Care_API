@@ -16,26 +16,14 @@ public class KindOfMedicine {
     private  String name;
     private Boolean flagDeleted;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "kindOfMedicine")
-    @JsonBackReference
-    private Set<Medicine> medicineSet;
-
     public KindOfMedicine() {
     }
 
-    public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted, Set<Medicine> medicineSet) {
+    public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.flagDeleted = flagDeleted;
-        this.medicineSet = medicineSet;
-    }
-
-    public KindOfMedicine(Long id, String code, String name) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
     }
 
     public Long getId() {
@@ -68,13 +56,5 @@ public class KindOfMedicine {
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
-    }
-
-    public Set<Medicine> getMedicineSet() {
-        return medicineSet;
-    }
-
-    public void setMedicineSet(Set<Medicine> medicineSet) {
-        this.medicineSet = medicineSet;
     }
 }
