@@ -3,6 +3,8 @@ package com.example.retro_care.employee.controller;
 
 import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
+import com.example.retro_care.user.model.AppUser;
+import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +28,8 @@ import static java.util.Collections.sort;
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
-
+    @Autowired
+    private IAppUserService appUserService;
     /**
      * Author: TanNV
      * Date: 15/09/2023
@@ -58,9 +61,10 @@ public class EmployeeController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
+        Long userId = appUserService.findAppUserIdByUserName(employeeDto.getAppUser());
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);
-        employeeService.addEmployee(employee);
+        employeeService.addEmployee(employee,userId);
         return new ResponseEntity<>("Create successfully", HttpStatus.OK);
     }
 
@@ -97,6 +101,9 @@ public class EmployeeController {
     public ResponseEntity<String> updateEmployee(@PathVariable Long id,
                                                    @RequestBody EmployeeDto employeeDto,
                                                    BindingResult bindingResult){
+        if (id == null){
+            return new ResponseEntity<>("Không có id",HttpStatus.BAD_REQUEST);
+        }
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
@@ -107,7 +114,7 @@ public class EmployeeController {
         }
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.updateEmployee(employee);
-        return new ResponseEntity<>("Update successfully",HttpStatus.OK);
+        return new ResponseEntity<>("Update thành công",HttpStatus.OK);
     }
     /**
      * Create: SonTT

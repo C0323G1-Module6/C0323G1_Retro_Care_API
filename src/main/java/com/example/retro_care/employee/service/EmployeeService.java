@@ -24,6 +24,7 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public String getNextCode() {
         String code = employeeRepository.getLastCodeEmployee();
+        System.out.println(code);
         if(code==null){
             return "NV001";
         }
@@ -35,16 +36,18 @@ public class EmployeeService implements IEmployeeService{
     /**
      * author: TanNV
      * this function use to give employee to repository and save this employee
+     *
      * @param employee
+     * @param userId
      * @return this employee have id
      */
     @Override
-    public void addEmployee(Employee employee) {
+    public void addEmployee(Employee employee, Long userId) {
 
         employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.isFlagDelete(),employee.getAppUser().getId());
+                employee.getNote(),employee.isFlagDelete(),userId);
     }
   /**
      * Create: SonTT
@@ -123,6 +126,6 @@ public class EmployeeService implements IEmployeeService{
         employeeRepository.updateEmployee(employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote());
+                employee.getNote(),employee.getId());
     }
 }

@@ -127,42 +127,48 @@ public class EmployeeDto implements Validator {
 //    codeEmployee ,nameEmployee, address,image,phoneNumber,birthday,idCard,note,appUser
         EmployeeDto employeeDto = (EmployeeDto) target;
 
-        if(employeeDto.getNameEmployee()==null){
-            errors.rejectValue("nameEmployee",null,"Vui lòng nhập tên");
-        }else if(employeeDto.getNameEmployee().length()>100){
-            errors.rejectValue("nameEmployee",null,"Quá ký tự cho phép");
+        if (employeeDto.getNameEmployee() == null) {
+            errors.rejectValue("nameEmployee", null, "Vui lòng nhập tên");
+        } else if (employeeDto.getNameEmployee().length() > 100) {
+            errors.rejectValue("nameEmployee", null, "Quá ký tự cho phép");
         } else if (!employeeDto.getNameEmployee().matches("^[\\p{L}\\s]+$")) {
-            errors.rejectValue("nameEmployee",null,"Tên chỉ chứa định dạng chữ");
+            errors.rejectValue("nameEmployee", null, "Tên chỉ chứa định dạng chữ");
         }
 
-        if(employeeDto.getAddress()==null){
-            errors.rejectValue("address",null,"Vui lòng nhập địa chỉ");
-        }else if(employeeDto.getAddress().length()>100){
-            errors.rejectValue("address",null,"Quá ký tự cho phép");
+        if (employeeDto.getAddress() == null) {
+            errors.rejectValue("address", null, "Vui lòng nhập địa chỉ");
+        } else if (employeeDto.getAddress().length() > 100) {
+            errors.rejectValue("address", null, "Quá ký tự cho phép");
         }
 
-        if(employeeDto.getPhoneNumber()==null){
-            errors.rejectValue("address",null,"Vui lòng nhập số điện thoại");
-        }else if(employeeDto.getPhoneNumber().length()>12){
-            errors.rejectValue("address",null,"Quá ký tự cho phép");
+        if (employeeDto.getPhoneNumber() == null) {
+            errors.rejectValue("phoneNumber", null, "Vui lòng nhập số điện thoại");
+        } else if (employeeDto.getPhoneNumber().length() > 11) {
+            errors.rejectValue("phoneNumber", null, "Vui lòng chỉ nhập từ 10 đến 11 số");
+        } else if (employeeDto.getPhoneNumber().length() <10) {
+            errors.rejectValue("phoneNumber", null, "Vui lòng chỉ nhập từ 10 đến 11 số");
         } else if (!employeeDto.getPhoneNumber().matches("^0\\d{9,10}$")) {
-            errors.rejectValue("address",null,"Sai định dạng");
+            errors.rejectValue("phoneNumber", null, "Sai định dạng");
         }
 
-        if(employeeDto.getStartDay()==null){
-            errors.rejectValue("startDay",null,"Vui lòng nhập ngày bắt đầu");
+        if (employeeDto.getStartDay() == null) {
+            errors.rejectValue("startDay", null, "Vui lòng nhập ngày bắt đầu");
+        } else if (!employeeDto.getStartDay().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
+            errors.rejectValue("startDay",null,"Vui lòng nhập đúng định dạng yyyy-mm-dd");
         }
 
-        if(employeeDto.getBirthday()==null){
-            errors.rejectValue("birthday",null,"Vui lòng nhập ngày sinh");
+        if (employeeDto.getBirthday() == null) {
+            errors.rejectValue("birthday", null, "Vui lòng nhập ngày sinh");
+        }else if (!employeeDto.getBirthday().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
+            errors.rejectValue("birthday",null,"Vui lòng nhập đúng định dạng yyyy-mm-dd");
         }
 
-        if(employeeDto.getIdCard()==null){
-            errors.rejectValue("idCard",null,"Vui lòng nhập CCCD");
-        }else if(employeeDto.getIdCard().length()>20){
-            errors.rejectValue("idCard",null,"Quá ký tự cho phép");
+        if (employeeDto.getIdCard() == null) {
+            errors.rejectValue("idCard", null, "Vui lòng nhập CCCD");
+        } else if (employeeDto.getIdCard().length() > 20) {
+            errors.rejectValue("idCard", null, "Quá ký tự cho phép");
         } else if (!employeeDto.getIdCard().matches("^\\d{9}(\\d{3})?$")) {
-            errors.rejectValue("idCard",null,"Sai định dạng");
+            errors.rejectValue("idCard", null, "Sai định dạng");
         }
 
     }
