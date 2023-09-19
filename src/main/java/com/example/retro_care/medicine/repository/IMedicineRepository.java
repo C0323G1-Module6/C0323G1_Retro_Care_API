@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -99,8 +100,10 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      *
      * @param id Search medicine by id to delete
      */
-    @Query(value = "update medicine set flag_deleted = true where medicine.id = :id", nativeQuery = true)
-    void deleteMedicineById(@Param("id") Long id);
+    @Transactional
+    @Modifying
+    @Query(value = "update medicine set medicine.flag_deleted = 1 where medicine.id = :id", nativeQuery = true)
+    int deleteMedicineById(@Param("id") Long id);
 
 //    /**
 //     * author: DaoPTA
@@ -153,21 +156,24 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
 //    Page<Medicine> searchByKindOfName(@Param("searchByNameKindOf") String searchByNameKindOf ,Pageable pageable);
 
     @Query(value = "SELECT " +
-            " m.name AS medicine_name," +
-            " m.code AS medicine_code," +
-            " k.name AS kind_of_medicine_name," +
-            " m.active_element AS medicine_active_element" +
+            " m.id, m.maker, m.note, m.origin, m.price, m.quantity, m.retail_profits, m.vat, m.flag_deleted," +
+            " m.name," +
+            " m.code," +
+            " m.active_element," +
+            " m.kind_of_medicine_id" +
             " FROM" +
             " medicine m" +
             " INNER JOIN" +
             " kind_of_medicine k ON m.kind_of_medicine_id = k.id" +
             " WHERE" +
             " m.flag_deleted = false" +
-            " AND (m.name LIKE CONCAT('%', :searchByName ,'%')  OR m.code LIKE CONCAT('%', :searchByCode ,'%') " +
-            " OR m.active_element LIKE CONCAT('%', :searchByActiveElement ,'%'))",nativeQuery = true)
+            " AND (m.name LIKE CONCAT('%', :searchByName,'%')  AND m.code LIKE CONCAT('%', :searchByCode,'%') " +
+            " AND m.active_element LIKE CONCAT('%', :searchByActiveElement,'%') AND k.name LIKE CONCAT('%', :searchByNameKindOf,'%')) " +
+            "",nativeQuery = true)
     Page<Medicine> searchMedicine(@Param("searchByName") String searchByName,
                                   @Param("searchByCode") String searchByCode,
                                   @Param("searchByActiveElement") String searchByActiveElement,
+                                  @Param("searchByNameKindOf") String searchByNameKindOf,
                                   Pageable pageable);
 
 
