@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -79,17 +80,18 @@ public class MedicineService implements IMedicineService {
      * @param id Pass the id to get the object to delete
      */
     @Override
-    public Boolean removeMedicine(Long id) {
-        if (iMedicineRepository.findMedicineById(id) == null) {
-            return false;
-        }
-        iMedicineRepository.deleteMedicineById(id);
-        return true;
+    public int removeMedicine(Long id) {
+        return iMedicineRepository.deleteMedicineById(id);
     }
 
     @Override
-    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement) {
-        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement, pageable);
+    public List<Medicine> getAll() {
+        return iMedicineRepository.findAll();
+    }
+
+    @Override
+    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf) {
+        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement,searchByNameKindOf ,pageable);
     }
 
 //    /**
