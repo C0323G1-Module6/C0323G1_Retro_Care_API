@@ -260,7 +260,7 @@ public class MedicineController_searchMedicine {
     }
 
     /**
-     * List of seaweed, search searchByActiveElement(Anh Dao)
+     * List of seaweed, search searchByActiveElement(ok)
      * author: DaoPTA
      * workday: 18/09/2023
      *
@@ -270,7 +270,7 @@ public class MedicineController_searchMedicine {
     public void searchMedicineByActiveElement_11() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders.get(
-                                "/api/medicine/search?searchByActiveElement=Anh Dao"))
+                                "/api/medicine/search?searchByActiveElement=ok"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("totalPages").value(1))
@@ -279,6 +279,7 @@ public class MedicineController_searchMedicine {
                 .andExpect(jsonPath("content[0].activeElement").value("ok"))
                 .andExpect(jsonPath("content[0].code").value("T00001"))
                 .andExpect(jsonPath("content[0].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[0].flagDeleted").value(false))
                 .andExpect(jsonPath("content[0].name").value("Pandol"))
                 .andExpect(jsonPath("content[0].note").value("Ngon"))
                 .andExpect(jsonPath("content[0].origin").value("VietNam"))
@@ -286,7 +287,33 @@ public class MedicineController_searchMedicine {
                 .andExpect(jsonPath("content[0].quantity").value("100"))
                 .andExpect(jsonPath("content[0].retailProfits").value("5.1"))
                 .andExpect(jsonPath("content[0].vat").value("5.1"))
-                .andExpect(jsonPath("content[0].kindOfMedicine.id").value("2"));
+                .andExpect(jsonPath("content[0].kindOfMedicine.id").value(2))
+                .andExpect(jsonPath("content[1].id").value(2))
+                .andExpect(jsonPath("content[1].activeElement").value("ok"))
+                .andExpect(jsonPath("content[1].code").value("T00002"))
+                .andExpect(jsonPath("content[1].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[1].flagDeleted").value(false))
+                .andExpect(jsonPath("content[1].name").value("Extra"))
+                .andExpect(jsonPath("content[1].note").value("Ngon"))
+                .andExpect(jsonPath("content[1].origin").value("VietNam"))
+                .andExpect(jsonPath("content[1].price").value("15000.1"))
+                .andExpect(jsonPath("content[1].quantity").value("100"))
+                .andExpect(jsonPath("content[1].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[1].vat").value("5.1"))
+                .andExpect(jsonPath("content[1].kindOfMedicine.id").value(1))
+                .andExpect(jsonPath("content[2].id").value(3))
+                .andExpect(jsonPath("content[2].activeElement").value("ok"))
+                .andExpect(jsonPath("content[2].code").value("T00011"))
+                .andExpect(jsonPath("content[2].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[2].flagDeleted").value(false))
+                .andExpect(jsonPath("content[2].name").value("MAT ONG"))
+                .andExpect(jsonPath("content[2].note").value("Ngon"))
+                .andExpect(jsonPath("content[2].origin").value("VietNam"))
+                .andExpect(jsonPath("content[2].price").value("15000.1"))
+                .andExpect(jsonPath("content[2].quantity").value("100"))
+                .andExpect(jsonPath("content[2].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[2].vat").value("5.1"))
+                .andExpect(jsonPath("content[2].kindOfMedicine.id").value(1));
     }
     /**
      * List of seaweed, search searchByActiveElement(Anh Dao)
@@ -303,18 +330,32 @@ public class MedicineController_searchMedicine {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("totalPages").value(1))
-                .andExpect(jsonPath("totalElements").value(3))
-                .andExpect(jsonPath("content[0].id").value(1))
+                .andExpect(jsonPath("totalElements").value(2))
+                .andExpect(jsonPath("content[0].id").value(2))
                 .andExpect(jsonPath("content[0].activeElement").value("ok"))
-                .andExpect(jsonPath("content[0].code").value("T00001"))
+                .andExpect(jsonPath("content[0].code").value("T00002"))
                 .andExpect(jsonPath("content[0].maker").value("Anh Dao"))
-                .andExpect(jsonPath("content[0].name").value("Pandol"))
+                .andExpect(jsonPath("content[0].flagDeleted").value(false))
+                .andExpect(jsonPath("content[0].name").value("Extra"))
                 .andExpect(jsonPath("content[0].note").value("Ngon"))
                 .andExpect(jsonPath("content[0].origin").value("VietNam"))
                 .andExpect(jsonPath("content[0].price").value("15000.1"))
                 .andExpect(jsonPath("content[0].quantity").value("100"))
                 .andExpect(jsonPath("content[0].retailProfits").value("5.1"))
                 .andExpect(jsonPath("content[0].vat").value("5.1"))
-                .andExpect(jsonPath("content[0].kindOfMedicine.id").value("2"));
+                .andExpect(jsonPath("content[0].kindOfMedicine.id").value(1))
+                .andExpect(jsonPath("content[1].id").value(3))
+                .andExpect(jsonPath("content[1].activeElement").value("ok"))
+                .andExpect(jsonPath("content[1].code").value("T00011"))
+                .andExpect(jsonPath("content[1].maker").value("Anh Dao"))
+                .andExpect(jsonPath("content[1].flagDeleted").value(false))
+                .andExpect(jsonPath("content[1].name").value("MAT ONG"))
+                .andExpect(jsonPath("content[1].note").value("Ngon"))
+                .andExpect(jsonPath("content[1].origin").value("VietNam"))
+                .andExpect(jsonPath("content[1].price").value("15000.1"))
+                .andExpect(jsonPath("content[1].quantity").value("100"))
+                .andExpect(jsonPath("content[1].retailProfits").value("5.1"))
+                .andExpect(jsonPath("content[1].vat").value("5.1"))
+                .andExpect(jsonPath("content[1].kindOfMedicine.id").value(1));
     }
 }
