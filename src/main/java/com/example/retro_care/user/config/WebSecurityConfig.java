@@ -25,6 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private UserDetailsService jwtUserDetailService;
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
+
     /**
      * method: configureGlobal
      * Creater: NhatNHH
@@ -36,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(jwtUserDetailService).passwordEncoder(new BCryptPasswordEncoder());
     }
+
     /**
      * method: authenticationManagerBean
      * Creater: NhatNHH
@@ -59,6 +61,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     /**
      * method: configure
      * Creater: NhatNHH
@@ -70,12 +73,71 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //        httpSecurity.csrf().disable().cors().and()
 //                .authorizeRequests()
 //                .antMatchers(
+//                        //All role
 //                        "/api/user/login-by-username/**",
-//                        "/api/user/register-by-customer/**",
-//                        "/api/user/register-by-manager/**",
 //                        "/api/user/login-by-facebook/**",
-//                        "/api/user/logout/**")
-//                .permitAll()
+//                        "/api/user/register-by-customer/**",
+//                        "/api/user/logout/**",
+//                        "/api/home",
+//                        "/api/home/search/**",
+//                        "api/home/favorite/**"
+//
+//                ).permitAll()
+//                .antMatchers(
+//                        //Authen Role admin, manager
+//                        "/api/user/register-by-manager/**"
+//                )
+//                .hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
+//                .antMatchers(
+//                        //Authen Role admin, manager, employee
+//                        "/api/orders",
+//                        "/api/orders/list/**",
+//                        "/api/orders",
+//                        "/api/orders/{id}"
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                ).hasAnyRole("ROLE_ADMIN","ROLE_EMPLOYEE","ROLE_MANAGER")
+//                .antMatchers(
+//                        //Authen Role admin and manager
+//                        "/api/invoice",
+//                        "/api/invoice/delete/{id}/**",
+//                        "/api/invoice/search/**",
+//                        "/api/invoice/create",
+//                        "/api/invoice/{invoiceId}",
+//                        "/api/invoice/edit",
+//                        "/api/invoice/code",
+//                        "/api/kindOfMedicine",
+//                        "/api/kindOfMedicine/{id}",
+//                        "/api/kindOfMedicine/create",
+//                        "/api/kindOfMedicine/edit/{id}",
+//                        "/api/kindOfMedicine/get",
+//                        "/api/medicine/{id}",
+//                        "/api/medicine",
+//                        "/api/medicine/"
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//                ).hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
+//                .antMatchers(
+//                        //Authen Role customer
+//
+//                ).hasAnyRole("ROLE_CUSTOMER")
+//
+//
 //                .anyRequest()
 //                .authenticated()
 //                .and()
