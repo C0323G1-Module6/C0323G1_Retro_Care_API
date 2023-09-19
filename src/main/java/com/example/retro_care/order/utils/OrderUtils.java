@@ -1,6 +1,5 @@
 package com.example.retro_care.order.utils;
 
-import com.example.retro_care.order.model.CartDetails;
 import com.example.retro_care.order.projection.CartProjection;
 
 import java.util.List;
@@ -65,12 +64,12 @@ public class OrderUtils {
             html.append(String.format("<tr>" +
                     "<td style='text-align:center' ><img src='%s' style='width:50px; height:50px' alt='%s'></td>" +
                     "<td style='text-align:center'>%s</td>" +
-                    "<td style='text-align:center'>%.3fVND</td>" +
+                    "<td style='text-align:center'>%.0fVND</td>" +
                     "<td style='text-align:center'>%d</td>" +
-                    "<td style='text-align:center'>%.3fVND</td>" +
+                    "<td style='text-align:center'>%.0fVND</td>" +
                     "</tr>", image, name,name, price, quantity, totalProductPrice));
         }
-        html.append(String.format("<tr><td colspan='4'><h3>Thành tiền:<h3></td><td style='text-align:center'><h3>%.3fVND<h3></td></tr>" +
+        html.append(String.format("<tr><td colspan='4'><h3>Thành tiền:<h3></td><td style='text-align:center'><h3>%.0fVND<h3></td></tr>" +
                 "<tr><hr></tr>" +
                 "<tr><td colspan='4'>Hình thức vận chuyển:</td><td><h4 style='text-align:center'>Giao hàng tiêu chuẩn</h4></td></tr>" +
                 "<tr><td colspan='4'>Hình thức thanh toán:</td><td><h4 style='text-align:center'>PAYPAL</h4></td></tr>" +

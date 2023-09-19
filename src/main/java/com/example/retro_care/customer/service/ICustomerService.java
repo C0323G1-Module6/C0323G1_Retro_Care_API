@@ -12,6 +12,5 @@ public interface ICustomerService {
     Customer findCustomerByCode(String code);
     Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
     boolean deleteCustomerById(Long id);
-
     Page<Customer> findAllByName(Pageable pageable, String searchName);
 }

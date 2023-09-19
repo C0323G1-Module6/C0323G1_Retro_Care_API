@@ -1,19 +1,23 @@
 package com.example.retro_care.supplier.service.impl;
 
 import com.example.retro_care.supplier.model.IInvoiceProjection;
+import com.example.retro_care.supplier.model.ISupplierProjection;
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.supplier.repository.ISupplierRepository;
 import com.example.retro_care.supplier.service.ISupplierService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+@Service
 
 public class SupplierServiceImpl implements ISupplierService {
     @Autowired
     private ISupplierRepository iSupplierRepository;
 
     @Override
-    public Page<Supplier> getListSupplier(Pageable pageable) {
+    public Page<ISupplierProjection> getListSupplier(Pageable pageable) {
         return iSupplierRepository.getListSupplier(pageable);
     }
 

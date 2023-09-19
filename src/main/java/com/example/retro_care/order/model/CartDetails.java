@@ -6,9 +6,9 @@ import com.example.retro_care.user.model.AppUser;
 import javax.persistence.*;
 
 @Entity
-//@Table(indexes = {
-//        @Index(name = "uniqueMultiIndex", columnList = "app_user_id, medicine_id", unique = true)
-//})
+@Table(indexes = {
+        @Index(name = "uniqueMultiIndex", columnList = "app_user_id, medicine_id", unique = true)
+})
 public class CartDetails {
 
 

@@ -20,7 +20,9 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        customerRepository.saveCustomer(customer);
+        customer.setFlagDeleted(true);
+        customer.setPoint(0l);
+        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted(),customer.getAppUser().getId());
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
     }
@@ -37,7 +39,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer);
+        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getId());
     }
 
     /**
