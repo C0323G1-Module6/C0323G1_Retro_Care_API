@@ -66,8 +66,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String groupValue, String sortItem, Pageable pageable) {
-        return customerRepository.findAllCustomer(searchInput, code, address, groupValue, sortItem, pageable);
+    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
 
     }
 
