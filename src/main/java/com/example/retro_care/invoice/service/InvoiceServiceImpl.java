@@ -37,7 +37,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
         invoice.setAppUserId(new AppUser());
-
+        invoice.setCreationDate(new Date());
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
@@ -100,7 +100,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         // Tăng giá trị số lên 1
         numericValue++;
 
-        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HD"
+        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
         String newNumericPart = String.format("%05d", numericValue);
         String newCode = "HDN" + newNumericPart;
 

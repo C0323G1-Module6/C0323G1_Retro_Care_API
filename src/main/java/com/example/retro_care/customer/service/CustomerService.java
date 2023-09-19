@@ -1,5 +1,6 @@
 package com.example.retro_care.customer.service;
 
+import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.repository.ICustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,16 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        customerRepository.saveCustomer(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getAppUser().getId());
+        customer.setFlagDeleted(true);
+        customer.setPoint(0l);
+        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted(),customer.getAppUser().getId());
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
+    }
+
+    @Override
+    public Page<Customer> findAllByName(Pageable pageable, String searchName) {
+        return customerRepository.findCustomerByNameContaining(pageable,searchName);
     }
 
     /**
@@ -31,7 +39,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getId());
+        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getId());
     }
 
     /**
@@ -43,6 +51,16 @@ public class CustomerService implements ICustomerService {
     public Customer findCustomerById(Long id) {
         return customerRepository.findCustomerById(id);
     }
+    /**
+     * Author: TinDT
+     * Goal: find customer by code
+     * * return customer
+     */
+
+    @Override
+    public Customer findCustomerByCode(String code) {
+        return customerRepository.findCustomerByCode(code);
+    }
 
     /**
      * Author: QuyenHT
@@ -50,8 +68,9 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<Customer> findAllCustomer(Pageable pageable, String searchInput, String code, String address, String groupValue, String sortItem) {
-        return customerRepository.findAllCustomer(pageable, searchInput, code, address, groupValue, sortItem);
+    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(searchInput, code, address, groupValue, sortItem, pageable);
+
     }
 
     /**

@@ -13,22 +13,22 @@ public class Supplier {
     private String name;
     private String email;
     private String address;
-    private String phone;
+    private String phoneNumber;
     private String note;
-    private Boolean flagDelete;
+    private Boolean flagDeleted;
 
     public Supplier() {
     }
 
-    public Supplier(Long id, String code, String name, String email, String address, String phone, String note, Boolean flagDelete) {
+    public Supplier(Long id, String code, String name, String email, String address, String phoneNumber, String note, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.email = email;
         this.address = address;
-        this.phone = phone;
+        this.phoneNumber = phoneNumber;
         this.note = note;
-        this.flagDelete = flagDelete;
+        this.flagDeleted = flagDeleted;
     }
 
     public Long getId() {
@@ -71,12 +71,12 @@ public class Supplier {
         this.address = address;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getNote() {
@@ -87,11 +87,11 @@ public class Supplier {
         this.note = note;
     }
 
-    public Boolean getFlagDelete() {
-        return flagDelete;
+    public Boolean getFlagDeleted() {
+        return flagDeleted;
     }
 
-    public void setFlagDelete(Boolean flagDelete) {
-        this.flagDelete = flagDelete;
+    public void setFlagDeleted(Boolean flagDeleted) {
+        this.flagDeleted = flagDeleted;
     }
 }

@@ -159,6 +159,7 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
+
         if (invoiceService.getInvoiceById(invoice.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
@@ -180,3 +181,4 @@ public class InvoiceController {
         return new ResponseEntity<>(maxCode, HttpStatus.OK);
     }
 }
+
