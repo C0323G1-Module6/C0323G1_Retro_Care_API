@@ -63,9 +63,9 @@ public class CustomerController {
             for (FieldError err: bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
+
             return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
         }
-
 
 //        customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
 //        if (customerCheck != null){
