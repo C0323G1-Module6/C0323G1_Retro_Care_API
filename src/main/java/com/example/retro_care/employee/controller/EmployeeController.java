@@ -3,6 +3,8 @@ package com.example.retro_care.employee.controller;
 
 import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
+import com.example.retro_care.user.model.AppUser;
+import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.web.PageableDefault;
@@ -26,7 +28,8 @@ import static java.util.Collections.sort;
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
-
+    @Autowired
+    private IAppUserService appUserService;
     /**
      * Author: TanNV
      * Date: 15/09/2023
@@ -58,9 +61,10 @@ public class EmployeeController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
+        Long userId = appUserService.findAppUserIdByUserName(employeeDto.getAppUser());
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);
-        employeeService.addEmployee(employee);
+        employeeService.addEmployee(employee,userId);
         return new ResponseEntity<>("Create successfully", HttpStatus.OK);
     }
 
@@ -97,6 +101,9 @@ public class EmployeeController {
     public ResponseEntity<String> updateEmployee(@PathVariable Long id,
                                                    @RequestBody EmployeeDto employeeDto,
                                                    BindingResult bindingResult){
+        if (id == null){
+            return new ResponseEntity<>("Không có id",HttpStatus.BAD_REQUEST);
+        }
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
@@ -107,28 +114,7 @@ public class EmployeeController {
         }
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.updateEmployee(employee);
-        return new ResponseEntity<>("Update successfully",HttpStatus.OK);
-    }
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Call the database to retrieve the data with page, limit and sort
-     *
-     * @param page
-     * @param limit
-     * @return ResponseEntity<?>
-     */
-    @GetMapping("/get-list/{page}/{limit}/{sort}")
-    public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
-                                                          @PathVariable(value = "limit", required = false) Integer limit,
-                                                          @PathVariable(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
-        Page<Employee> employees = employeeService.getListEmployee(pageable);
-        if (employees.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(employees, HttpStatus.OK);
-        }
+        return new ResponseEntity<>("Update thành công",HttpStatus.OK);
     }
 
 
@@ -143,20 +129,30 @@ public class EmployeeController {
      * @param nameEmployee
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search-list/{page}/{limit}/{sort}")
+    @GetMapping("/list/{page}/{limit}/{sort}")
     public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                          @PathVariable(value = "limit", required = false) Integer limit,
                                                          @PathVariable(value = "sort", required = false) String sort,
                                                          @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
-        Pageable pageable = PageRequest.of(page, limit,  Sort.by(Sort.Direction.ASC, sort));
-        Page<Employee> employees = employeeService.searchEmployee(pageable, idRole, nameEmployee);
-        if (employees.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            return new ResponseEntity<>(employees, HttpStatus.OK);
-        }
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
+        Page<Employee> employees;
+        if (nameEmployee == null) {
+             employees = employeeService.getListEmployee(pageable);
+            if (employees.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(employees, HttpStatus.OK);
+            }
 
+        } else {
+             employees = employeeService.searchEmployee(pageable, nameEmployee);
+            if (employees.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(employees, HttpStatus.OK);
+            }
+        }
     }
 
     /**
@@ -168,11 +164,16 @@ public class EmployeeController {
      */
     @DeleteMapping("/delete-employee")
     public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam(value = "id", required = false) Long id) {
-        if (employeeService.deleteEmployee(id)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (employeeService.findEmployee(id)==null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }else {
+            if (employeeService.deleteEmployee(id)) {
+                return new ResponseEntity<>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
         }
+
 
     }
 
