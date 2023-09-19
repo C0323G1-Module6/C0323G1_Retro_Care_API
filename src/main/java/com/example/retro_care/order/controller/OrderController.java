@@ -113,17 +113,19 @@ public class OrderController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId,
-                                            @RequestParam("loyaltyPoint") Long loyaltyPoint){
-
+                                            @RequestParam("loyaltyPoint") Long loyaltyPoint,
+                                            @RequestParam("totalPrice") Long totalPrice){
+        System.out.println(totalPrice);
+        System.out.println(loyaltyPoint);
         // prepare and send email
         List<CartProjection> cartsForBill = iCartDetailsService.findCartDetailsByUserId(appUserId);
         System.out.println(cartsForBill);
         String subject = "Billing and Thank You Letter from RetroCare!";
         String message = "Hi " + cartsForBill.get(0).getCustomerEmail() + "!";
-        EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, cartsForBill);
+        EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, totalPrice, cartsForBill);
         iEmailSenderService.sendEmail(emailMessage);
         // after sending mail then create order and clear cart
         iOrderService.createOrderForUser(appUserId,loyaltyPoint);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>( totalPrice, HttpStatus.OK);
     }
 }

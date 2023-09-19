@@ -52,7 +52,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      */
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM cart_details where app_user_id = :appUserId")
-    void clearAllCartFromUser(@Param("appUserId") Long appUserId);
+    int clearAllCartFromUser(@Param("appUserId") Long appUserId);
 
     /**
      * Create by: HanhNLM;
@@ -62,7 +62,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      */
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM cart_details where id = :cartId")
-    void deleteCartDetailsById(@Param("cartId") Long cartId);
+    int deleteCartDetailsById(@Param("cartId") Long cartId);
 
     /**
      * Create by: HanhNLM;

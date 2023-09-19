@@ -5,7 +5,6 @@ import com.example.retro_care.order.utils.OrderUtils;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
-
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
@@ -37,7 +36,7 @@ public class EmailSenderService implements IEmailSenderService {
             helper.setTo(emailMessage.getTo());
             helper.setSubject(emailMessage.getSubject());
 
-            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getCartProjections());
+            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getCartProjections(), emailMessage.getTotalPrice());
 
             String htmlContent = emailMessage.getMessage() + tableOfProds;
 
