@@ -58,7 +58,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * @param idPrescription
      */
     @Query(value = "SELECT p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n" +
-            " FROM prescription WHERE id = :#{#idPrescription}", nativeQuery = true)
+            " FROM prescription p WHERE id = :#{#idPrescription}", nativeQuery = true)
     Prescription getPrescriptionById(Long idPrescription);
 
 
@@ -74,7 +74,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
     @Query(value = "UPDATE prescription SET code = :#{#prescription.code}, duration = :#{#prescription.duration}, " +
             "name = :#{#prescription.name}, note = :#{#prescription.note}, symptoms = :#{#prescription.symptoms}, " +
             "patient_id = :#{#prescription.patient.id} WHERE id = :#{#prescription.id}", nativeQuery = true)
-    void editPrescription(@Param("prescription") Prescription prescription);
+    Integer editPrescription(@Param("prescription") Prescription prescription);
 
     /**
      * Author: ThanhKN
