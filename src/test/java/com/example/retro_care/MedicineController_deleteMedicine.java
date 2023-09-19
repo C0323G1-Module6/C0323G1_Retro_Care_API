@@ -76,7 +76,7 @@ public class MedicineController_deleteMedicine {
     @Test
     public void deleteMedicine_25() throws Exception {
         this.mockMvc.perform(MockMvcRequestBuilders
-                        .delete("/api/medicine/id=null"))
+                        .delete("/api/medicine/{id}","null"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
