@@ -2,8 +2,13 @@ package com.example.retro_care.invoice.controller;
 
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.model.InvoiceDetailDto;
 import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.service.IInvoiceService;
+import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.supplier.model.Supplier;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -202,6 +207,8 @@ public class InvoiceController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        if (invoiceDto.getInvoiceDetailDtoSet() == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> err = new HashMap<>();
@@ -212,12 +219,10 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoice.getInvoiceDetailSet() != null) {
-            Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-            return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
-        } else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
+        Invoice selectedInvoice = invoiceService.createInvoice(invoice, invoiceDto);
+        if (selectedInvoice == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
     }
 
     /**
@@ -242,7 +247,7 @@ public class InvoiceController {
      * @param invoiceDto
      * @return an ResponseEntity
      */
-    @PutMapping("/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -254,11 +259,11 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoiceService.getInvoiceById(invoice.getId()) != null)
+        if (invoiceService.getInvoiceById(invoice.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        else
-            invoiceService.editInvoice(invoice);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
+        System.out.println(selectedInvoice);
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 
     /**

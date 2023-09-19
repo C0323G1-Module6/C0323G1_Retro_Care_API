@@ -3,15 +3,21 @@ package com.example.retro_care.invoice.service;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.model.InvoiceDetailDto;
+import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
+import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -28,19 +34,38 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return Invoice
      */
     @Override
-    public Invoice createInvoice(Invoice invoice) {
+    public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setCreationDate(new Date());
-        invoice.setFlagDeleted(false);
+//        Set AppUserId
         invoice.setAppUserId(new AppUser());
-        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
-            invoiceDetail.setInvoiceId(invoice);
+
+        Supplier supplier = new Supplier();
+        supplier.setId(invoiceDto.getSupplierId());
+        invoice.setSupplierId(supplier);
+        Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
+        System.out.println(selectedInvoice);
+        for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
+            InvoiceDetail invoiceDetail = new InvoiceDetail();
+            Medicine medicine = new Medicine();
+            medicine.setId(invoiceDetailDto.getMedicineId());
+            BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
+            invoiceDetail.setMedicineId(medicine);
+            invoiceDetail.setInvoiceId(selectedInvoice);
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
         }
-        return invoiceRepository.createInvoice(invoice);
+        return selectedInvoice;
     }
 
-    public void editInvoice(Invoice invoice) {
-        invoiceRepository.editInvoice(invoice);
+    public Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto) {
+//        invoice.setCreationDate(new Date());
+//        Set AppUserId
+        AppUser appUser = new AppUser();
+        appUser.setId(1L);
+        invoice.setAppUserId(appUser);
+        Supplier supplier = new Supplier();
+        supplier.setId(invoiceDto.getSupplierId());
+        invoice.setSupplierId(supplier);
+        return invoiceRepository.editInvoice(invoice);
     }
 
 
