@@ -5,6 +5,7 @@ import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import com.example.retro_care.employee.service.IEmployeeService;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
+
+import static java.util.Collections.sort;
 
 @RestController
 @CrossOrigin("*")
@@ -50,6 +53,7 @@ public class EmployeeController {
      */
     @PostMapping("/create")
     public ResponseEntity<String> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
+        System.out.println("employeeDto");
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
@@ -69,9 +73,12 @@ public class EmployeeController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployee(@PathVariable Long id){
+        if(id==null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Employee employee = employeeService.getById(id);
         if(employee==null){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(employee,HttpStatus.OK);
     }
@@ -86,7 +93,7 @@ public class EmployeeController {
      * @param bindingResult return error
      * @return Responese Entity with message
      */
-    @PutMapping("/update/{id}")
+    @PatchMapping("/update/{id}")
     public ResponseEntity<String> updateEmployee(@PathVariable Long id,
                                                    @RequestBody EmployeeDto employeeDto,
                                                    BindingResult bindingResult){
@@ -95,6 +102,9 @@ public class EmployeeController {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
         }
         Employee employee = employeeService.getById(id);
+        if(employee==null){
+            return new ResponseEntity<>("Không tìm thấy",HttpStatus.NOT_FOUND);
+        }
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.updateEmployee(employee);
         return new ResponseEntity<>("Update successfully",HttpStatus.OK);
@@ -112,7 +122,7 @@ public class EmployeeController {
     public ResponseEntity<Page<Employee>> getListEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                           @PathVariable(value = "limit", required = false) Integer limit,
                                                           @PathVariable(value = "sort", required = false) String sort) {
-        Pageable pageable = PageRequest.of(page, limit);
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees = employeeService.getListEmployee(pageable);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -126,7 +136,6 @@ public class EmployeeController {
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Call the database to retrieve paginated data with fields idRole and employee name
-     *
      * @param page
      * @param limit
      * @param sort
@@ -134,13 +143,13 @@ public class EmployeeController {
      * @param nameEmployee
      * @return ResponseEntity<?>
      */
-    @GetMapping("/search-list/{page}/{limit}")
+    @GetMapping("/search-list/{page}/{limit}/{sort}")
     public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                          @PathVariable(value = "limit", required = false) Integer limit,
                                                          @PathVariable(value = "sort", required = false) String sort,
                                                          @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
+        Pageable pageable = PageRequest.of(page, limit,  Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees = employeeService.searchEmployee(pageable, idRole, nameEmployee);
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -157,7 +166,7 @@ public class EmployeeController {
      * @param id
      * @return ResponseEntity<>
      */
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete-employee")
     public ResponseEntity<HttpStatus> deleteEmployee(@RequestParam(value = "id", required = false) Long id) {
         if (employeeService.deleteEmployee(id)) {
             return new ResponseEntity<>(HttpStatus.OK);
