@@ -613,7 +613,7 @@ public class SupplierController_updateSupplierById {
      **/
     @Test
     public void updateSupplierById_id_9() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/update-supplier/{id}", "10"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/update-supplier/{id}", "100"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -659,15 +659,15 @@ public class SupplierController_updateSupplierById {
     @Test
     public void updateSupplierById_24() throws Exception {
         SupplierDto supplierDto = new SupplierDto();
-        supplierDto.setName("Công Ty Pharmacity");
-        supplierDto.setAddress("100 Hà Đông,Hà Nội");
-        supplierDto.setCode("PHARMACITY");
-        supplierDto.setEmail("pharmacity@gmail.com");
-        supplierDto.setNote("Chưa thanh toán nợ");
-        supplierDto.setPhoneNumber("0902888675");
+        supplierDto.setName("Công Ty Dana");
+        supplierDto.setAddress("253 Dũng Sĩ Thanh Khê,Đà Nẵng");
+        supplierDto.setCode("DANAA");
+        supplierDto.setEmail("danapha@gmail.com");
+        supplierDto.setNote("Không có nợ");
+        supplierDto.setPhoneNumber("0987232424");
         this.mockMvc
                 .perform(MockMvcRequestBuilders
-                        .patch("/supplier/update-supplier/2")
+                        .patch("/supplier/update-supplier/11")
                         .content(this.objectMapper.writeValueAsString(supplierDto))
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andDo(print())

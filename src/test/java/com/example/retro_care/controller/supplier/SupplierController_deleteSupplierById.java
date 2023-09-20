@@ -38,7 +38,7 @@ public class SupplierController_deleteSupplierById {
      **/
     @Test
     public void deleteSupplierById_id_27() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.patch("/supplier/delete/{id}", "10"))
+        this.mockMvc.perform(MockMvcRequestBuilders.patch("/supplier/delete/{id}", "100"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -82,7 +82,7 @@ public class SupplierController_deleteSupplierById {
      **/
     @Test
     public void deleteSupplierById_id_28() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.patch("/supplier/delete/{id}", "1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.patch("/supplier/delete/{id}", "4"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }

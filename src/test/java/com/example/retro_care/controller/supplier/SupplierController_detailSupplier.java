@@ -24,7 +24,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_7() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", (Object) null))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", (Object) null))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -35,7 +35,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_8() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", ""))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", ""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -46,7 +46,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_9() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", "10"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", "10"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -57,7 +57,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_99() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", "-1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", "-1"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -68,7 +68,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_98() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", "a"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", "a"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -79,7 +79,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void getSupplierById_id_97() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/detail-supplier/{id}", "0"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/detail-supplier/{id}", "0"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -90,7 +90,7 @@ public class SupplierController_detailSupplier {
      **/
     @Test
     public void detailSupplier_id_11() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "1"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("id").value(1))

@@ -605,12 +605,12 @@ public class SupplierController_createSupplier {
     @Test
     public void createSupplier_18() throws Exception {
         SupplierDto supplierDto = new SupplierDto();
-        supplierDto.setName("Công Ty Bluegreen");
-        supplierDto.setAddress("33 Yên Khê 2, Đà Nẵng");
-        supplierDto.setCode("BLUE");
-        supplierDto.setEmail("bluegreen@gmail.com");
+        supplierDto.setName("Công Ty Pharma");
+        supplierDto.setAddress("150 Nguyễn Tri Phương, Đà Nẵng");
+        supplierDto.setCode("PHAR");
+        supplierDto.setEmail("pharma@gmail.com");
         supplierDto.setNote("Đã thanh toán");
-        supplierDto.setPhoneNumber("0908223457");
+        supplierDto.setPhoneNumber("0786222425");
         this.mockMvc
                 .perform(MockMvcRequestBuilders
                         .post("/supplier/create-supplier")

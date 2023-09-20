@@ -21,7 +21,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_7() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", (Object) null))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", (Object) null))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -32,7 +32,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_8() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", ""))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", ""))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -43,7 +43,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_9() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "10"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "100"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -54,7 +54,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_99() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "-1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "-1"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -65,7 +65,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_98() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "a"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "a"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -76,7 +76,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_97() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "0"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "0"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
     }
@@ -87,7 +87,7 @@ public class SupplierController_getSupplierById {
      **/
     @Test
     public void getSupplierById_id_11() throws Exception {
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/{id}", "1"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/supplier/get/{id}", "1"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("id").value(1))
@@ -95,7 +95,7 @@ public class SupplierController_getSupplierById {
                 .andExpect(jsonPath("code").value("NUTINE"))
                 .andExpect(jsonPath("email").value("nutine@gmail.com"))
                 .andExpect(jsonPath("flagDeleted").value("false"))
-                .andExpect(jsonPath("name").value("Dược phẩm NUTINE"))
+                .andExpect(jsonPath("name").value("Dược Phẩm Nutine"))
                 .andExpect(jsonPath("note").value("Chưa thanh toán nợ"))
                 .andExpect(jsonPath("phoneNumber").value("0908223242"));
     }
