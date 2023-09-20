@@ -1,5 +1,6 @@
 package com.example.retro_care.kind_of_medicine.service;
 
+import com.example.retro_care.kind_of_medicine.dto.IKindOfMedicineDto;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.kind_of_medicine.repository.IKindOfMedicineRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,8 @@ public class KindOfMedicineService implements IKindOfMedicineService {
     }
 
     @Override
-    public Page<KindOfMedicine> getPageKindOfMedicine(Pageable pageable, String searchCode, String searchName) {
-        return null;
+    public Page<IKindOfMedicineDto> getPageKindOfMedicine(Pageable pageable, String searchCode, String searchName) {
+        return kindOfMedicineRepository.findAllKindOfMedicine(pageable,searchCode,searchName);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class KindOfMedicineService implements IKindOfMedicineService {
 
     @Override
     public void deleteKindOfMedicineById(Long id) {
-        kindOfMedicineRepository.deleteById(id);
+        kindOfMedicineRepository.deleteKindOfMedicineById(id);
     }
 
     @Override

@@ -30,7 +30,7 @@ public class Employee {
     @Column(columnDefinition = "bit(1)")
     private Boolean flagDelete = true;
     @OneToOne
-    @JoinColumn(name = "app_user_id", nullable = false)
+    @JoinColumn(name = "app_user_id")
     private AppUser appUser;
 
     public Employee(String code, String name, String address, String image, String phoneNumber, String startDay, String birthday, String idCard, String note, AppUser appUser) {

@@ -1,11 +1,18 @@
 package com.example.retro_care.invoice.controller;
 
+import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
+import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.invoice.model.InvoiceDetailDto;
 import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.service.IInvoiceService;
+import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.supplier.model.Supplier;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
@@ -15,9 +22,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @RestController
 @CrossOrigin("*")
@@ -39,10 +46,24 @@ public class InvoiceController {
     public ResponseEntity<Page<Invoice>> getListInvoice(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
         if (invoiceService.findAllInvoice(pageable).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (page < 0 ) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(invoiceService.findAllInvoice(pageable), HttpStatus.OK);
     }
 
+    @GetMapping("/result")
+    public ResponseEntity<Page<IInvoiceResult>> getListInvoiceResult(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
+        Page<IInvoiceResult> invoicePage = invoiceService.findAllInvoiceResult(pageable);
+
+        if (invoicePage.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else if (page < 0 || page >= invoicePage.getTotalPages()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return new ResponseEntity<>(invoicePage, HttpStatus.OK);
+    }
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -53,38 +74,82 @@ public class InvoiceController {
      */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteInvoice(@PathVariable Long id) {
-        Invoice invoice = this.invoiceService.findById(id);
-        if (invoice == null) {
-            return new ResponseEntity<>("Không tìm thấy hóa đơn", HttpStatus.NO_CONTENT);
-        }
-
         try {
+            Invoice invoice = this.invoiceService.findById(id);
+            if (invoice == null) {
+                return new ResponseEntity<>("Không tìm thấy hóa đơn", HttpStatus.NO_CONTENT);
+            }
             this.invoiceService.deleteInvoice(id);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("Đã xảy ra lỗi! Không thể xóa hóa đơn này!", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            return new ResponseEntity<>("Đã xảy ra lỗi! Không thể xóa hóa đơn này!", HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>("Đã xảy ra lỗi khi xử lý yêu cầu!", HttpStatus.NOT_FOUND);
         }
     }
+    public static boolean isValidDateFormat(String inputDate, String format) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(format);
+        dateFormat.setLenient(false);
 
+        try {
+            dateFormat.parse(inputDate);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+    private boolean isValidSortColumn(String sort_column) {
+        List<String> validSortColumns = Arrays.asList("1", "2", "3", "4", "5", "6", "7");
+        return validSortColumns.contains(sort_column);
+    }
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
-     *
-     * @param start_date
-     * @param end_date
-     * @param start_time
-     * @param end_time
-     * @param sort_column
+     * @param page page number
+     * @param size number record in page
+     * @param startDate
+     * @param endDate
+     * @param startTime
+     * @param endTime
+     * @param sortColumn
      * @return
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchInvoice(@RequestParam(required = false) String start_date,
-                                           @RequestParam(required = false) String end_date,
-                                           @RequestParam(required = false) String start_time,
-                                           @RequestParam(required = false) String end_time,
-                                           @RequestParam(required = false) String sort_column) {
-        List<Invoice> invoices = invoiceService.searchInvoice(start_date, end_date, start_time, end_time, sort_column);
+    public ResponseEntity<?> searchInvoice(@RequestParam(required = false) Integer page,
+                                           @RequestParam(required = false) Integer size,
+                                           @RequestParam(required = false) String startDate,
+                                           @RequestParam(required = false) String endDate,
+                                           @RequestParam(required = false) String startTime,
+                                           @RequestParam(required = false) String endTime,
+                                           @RequestParam(required = false) String sortColumn) {
+        if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
+            return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
+        }
+
+        if (endDate != null && !isValidDateFormat(endDate, "yyyy-MM-dd")) {
+            return new ResponseEntity<>("Invalid end_date format", HttpStatus.BAD_REQUEST);
+        }
+
+        if (startTime != null && !isValidDateFormat(startTime, "HH:mm:ss")) {
+            return new ResponseEntity<>("Invalid start_time format", HttpStatus.BAD_REQUEST);
+        }
+
+        if (endTime != null && !isValidDateFormat(endTime, "HH:mm:ss")) {
+            return new ResponseEntity<>("Invalid end_time format", HttpStatus.BAD_REQUEST);
+        }
+
+        Pageable pageable;
+        if (page != null && size != null) {
+            pageable = PageRequest.of(page, size);
+        } else {
+            pageable = Pageable.unpaged();
+        }
+        if (sortColumn != null && !isValidSortColumn(sortColumn)) {
+            return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
+        }
+        Page<Invoice> invoices = invoiceService.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
+
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
@@ -102,6 +167,8 @@ public class InvoiceController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        if (invoiceDto.getInvoiceDetailDtoSet() == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> err = new HashMap<>();
@@ -112,12 +179,10 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoice.getInvoiceDetailSet() != null) {
-            Invoice selectedInvoice = invoiceService.createInvoice(invoice);
-            return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
-        } else
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
+        Invoice selectedInvoice = invoiceService.createInvoice(invoice, invoiceDto);
+        if (selectedInvoice == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.CREATED);
     }
 
     /**
@@ -142,7 +207,7 @@ public class InvoiceController {
      * @param invoiceDto
      * @return an ResponseEntity
      */
-    @PutMapping("/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
@@ -154,11 +219,11 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoiceService.getInvoiceById(invoice.getId()) != null)
+        if (invoiceService.getInvoiceById(invoice.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        else
-            invoiceService.editInvoice(invoice);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
+        System.out.println(selectedInvoice);
+        return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 
     /**
