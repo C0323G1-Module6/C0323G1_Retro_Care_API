@@ -7,13 +7,8 @@ public interface IMedicineListDto {
     String getName();
     String getActiveElement();
     String getUnitName();
-    Long getConversionRate();
     String getConversionUnit();
     Long getQuantity();
-    Double getImportPrice();
-    Double getWholesalePrice();
-    Double getRetailPrice();
-    Float getRetailProfits();
     Float getDiscount();
     Float getVat();
 }

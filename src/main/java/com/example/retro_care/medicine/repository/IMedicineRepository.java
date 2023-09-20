@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.repository;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -93,24 +94,29 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
 //            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false AND m.name like CONCAT('%', :search ,'%')", nativeQuery = true)
 
     @Query(value = "SELECT" +
-            " m.id AS id," +
-            " m.code AS code" +
-            " m.name AS name," +
-            " m.price AS medicine_price," +
-            " km.name AS kind_of_medicine_name," +
-            " u.name AS unit_name," +
-            " ud.conversion_rate AS conversion_rate," +
-            " ud.conversion_unit AS conversion_unit" +
-            " FROM" +
-            " medicine m" +
-            " JOIN" +
+            "    m.id AS id," +
+            "    m.code AS code," +
+            "    m.name AS name," +
+            "    m.active_element AS activeElement," +
+            "    m.quantity AS quantity," +
+            "    m.vat AS vat," +
+            "    m.price AS price," +
+            "    km.name AS kindOfMedicineName," +
+            "    u.name AS unitName," +
+            "    id.discount AS discount," +
+            "    ud.conversion_unit AS conversionUnit " +
+            "FROM" +
+            "    medicine m" +
+            "        JOIN" +
             "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
-            " JOIN" +
+            "        JOIN" +
             "    unit_detail ud ON m.id = ud.medicine_id" +
-            " JOIN" +
-            "    unit u ON ud.unit_id = u.id", nativeQuery = true)
-    Page<IMedicineRepository> findAll(Pageable pageable,
-                           @Param("search") String search);
+            "        JOIN" +
+            "    unit u ON ud.unit_id = u.id" +
+            "        LEFT JOIN" +
+            "    invoice_detail id ON m.id = id.medicine_id", nativeQuery = true)
+    Page<IMedicineListDto> findAll(Pageable pageable,
+                                   @Param("search") String search);
 
     /**
      * author: DaoPTA
@@ -134,7 +140,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @return returns approximate drug code with filter.
      */
     @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
-    Page<Medicine> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
+    Page<IMedicineListDto> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -146,7 +152,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @return Returns the drug name that approximates the filter
      */
     @Query(value = "select * from medicine where medicine.name like CONCAT('%', :searchByName ,'%')",nativeQuery = true)
-    Page<Medicine> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
+    Page<IMedicineListDto> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -158,7 +164,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @return returns the drug's active ingredient approximated by the filter
      */
     @Query(value = "select * from medicine where medicine.active_element like CONCAT('%', :searchByActiveElement ,'%')",nativeQuery = true)
-    Page<Medicine> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
+    Page<IMedicineListDto> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -173,7 +179,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             " INNER JOIN kind_of_medicine k ON k.id = m.kind_of_medicine_id " +
             "WHERE k.name LIKE CONCAT('%', :searchByNameKindOfMedicine, '%')) AS m", nativeQuery = true)
 
-    Page<Medicine> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
+    Page<IMedicineListDto> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
 
     @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +
