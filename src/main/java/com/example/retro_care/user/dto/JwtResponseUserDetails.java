@@ -14,7 +14,6 @@ import java.util.Set;
  * Function: output data when login success
  */
 public class JwtResponseUserDetails implements UserDetails {
-
     private String username;
     private String password;
     private Boolean online;
@@ -23,7 +22,8 @@ public class JwtResponseUserDetails implements UserDetails {
     public JwtResponseUserDetails() {
     }
 
-    public JwtResponseUserDetails(String username, String password, Boolean online, Collection<? extends GrantedAuthority> authorities) {
+    public JwtResponseUserDetails( String username, String password, Boolean online, Collection<? extends GrantedAuthority> authorities) {
+
         this.username = username;
         this.password = password;
         this.online = online;

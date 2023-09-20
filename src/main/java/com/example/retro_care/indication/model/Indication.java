@@ -27,6 +27,14 @@ public class Indication {
     public Indication() {
     }
 
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
+    }
+
     public Indication(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription) {
         this.id = id;
         this.dosage = dosage;
@@ -41,7 +49,7 @@ public class Indication {
         this.frequency = frequency;
         this.flagDeleted = flagDeleted;
         this.prescription = prescription;
-//        this.medicine = medicine;
+        this.medicine = medicine;
     }
 
     public Long getId() {
