@@ -13,37 +13,41 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class HomeController_findAllMedicineForHomepage {
+public class HomeController_findMedicineForHomepage {
     @Autowired
     private MockMvc mockMvc;
 
     /**
      * Test for get list with size > 0
+     *
      * @throws Exception successful
      * @author HuyL
      */
     @Test
-    public void findAllMedicineForHomepage_6() throws Exception {
+    public void findMedicineForHomepage_6() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders.get(("/api/home/")))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(1))
-                .andExpect(jsonPath("$[0].code").value("IBU01"))
-                .andExpect(jsonPath("$[0].name").value("Ibuprofen Tablets"))
-                .andExpect(jsonPath("$[2].id").value(3))
-                .andExpect(jsonPath("$[2].code").value("VITC01"))
-                .andExpect(jsonPath("$[2].name").value("Vitamin C Tablets"));
+                .andExpect(jsonPath("$[0].medicineId").value(1))
+                .andExpect(jsonPath("$[0].medicineImage").exists())
+                .andExpect(jsonPath("$[0].medicinePrice").value(10.5))
+                .andExpect(jsonPath("$[0].medicineName").value("Paracetamol"))
+                .andExpect(jsonPath("$[29].medicineId").value(30))
+                .andExpect(jsonPath("$[29].medicineImage").exists())
+                .andExpect(jsonPath("$[29].medicinePrice").value(8.4))
+                .andExpect(jsonPath("$[29].medicineName").value("Metoprolol"));
     }
 
     /**
      * Test for wrong url
+     *
      * @throws Exception 404 Not Found
      * @author HuyL
      */
     @Test
-    public void findAllMedicineForHomepage_5() throws Exception {
+    public void findMedicineForHomepage_5() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders.get(("/api/home_wrong_url/")))
                 .andDo(print())
@@ -54,11 +58,12 @@ public class HomeController_findAllMedicineForHomepage {
 
     /**
      * Test NOT_FOUND status by empty database
+     *
      * @throws Exception NOT_FOUND
      * @author HuyL
      */
     @Test
-    public void findAllMedicineForHomepage_99() throws Exception {
+    public void findMedicineForHomepage_99() throws Exception {
 //        Database had empty
         mockMvc.perform(MockMvcRequestBuilders.get("/api/home/"))
                 .andDo(print())

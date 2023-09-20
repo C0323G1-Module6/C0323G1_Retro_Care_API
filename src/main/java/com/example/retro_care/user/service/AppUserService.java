@@ -38,7 +38,7 @@ public class AppUserService implements IAppUserService {
         if (appUser == null) {
             throw new UsernameNotFoundException("User name or password is wrong");
         }
-        appUserRepository.updateAppUserIsOnline(appUser);
+
         List<GrantedAuthority> grantList = new ArrayList<>();
         for (UserRole userRole : appUser.getUserRoleSet()) {
             grantList.add(new SimpleGrantedAuthority(userRole.getAppRole().getName()));
@@ -49,6 +49,7 @@ public class AppUserService implements IAppUserService {
                 appUser.getPassword(),
                 appUser.getFlagOnline(),
                 grantList);
+        appUserRepository.updateAppUserIsOnline(appUser);
         return userDetails;
     }
 
@@ -97,7 +98,5 @@ public class AppUserService implements IAppUserService {
     public Long findAppUserIdByUserName(String userName) {
         return appUserRepository.findIdByUserName(userName);
     }
-
-
 
 }

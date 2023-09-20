@@ -25,7 +25,7 @@ public class PrescriptionController_getPrescriptionById {
     @Test
     public void getPrescriptionById_4() throws Exception {
         this.mockMvc.perform(
-                MockMvcRequestBuilders.get("/prescription/{id}",6))
+                MockMvcRequestBuilders.get("/prescription/{id}",7))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }

@@ -1,5 +1,7 @@
 package com.example.retro_care.prescription.controller;
 
+import com.example.retro_care.patient.model.Patient;
+import com.example.retro_care.patient.service.IPatientService;
 import com.example.retro_care.prescription.dto.PrescriptionDto;
 import com.example.retro_care.prescription.model.Prescription;
 import com.example.retro_care.prescription.service.IPrescriptionService;
@@ -23,6 +25,9 @@ import java.util.Map;
 public class PrescriptionController {
     @Autowired
     private IPrescriptionService prescriptionService;
+
+    @Autowired
+    private IPatientService patientService;
 
     /**
      * Author: ThanhKN
@@ -60,7 +65,9 @@ public class PrescriptionController {
             }
             return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
         }
+        Patient patient = patientService.patientById(prescriptionDto.getPatient());
         BeanUtils.copyProperties(prescriptionDto, prescription);
+        prescription.setPatient(patient);
         prescriptionService.createPrescription(prescription);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
