@@ -1,6 +1,6 @@
 package com.example.retro_care.order.controller;
 
-import com.example.retro_care.order.projection.*;
+
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -20,7 +20,6 @@ public class CartDetailsController {
 
     @Autowired
     private ICartDetailsService iCartDetailsService;
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -105,58 +104,8 @@ public class CartDetailsController {
         } else return new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
     }
 
-    /**
-     * Create by: HanhNLM;
-     * Create Date: 15/09/2023;
-     * Function: get all info of a product to display on details screen,
-     * @param : medicineId;
-     * @return : product with all info;
-     */
-    @GetMapping("/get-details")
-    public ResponseEntity<?> getMedicineDetailsForDisplay(@RequestParam("medicineId") Long medicineId) {
-        return new ResponseEntity<>(iCartDetailsService.getMedicineToCheckAndDisplay(medicineId), HttpStatus.OK);
-    }
 
     /**
-     * Create by: HanhNLM;
-     * Create Date: 15/09/2023;
-     * Function: get all products in cart to display on cart screen,
-     * @param : appUserId;
-     * @return : all products in cart;
-     */
-    @GetMapping("/get-all")
-    public ResponseEntity<?> getAllCarts(@RequestParam("appUserId") Long appUserId){
-        return new ResponseEntity<>(iCartDetailsService.findCartDetailsByUserId(appUserId), HttpStatus.OK);
-    }
-
-    /**
-     * Create by: HanhNLM;
-     * Create Date: 15/09/2023;
-     * Function: get quantity of a product in cart to check the availability of the product for selling ,
-     * @param : appUserId, medicineId;
-     * @return : quantity of a product in cart;
-     */
-    @GetMapping("/get-quantity-in-cart")
-    public ResponseEntity<?> getQuantityInCart(@RequestParam("appUserId") Long appUserId,
-                                              @RequestParam("medicineId") Long medicineId){
-        return new ResponseEntity<>(iCartDetailsService.findMedicineQuantityInCart(appUserId,medicineId), HttpStatus.OK);
-    }
-
-    /**
-     * Create by: HanhNLM;
-     * Create Date: 15/09/2023;
-     * Function: get loyalty point of a customer;
-     * @param : appUserId;
-     * @return : loyalty point;
-     */
-    @GetMapping("/get-loyalty-point")
-    public ResponseEntity<?> getLoyaltyPoint(@RequestParam("appUserId") Long appUserId){
-        return new ResponseEntity<>(iCartDetailsService.getLoyaltyPoint(appUserId), HttpStatus.OK);
-    }
-
-
-    /**
-<<<<<<< HEAD
      * author: VuNL
      * date create: 17/09/2023
      * function: get list medicine by name
@@ -232,7 +181,61 @@ public class CartDetailsController {
     public ResponseEntity<?> getInformationCustomer(@RequestParam("phone")String phone){
         ICustomerProjectionWhenSell customer = iCartDetailsService.getCustomerNameAndUserId(phone);
         return new ResponseEntity<>(customer, HttpStatus.OK);
+        MedicineProjection med = iCartDetailsService.getMedicineToCheckAndDisplay(medicineId);
+        if(med.getQuantity() >= (inputQuantity * med.getConversion_Rate())){
+            return new ResponseEntity<>( HttpStatus.OK);
+        } else return new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
     }
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get all info of a product to display on details screen,
+     * @param : medicineId;
+     * @return : product with all info;
+     */
+    @GetMapping("/get-details")
+    public ResponseEntity<?> getMedicineDetailsForDisplay(@RequestParam("medicineId") Long medicineId) {
+        return new ResponseEntity<>(iCartDetailsService.getMedicineToCheckAndDisplay(medicineId), HttpStatus.OK);
+    }
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get all products in cart to display on cart screen,
+     * @param : appUserId;
+     * @return : all products in cart;
+     */
+    @GetMapping("/get-all")
+    public ResponseEntity<?> getAllCarts(@RequestParam("appUserId") Long appUserId){
+        return new ResponseEntity<>(iCartDetailsService.findCartDetailsByUserId(appUserId), HttpStatus.OK);
+    }
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get quantity of a product in cart to check the availability of the product for selling ,
+     * @param : appUserId, medicineId;
+     * @return : quantity of a product in cart;
+     */
+    @GetMapping("/get-quantity-in-cart")
+    public ResponseEntity<?> getQuantityInCart(@RequestParam("appUserId") Long appUserId,
+                                              @RequestParam("medicineId") Long medicineId){
+        return new ResponseEntity<>(iCartDetailsService.findMedicineQuantityInCart(appUserId,medicineId), HttpStatus.OK);
+    }
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get loyalty point of a customer;
+     * @param : appUserId;
+     * @return : loyalty point;
+     */
+    @GetMapping("/get-loyalty-point")
+    public ResponseEntity<?> getLoyaltyPoint(@RequestParam("appUserId") Long appUserId){
+        return new ResponseEntity<>(iCartDetailsService.getLoyaltyPoint(appUserId), HttpStatus.OK);
+    }
+
 
     /**
      * Create by: HanhNLM;

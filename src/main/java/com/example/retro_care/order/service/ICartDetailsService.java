@@ -1,5 +1,8 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.MedicineProjection;
+
 import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
@@ -116,6 +119,7 @@ public interface ICartDetailsService {
      */
     ICustomerProjectionWhenSell getCustomerNameAndUserId(String phone);
     /**
+
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
