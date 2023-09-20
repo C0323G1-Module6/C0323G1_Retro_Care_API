@@ -85,9 +85,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     Page<ICustomerDto> findAllCustomer(@Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "phoneNumber") String phoneNumber, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem, Pageable pageable);
 
 
-
-
-    Page<Customer> findCustomerByNameContaining(Pageable pageable, String searchName);
     /**
      * Author: QuyenHT
      * Goal: Delete customer by id
