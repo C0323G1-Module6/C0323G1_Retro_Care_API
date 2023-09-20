@@ -168,6 +168,16 @@ public class InvoiceController {
         }
     }
 
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id ){
+        List<IInvoiceResult> medicine = invoiceService.getInvoiceDetailById(id);
+        if(medicine==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+
     /**
      * Create an invoice with create invoiceDetail
      * Code by CuongHLT

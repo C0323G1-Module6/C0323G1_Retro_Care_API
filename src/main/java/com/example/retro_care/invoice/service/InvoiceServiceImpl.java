@@ -139,6 +139,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.findById(id).get();
     }
 
+    @Override
+    public List<IInvoiceResult> getInvoiceDetailById(Long id) {
+        return invoiceRepository.getInvoiceDetailById(id);
+    }
+
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023

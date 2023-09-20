@@ -3,6 +3,7 @@ package com.example.retro_care.invoice.repository;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 
+import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     /**
@@ -35,6 +38,18 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "ORDER BY i.code DESC",
             nativeQuery = true)
     Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable);
+
+
+    @Query(value = "SELECT m.id as idMedicine, m.active_element, m.code as codeMedicine, m.maker, m.name as nameMedicine,\n" +
+            "       m.note as noteMedicine, m.origin, m.price, m.quantity, m.retail_profits as retailProfits,m.active_element as activeElement, m.vat,\n" +
+            "       m.kind_of_medicine_id, k.code as codeKind, k.name as nameKind\n " +
+            "        FROM invoice i \n" +
+            "        JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
+            "        JOIN medicine m ON m.id = ind.medicine_id\n" +
+            "        JOIN supplier s ON s.id = i.supplier_id\n" +
+            "        JOIN kind_of_medicine k ON k.id = m.kind_of_medicine_id\n" +
+            "WHERE i.id = :id",nativeQuery = true)
+    List<IInvoiceResult> getInvoiceDetailById(@Param("id") Long id);
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
