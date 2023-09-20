@@ -23,6 +23,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: add product to cart on home/ details screen, if product already exists then updates quantity;
+     *
      * @param : appUserId, medicineId, newQuantity;
      */
     @Modifying
@@ -37,6 +38,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: update quantity of product cart;
+     *
      * @param : appUserId, medicineId, quantity;
      */
     @Modifying
@@ -50,6 +52,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: clears all products in cart;
+     *
      * @param : appUserId;
      */
     @Modifying
@@ -60,6 +63,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: delete a specific product in cart;
+     *
      * @param : cartId;
      */
     @Modifying
@@ -70,12 +74,13 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: gets all needed info of a product;
+     *
      * @param : medicineId;
      * @return : MedicineProjection that holds all info of product;
      */
     @Query(nativeQuery = true, value = "SELECT " +
-            "m.id,"+
-            "ud.conversion_rate,"+
+            "m.id," +
+            "ud.conversion_rate," +
             "m.name AS medicine_name," +
             "m.code AS medicine_code," +
             "GROUP_CONCAT(im.image_path) AS medicine_images," +
@@ -89,7 +94,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "JOIN kind_of_medicine km ON m.kind_of_medicine_id = km.id " +
             "LEFT JOIN image_medicine im ON m.id = im.medicine_id " +
             "LEFT JOIN unit_detail ud ON m.id = ud.medicine_id " +
-            "LEFT JOIN unit u ON ud.unit_id = u.id "+
+            "LEFT JOIN unit u ON ud.unit_id = u.id " +
             "WHERE m.id = :medicineId " +
             "GROUP BY m.id")
     MedicineProjection getMedicine(@Param("medicineId") Long medicineId);
@@ -99,6 +104,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get product and customer's info for display and mailing purpose;
+     *
      * @param : appUserId;
      * @return : list of CartProjection that holds some info of product,
      * as well as customer for display and mailing purpose;
@@ -108,7 +114,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
 
 
     /**
-<<<<<<< HEAD
+     * <<<<<<< HEAD
      * author: VuNL
      * date create: 16/09/2023
      * function: find medicine when sell offline
@@ -124,6 +130,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * author: VuNL
      * date create: 16/09/2023
      * function: get all cart of employee when sell
+     *
      * @param id
      * @return List cart when sell
      */
@@ -138,31 +145,34 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * author: VuNL
      * date create: 17/09/2023
      * function: get all prescription by name
+     *
      * @param name
      * @return list prescription
      */
-    @Query(nativeQuery = true, value = "select p.id, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
+    @Query(nativeQuery = true, value = "select p.id, p.duration, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
             "from prescription p join patient pa \n" +
             "on p.patient_id = pa.id where p.name like %:name% and p.flag_deleted = false")
-    List<IPrescriptionProjectionOrder> getAllPrescriptionByName(@Param("name")String name);
+    List<IPrescriptionProjectionOrder> getAllPrescriptionByName(@Param("name") String name);
 
 
     /**
      * author: VuNL
      * date create: 17/09/2023
      * function: get all prescription by symptoms
+     *
      * @param symptoms
      * @return list prescription
      */
-    @Query(nativeQuery = true, value = "select p.id, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
+    @Query(nativeQuery = true, value = "select p.id, p.duration, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
             "from prescription p join patient pa \n" +
             "on p.patient_id = pa.id where p.symptoms like %:symptoms% and p.flag_deleted = false")
-    List<IPrescriptionProjectionOrder> getAllPrescriptionBySymptoms(@Param("symptoms")String symptoms);
+    List<IPrescriptionProjectionOrder> getAllPrescriptionBySymptoms(@Param("symptoms") String symptoms);
 
     /**
      * author: VuNL
      * date create: 17/09/2023
      * function: get all indication from prescription id
+     *
      * @param id
      * @return list indication
      */
@@ -175,6 +185,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * author: VuNL
      * date create: 17/09/2023
      * function: get name and user app id of customer from phone number
+     *
      * @param phone
      * @return name and app user id
      */
@@ -186,6 +197,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
+     *
      * @param : appUserId, medicineId;
      * @return : product's quantity;
      */
@@ -197,6 +209,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get loyalty point of customer;
+     *
      * @param : appUserId;
      * @return : loyalty point;
      */

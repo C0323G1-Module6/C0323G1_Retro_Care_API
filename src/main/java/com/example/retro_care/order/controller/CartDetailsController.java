@@ -156,7 +156,6 @@ public class CartDetailsController {
 
 
     /**
-<<<<<<< HEAD
      * author: VuNL
      * date create: 17/09/2023
      * function: get list medicine by name
