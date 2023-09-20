@@ -12,6 +12,30 @@ import org.springframework.stereotype.Service;
 public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
+    /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    @Override
+    public int updateOnlineCustomer(Customer customer) {
+        return customerRepository.updateOnlineCustomer(customer);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+    @Override
+    public boolean existsByEmail(String email, Long id) {
+        return customerRepository.existsByEmailAndIdNot(email,id);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+    @Override
+    public boolean existsByPhoneNumber(String phoneNumber, Long id) {
+        return customerRepository.existsByPhoneNumberAndIdNot(phoneNumber,id);
+    }
 
     /**
      * Author: TinDT

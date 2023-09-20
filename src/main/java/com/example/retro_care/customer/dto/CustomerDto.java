@@ -180,7 +180,7 @@ public class CustomerDto implements Validator {
             errors.rejectValue("phoneNumber", null, "Vui lòng bổ sung số điện thoại");
         } else if (customerDto.getPhoneNumber().trim().equals("")) {
             errors.rejectValue("phoneNumber", null, "Không được để trống số điện thoại");
-        } else if (customerDto.getPhoneNumber().length() < 7) {
+        } else if (customerDto.getPhoneNumber().length() < 10) {
             errors.rejectValue("phoneNumber", null, "Không đúng độ dài ký tự cho phép ");
         } else if (customerDto.getPhoneNumber().length() > 11) {
             errors.rejectValue("phoneNumber", null, "Quá ký tự cho phép");
