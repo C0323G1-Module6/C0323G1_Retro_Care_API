@@ -169,6 +169,10 @@ public class CustomerDto implements Validator {
             errors.rejectValue("birthday", null, "Không để trống ngày sinh khách hàng!");
         } else if (!customerDto.getBirthday().matches("^\\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$")) {
             errors.rejectValue("birthday", null, "Nhập không đúng định dạng ngày sinh !");
+        } else if (!FormatCustomer.isDateValidAndBeforeCurrent(customerDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Vượt quá thời gian thực tế !");
+        }else if (!FormatCustomer.check18YearsOld(customerDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Cảnh báo chưa đủ 18 tuổi !");
         }
 //
         // Check number phone
@@ -183,9 +187,6 @@ public class CustomerDto implements Validator {
         } else if (!customerDto.getPhoneNumber().matches("(84|0[3|5|7|8|9])+([0-9]{8})\\b")) {
             errors.rejectValue("phoneNumber", null, "Bạn nhập sai định dạng số điện thoại!");
         }
-//             else if (customerService.findCustomerByPhone(customerDto.getPhoneNumber()) != null) {
-//            errors.rejectValue("phoneNumber", null, "Số điện thoại đã được đăng ký!");}
-
         // Check email
         if (customerDto.getEmail() == null) {
             errors.rejectValue("email", null, "Vui lòng bổ sung email khách hàng");
