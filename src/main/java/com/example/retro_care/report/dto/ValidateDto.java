@@ -12,13 +12,23 @@ public class ValidateDto implements Validator {
     private String startDate;
 
     private String endDate;
+    private String reportName;
 
     public ValidateDto() {
     }
 
-    public ValidateDto(String startDate, String endDate) {
+    public ValidateDto(String startDate, String endDate, String reportName) {
         this.startDate = startDate;
         this.endDate = endDate;
+        this.reportName = reportName;
+    }
+
+    public String getReportName() {
+        return reportName;
+    }
+
+    public void setReportName(String reportName) {
+        this.reportName = reportName;
     }
 
     public String getStartDate() {

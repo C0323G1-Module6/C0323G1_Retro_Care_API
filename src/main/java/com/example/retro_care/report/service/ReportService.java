@@ -35,6 +35,9 @@ public class ReportService implements IReportService {
      */
     @Override
     public List<Revenue> findRevenue(String startDate, String endDate) {
+        if(startDate.equals("") || endDate.equals("") ) {
+//            return
+        }
         return revenueRepository.findRevenue(startDate, endDate);
     }
 

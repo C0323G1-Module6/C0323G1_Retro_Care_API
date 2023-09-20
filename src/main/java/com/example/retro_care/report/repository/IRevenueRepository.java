@@ -23,6 +23,7 @@ public interface IRevenueRepository extends JpaRepository<OrderDetails, Long> {
             "FROM `orders` o JOIN `order_details` od ON o.id = od.order_id " +
             "WHERE o.flag_deleted = 0 " +
             "AND o.date_time BETWEEN :startDate AND :endDate " +
-            "GROUP BY o.date_time", nativeQuery = true)
+            "GROUP BY o.date_time" +
+            " ORDER BY o.date_time ASC ", nativeQuery = true)
     List<Revenue> findRevenue(@Param(value = "startDate") String startDate, @Param(value = "endDate") String endDate);
 }

@@ -20,12 +20,13 @@ public interface IProfitRepository extends JpaRepository<OrderDetails, Long> {
      * @param endDate
      * @return List of Profit
      */
-    @Query(value = "SELECT o.date_time AS sellDate, SUM(m.retail_profits/100 * od.quantity) AS total " +
+    @Query(value = "SELECT o.date_time AS sellDate, SUM((od.current_price -m.price) * od.quantity) AS total " +
             "FROM orders o JOIN order_details od ON o.id = od.order_id " +
             "JOIN medicine m ON od.medicine_id = m.id " +
             "WHERE o.flag_deleted = 0 " +
             "AND o.date_time BETWEEN :startDate AND :endDate " +
-            "GROUP BY o.date_time", nativeQuery = true)
+            "GROUP BY o.date_time "+
+            "ORDER BY o.date_time ASC ", nativeQuery = true)
     List<Profit> findProfit(@Param(value = "startDate") String startDate, @Param(value = "endDate") String endDate);
 
 

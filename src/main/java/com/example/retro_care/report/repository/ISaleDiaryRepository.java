@@ -25,6 +25,7 @@ public interface ISaleDiaryRepository extends JpaRepository<OrderDetails, Long> 
             "JOIN app_user a ON u.app_user_id = a.id " +
             "JOIN employee e ON a.id = e.app_user_id " +
             "AND o.date_time BETWEEN :startDate AND :endDate " +
-            "GROUP BY e.id, e.name_employee, o.date_time", nativeQuery = true)
+            "GROUP BY e.id, e.name_employee, o.date_time" +
+            " ORDER BY o.date_time ASC ", nativeQuery = true)
     List<SaleDiary> findSaleDiary(@Param(value = "startDate") String startDate, @Param(value = "endDate") String endDate);
 }

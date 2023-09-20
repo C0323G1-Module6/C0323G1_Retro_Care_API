@@ -1,5 +1,6 @@
 package com.example.retro_care.report.controller;
 
+import com.example.retro_care.report.common.ValidateReportInput;
 import com.example.retro_care.report.dto.*;
 import com.example.retro_care.report.service.IReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,29 +28,26 @@ public class ReportController {
      * Goal: Get data report base on start date, end date and name of report
      * Date created: 15/09/2023
      *
-     * @param validateDto
-     * @param bindingResult
+     * @param startDate
+     * @param endDate
      * @param reportName
      * @return ResponseEntity includes report data and HttpStatus
      */
 
 
     @GetMapping("/general")
-    public ResponseEntity<?> findReport(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult,
+    public ResponseEntity<?> findReport(@RequestParam(defaultValue = "") String startDate,
+                                        @RequestParam(defaultValue = "") String endDate,
                                         @RequestParam(defaultValue = "", required = false) String reportName) {
 
-        new ValidateDto().validate(validateDto, bindingResult);
-        Map<String, String> errorsMap = new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
+        Map<String, String> errMap = new HashMap<>();
+        errMap = ValidateReportInput.validate(startDate, endDate, reportName, errMap);
+        if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(errorsMap);
+                    .body(errMap);
+
         }
-        String startDate = validateDto.getStartDate();
-        String endDate = validateDto.getEndDate();
 
         switch (reportName) {
             case "revenue":
@@ -106,26 +104,23 @@ public class ReportController {
      * Goal: Get data report of revenue to make revenue - profit chart
      * Date created: 15/09/2023
      *
-     * @param validateDto
-     * @param bindingResult
+     * @param startDate
+     * @param endDate
      * @return ResponseEntity includes revenue data, HttpStatus
      */
 
 
     @GetMapping("/chart/revenue")
-    public ResponseEntity<?> findRevenue(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult) {
-        new ValidateDto().validate(validateDto, bindingResult);
-        Map<String, String> errorsMap = new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
+    public ResponseEntity<?> findRevenue(@RequestParam(defaultValue = "", required = false) String startDate,
+                                         @RequestParam(defaultValue = "", required = false) String endDate) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap = ValidateReportInput.validate(startDate, endDate, "revenue", errMap);
+        if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(errorsMap);
+                    .body(errMap);
+
         }
-        String startDate = validateDto.getStartDate();
-        String endDate = validateDto.getEndDate();
         List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
         if (revenueList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -139,24 +134,21 @@ public class ReportController {
      * Goal: Get data report of profit to make revenue - profit chart
      * Date created: 15/09/2023
      *
-     * @param validateDto
-     * @param bindingResult
+     * @param startDate
+     * @param endDate
      * @return ResponseEntity includes revenue data, HttpStatus
      */
     @GetMapping("/chart/profit")
-    public ResponseEntity<?> findProfit(@Valid @RequestBody ValidateDto validateDto, BindingResult bindingResult) {
-        new ValidateDto().validate(validateDto, bindingResult);
-        Map<String, String> errorsMap = new HashMap<>();
-        if (bindingResult.hasErrors()) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-            }
+    public ResponseEntity<?> findProfit(@RequestParam(defaultValue = "", required = false) String startDate,
+                                        @RequestParam(defaultValue = "", required = false) String endDate) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap = ValidateReportInput.validate(startDate, endDate, "profit", errMap);
+        if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
-                    .body(errorsMap);
+                    .body(errMap);
+
         }
-        String startDate = validateDto.getStartDate();
-        String endDate = validateDto.getEndDate();
         List<Profit> profitList = reportService.findProfit(startDate, endDate);
         if (profitList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
