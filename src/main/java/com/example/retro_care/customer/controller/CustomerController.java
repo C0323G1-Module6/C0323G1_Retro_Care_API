@@ -162,17 +162,6 @@ public class CustomerController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/list-customer")
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false) int page,
-                                    @RequestParam(defaultValue = "", required = false) String searchName) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllByName(pageable, searchName);
-        System.out.println(customers.getContent());
-        if (customers.getTotalElements() != 0) {
-            return new ResponseEntity<>(customers, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
     /**
      * Author: QuyenHT
