@@ -63,17 +63,19 @@ public class CustomerController {
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
+
+        }
         Customer customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
-            if (customerCheck != null){
-                errors.put("email","Email đã được đăng ký");
-            }
-            Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
-            if (customerCheckPhone != null) {
-                errors.put("phoneNumber", "Số điện thoại đã được đăng ký");
-            }
+        if (customerCheck != null){
+            errors.put("email","Email đã được đăng ký");
+        }
+        Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+        if (customerCheckPhone != null) {
+            errors.put("phoneNumber", "Số điện thoại đã được đăng ký");
+        }
+        if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-
         BeanUtils.copyProperties(customerDto, customer);
          customerService.saveCustomer(customer);
 
@@ -90,23 +92,25 @@ public class CustomerController {
     public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
         Customer customer= customerService.findCustomerById(id);
         new CustomerDto().validate(customerDto,bindingResult);
+        Map<String, String> errors = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
-            if (customer.getEmail().equals(customerDto.getEmail())){
-                Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
-                if (customerCheckEmail != null){
-                    errors.put("email","Email đã được đăng ký");
-                }
+        }
+        if (!(customer.getEmail().equals(customerDto.getEmail()))){
+            Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
+            if (customerCheckEmail != null){
+                errors.put("email","Email đã tồn tại");
             }
-            if (customer.getPhoneNumber().equals(customerDto.getPhoneNumber())){
-                Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
-                if (customerCheckPhone != null){
-                    errors.put("phoneNumber","Số điện thoại đã được đăng ký");
-                }
+        }
+        if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))){
+            Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+            if (customerCheckPhone != null){
+                errors.put("phoneNumber","Số điện thoại đã tồn tại");
             }
+        }
+        if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         if (customer==null){
