@@ -59,6 +59,15 @@ public class Customer {
         this.address = address;
         this.note = note;
     }
+    // HANHNLM 's constructor
+    public Customer(Long id, String name, String phoneNumber, String email, String address, String note){
+        this.id = id;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.note = note;
+    }
     public Long getId() {
         return id;
     }

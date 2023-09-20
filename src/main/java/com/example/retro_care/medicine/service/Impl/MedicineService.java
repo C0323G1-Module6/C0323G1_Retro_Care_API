@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.service.Impl;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.medicine.repository.IMedicineRepository;
 import com.example.retro_care.medicine.service.IMedicineService;
@@ -67,7 +68,7 @@ public class MedicineService implements IMedicineService {
      * @return Display medicine list
      */
     @Override
-    public Page<Medicine> findAll(Pageable pageable, String search) {
+    public Page<IMedicineListDto> findAll(Pageable pageable, String search) {
         return iMedicineRepository.findAll(pageable, search);
     }
 
@@ -89,10 +90,6 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.findAll();
     }
 
-//    @Override
-//    public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf) {
-//        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement,searchByNameKindOf ,pageable);
-//    }
 
     /**
      * author: DaoPTA
@@ -104,7 +101,7 @@ public class MedicineService implements IMedicineService {
      * @return approximate drug code with filter.
      */
     @Override
-    public Page<Medicine> searchByCodeMedicine(Pageable pageable, String searchByCode) {
+    public Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable, String searchByCode) {
         return iMedicineRepository.searchCode(searchByCode, pageable);
     }
 
@@ -118,7 +115,7 @@ public class MedicineService implements IMedicineService {
      * @return the drug name that approximates the filter
      */
     @Override
-    public Page<Medicine> searchByNameMedicine(Pageable pageable, String searchByName) {
+    public Page<IMedicineListDto> searchByNameMedicine(Pageable pageable, String searchByName) {
         return iMedicineRepository.searchName(searchByName, pageable);
     }
 
@@ -132,7 +129,7 @@ public class MedicineService implements IMedicineService {
      * @return the drug's active ingredient approximated by the filter
      */
     @Override
-    public Page<Medicine> searchActiveElement(Pageable pageable, String searchByActiveElement) {
+    public Page<IMedicineListDto> searchActiveElement(Pageable pageable, String searchByActiveElement) {
         return iMedicineRepository.searchActiveElement(searchByActiveElement, pageable);
     }
 
@@ -146,7 +143,7 @@ public class MedicineService implements IMedicineService {
      * @return the drug group of the drug approximated by the filter
      */
     @Override
-    public Page<Medicine> searchByNameKindOfMedicine(Pageable pageable, String searchByNameKindOfMedicine) {
+    public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByNameKindOfMedicine) {
         return iMedicineRepository.searchByKindOfName(searchByNameKindOfMedicine, pageable);
     }
 

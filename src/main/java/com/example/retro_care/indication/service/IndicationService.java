@@ -33,7 +33,8 @@ public class IndicationService implements IIndicationService {
      * Date:17/09/2023
      * return id max of prescription
      */
-    Long maxId(){
+    @Override
+    public Long maxId(){
         List<Prescription> prescriptionList = prescriptionService.getAll();
         Long idMax = prescriptionList.get(0).getId();
         for (Prescription p : prescriptionList) {
@@ -51,8 +52,7 @@ public class IndicationService implements IIndicationService {
      */
     @Override
     public void createIndication(Indication indication) {
-        indication.setId(maxId()+1);
-        indicationRepository.createIndication(indication);
+        indicationRepository.save(indication);
     }
 
     /**

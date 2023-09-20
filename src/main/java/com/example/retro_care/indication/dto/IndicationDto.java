@@ -11,13 +11,13 @@ public class IndicationDto implements Validator {
     private Integer dosage;
     private Integer frequency;
     private Boolean flagDeleted;
-    private Prescription prescription;
-    private Medicine medicine;
+    private Long prescription;
+    private Long medicine;
 
     public IndicationDto() {
     }
 
-    public IndicationDto(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription, Medicine medicine) {
+    public IndicationDto(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, Long medicine) {
         this.id = id;
         this.dosage = dosage;
         this.frequency = frequency;
@@ -26,7 +26,7 @@ public class IndicationDto implements Validator {
         this.medicine = medicine;
     }
 
-    public IndicationDto(Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription, Medicine medicine) {
+    public IndicationDto(Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, Long medicine) {
         this.dosage = dosage;
         this.frequency = frequency;
         this.flagDeleted = flagDeleted;
@@ -66,19 +66,19 @@ public class IndicationDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public Prescription getPrescription() {
+    public Long getPrescription() {
         return prescription;
     }
 
-    public void setPrescription(Prescription prescription) {
+    public void setPrescription(Long prescription) {
         this.prescription = prescription;
     }
 
-    public Medicine getMedicine() {
+    public Long getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(Medicine medicine) {
+    public void setMedicine(Long medicine) {
         this.medicine = medicine;
     }
 
@@ -89,18 +89,18 @@ public class IndicationDto implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-        IndicationDto indicationDto = (IndicationDto) target;
-
-        if(indicationDto.getDosage() == null){
-            errors.rejectValue("dosage",null,"Không được để trống");
-        } else if (indicationDto.getDosage()<=0) {
-            errors.rejectValue("dosage",null,"Không được nhỏ hơn 0");
-        }
-
-        if(indicationDto.getFrequency() == null){
-            errors.rejectValue("frequency",null,"Không được để trống");
-        } else if (indicationDto.getDosage()<=0) {
-            errors.rejectValue("frequency",null,"Không được nhỏ hơn 0");
-        }
+//        IndicationDto indicationDto = (IndicationDto) target;
+//
+//        if(indicationDto.getDosage() == null){
+//            errors.rejectValue("dosage",null,"Không được để trống");
+//        } else if (indicationDto.getDosage()<=0) {
+//            errors.rejectValue("dosage",null,"Không được nhỏ hơn 0");
+//        }
+//
+//        if(indicationDto.getFrequency() == null){
+//            errors.rejectValue("frequency",null,"Không được để trống");
+//        } else if (indicationDto.getDosage()<=0) {
+//            errors.rejectValue("frequency",null,"Không được nhỏ hơn 0");
+//        }
     }
 }

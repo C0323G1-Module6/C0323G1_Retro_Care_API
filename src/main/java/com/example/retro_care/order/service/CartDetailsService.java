@@ -1,6 +1,6 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
 import com.example.retro_care.order.projection.MedicineProjection;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +85,86 @@ public class CartDetailsService implements ICartDetailsService{
     }
 
     /**
+
+     * author: VuNL
+     * date: 15/09/2023
+     * function: get list medicine by name
+     * @param name
+     * @return List Medicine
+     */
+    @Override
+    public List<IMedicineWhenSell> getMedicineByNameWhenOrder(String name) {
+        List<IMedicineWhenSell> list = iCartDetailsRepository.getMedicineByNameWhenSell(name);
+        System.out.println(list);
+        return list;
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * @param id
+     * @return List cart when sell
+     */
+    @Override
+    public List<ICartDetailProjectionWhenSell> getAllCardByAppUserId(Long id) {
+        return iCartDetailsRepository.getAllCardByAppUserId(id);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all prescription by name
+     * @param name
+     * @return list prescription
+     */
+    @Override
+    public List<IPrescriptionProjectionOrder> getAllPrescriptionByName(String name) {
+        return iCartDetailsRepository.getAllPrescriptionByName(name);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all prescription by symptoms
+     * @param symptoms
+     * @return list prescription
+     */
+    @Override
+    public List<IPrescriptionProjectionOrder> getAllPrescriptionBySymptoms(String symptoms) {
+        return iCartDetailsRepository.getAllPrescriptionBySymptoms(symptoms);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all indication from prescription id
+     *
+     * @param id
+     * @return list indication
+     */
+    @Override
+    public List<IIndicationProjectionOrder> getAllIndicationByPrescriptionId(Long id) {
+        return iCartDetailsRepository.getAllIndicationByPrescriptionId(id);
+    }
+
+    /**
+     * author: VuNL
+     * date create: 18/09/2023
+     * function: get name and user id of customer
+     * @param phone
+     * @return
+     */
+    @Override
+    public ICustomerProjectionWhenSell getCustomerNameAndUserId(String phone) {
+        return iCartDetailsRepository.getCustomerName(phone);
+    }
+
+    /**
+
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
@@ -107,4 +187,5 @@ public class CartDetailsService implements ICartDetailsService{
     public Long getLoyaltyPoint(Long appUserId) {
         return iCartDetailsRepository.getLoyaltyPoint(appUserId);
     }
+
 }

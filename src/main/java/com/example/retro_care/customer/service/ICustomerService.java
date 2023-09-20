@@ -7,6 +7,23 @@ import org.springframework.data.domain.Pageable;
 
 public interface ICustomerService {
     /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    int updateOnlineCustomer(Customer customer);
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+
+    boolean existsByEmail(String email, Long id);
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+
+    boolean existsByPhoneNumber(String phoneNumber, Long id);
+    /**
      * Author: TinDT
      * Goal: save customers
      */

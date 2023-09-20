@@ -27,6 +27,27 @@ import java.util.Map;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+    /**
+     * Author: HanhNLM
+     * Goal: update online customer
+     * return HttpStatus or error
+     */
+    @PatchMapping("/online-customer")
+    public ResponseEntity<?> updateOnlineCustomer(@RequestBody Customer customer){
+        Map<String, String> errors = new HashMap<>();
+        if(customerService.existsByEmail(customer.getEmail(), customer.getId())){
+            errors.put("email", "Email đã tồn tại trong hệ thống!");
+        }
+        if(customerService.existsByPhoneNumber(customer.getPhoneNumber(), customer.getId())){
+            errors.put("phoneNumber", "Số điện thoại đã tồn tại!");
+        }
+        if(errors.size() > 0){
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        }
+        customerService.updateOnlineCustomer(customer);
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
 
     /**
      * Author: TinDT
