@@ -1,7 +1,8 @@
 package com.example.retro_care.order.controller;
 
-
 import com.example.retro_care.order.projection.*;
+import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -179,7 +180,6 @@ public class CartDetailsController {
     public ResponseEntity<?> getInformationCustomer(@RequestParam("phone")String phone){
         ICustomerProjectionWhenSell customer = iCartDetailsService.getCustomerNameAndUserId(phone);
         return new ResponseEntity<>(customer, HttpStatus.OK);
-
     }
 
     /**
