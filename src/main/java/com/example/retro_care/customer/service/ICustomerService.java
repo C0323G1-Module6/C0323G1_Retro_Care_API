@@ -10,7 +10,6 @@ public interface ICustomerService {
     void updateCustomer(Customer customer);
     Customer findCustomerById(Long id);
     Customer findCustomerByCode(String code);
-    Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
+    Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
     boolean deleteCustomerById(Long id);
-    Page<Customer> findAllByName(Pageable pageable, String searchName);
 }

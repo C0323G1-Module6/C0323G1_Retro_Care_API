@@ -115,26 +115,14 @@ public class CustomerController {
      */
     @GetMapping("/list")
     public ResponseEntity<?> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                             @RequestParam(defaultValue = "", required = false) String search,
+                                             @RequestParam(defaultValue = "", required = false) String name,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
                                              @RequestParam(defaultValue = "", required = false) String phoneNumber,
                                              @RequestParam(defaultValue = "") String groupValue,
                                              @RequestParam(defaultValue = "") String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
-        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + search + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
-        if (customers.getTotalElements() != 0) {
-            return new ResponseEntity<>(customers, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/list-customer")
-    public ResponseEntity<?> getAll(@RequestParam(defaultValue = "0", required = false) int page,
-                                    @RequestParam(defaultValue = "", required = false) String searchName) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<Customer> customers = customerService.findAllByName(pageable, searchName);
-        System.out.println(customers.getContent());
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
         if (customers.getTotalElements() != 0) {
             return new ResponseEntity<>(customers, HttpStatus.OK);
         }
@@ -150,7 +138,7 @@ public class CustomerController {
     public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         boolean check = customerService.deleteCustomerById(id);
         if (check) {
