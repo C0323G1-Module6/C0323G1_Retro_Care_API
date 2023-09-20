@@ -18,10 +18,10 @@ public class PrescriptionDto implements Validator {
 
     private String note;
     private Integer duration;
-    private Patient patient;
+    private Long patient;
     private Boolean flagDeleted;
 
-    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Patient patient, Boolean flagDeleted) {
+    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Long patient, Boolean flagDeleted) {
         this.code = code;
         this.name = name;
         this.symptoms = symptoms;
@@ -31,7 +31,7 @@ public class PrescriptionDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public PrescriptionDto(Long id, String code, String name, String symptoms, String note, Integer duration, Patient patient, Boolean flagDeleted) {
+    public PrescriptionDto(Long id, String code, String name, String symptoms, String note, Integer duration, Long patient, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -45,11 +45,11 @@ public class PrescriptionDto implements Validator {
     public PrescriptionDto() {
     }
 
-    public Patient getPatient() {
+    public Long getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(Long patient) {
         this.patient = patient;
     }
 
@@ -119,7 +119,7 @@ public class PrescriptionDto implements Validator {
         PrescriptionDto prescriptionDto = (PrescriptionDto) target;
         if(prescriptionDto.code.equals("")){
             errors.rejectValue("code",null,"Không được để trống mã toa thuốc");
-        }else if(prescriptionDto.code.length()>=6){
+        }else if(prescriptionDto.code.length()>6){
             errors.rejectValue("code",null,"Độ dài mã toa thuốc không được dài hơn 6 ký tự");
         }
 
