@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.controller;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.dto.MedicineDto;
 import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.Medicine;
@@ -119,10 +120,10 @@ public class MedicineController {
      */
     @GetMapping("/get-medicine")
     @ResponseBody
-    public ResponseEntity<Page<Medicine>> medicineList(@RequestParam(defaultValue = "0", required = false) int page,
+    public ResponseEntity<Page<IMedicineListDto>> medicineList(@RequestParam(defaultValue = "0", required = false) int page,
                                                        @RequestParam(defaultValue = "5", required = false) int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Medicine> medicinePage = iMedicineService.findAll(pageable, "");
+        Page<IMedicineListDto> medicinePage = iMedicineService.findAll(pageable, "");
         if (medicinePage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -169,13 +170,13 @@ public class MedicineController {
      *         - If there is data, the list to search will be returned
      */
     @GetMapping("/search")
-    public ResponseEntity<Page<Medicine>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                                           @RequestParam(defaultValue = "5", required = false) Integer limit,
-                                                           @RequestParam(defaultValue = "code", required = false) String sort,
-                                                           @RequestParam(defaultValue = "",required = false) String searchInMedicine,
-                                                           @RequestParam(defaultValue = "", required = false) String search){
+    public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                                   @RequestParam(defaultValue = "5", required = false) Integer limit,
+                                                                   @RequestParam(defaultValue = "code", required = false) String sort,
+                                                                   @RequestParam(defaultValue = "",required = false) String searchInMedicine,
+                                                                   @RequestParam(defaultValue = "", required = false) String search){
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-        Page<Medicine> medicines;
+        Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
             case "searchByName":
                 medicines = iMedicineService.searchByNameMedicine(pageable,search);

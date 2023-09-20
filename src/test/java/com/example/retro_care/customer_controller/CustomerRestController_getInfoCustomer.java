@@ -24,7 +24,7 @@ public class CustomerRestController_getInfoCustomer {
     public void getInfoCustomer_id_1() throws Exception {
         this.mockMvc.perform(
                         MockMvcRequestBuilders
-                                .get("/customers/api/{id}", "1"))
+                                .get("/customers/api/{id}", "2"))
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful());
     }
