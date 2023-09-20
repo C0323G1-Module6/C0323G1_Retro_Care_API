@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -121,22 +122,13 @@ public class MedicineController {
     public ResponseEntity<Page<Medicine>> medicineList(@RequestParam(defaultValue = "0", required = false) int page,
                                                        @RequestParam(defaultValue = "5", required = false) int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Medicine> medicinePage = iMedicineService.findAll(pageable);
+        Page<Medicine> medicinePage = iMedicineService.findAll(pageable, "");
         if (medicinePage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
-    @GetMapping("/get-list")
-    @ResponseBody
-    public ResponseEntity<List<Medicine>> getListMedicine(){
-        List<Medicine> medicines = iMedicineService.getAll();
-        if (medicines.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(medicines, HttpStatus.OK);
-    }
 
     /**
      * author: DaoPTA
@@ -164,30 +156,45 @@ public class MedicineController {
     }
 
     /**
+     * Multi-field search method for medicine
+     * workday: 19/09/2023
      * author: DaoPTA
-     * workday: 18/09/2023
-     * Search by name Medicine
      *
-     * @param page         Pagination after search
-     * @param limit        Limit the number per page
-     * @param sort         Arrange records in each page
-     * @param searchByName value when filtering
-     * @return ResponseEntity<?>
+     * @param page parameters for paging
+     * @param limit Limit the number of records in the page
+     * @param sort Sorted by medicine code
+     * @param searchInMedicine parameters contain different search methods
+     * @param search Search by input box
+     * @return - If empty, list medicine will be returned
+     *         - If there is data, the list to search will be returned
      */
     @GetMapping("/search")
-    public ResponseEntity<Page<Medicine>> searchMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                                         @RequestParam(defaultValue = "5", required = false) Integer limit,
-                                                         @RequestParam(defaultValue = "code", required = false) String sort,
-                                                         @RequestParam(defaultValue = "", name = "searchByName", required = false) String searchByName,
-                                                         @RequestParam(defaultValue = "", name = "searchByCode", required = false) String searchByCode,
-                                                         @RequestParam(defaultValue = "", name = "searchByActiveElement", required = false) String searchByActiveElement,
-                                                         @RequestParam(defaultValue = "", name = "searchByNameKindOf", required = false) String searchByNameKindOf) {
+    public ResponseEntity<Page<Medicine>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                           @RequestParam(defaultValue = "5", required = false) Integer limit,
+                                                           @RequestParam(defaultValue = "code", required = false) String sort,
+                                                           @RequestParam(defaultValue = "",required = false) String searchInMedicine,
+                                                           @RequestParam(defaultValue = "", required = false) String search){
         Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement, searchByNameKindOf);
+        Page<Medicine> medicines;
+        switch (searchInMedicine){
+            case "searchByName":
+                medicines = iMedicineService.searchByNameMedicine(pageable,search);
+                break;
+            case "searchByCode":
+               medicines = iMedicineService.searchByCodeMedicine(pageable,search);
+                break;
+            case "searchByActiveElement":
+               medicines = iMedicineService.searchActiveElement(pageable,search);
+                break;
+            case "searchByNameKindOfMedicine":
+               medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                break;
+            default:
+                medicines = iMedicineService.findAll(pageable,search);
+        }
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        System.out.println(medicines);
-        return new ResponseEntity<>(medicines, HttpStatus.OK);
+        return new  ResponseEntity<>(medicines, HttpStatus.OK);
     }
 }
