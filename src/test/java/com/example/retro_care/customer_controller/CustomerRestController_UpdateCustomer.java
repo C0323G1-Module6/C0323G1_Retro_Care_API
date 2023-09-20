@@ -37,10 +37,10 @@ public class CustomerRestController_UpdateCustomer {
         customerDto.setEmail("hoangnguyen@gmail.com");
         customerDto.setNote("Khách vip");
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.patch("/customers/api/update/ ")
+                        MockMvcRequestBuilders.patch("/customers/api/update/1")
                                 .content(this.objectMapper.writeValueAsString(customerDto))
                                 .contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andDo(print()).andExpect(status().is4xxClientError());
+                .andDo(print()).andExpect(status().is2xxSuccessful());
     }
     /**
      * This function is used to check that the id parameter does not exist

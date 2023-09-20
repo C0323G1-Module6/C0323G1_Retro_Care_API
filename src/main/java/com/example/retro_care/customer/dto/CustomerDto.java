@@ -187,9 +187,6 @@ public class CustomerDto implements Validator {
         } else if (!customerDto.getPhoneNumber().matches("(84|0[3|5|7|8|9])+([0-9]{8})\\b")) {
             errors.rejectValue("phoneNumber", null, "Bạn nhập sai định dạng số điện thoại!");
         }
-//             else if (customerService.findCustomerByPhone(customerDto.getPhoneNumber()) != null) {
-//            errors.rejectValue("phoneNumber", null, "Số điện thoại đã được đăng ký!");}
-
         // Check email
         if (customerDto.getEmail() == null) {
             errors.rejectValue("email", null, "Vui lòng bổ sung email khách hàng");

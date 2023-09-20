@@ -1,13 +1,19 @@
 package com.example.retro_care.indication.controller;
 
+import com.example.retro_care.indication.dto.IndicationDto;
 import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.indication.service.IIndicationService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -23,8 +29,15 @@ public class IndicationController {
      */
     @GetMapping("/indication/{id}")
     public ResponseEntity<List<Indication>> getIndication(@PathVariable Long id) {
-        List<Indication> indicationList = indicationService.getAllIndication(id);
-        return new ResponseEntity<>(indicationList, HttpStatus.OK);
+        List<Indication> indications = indicationService.getAll();
+        for (Indication i: indications) {
+            if(i.getId() == id) {
+                List<Indication> indicationList = indicationService.getAllIndication(id);
+                return new ResponseEntity<>(indicationList, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
     }
 
     /**
@@ -45,10 +58,20 @@ public class IndicationController {
      * Goal:get indication by id
      * Date:17/09/2023
      * return http status
-     * @param indication
+     * @param indicationDto
      */
     @PostMapping("/indication/create")
-    public ResponseEntity<?> createIndication(@RequestBody Indication indication) {
+    public ResponseEntity<?> createIndication(@RequestBody IndicationDto indicationDto, BindingResult bindingResult) {
+        Indication indication = new Indication();
+        new IndicationDto().validate(indicationDto,bindingResult);
+        if(bindingResult.hasErrors()){
+            Map<String,String> errors = new HashMap<>();
+            for (FieldError e: bindingResult.getFieldErrors()) {
+                errors.put(e.getField(),e.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
+        }
+        BeanUtils.copyProperties(indicationDto,indication);
         indicationService.createIndication(indication);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -58,11 +81,21 @@ public class IndicationController {
      * Goal:get indication by id
      * Date:17/09/2023
      * return http status
-     * @param indication
+     * @param indicationDto
      */
-    @PutMapping("/indication/edit")
-    public ResponseEntity<?> editIndication(@RequestBody Indication indication) {
+    @PatchMapping("/indication/edit")
+    public ResponseEntity<?> editIndication(@RequestBody IndicationDto indicationDto,BindingResult bindingResult) {
+        Indication indication = new Indication();
+        new IndicationDto().validate(indicationDto,bindingResult);
+        if(bindingResult.hasErrors()){
+            Map<String,String> errors = new HashMap<>();
+            for (FieldError e: bindingResult.getFieldErrors()) {
+                errors.put(e.getField(),e.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
+        }
+        BeanUtils.copyProperties(indicationDto,indication);
         indicationService.editIndication(indication);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
