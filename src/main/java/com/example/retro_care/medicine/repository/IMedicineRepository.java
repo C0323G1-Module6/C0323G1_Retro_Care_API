@@ -101,6 +101,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    m.quantity AS quantity," +
             "    m.vat AS vat," +
             "    m.price AS price," +
+            " m.retail_profits AS retailProfits," +
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
             "    id.discount AS discount," +
