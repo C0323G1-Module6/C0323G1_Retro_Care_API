@@ -1,14 +1,7 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.medicine.repository.IMedicineRepository;
-import com.example.retro_care.order.model.ICartDetailProjectionWhenSell;
-import com.example.retro_care.order.model.IIndicationProjectionOrder;
-import com.example.retro_care.order.model.IMedicineWhenSell;
-import com.example.retro_care.order.model.IPrescriptionProjectionOrder;
-import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
-import com.example.retro_care.order.projection.MedicineQuantityProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -117,6 +110,18 @@ public class CartDetailsService implements ICartDetailsService{
     @Override
     public List<IIndicationProjectionOrder> getAllIndicationByPrescriptionId(Long id) {
         return iCartDetailsRepository.getAllIndicationByPrescriptionId(id);
+    }
+
+    /**
+     * author: VuNL
+     * date create: 18/09/2023
+     * function: get name and user id of customer
+     * @param phone
+     * @return
+     */
+    @Override
+    public ICustomerProjectionWhenSell getCustomerNameAndUserId(String phone) {
+        return iCartDetailsRepository.getCustomerName(phone);
     }
 
 

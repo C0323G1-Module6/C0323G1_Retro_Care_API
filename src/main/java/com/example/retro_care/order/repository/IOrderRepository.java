@@ -1,8 +1,8 @@
 package com.example.retro_care.order.repository;
 
-import com.example.retro_care.order.model.IOrderProjection;
+import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-import com.sun.tools.javac.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +15,7 @@ import javax.transaction.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -68,14 +69,13 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * date create: 15/09/2023
      *
      * @param code
-     * @param localDate
      * @param note
      */
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into orders(code, date_time, flag_delete, note)\n" +
-            "values (:code, :date_time, false, :note)")
-    void createOrder(@Param("code") String code, @Param("date_time") LocalDate localDate, @Param("note") String note);
+    @Query(nativeQuery = true, value = "insert into orders(code, date_time, flag_deleted, note)\n" +
+            "values (:code, localtime(), false, :note)")
+    void createOrder(@Param("code") String code, @Param("note") String note);
 
 
     /**
@@ -85,9 +85,8 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      *
      * @return the newest orders
      */
-    @Query(nativeQuery = true, value = "select id, code, date_time, flag_delete, note from order " +
-            "where id=last_insert_id() and flag_delete = false")
-    Orders getLastInsertOrders();
+    @Query(nativeQuery = true, value = "SELECT MAX(id) FROM orders WHERE flag_deleted = false")
+    Long getLastInsertOrders();
 
 
 
@@ -159,7 +158,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Transactional
     @Modifying
-    @Query(value = "update orders set flag_delete = true where id = :id", nativeQuery = true)
+    @Query(value = "update orders set flag_deleted = true where id = :id", nativeQuery = true)
     void deleteOrder(@Param("id") Long id);
 
     /**

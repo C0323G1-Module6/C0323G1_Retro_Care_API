@@ -1,12 +1,6 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.ICartDetailProjectionWhenSell;
-import com.example.retro_care.order.model.IIndicationProjectionOrder;
-import com.example.retro_care.order.model.IMedicineWhenSell;
-import com.example.retro_care.order.model.IPrescriptionProjectionOrder;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineQuantityProjection;
-import org.springframework.data.repository.query.Param;
+import com.example.retro_care.order.projection.*;
 
 import java.util.List;
 
@@ -72,4 +66,13 @@ public interface ICartDetailsService {
      * @return list indication
      */
     List<IIndicationProjectionOrder> getAllIndicationByPrescriptionId(Long id);
+
+    /**
+     * author: VuNL
+     * date create: 18/09/2023
+     * function: get name and user id of customer
+     * @param phone
+     * @return
+     */
+    ICustomerProjectionWhenSell getCustomerNameAndUserId(String phone);
 }

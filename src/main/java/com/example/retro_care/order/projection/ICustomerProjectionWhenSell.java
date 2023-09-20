@@ -1,4 +1,4 @@
-package com.example.retro_care.order.model;
+package com.example.retro_care.order.projection;
 
 public interface ICustomerProjectionWhenSell {
     String getName();

@@ -1,11 +1,6 @@
 package com.example.retro_care.order.controller;
 
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.order.model.ICartDetailProjectionWhenSell;
-import com.example.retro_care.order.model.IIndicationProjectionOrder;
-import com.example.retro_care.order.model.IMedicineWhenSell;
-import com.example.retro_care.order.model.IPrescriptionProjectionOrder;
-import com.example.retro_care.order.projection.MedicineQuantityProjection;
+import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.service.ICartDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,10 +31,14 @@ public class CartDetailsController {
     public ResponseEntity<?> addToCartCart(@RequestParam("appUserId") Long appUserId,
                                            @RequestParam("medicineId") Long medicineId,
                                            @RequestParam("quantity") Integer quantity) {
-
+        System.out.println(appUserId);
+        System.out.println(medicineId);
+        System.out.println(quantity);
         iCartDetailsService.addToCart(appUserId, medicineId, quantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
     @DeleteMapping("/delete-all")
     public ResponseEntity<?> clearAllCartFrom(@RequestParam("appUserId") Long appUserId) {
@@ -136,6 +135,12 @@ public class CartDetailsController {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/getInforCustomer")
+    public ResponseEntity<?> getInformationCustomer(@RequestParam("phone")String phone){
+        ICustomerProjectionWhenSell customer = iCartDetailsService.getCustomerNameAndUserId(phone);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
     }
 
 }
