@@ -114,6 +114,7 @@ public class OrderController {
         return new ResponseEntity<>(orders, HttpStatus.OK);
     }
 
+
     @PostMapping("/createOrder")
     public ResponseEntity<?> createNewOrderWhenSell(@RequestParam("customerUserId") Long customerUserId,
                                                     @RequestParam("employeeUserId") Long employeeUserId,
@@ -124,18 +125,29 @@ public class OrderController {
         return new ResponseEntity<>( HttpStatus.OK);
     }
 
-    @PostMapping("/create")
-    public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId) {
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create order and update loyalty point, then send email as billing;
+     * @param : appUserId, loyalty point;
+     * @return : HTTPStatus;
+     */
+    @PostMapping("/create")
+    public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId,
+                                            @RequestParam("loyaltyPoint") Long loyaltyPoint,
+                                            @RequestParam("totalPrice") Long totalPrice){
+        System.out.println(totalPrice);
+        System.out.println(loyaltyPoint);
         // prepare and send email
         List<CartProjection> cartsForBill = iCartDetailsService.findCartDetailsByUserId(appUserId);
         System.out.println(cartsForBill);
         String subject = "Billing and Thank You Letter from RetroCare!";
         String message = "Hi " + cartsForBill.get(0).getCustomerEmail() + "!";
-        EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, cartsForBill);
+        EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, totalPrice, cartsForBill);
         iEmailSenderService.sendEmail(emailMessage);
         // after sending mail then create order and clear cart
-        iOrderService.createOrderForUser(appUserId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        iOrderService.createOrderForUser(appUserId,loyaltyPoint);
+        return new ResponseEntity<>( totalPrice, HttpStatus.OK);
     }
 }
