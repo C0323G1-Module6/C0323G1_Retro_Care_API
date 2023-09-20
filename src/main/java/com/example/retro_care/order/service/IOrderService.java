@@ -3,7 +3,6 @@ package com.example.retro_care.order.service;
 import com.example.retro_care.order.projection.IMedicineWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -75,18 +74,6 @@ public interface IOrderService {
 
 
 
-
-
-    /**
-     * Create by: HanhNLM;
-     * Create Date: 15/09/2023;
-     * Function: create new order and update loyalty point of a customer;
-     * @param : appUserId, loyaltyPoint;
-     */
-    void createOrderForUser(Long appUserId, Long loyaltyPoint);
-
-
-
     /**
      * author: VuNL
      * date: 15/09/2023
@@ -96,11 +83,17 @@ public interface IOrderService {
      * @param note
      * @return return true if success, false if fail
      */
+
     String doEverythingWhenPay(Long customerUserId, Long employeeUserId,String code, String note);
 
 
-
-
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     * @param : appUserId, loyaltyPoint;
+     */
+    void createOrderForUser(Long appUserId, Long loyaltyPoint);
 
 
 }
