@@ -40,7 +40,7 @@ public class PrescriptionController_getAllPrescription {
     @Test
     public void getAllPrescription_5() throws Exception {
         this.mockMvc.perform(
-                        MockMvcRequestBuilders.get("/prescription?page=1"))
+                        MockMvcRequestBuilders.get("/prescription?page=9"))
                 .andDo(print())
                 .andExpect(status().is(204)
                 );

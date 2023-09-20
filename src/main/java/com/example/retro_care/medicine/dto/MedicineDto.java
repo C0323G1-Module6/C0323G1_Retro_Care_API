@@ -24,9 +24,6 @@ public class MedicineDto implements Validator {
     private Float vat;
     private String note;
 
-
-
-
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
