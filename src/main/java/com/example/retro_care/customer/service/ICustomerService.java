@@ -28,6 +28,7 @@ public interface ICustomerService {
      * return customer
      */
     Customer findCustomerByCode(String code);
+
     /**
      * Author: TinDT
      * Goal: find customers by email
@@ -40,6 +41,16 @@ public interface ICustomerService {
      * return customer
      */
     Customer findCustomerByPhone(String phoneNumber);
-    Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
+    /**
+     * Author: QuyenHT
+     * Goal: find all customers
+     * return customers
+     */
+    Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
+     /**
+     * Author: QuyenHT
+     * Goal: delete customers
+     * return res
+     */
     boolean deleteCustomerById(Long id);
 }

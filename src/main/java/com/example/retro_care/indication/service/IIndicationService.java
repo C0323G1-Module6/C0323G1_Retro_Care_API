@@ -11,4 +11,5 @@ public interface IIndicationService {
     void removeIndication(Long idIndication);
     void editIndication(Indication indication);
     List<Indication> getAll();
+    Long maxId();
 }
