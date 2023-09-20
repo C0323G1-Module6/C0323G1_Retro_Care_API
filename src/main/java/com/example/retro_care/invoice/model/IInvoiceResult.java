@@ -9,17 +9,12 @@ import java.util.Date;
 public interface IInvoiceResult {
     String getCode();
     Long getId();
-
     String getDocumentNumber();
-
     Date getCreationDay();
     Date getCreationDate();
     Time getCreationTime();
-
     String getNote();
-
     Double getTotal();
-
     Double getBillOwed();
     Supplier getSupplier();
     String getName();
