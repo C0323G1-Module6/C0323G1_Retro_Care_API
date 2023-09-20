@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -116,11 +117,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<Invoice> findAllInvoice(Pageable pageable) {
-        return invoiceRepository.findAllInvoice(pageable);
-    }
-
-    @Override
     public Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable) {
         return invoiceRepository.findAllInvoiceResult(pageable);
     }
@@ -143,6 +139,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.findById(id).get();
     }
 
+    @Override
+    public List<IInvoiceResult> getInvoiceDetailById(Long id) {
+        return invoiceRepository.getInvoiceDetailById(id);
+    }
+
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -158,9 +159,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<Invoice> searchInvoice(Pageable pageable, String startDate, String endDate, String startTime, String
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String
             endTime, String sortColumn) {
-        return invoiceRepository.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
+        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
     }
-
 }
