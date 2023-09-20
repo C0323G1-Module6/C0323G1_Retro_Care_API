@@ -107,7 +107,6 @@ public class InvoiceController {
      * @param sortColumn
      * @return
      */
-
     @GetMapping("/search/result")
     public ResponseEntity<?> searchInvoiceResult(@RequestParam(required = false) Integer page,
                                            @RequestParam(required = false) Integer size,
