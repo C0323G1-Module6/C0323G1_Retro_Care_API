@@ -78,80 +78,78 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/login-by-facebook/**",
                         "/api/user/register-by-customer/**",
                         "/api/user/logout/**",
-                        "/api/home",
+                        "/api/home/**",
                         "/api/home/search/**",
-                        "api/home/favorite/**",
-                        "/api/orders",
-                        "/api/orders/list/**",
-                        "/api/orders",
-                        "/api/orders/{id}"
+                        "/api/home/favorite/**"
 
-                ).permitAll()
+                ).anonymous()
                 .antMatchers(
-                        //Authen Role admin, manager
-                        "/api/user/register-by-manager/**"
-                )
-                .hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
-
+                        "/api/orders/**",
+                        "/api/orders/list/**",
+                        "/api/orders/{id}/**").hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER","ROLE_CUSTOMER","ROLE_EMPLOYEE")
                 .antMatchers(
                         //Authen Role admin and manager
-                        "/api/invoice",
+                        "/api/user/register-by-manager/**",
+                        "/api/invoice/**",
                         "/api/invoice/delete/{id}/**",
                         "/api/invoice/search/**",
-                        "/api/invoice/create",
-                        "/api/invoice/{invoiceId}",
-                        "/api/invoice/edit",
-                        "/api/invoice/code",
-                        "/api/kindOfMedicine",
-                        "/api/kindOfMedicine/{id}",
-                        "/api/kindOfMedicine/create",
+                        "/api/invoice/create/**",
+                        "/api/invoice/{invoiceId}/**",
+                        "/api/invoice/edit/**",
+                        "/api/invoice/code/**",
+                        "/api/kindOfMedicine/**",
+                        "/api/kindOfMedicine/{id}/**",
+                        "/api/kindOfMedicine/create/**",
                         "/api/kindOfMedicine/edit/{id}",
-                        "/api/kindOfMedicine/get",
-                        "/api/medicine/{id}",
-                        "/api/medicine",
-                        "/api/medicine/get-medicine",
-                        "/api/medicine/get-list",
-                        "/api/medicine/search",
-                        "/customers/api/dto/create",
-                        "/customers/api/create",
-                        "/customers/api/update/{id}",
-                        "/customers/api/{id}",
-                        "/customers/api/list",
-                        "/customers/api/list-customer",
-                        "/customers/api/delete/{id}",
-                        "/supplier",
-                        "/supplier/delete/{id}",
-                        "/supplier/create-supplier",
-                        "/supplier/update-supplier/{id}",
-                        "/supplier/detail-supplier/{id}",
-                        "/supplier/{id}",
-                        "/employees/create",
-                        "/employees/{id}",
-                        "/employees/update/{id}",
-                        "/employees/list/{page}/{limit}/{sort}",
-                        "/employees/delete-employee",
-                        "/indication/{id}",
-                        "/indication/delete/{id}",
-                        "/indication/create",
-                        "/indication/edit",
-                        "/prescription",
-                        "/prescription/create",
-                        "/prescription/{id}",
-                        "/prescription/delete/{id}",
-                        "/prescription/edit/{id}",
-                        "/patient",
-                        "/api/report/general",
-                        "/api/report/chart/revenue",
-                        "/api/report//chart/profit"
+                        "/api/kindOfMedicine/get/**",
+                        "/api/medicine/{id}/**",
+                        "/api/medicine/**",
+                        "/api/medicine/get-medicine/**",
+                        "/api/medicine/get-list/**",
+                        "/api/medicine/search/**",
+                        "/customers/api/dto/create/**",
+                        "/customers/api/create/**",
+                        "/customers/api/update/{id}/**",
+                        "/customers/api/{id}/**",
+                        "/customers/api/list/**",
+                        "/customers/api/list-customer/**",
+                        "/customers/api/delete/{id}/**",
+                        "/supplier/**",
+                        "/supplier/delete/{id}/**",
+                        "/supplier/create-supplier/**",
+                        "/supplier/update-supplier/{id}/**",
+                        "/supplier/detail-supplier/{id}/**",
+                        "/supplier/{id}/**",
+                        "/employees/create/**",
+                        "/employees/{id}/**",
+                        "/employees/update/{id}/**",
+                        "/employees/list/{page}/{limit}/{sort}/**",
+                        "/employees/delete-employee/**",
+                        "/indication/{id}/**",
+                        "/indication/delete/{id}/**",
+                        "/indication/create/**",
+                        "/indication/edit/**",
+                        "/prescription/**",
+                        "/prescription/create/**",
+                        "/prescription/{id}/**",
+                        "/prescription/delete/{id}/**",
+                        "/prescription/edit/{id}/**",
+                        "/patien/**",
+                        "/api/report/general/**",
+                        "/api/report/chart/revenue/**",
+                        "/api/report//chart/profit/**"
 
                 ).hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
+
                 .anyRequest()
                 .authenticated()
                 .and()
-                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                .and().
+                sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+//        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 //        httpSecurity
 //                .authorizeRequests()
 //                .anyRequest().permitAll()
