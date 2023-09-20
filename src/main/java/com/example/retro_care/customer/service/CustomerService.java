@@ -22,7 +22,8 @@ public class CustomerService implements ICustomerService {
     public Customer saveCustomer(Customer customer) {
         customer.setFlagDeleted(true);
         customer.setPoint(0l);
-        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted(),customer.getAppUser().getId());
+        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
+
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
     }
@@ -34,7 +35,9 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getId());
+        System.out.println(customer);
+        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
+
     }
 
     /**
@@ -55,6 +58,24 @@ public class CustomerService implements ICustomerService {
     @Override
     public Customer findCustomerByCode(String code) {
         return customerRepository.findCustomerByCode(code);
+    }
+    /**
+     * Author: TinDT
+     * Goal: find customer by email
+     * * return customer
+     */
+    @Override
+    public Customer findCustomerByEmail(String email) {
+        return customerRepository.findCustomerByEmail(email);
+    }
+    /**
+     * Author: TinDT
+     * Goal: find customer by email
+     * * return customer
+     */
+    @Override
+    public Customer findCustomerByPhone(String phoneNumber) {
+        return customerRepository.findCustomerByPhoneNumber(phoneNumber);
     }
 
     /**

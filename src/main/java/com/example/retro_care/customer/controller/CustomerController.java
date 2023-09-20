@@ -1,6 +1,6 @@
 package com.example.retro_care.customer.controller;
 
-import com.example.retro_care.customer.dto.CreatCode;
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.customer.dto.CustomerDto;
 import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
@@ -36,7 +36,7 @@ public class CustomerController {
     @GetMapping("/dto/create")
     public ResponseEntity<CustomerDto> getCustomerForCreate() {
         CustomerDto customerDto = new CustomerDto();
-        String customerCode = CreatCode.generateCustomerCode();
+        String customerCode = FormatCustomer.generateCustomerCode();
         while (true) {
             if (customerService.findCustomerByCode(customerCode) == null) {
                 break;
@@ -57,17 +57,28 @@ public class CustomerController {
     @PostMapping("/create")
     public ResponseEntity<?> saveCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
-        Customer saveCustomer;
+        Map<String, String> errors = new HashMap<>();
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
+
+        }
+        Customer customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
+        if (customerCheck != null){
+            errors.put("email","Email đã được đăng ký");
+        }
+        Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+        if (customerCheckPhone != null) {
+            errors.put("phoneNumber", "Số điện thoại đã được đăng ký");
+        }
+        if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         BeanUtils.copyProperties(customerDto, customer);
-        saveCustomer = customerService.saveCustomer(customer);
+         customerService.saveCustomer(customer);
+
             return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }
@@ -77,19 +88,37 @@ public class CustomerController {
      * Goal: update information of customer
      * * return HttpStatus
      */
-    @PatchMapping("/update")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
-        new CustomerDto().validate(customerDto, bindingResult);
-
+    @PatchMapping("/update/{id}")
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
+        Customer customer= customerService.findCustomerById(id);
+        new CustomerDto().validate(customerDto,bindingResult);
+        Map<String, String> errors = new HashMap<>();
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
+        }
+        if (!(customer.getEmail().equals(customerDto.getEmail()))){
+            Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
+            if (customerCheckEmail != null){
+                errors.put("email","Email đã tồn tại");
+            }
+        }
+        if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))){
+            Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+            if (customerCheckPhone != null){
+                errors.put("phoneNumber","Số điện thoại đã tồn tại");
+            }
+        }
+        if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        Customer customer = new Customer();
-        BeanUtils.copyProperties(customerDto, customer);
+        if (customer==null){
+            return new ResponseEntity<>("Không tìm thấy thông tin khách hàng",HttpStatus.NOT_FOUND);
+        }
+        BeanUtils.copyProperties(customerDto,customer);
+        customer.setId(id);
+
         customerService.updateCustomer(customer);
         return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
     }
@@ -103,8 +132,11 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> detailCustomer(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
+        if (customer == null){
+            return new ResponseEntity<>("Không tìm thấy khách hàng", HttpStatus.NOT_FOUND);
+        }
         CustomerDto customerDto = new CustomerDto();
-        BeanUtils.copyProperties(customer, customerDto);
+                BeanUtils.copyProperties(customer, customerDto);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
@@ -118,6 +150,7 @@ public class CustomerController {
                                              @RequestParam(defaultValue = "", required = false) String name,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
+
                                              @RequestParam(defaultValue = "", required = false) String phoneNumber,
                                              @RequestParam(defaultValue = "") String groupValue,
                                              @RequestParam(defaultValue = "") String sortItem) {
