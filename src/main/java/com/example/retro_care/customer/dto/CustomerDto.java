@@ -207,7 +207,7 @@ public class CustomerDto implements Validator {
             errors.rejectValue("code",null,"Mã code quá ký tự cho phép");
         } else if (customerDto.getCode().length() < 4) {
             errors.rejectValue("code",null,"Mã code không đủ độ dài cho phép");
-        } else if (!customerDto.getCode().matches("^KH-\\d+$")) {
+        } else if (!customerDto.getCode().matches("^KH\\d+$")) {
             errors.rejectValue("code",null,"Mã code không đúng định dạng");
         }
 
