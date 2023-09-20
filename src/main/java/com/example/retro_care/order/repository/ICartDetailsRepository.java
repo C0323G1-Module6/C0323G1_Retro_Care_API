@@ -1,5 +1,7 @@
 package com.example.retro_care.order.repository;
 
+
+import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.model.CartDetails;
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
@@ -92,6 +94,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "GROUP BY m.id")
     MedicineProjection getMedicine(@Param("medicineId") Long medicineId);
 
+
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -105,6 +108,82 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
 
 
     /**
+
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: find medicine when sell offline
+     *
+     * @param name
+     * @return List medicine
+     */
+    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
+            "where name like :name% and flag_deleted = false")
+    List<IMedicineWhenSell> getMedicineByNameWhenSell(@Param("name") String name);
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get all cart of employee when sell
+     * @param id
+     * @return List cart when sell
+     */
+    @Query(nativeQuery = true, value = "select c.id as cd_id, c.quantity as cd_quantity, m.id as m_id," +
+            " m.name, m.code, m.price, m.quantity as m_quantity, u.conversion_unit " +
+            "from cart_details c join medicine m on m.id = c.medicine_id join unit_detail u on m.id = u.medicine_id " +
+            "where c.app_user_id = :id ")
+    List<ICartDetailProjectionWhenSell> getAllCardByAppUserId(@Param("id") Long id);
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all prescription by name
+     * @param name
+     * @return list prescription
+     */
+    @Query(nativeQuery = true, value = "select p.id, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
+            "from prescription p join patient pa \n" +
+            "on p.patient_id = pa.id where p.name like %:name% and p.flag_deleted = false")
+    List<IPrescriptionProjectionOrder> getAllPrescriptionByName(@Param("name")String name);
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all prescription by symptoms
+     * @param symptoms
+     * @return list prescription
+     */
+    @Query(nativeQuery = true, value = "select p.id, p.code, p.name, p.symptoms, p.note, pa.name as patient_name \n" +
+            "from prescription p join patient pa \n" +
+            "on p.patient_id = pa.id where p.symptoms like %:symptoms% and p.flag_deleted = false")
+    List<IPrescriptionProjectionOrder> getAllPrescriptionBySymptoms(@Param("symptoms")String symptoms);
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all indication from prescription id
+     * @param id
+     * @return list indication
+     */
+    @Query(nativeQuery = true, value = "select i.id,i.dosage,i.frequency,i.medicine_id,m.name from indication i \n" +
+            "join medicine m on m.id = i.medicine_id where i.prescription_id = :id")
+    List<IIndicationProjectionOrder> getAllIndicationByPrescriptionId(@Param("id") Long id);
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get name and user app id of customer from phone number
+     * @param phone
+     * @return name and app user id
+     */
+    @Query(nativeQuery = true, value = "select c.name, c.app_user_id from customer c " +
+            "where c.phone_number = :phone and c.flag_deleted = false")
+    ICustomerProjectionWhenSell getCustomerName(@Param("phone") String phone);
+
+    /**
+
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
@@ -124,6 +203,5 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      */
     @Query(nativeQuery = true, value = "select c.point from customer c where c.app_user_id = :appUserId")
     Long getLoyaltyPoint(@Param("appUserId") Long appUserId);
-
 
 }

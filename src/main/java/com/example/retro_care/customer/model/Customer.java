@@ -10,17 +10,17 @@ public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(20)")
+    @Column(columnDefinition = "varchar(20)", unique = true)
     private String code;
     @Column(columnDefinition = "varchar(100)")
     private String name;
     @Column(name = "birth_day", columnDefinition = "date")
-    private String birthday;
+    private String birthDay;
     @Column(columnDefinition = "varchar(255)")
     private String address;
-    @Column(name = "phone_number",columnDefinition = "varchar(20)")
+    @Column(name = "phone_number",columnDefinition = "varchar(20)", unique = true)
     private String phoneNumber;
-    @Column(columnDefinition = "varchar(100)")
+    @Column(columnDefinition = "varchar(100)", unique = true)
     private String email;
     private Long point;
     @Column(columnDefinition = "text")
@@ -38,7 +38,7 @@ public class Customer {
         this.id = id;
         this.code = code;
         this.name = name;
-        this.birthday = birthday;
+        this.birthDay = birthday;
         this.address = address;
         this.phoneNumber = phoneNumber;
         this.email = email;
@@ -47,7 +47,14 @@ public class Customer {
         this.flagDeleted = flagDeleted;
         this.appUser = appUser;
     }
-
+    // HANHNLM 's constructor
+    public Customer(String name, String phoneNumber, String email, String address, String note){
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.note = note;
+    }
     public Long getId() {
         return id;
     }
@@ -73,11 +80,11 @@ public class Customer {
     }
 
     public String getBirthday() {
-        return birthday;
+        return birthDay;
     }
 
     public void setBirthday(String birthday) {
-        this.birthday = birthday;
+        this.birthDay = birthday;
     }
 
     public String getAddress() {
@@ -134,5 +141,22 @@ public class Customer {
 
     public void setAppUser(AppUser appUser) {
         this.appUser = appUser;
+    }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", birthDay='" + birthDay + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", point=" + point +
+                ", note='" + note + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", appUser=" + appUser +
+                '}';
     }
 }

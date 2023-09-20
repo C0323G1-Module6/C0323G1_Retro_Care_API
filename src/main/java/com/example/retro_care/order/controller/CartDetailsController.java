@@ -1,5 +1,6 @@
 package com.example.retro_care.order.controller;
 
+
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
@@ -8,11 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 @Controller
 @CrossOrigin
@@ -21,8 +20,6 @@ public class CartDetailsController {
 
     @Autowired
     private ICartDetailsService iCartDetailsService;
-
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -33,7 +30,7 @@ public class CartDetailsController {
     @PostMapping("/add-from-home-details")
     public ResponseEntity<?> addToCartFromHomeAndDetails(@RequestParam("appUserId") Long appUserId,
                                                          @RequestParam("medicineId") Long medicineId,
-                                                         @RequestParam("newQuantity") Integer newQuantity){
+                                                         @RequestParam("newQuantity") Integer newQuantity) {
         iCartDetailsService.addToCartFromDetailsAndHome(appUserId, medicineId, newQuantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -47,9 +44,11 @@ public class CartDetailsController {
      */
     @PostMapping("/add-from-cart")
     public ResponseEntity<?> addToCartCart(@RequestParam("appUserId") Long appUserId,
-                                                         @RequestParam("medicineId") Long medicineId,
-                                                         @RequestParam("quantity") Integer quantity){
-
+                                           @RequestParam("medicineId") Long medicineId,
+                                           @RequestParam("quantity") Integer quantity) {
+        System.out.println(appUserId);
+        System.out.println(medicineId);
+        System.out.println(quantity);
         iCartDetailsService.addToCart(appUserId, medicineId, quantity);
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -97,9 +96,91 @@ public class CartDetailsController {
      */
     @GetMapping("/check-quantity")
     public ResponseEntity<?> checkQuantity(@RequestParam("medicineId") Long medicineId,
-                                           @RequestParam("inputQuantity") Long inputQuantity){
+                                           @RequestParam("inputQuantity") Long inputQuantity) {
         System.out.println(medicineId);
+        MedicineProjection med = iCartDetailsService.getMedicineToCheckAndDisplay(medicineId);
+        if(med.getQuantity() >= (inputQuantity * med.getConversion_Rate())){
+            return new ResponseEntity<>( HttpStatus.OK);
+        } else return new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
+    }
 
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get list medicine by name
+     * @param name
+     * @return list medicine
+     */
+    @GetMapping("/getMedicine")
+    public ResponseEntity<?> getMedicine(@RequestParam("name") String name) {
+        List<IMedicineWhenSell> list = iCartDetailsService.getMedicineByNameWhenOrder(name);
+        System.out.println(list);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get all cart details by user
+     * @param id
+     * @return
+     */
+    @GetMapping("/getAllCartDetailsByUser")
+    public ResponseEntity<?> getAllCartDetailByUser(@RequestParam("id") Long id) {
+        List<ICartDetailProjectionWhenSell> list = iCartDetailsService.getAllCardByAppUserId(id);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get prescription by name
+     * @param name
+     * @return list prescription
+     */
+    @GetMapping("/getPrescriptionByName")
+    public ResponseEntity<?> getAllPrescriptionByName(@RequestParam("name") String name) {
+        List<IPrescriptionProjectionOrder> list = iCartDetailsService.getAllPrescriptionByName(name);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get prescription by sumptoms
+     * @param symptoms
+     * @return list prescription
+     */
+    @GetMapping("/getPrescriptionBySymptoms")
+    public ResponseEntity<?> getAllPrescriptionBySymptoms(@RequestParam("symptoms") String symptoms) {
+        List<IPrescriptionProjectionOrder> list = iCartDetailsService.getAllPrescriptionBySymptoms(symptoms);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 17/09/2023
+     * function: get indication by prescription id
+     * @param id
+     * @return list indication
+     */
+    @GetMapping("/getIndication")
+    public ResponseEntity<?> getAllIndication(@RequestParam("id") Long id) {
+        List<IIndicationProjectionOrder> list = iCartDetailsService.getAllIndicationByPrescriptionId(id);
+        if (list == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @GetMapping("/getInforCustomer")
+    public ResponseEntity<?> getInformationCustomer(@RequestParam("phone")String phone){
+        ICustomerProjectionWhenSell customer = iCartDetailsService.getCustomerNameAndUserId(phone);
+        return new ResponseEntity<>(customer, HttpStatus.OK);
         MedicineProjection med = iCartDetailsService.getMedicineToCheckAndDisplay(medicineId);
         if(med.getQuantity() >= (inputQuantity * med.getConversion_Rate())){
             return new ResponseEntity<>( HttpStatus.OK);

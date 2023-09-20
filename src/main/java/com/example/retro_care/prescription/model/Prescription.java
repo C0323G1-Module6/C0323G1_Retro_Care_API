@@ -2,6 +2,7 @@ package com.example.retro_care.prescription.model;
 
 import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.patient.model.Patient;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,21 +16,21 @@ public class Prescription {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(columnDefinition = "varchar(50)")
+    @Column(columnDefinition = "varchar(6)")
     private String code;
-    @Column(columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(25)")
     private String name;
-    @Column(columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(50)")
     private String symptoms;
-    @Column(columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(50)")
     private String note;
     private Integer duration;
-    @Column(columnDefinition = "BIT(1)")
     private Boolean flagDeleted;
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
     @OneToMany(mappedBy = "prescription")
+    @JsonBackReference
     private Set<Indication> indicationSet;
 
     public Prescription() {
@@ -138,5 +139,20 @@ public class Prescription {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    @Override
+    public String toString() {
+        return "Prescription{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", symptoms='" + symptoms + '\'' +
+                ", note='" + note + '\'' +
+                ", duration=" + duration +
+                ", flagDeleted=" + flagDeleted +
+                ", patient=" + patient +
+                ", indicationSet=" + indicationSet +
+                '}';
     }
 }

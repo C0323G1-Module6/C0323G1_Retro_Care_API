@@ -7,6 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IPatientRepository extends JpaRepository<Patient,Long> {
-    @Query(value = "select p.id,p.name from patient p",nativeQuery = true)
+    /**
+     * Author: ThanhKN
+     * Goal:get all patient
+     * Return void
+     * Date:17/09/2023
+     */
+    @Query(value = "select p.id,p.name ,p.flag_deleted from patient p",nativeQuery = true)
     List<Patient> getAllPatient();
 }
