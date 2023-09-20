@@ -88,6 +88,7 @@ public class IndicationController {
         BeanUtils.copyProperties(indicationDto,indication);
         indication.setMedicine(medicine);
         indication.setPrescription(prescription);
+        indication.setFlagDeleted(false);
         indicationService.createIndication(indication);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
