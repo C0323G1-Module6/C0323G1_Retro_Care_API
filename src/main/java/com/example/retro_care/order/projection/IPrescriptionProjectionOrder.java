@@ -8,4 +8,5 @@ public interface IPrescriptionProjectionOrder {
     String getPatient_name();
     String getNote();
     Integer getDuration();
+
 }

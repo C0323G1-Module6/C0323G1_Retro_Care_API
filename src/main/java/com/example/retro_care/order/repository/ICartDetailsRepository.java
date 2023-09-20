@@ -114,7 +114,11 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
 
 
     /**
+<<<<<<< HEAD
      * <<<<<<< HEAD
+=======
+
+>>>>>>> aaf77eeb72d9a0b9fc405b1531629e3c49d88ea6
      * author: VuNL
      * date create: 16/09/2023
      * function: find medicine when sell offline
@@ -194,6 +198,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     ICustomerProjectionWhenSell getCustomerName(@Param("phone") String phone);
 
     /**
+
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
