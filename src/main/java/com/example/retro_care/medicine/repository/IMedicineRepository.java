@@ -86,12 +86,30 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @return : Medicine list with pagination
      */
 //    @Modifying
-    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
-            " LEFT JOIN " +
-            "    unit_detail ud ON m.id = ud.medicine_id " +
-            " LEFT JOIN " +
-            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false AND m.name like CONCAT('%', :search ,'%')", nativeQuery = true)
-    Page<Medicine> findAll(Pageable pageable,
+//    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
+//            " LEFT JOIN " +
+//            "    unit_detail ud ON m.id = ud.medicine_id " +
+//            " LEFT JOIN " +
+//            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false AND m.name like CONCAT('%', :search ,'%')", nativeQuery = true)
+
+    @Query(value = "SELECT" +
+            " m.id AS id," +
+            " m.code AS code" +
+            " m.name AS name," +
+            " m.price AS medicine_price," +
+            " km.name AS kind_of_medicine_name," +
+            " u.name AS unit_name," +
+            " ud.conversion_rate AS conversion_rate," +
+            " ud.conversion_unit AS conversion_unit" +
+            " FROM" +
+            " medicine m" +
+            " JOIN" +
+            "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
+            " JOIN" +
+            "    unit_detail ud ON m.id = ud.medicine_id" +
+            " JOIN" +
+            "    unit u ON ud.unit_id = u.id", nativeQuery = true)
+    Page<IMedicineRepository> findAll(Pageable pageable,
                            @Param("search") String search);
 
     /**
