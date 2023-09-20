@@ -58,20 +58,10 @@ public class IndicationController {
      * Goal:get indication by id
      * Date:17/09/2023
      * return http status
-     * @param indicationDto
+     * @param indication
      */
     @PostMapping("/indication/create")
-    public ResponseEntity<?> createIndication(@RequestBody IndicationDto indicationDto, BindingResult bindingResult) {
-        Indication indication = new Indication();
-        new IndicationDto().validate(indicationDto,bindingResult);
-        if(bindingResult.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for (FieldError e: bindingResult.getFieldErrors()) {
-                errors.put(e.getField(),e.getDefaultMessage());
-            }
-            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
-        }
-        BeanUtils.copyProperties(indicationDto,indication);
+    public ResponseEntity<?> createIndication(@RequestBody Indication indication) {
         indicationService.createIndication(indication);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

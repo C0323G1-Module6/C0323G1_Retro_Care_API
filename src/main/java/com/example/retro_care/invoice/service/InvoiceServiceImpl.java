@@ -1,5 +1,6 @@
 package com.example.retro_care.invoice.service;
 
+import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDetailDto;
@@ -16,7 +17,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -120,6 +120,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.findAllInvoice(pageable);
     }
 
+    @Override
+    public Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable) {
+        return invoiceRepository.findAllInvoiceResult(pageable);
+    }
+
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -143,16 +148,19 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
      *
-     * @param start_date
-     * @param end_date
-     * @param start_time
-     * @param end_time
-     * @param sort_column
+     * @param pageable
+     * @param startDate
+     * @param endDate
+     * @param startTime
+     * @param endTime
+     * @param sortColumn
      * @return
      */
+
     @Override
-    public List<Invoice> searchInvoice(String start_date, String end_date, String start_time, String
-            end_time, String sort_column) {
-        return invoiceRepository.searchInvoice(start_date, end_date, start_time, end_time, sort_column);
+    public Page<Invoice> searchInvoice(Pageable pageable, String startDate, String endDate, String startTime, String
+            endTime, String sortColumn) {
+        return invoiceRepository.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
     }
+
 }

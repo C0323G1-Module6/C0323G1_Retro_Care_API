@@ -2,7 +2,7 @@ package com.example.retro_care.order.repository;
 
 import com.example.retro_care.order.model.CartDetails;
 import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineQuantityProjection;
+import com.example.retro_care.order.projection.MedicineProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +17,12 @@ import java.util.List;
 public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long> {
 
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: add product to cart on home/ details screen, if product already exists then updates quantity;
+     * @param : appUserId, medicineId, newQuantity;
+     */
     @Modifying
     @Query(nativeQuery = true, value = "insert into cart_details (app_user_id, medicine_id, quantity)" +
             " VALUES (:appUserId, :medicineId, :newQuantity) " +
@@ -25,8 +31,12 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
                                      @Param("medicineId") Long medicineId, @Param("newQuantity") Integer newQuantity);
 
 
-
-
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: update quantity of product cart;
+     * @param : appUserId, medicineId, quantity;
+     */
     @Modifying
     @Query(nativeQuery = true, value = "update cart_details " +
             "SET quantity = :quantity " +
@@ -34,22 +44,86 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     void addToCart(@Param("appUserId") Long appUserId,
                    @Param("medicineId") Long medicineId, @Param("quantity") Integer quantity);
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: clears all products in cart;
+     * @param : appUserId;
+     */
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM cart_details where app_user_id = :appUserId")
-    void clearAllCartFromUser(@Param("appUserId") Long appUserId);
+    int clearAllCartFromUser(@Param("appUserId") Long appUserId);
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: delete a specific product in cart;
+     * @param : cartId;
+     */
     @Modifying
     @Query(nativeQuery = true, value = "DELETE FROM cart_details where id = :cartId")
-    void deleteCartDetailsById(@Param("cartId") Long cartId);
+    int deleteCartDetailsById(@Param("cartId") Long cartId);
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: gets all needed info of a product;
+     * @param : medicineId;
+     * @return : MedicineProjection that holds all info of product;
+     */
+    @Query(nativeQuery = true, value = "SELECT " +
+            "m.id,"+
+            "ud.conversion_rate,"+
+            "m.name AS medicine_name," +
+            "m.code AS medicine_code," +
+            "GROUP_CONCAT(im.image_path) AS medicine_images," +
+            "m.price AS price," +
+            "u.name AS unit_name," +
+            "ud.conversion_unit AS conversion_unit," +
+            "m.note AS medicine_note," +
+            "m.quantity AS quantity," +
+            "km.name AS kind_of_medicine_name " +
+            "FROM medicine m " +
+            "JOIN kind_of_medicine km ON m.kind_of_medicine_id = km.id " +
+            "LEFT JOIN image_medicine im ON m.id = im.medicine_id " +
+            "LEFT JOIN unit_detail ud ON m.id = ud.medicine_id " +
+            "LEFT JOIN unit u ON ud.unit_id = u.id "+
+            "WHERE m.id = :medicineId " +
+            "GROUP BY m.id")
+    MedicineProjection getMedicine(@Param("medicineId") Long medicineId);
 
-    @Query(nativeQuery = true, value = "SELECT m.id, m.name, m.quantity, ud.conversion_rate "+
-            "FROM medicine AS m" +
-            " JOIN unit_detail AS ud ON m.id = ud.medicine_id" +
-            " WHERE m.id = :medicineId")
-    MedicineQuantityProjection getQuantityBasedOnUnit(@Param("medicineId") Long medicineId);
-
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get product and customer's info for display and mailing purpose;
+     * @param : appUserId;
+     * @return : list of CartProjection that holds some info of product,
+     * as well as customer for display and mailing purpose;
+     */
     @Query(nativeQuery = true, value = "call getCartDetailsForMail(:appUserId)")
     List<CartProjection> findCartDetailsByUserId(@Param("appUserId") Long appUserId);
+
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get quantity of a product in cart;
+     * @param : appUserId, medicineId;
+     * @return : product's quantity;
+     */
+    @Query(nativeQuery = true, value = "SELECT cd.quantity FROM cart_details cd " +
+            "WHERE cd.app_user_id = :appUserId AND cd.medicine_id = :medicineId")
+    Long findMedicineQuantityInCart(@Param("appUserId") Long appUserId, @Param("medicineId") Long medicineId);
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get loyalty point of customer;
+     * @param : appUserId;
+     * @return : loyalty point;
+     */
+    @Query(nativeQuery = true, value = "select c.point from customer c where c.app_user_id = :appUserId")
+    Long getLoyaltyPoint(@Param("appUserId") Long appUserId);
+
 
 }
