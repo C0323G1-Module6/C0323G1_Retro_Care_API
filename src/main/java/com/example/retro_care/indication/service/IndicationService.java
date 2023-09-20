@@ -52,6 +52,8 @@ public class IndicationService implements IIndicationService {
      */
     @Override
     public void createIndication(Indication indication) {
+        Prescription prescription = prescriptionService.getPrescriptionById(maxId());
+        indication.setPrescription(prescription);
         indicationRepository.save(indication);
     }
 

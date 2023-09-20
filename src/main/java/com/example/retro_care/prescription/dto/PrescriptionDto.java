@@ -1,11 +1,13 @@
 package com.example.retro_care.prescription.dto;
 
 
+import com.example.retro_care.indication.dto.IndicationDto;
 import com.example.retro_care.patient.model.Patient;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
+import java.util.List;
 
 
 public class PrescriptionDto implements Validator {
@@ -19,27 +21,26 @@ public class PrescriptionDto implements Validator {
     private String note;
     private Integer duration;
     private Long patient;
+        private List<IndicationDto> indicationDto;
     private Boolean flagDeleted;
 
-    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Long patient, Boolean flagDeleted) {
+    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Long patient, List<IndicationDto> indicationDto, Boolean flagDeleted) {
         this.code = code;
         this.name = name;
         this.symptoms = symptoms;
         this.note = note;
         this.duration = duration;
         this.patient = patient;
+        this.indicationDto = indicationDto;
         this.flagDeleted = flagDeleted;
     }
 
-    public PrescriptionDto(Long id, String code, String name, String symptoms, String note, Integer duration, Long patient, Boolean flagDeleted) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.symptoms = symptoms;
-        this.note = note;
-        this.duration = duration;
-        this.patient = patient;
-        this.flagDeleted = flagDeleted;
+    public List<IndicationDto> getIndicationDto() {
+        return indicationDto;
+    }
+
+    public void setIndicationDto(List<IndicationDto> indicationDto) {
+        this.indicationDto = indicationDto;
     }
 
     public PrescriptionDto() {
