@@ -1,7 +1,5 @@
 package com.example.retro_care.user.service;
 
-import com.example.retro_care.user.common.ValidateAppUser;
-import com.example.retro_care.user.dto.AppUserDto;
 import com.example.retro_care.user.dto.JwtResponseUserDetails;
 import com.example.retro_care.user.model.AppUser;
 import com.example.retro_care.user.model.UserRole;
@@ -9,16 +7,12 @@ import com.example.retro_care.user.repository.IAppUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class AppUserService implements IAppUserService {
