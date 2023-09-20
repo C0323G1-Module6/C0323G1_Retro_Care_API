@@ -16,7 +16,7 @@ public class FormatCustomer {
     public static String generateCustomerCode() {
         Random random = new Random();
         int randomNumber = random.nextInt(10000);
-        return "KH-" + randomNumber;
+        return "KH"+ randomNumber;
     }
     /**
      * Author: TinDT
