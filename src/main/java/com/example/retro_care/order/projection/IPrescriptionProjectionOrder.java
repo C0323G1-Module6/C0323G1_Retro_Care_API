@@ -7,4 +7,6 @@ public interface IPrescriptionProjectionOrder {
     String getSymptoms();
     String getPatient_name();
     String getNote();
+    Integer getDuration();
+
 }

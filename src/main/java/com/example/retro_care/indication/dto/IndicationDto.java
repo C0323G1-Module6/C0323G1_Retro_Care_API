@@ -26,6 +26,14 @@ public class IndicationDto implements Validator {
         this.medicine = medicine;
     }
 
+    public IndicationDto(Integer dosage, Integer frequency, Boolean flagDeleted, Prescription prescription, Medicine medicine) {
+        this.dosage = dosage;
+        this.frequency = frequency;
+        this.flagDeleted = flagDeleted;
+        this.prescription = prescription;
+        this.medicine = medicine;
+    }
+
     public Long getId() {
         return id;
     }

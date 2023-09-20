@@ -1,6 +1,6 @@
 package com.example.retro_care.order.controller;
 
-
+import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.projection.CartProjection;
 import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
@@ -104,7 +104,6 @@ public class CartDetailsController {
         } else return new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
     }
 
-
     /**
      * author: VuNL
      * date create: 17/09/2023
@@ -181,10 +180,6 @@ public class CartDetailsController {
     public ResponseEntity<?> getInformationCustomer(@RequestParam("phone")String phone){
         ICustomerProjectionWhenSell customer = iCartDetailsService.getCustomerNameAndUserId(phone);
         return new ResponseEntity<>(customer, HttpStatus.OK);
-        MedicineProjection med = iCartDetailsService.getMedicineToCheckAndDisplay(medicineId);
-        if(med.getQuantity() >= (inputQuantity * med.getConversion_Rate())){
-            return new ResponseEntity<>( HttpStatus.OK);
-        } else return new ResponseEntity<>( HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
