@@ -21,17 +21,17 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *                 {@literal null}.
      * @return
      */
-    @Query(value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
+    @Query(value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
             "s.name, s.address , DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
             "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
             "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
             "FROM invoice i " +
-            "JOIN invoice_detail ind ON i.id = ind.invoice_id_id " +
-            "JOIN medicine m ON m.id = ind.medicine_id_id " +
+            "JOIN invoice_detail ind ON i.id = ind.invoice_id " +
+            "JOIN medicine m ON m.id = ind.medicine_id " +
             "JOIN supplier s ON s.id = i.supplier_id " +
             "WHERE i.flag_deleted = false " +
-            "GROUP BY i.id, i.app_user_id_id, i.creation_date, i.flag_deleted, i.code, i.paid, " +
-            "i.supplier_id_id, i.document_number, i.note, i.paid " +
+            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.paid, " +
+            "i.supplier_id, i.document_number, i.note, i.paid " +
             "ORDER BY i.code DESC",
             nativeQuery = true)
     Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable);
@@ -61,19 +61,19 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *
      * @return
      */
-    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
+    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
             "s.name, s.address, DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
             "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
             "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
             "FROM invoice i " +
-            "JOIN invoice_detail ind ON i.id = ind.invoice_id_id " +
-            "JOIN medicine m ON m.id = ind.medicine_id_id " +
+            "JOIN invoice_detail ind ON i.id = ind.invoice_id " +
+            "JOIN medicine m ON m.id = ind.medicine_id " +
             "JOIN supplier s ON s.id = i.supplier_id " +
             "WHERE i.flag_deleted = false " +
-            "AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL) " +
-            "AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL) " +
-            "AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL) " +
-            "AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL) " +
+            "AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '') " +
+            "AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '') " +
+            "AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '') " +
+            "AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '') " +
             "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.creation_date, i.paid, " +
             "i.supplier_id, i.document_number, i.note, i.paid " +
             "ORDER BY CASE " +

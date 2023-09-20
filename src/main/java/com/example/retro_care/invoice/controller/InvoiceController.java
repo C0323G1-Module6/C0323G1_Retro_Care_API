@@ -109,12 +109,28 @@ public class InvoiceController {
      */
     @GetMapping("/search/result")
     public ResponseEntity<?> searchInvoiceResult(@RequestParam(required = false) Integer page,
-                                           @RequestParam(required = false) Integer size,
-                                           @RequestParam(required = false) String startDate,
-                                           @RequestParam(required = false) String endDate,
-                                           @RequestParam(required = false) String startTime,
-                                           @RequestParam(required = false) String endTime,
-                                           @RequestParam(required = false) String sortColumn) {
+                                                 @RequestParam(required = false) Integer size,
+                                                 @RequestParam(required = false) String startDate,
+                                                 @RequestParam(required = false) String endDate,
+                                                 @RequestParam(required = false) String startTime,
+                                                 @RequestParam(required = false) String endTime,
+                                                 @RequestParam(required = false) String sortColumn) {
+        if (startDate != null && startDate.isEmpty()) {
+            startDate = null;
+        }
+
+        if (endDate != null && endDate.isEmpty()) {
+            endDate = null;
+        }
+
+        if (startTime != null && startTime.isEmpty()) {
+            startTime = null;
+        }
+
+        if (endTime != null && endTime.isEmpty()) {
+            endTime = null;
+        }
+
         if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
             return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
         }
@@ -140,6 +156,9 @@ public class InvoiceController {
         if (sortColumn != null && !isValidSortColumn(sortColumn)) {
             return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
         }
+
+        // Check for empty string ("") and set to null
+
         Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
 
         if (invoices.isEmpty()) {
