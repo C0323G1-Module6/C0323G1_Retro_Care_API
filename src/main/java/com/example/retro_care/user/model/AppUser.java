@@ -22,6 +22,7 @@ public class AppUser {
     public AppUser() {
     }
 
+
     public AppUser(Long id, String userName, String password, Boolean flagDeleted, Boolean flagOnline, Set<UserRole> userRoleSet) {
         this.id = id;
         this.userName = userName;
