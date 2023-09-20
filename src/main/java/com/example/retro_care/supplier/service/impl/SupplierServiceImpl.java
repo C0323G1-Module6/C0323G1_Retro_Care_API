@@ -17,8 +17,8 @@ public class SupplierServiceImpl implements ISupplierService {
     private ISupplierRepository iSupplierRepository;
 
     @Override
-    public Page<ISupplierProjection> getListSupplier(Pageable pageable) {
-        return iSupplierRepository.getListSupplier(pageable);
+    public Page<ISupplierProjection> getListSupplier(Pageable pageable,String code,String name,String phoneNumber,String address,String sortBy) {
+        return iSupplierRepository.getListSupplier(pageable,code,name,phoneNumber,address,sortBy);
     }
 
     @Override
