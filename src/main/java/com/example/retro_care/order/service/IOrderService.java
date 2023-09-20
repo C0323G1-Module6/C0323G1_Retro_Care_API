@@ -2,10 +2,10 @@ package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-import com.sun.tools.javac.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface IOrderService {
 
@@ -76,6 +76,13 @@ public interface IOrderService {
      * @param userId
      */
    void createUserOrder(Long orderId, Long userId);
-    void createOrderForUser(Long appUserId);
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     * @param : appUserId, loyaltyPoint;
+     */
+    void createOrderForUser(Long appUserId, Long loyaltyPoint);
 
 }
