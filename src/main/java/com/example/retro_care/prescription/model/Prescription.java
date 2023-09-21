@@ -29,7 +29,7 @@ public class Prescription {
     @ManyToOne
     @JoinColumn(name = "patient_id")
     private Patient patient;
-    @OneToMany(mappedBy = "prescription")
+    @OneToMany(mappedBy = "prescription", fetch = FetchType.EAGER)
     @JsonBackReference
     private Set<Indication> indicationSet;
 

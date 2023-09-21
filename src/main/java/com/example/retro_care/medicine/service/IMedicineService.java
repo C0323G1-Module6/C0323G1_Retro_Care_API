@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.service;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +38,7 @@ public interface IMedicineService {
      * @param pageable pagination of medication list
      * @return : Medicine list with pagination
      */
-    Page<Medicine> findAll(Pageable pageable, String search);
+    Page<IMedicineListDto> findAll(Pageable pageable, String search);
 
     /**
      * author: DaoPTA
@@ -60,7 +61,7 @@ public interface IMedicineService {
      * @param searchByCode Parameters used to search
      * @return approximate drug code with filter.
      */
-    Page<Medicine> searchByCodeMedicine(Pageable pageable,String searchByCode);
+    Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable,String searchByCode);
 
     /**
      * author: DaoPTA
@@ -71,7 +72,7 @@ public interface IMedicineService {
      * @param searchByName Parameters used to search
      * @return the drug name that approximates the filter
      */
-    Page<Medicine> searchByNameMedicine(Pageable pageable,String searchByName);
+    Page<IMedicineListDto> searchByNameMedicine(Pageable pageable,String searchByName);
 
     /**
      * author: DaoPTA
@@ -82,7 +83,7 @@ public interface IMedicineService {
      * @param searchByActiveElement Parameters used to search
      * @return the drug's active ingredient approximated by the filter
      */
-    Page<Medicine> searchActiveElement(Pageable pageable,String searchByActiveElement);
+    Page<IMedicineListDto> searchActiveElement(Pageable pageable,String searchByActiveElement);
 
     /**
      * author: DaoPTA
@@ -93,5 +94,5 @@ public interface IMedicineService {
      * @param searchByNameKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
-    Page<Medicine> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
+    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
 }

@@ -12,6 +12,30 @@ import org.springframework.stereotype.Service;
 public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
+    /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    @Override
+    public int updateOnlineCustomer(Customer customer) {
+        return customerRepository.updateOnlineCustomer(customer);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+    @Override
+    public boolean existsByEmail(String email, Long id) {
+        return customerRepository.existsByEmailAndIdNot(email,id);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+    @Override
+    public boolean existsByPhoneNumber(String phoneNumber, Long id) {
+        return customerRepository.existsByPhoneNumberAndIdNot(phoneNumber,id);
+    }
 
     /**
      * Author: TinDT
@@ -26,11 +50,6 @@ public class CustomerService implements ICustomerService {
 
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
-    }
-
-    @Override
-    public Page<Customer> findAllByName(Pageable pageable, String searchName) {
-        return customerRepository.findCustomerByNameContaining(pageable,searchName);
     }
 
     /**
@@ -89,8 +108,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
-        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
+    public Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(name, code, address, phoneNumber, groupValue, sortItem, pageable);
 
     }
 

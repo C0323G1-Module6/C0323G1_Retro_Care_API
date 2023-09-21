@@ -42,15 +42,7 @@ public class InvoiceController {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated invoice list with limit number of molecules per page.
      */
-    @GetMapping("")
-    public ResponseEntity<Page<Invoice>> getListInvoice(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
-        if (invoiceService.findAllInvoice(pageable).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (page < 0 ) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(invoiceService.findAllInvoice(pageable), HttpStatus.OK);
-    }
+
 
     @GetMapping("/result")
     public ResponseEntity<Page<IInvoiceResult>> getListInvoiceResult(@PageableDefault(size = 2) Pageable pageable, @RequestParam("page") Integer page) {
@@ -115,14 +107,30 @@ public class InvoiceController {
      * @param sortColumn
      * @return
      */
-    @GetMapping("/search")
-    public ResponseEntity<?> searchInvoice(@RequestParam(required = false) Integer page,
-                                           @RequestParam(required = false) Integer size,
-                                           @RequestParam(required = false) String startDate,
-                                           @RequestParam(required = false) String endDate,
-                                           @RequestParam(required = false) String startTime,
-                                           @RequestParam(required = false) String endTime,
-                                           @RequestParam(required = false) String sortColumn) {
+    @GetMapping("/search/result")
+    public ResponseEntity<?> searchInvoiceResult(@RequestParam(required = false) Integer page,
+                                                 @RequestParam(required = false) Integer size,
+                                                 @RequestParam(required = false) String startDate,
+                                                 @RequestParam(required = false) String endDate,
+                                                 @RequestParam(required = false) String startTime,
+                                                 @RequestParam(required = false) String endTime,
+                                                 @RequestParam(required = false) String sortColumn) {
+        if (startDate != null && startDate.isEmpty()) {
+            startDate = null;
+        }
+
+        if (endDate != null && endDate.isEmpty()) {
+            endDate = null;
+        }
+
+        if (startTime != null && startTime.isEmpty()) {
+            startTime = null;
+        }
+
+        if (endTime != null && endTime.isEmpty()) {
+            endTime = null;
+        }
+
         if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
             return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
         }
@@ -148,13 +156,25 @@ public class InvoiceController {
         if (sortColumn != null && !isValidSortColumn(sortColumn)) {
             return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
         }
-        Page<Invoice> invoices = invoiceService.searchInvoice(pageable, startDate, endDate, startTime, endTime, sortColumn);
+
+        // Check for empty string ("") and set to null
+
+        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
             return new ResponseEntity<>(invoices, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/detail/{id}")
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id ){
+        List<IInvoiceResult> medicine = invoiceService.getInvoiceDetailById(id);
+        if(medicine==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.controller;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.dto.MedicineDto;
 import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.Medicine;
@@ -112,17 +113,15 @@ public class MedicineController {
      * Medicine List
      *
      * @param page pagination of medication list
-     * @param size Divide the number of records per page
      * @return ResponseEntity with the corresponding HTTP status code.
      * - HttpStatus.OK if the drug list has data.
      * - HttpStatus.NO_CONTENT if drug list has no data.
      */
     @GetMapping("/get-medicine")
     @ResponseBody
-    public ResponseEntity<Page<Medicine>> medicineList(@RequestParam(defaultValue = "0", required = false) int page,
-                                                       @RequestParam(defaultValue = "5", required = false) int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Medicine> medicinePage = iMedicineService.findAll(pageable, "");
+    public ResponseEntity<Page<IMedicineListDto>> medicineList(@RequestParam(defaultValue = "0", required = false) Integer page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<IMedicineListDto> medicinePage = iMedicineService.findAll(pageable, "");
         if (medicinePage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -143,7 +142,7 @@ public class MedicineController {
     public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
 
         if (id == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         List<Medicine> medicinePage = iMedicineService.getAll();
         for (Medicine m : medicinePage) {
@@ -152,7 +151,7 @@ public class MedicineController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -162,20 +161,18 @@ public class MedicineController {
      *
      * @param page parameters for paging
      * @param limit Limit the number of records in the page
-     * @param sort Sorted by medicine code
      * @param searchInMedicine parameters contain different search methods
      * @param search Search by input box
      * @return - If empty, list medicine will be returned
      *         - If there is data, the list to search will be returned
      */
     @GetMapping("/search")
-    public ResponseEntity<Page<Medicine>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                                           @RequestParam(defaultValue = "5", required = false) Integer limit,
-                                                           @RequestParam(defaultValue = "code", required = false) String sort,
-                                                           @RequestParam(defaultValue = "",required = false) String searchInMedicine,
-                                                           @RequestParam(defaultValue = "", required = false) String search){
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-        Page<Medicine> medicines;
+    public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                                   @RequestParam(defaultValue = "5", required = false) Integer limit,
+                                                                   @RequestParam(defaultValue = "",required = false) String searchInMedicine,
+                                                                   @RequestParam(defaultValue = "", required = false) String search){
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
+        Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
             case "searchByName":
                 medicines = iMedicineService.searchByNameMedicine(pageable,search);
@@ -193,8 +190,17 @@ public class MedicineController {
                 medicines = iMedicineService.findAll(pageable,search);
         }
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new  ResponseEntity<>(medicines, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-list")
+    public ResponseEntity<List<Medicine>> medicineGetList(){
+        List<Medicine> medicine = iMedicineService.getAll();
+        if (medicine.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
 }
