@@ -6,7 +6,6 @@ import com.example.retro_care.medicine.service.IImageMedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
 
 @Service
 public class ImageMedicineService implements IImageMedicineService {
@@ -15,12 +14,17 @@ public class ImageMedicineService implements IImageMedicineService {
 
     /**
      * Add an ImageMedicine to the system-TinVV
-     *
+     * @param medicineId The ID of the Medicine.
      * @param imageMedicine The ImageMedicine object to be added.
      */
     @Override
-    public void addImageMedicine(ImageMedicine imageMedicine) {
-        iImageMedicineRepository.addImageMedicine(imageMedicine.getImagePath(), imageMedicine.getMedicine().getId());
+    public void addImageMedicine(ImageMedicine imageMedicine,Long medicineId) {
+        iImageMedicineRepository.addImageMedicine(imageMedicine,medicineId);
+    }
+
+    @Override
+    public ImageMedicine findImageMedicineByMedicineId(Long medicineId) {
+        return iImageMedicineRepository.findImageMedicineByMedicineId(medicineId);
     }
 
     /**
@@ -29,18 +33,18 @@ public class ImageMedicineService implements IImageMedicineService {
      * @param medicineId The ID of the Medicine.
      * @return A list of ImageMedicine objects associated with the given Medicine ID.
      */
-    @Override
-    public Set<ImageMedicine> findImageMedicineByMedicineId(Long medicineId) {
-        return iImageMedicineRepository.findImageMedicineByMedicineId(medicineId);
-    }
+//    @Override
+//    public Set<ImageMedicine> findImageMedicineByMedicineId(Long medicineId) {
+//        return iImageMedicineRepository.findImageMedicineByMedicineId(medicineId);
+//    }
 
     /**
      * Update an ImageMedicine in the system-TinVv
-     *
+     * @param medicineId The ID of the Medicine.
      * @param imageMedicine The updated ImageMedicine object.
      */
     @Override
-    public void updateImageMedicine(ImageMedicine imageMedicine) {
-        iImageMedicineRepository.updateImageMedicine(imageMedicine.getImagePath(), imageMedicine.getMedicine().getId());
+    public void updateImageMedicine(ImageMedicine imageMedicine,Long medicineId) {
+        iImageMedicineRepository.updateImageMedicine(imageMedicine,medicineId);
     }
 }

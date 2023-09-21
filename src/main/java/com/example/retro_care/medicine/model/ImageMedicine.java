@@ -6,7 +6,6 @@ import javax.persistence.*;
 @Table(name = "image_medicine")
 public class ImageMedicine {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -57,6 +56,16 @@ public class ImageMedicine {
 
     public Boolean getFlagDeleted() {
         return this.flagDeleted;
+    }
+
+    @Override
+    public String toString() {
+        return "ImageMedicine{" +
+                "id=" + id +
+                ", imagePath='" + imagePath + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicine=" + medicine +
+                '}';
     }
 
     public void setFlagDeleted(Boolean flagDeleted) {

@@ -1,14 +1,11 @@
 package com.example.retro_care.medicine.service.Impl;
 
-import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.repository.IUnitDetailRepository;
 import com.example.retro_care.medicine.service.IUnitDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
 
 @Service
 public class UnitDetailService implements IUnitDetailService {
@@ -21,8 +18,9 @@ public class UnitDetailService implements IUnitDetailService {
      * @param medicineId The ID of the Medicine.
      * @return A list of UnitDetail objects associated with the given Medicine ID.
      */
+
     @Override
-    public Set<UnitDetail> findUnitDetailByMedicineId(Long medicineId) {
+    public UnitDetail findUnitDetailByMedicineId(Long medicineId) {
         return iUnitDetailRepository.findUnitDetailByMedicineId(medicineId);
     }
 
@@ -32,9 +30,8 @@ public class UnitDetailService implements IUnitDetailService {
      * @param unitDetail The UnitDetail object to be added.
      */
     @Override
-    public void addUnitDetail(UnitDetail unitDetail) {
-        iUnitDetailRepository.addUnitDetail(unitDetail.getConversionUnit(), unitDetail.getConversionRate(),
-                unitDetail.getMedicine().getId(), unitDetail.getUnit().getId());
+    public void addUnitDetail(UnitDetail unitDetail,Long medicineId,Long unitId) {
+        iUnitDetailRepository.addUnitDetail(unitDetail, medicineId,unitId);
     }
 
     /**
@@ -43,8 +40,7 @@ public class UnitDetailService implements IUnitDetailService {
      * @param unitDetail The updated UnitDetail object.
      */
     @Override
-    public void updateUnitDetailByMedicineId(UnitDetail unitDetail) {
-        iUnitDetailRepository.updateUnitDetail(unitDetail.getConversionUnit(), unitDetail.getConversionRate(),
-                unitDetail.getMedicine().getId(), unitDetail.getUnit().getId());
+    public void updateUnitDetailByMedicineId(UnitDetail unitDetail,Long medicineId,Long unitId) {
+        iUnitDetailRepository.updateUnitDetail(unitDetail,medicineId, unitId);
     }
 }

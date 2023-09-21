@@ -11,7 +11,6 @@ import java.util.Set;
 @Table(name = "medicine")
 public class Medicine {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -66,6 +65,23 @@ public class Medicine {
     public Medicine() {
     }
 
+    public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, Set<UnitDetail> unitDetailSet, Set<ImageMedicine> imageMedicines, KindOfMedicine kindOfMedicine) {
+        this.id = id;
+        this.code = code;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
+        this.vat = vat;
+        this.note = note;
+        this.maker = maker;
+        this.activeElement = activeElement;
+        this.origin = origin;
+        this.retailProfits = retailProfits;
+        this.flagDeleted = flagDeleted;
+        this.unitDetailSet = unitDetailSet;
+        this.imageMedicines = imageMedicines;
+        this.kindOfMedicine = kindOfMedicine;
+    }
 
     public Medicine(Long id, String code, String name, Double price, Long quantity, Float vat, String note,
                     String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted,

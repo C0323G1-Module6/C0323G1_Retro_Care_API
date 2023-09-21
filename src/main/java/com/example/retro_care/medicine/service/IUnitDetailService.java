@@ -13,19 +13,19 @@ public interface IUnitDetailService {
      * @param medicineId The ID of the Medicine.
      * @return A list of UnitDetail objects associated with the given Medicine ID.
      */
-    Set<UnitDetail> findUnitDetailByMedicineId(Long medicineId);
+    UnitDetail findUnitDetailByMedicineId(Long medicineId);
 
     /**
      * Add a new UnitDetail-TinVV
-     *
+     * @param medicineId The ID of the Medicine.
      * @param unitDetail The UnitDetail object to be added.
      */
-    void addUnitDetail(UnitDetail unitDetail);
+    void addUnitDetail(UnitDetail unitDetail,Long medicineId,Long unitId);
 
     /**
      * Update an existing UnitDetail based on the Medicine ID-TinVV
-     *
+     * @param medicineId The ID of the Medicine.
      * @param unitDetail The updated UnitDetail object.
      */
-    void updateUnitDetailByMedicineId(UnitDetail unitDetail);
+    void updateUnitDetailByMedicineId(UnitDetail unitDetail,Long medicineId,Long unitId);
 }

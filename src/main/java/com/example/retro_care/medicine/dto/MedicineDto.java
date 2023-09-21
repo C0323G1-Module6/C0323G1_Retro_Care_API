@@ -1,39 +1,41 @@
 package com.example.retro_care.medicine.dto;
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 
-public class MedicineDto implements Validator {
+public class MedicineDto {
     private Long id;
-    @Size(max = 8)
-    @Pattern(regexp = "^[0-9][a-z]{8}$")
+//    @Size(max = 8)
+//    @Pattern(regexp = "^[0-9a-zA-Z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
 //    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
-    @Min(value = 1, message = "Giá không được nhỏ hơn 1")
+    @Min(value = 0, message = "Giá không được là số âm")
     private Double price;
     private Long quantity;
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
-    @Size(max = 255, message = "Nhà sản xuất không được vượt quá 255 kí tự")
+    @Size(min = 2,max = 50, message = "Nhà sản xuất không được ít hơn 2 kí tự và dài hơn 50 kí tự")
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
+    @NotBlank(message = "Không được để trống trường này")
     @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
-    @Min(value = 1, message = "Lợi nhuận bán lẻ không được nhỏ hơn 1")
+    @NotBlank(message = "Không được để trống trường này")
+    @Min(value = 0, message = "Lợi nhuận bán lẻ không được nhỏ hơn 0")
     private Float retailProfits;
     private Boolean flagDeleted;
+    @NotBlank(message = "Không được để trống trường này")
     private KindOfMedicineDto kindOfMedicineDto;
-    @Valid
+    //    @Valid
     private UnitDetailDto unitDetailDto;
     private ImageMedicineDto imageMedicineDto;
 
@@ -176,15 +178,5 @@ public class MedicineDto implements Validator {
 
     public void setImageMedicineDto(ImageMedicineDto imageMedicineDto) {
         this.imageMedicineDto = imageMedicineDto;
-    }
-
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-
     }
 }

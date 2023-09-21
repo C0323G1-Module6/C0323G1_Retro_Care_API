@@ -3,11 +3,10 @@ package com.example.retro_care.medicine.dto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Size;
 
-public class UnitDto implements Validator {
+public class UnitDto {
     private Long id;
-    @Size(max = 255, message = "Đơn vị không được vượt quá 255 kí tự")
+    //    @Size(max = 255, message = "Đơn vị không được vượt quá 255 kí tự")
     private String name;
     private Boolean flagDeleted;
 
@@ -42,15 +41,5 @@ public class UnitDto implements Validator {
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
-    }
-
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-
     }
 }

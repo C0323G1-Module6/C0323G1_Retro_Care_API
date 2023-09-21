@@ -12,15 +12,16 @@ import org.springframework.web.bind.annotation.*;
 public class UnitController {
     @Autowired
     private IUnitService iUnitService;
+
     /**
      * Retrieve all units from the system-TinVV
      *
      * @return ResponseEntity with the corresponding HTTP status code and the list of all units.
-     *         - HttpStatus.OK if the units are successfully retrieved.
+     * - HttpStatus.OK if the units are successfully retrieved.
      */
     @GetMapping("")
     @ResponseBody
-    public ResponseEntity findAll(){
+    public ResponseEntity findAll() {
         return new ResponseEntity<>(iUnitService.findAll(), HttpStatus.OK);
     }
 }

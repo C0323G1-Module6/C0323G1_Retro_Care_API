@@ -6,7 +6,6 @@ import com.example.retro_care.medicine.service.IMedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,10 +34,7 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public void editMedicine(Medicine medicine) {
-        iMedicineRepository.updateMedicine(medicine.getId(), medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(), medicine.getRetailProfits(),
-                medicine.getKindOfMedicine().getId());
+        iMedicineRepository.updateMedicine(medicine);
     }
 
     /**
@@ -50,11 +46,18 @@ public class MedicineService implements IMedicineService {
     public void addMedicine(Medicine medicine) {
         UUID uuid = UUID.randomUUID();
         String code = uuid.toString().replace("-", "").substring(0, 8);
-        System.out.println(code);
-        iMedicineRepository.addMedicine(code, medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(),
-                medicine.getRetailProfits(), medicine.getKindOfMedicine().getId());
+        medicine.setCode(code);
+        iMedicineRepository.addMedicine(medicine);
+    }
+
+    /**
+     * Retrieves the ID of the last inserted record in the database-TinVV
+     *
+     * @return The ID of the last inserted record as a {@code Long} value.
+     */
+    @Override
+    public Long getLastInsertedId() {
+        return iMedicineRepository.getLastInsertedId();
     }
 
 
@@ -91,7 +94,7 @@ public class MedicineService implements IMedicineService {
 
     @Override
     public Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf) {
-        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement,searchByNameKindOf ,pageable);
+        return iMedicineRepository.searchMedicine(searchByName, searchByCode, searchByActiveElement, searchByNameKindOf, pageable);
     }
 
 //    /**
