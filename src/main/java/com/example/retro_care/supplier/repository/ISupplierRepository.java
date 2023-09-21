@@ -12,6 +12,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 @Transactional
 public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
@@ -20,7 +22,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      * created by :ThanhVH
      * date create: 14/09/2023
      *
-     * @param: Pageable pageable
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
      * return Page<ISupplierProjection>
      */
     @Query(nativeQuery = true,
@@ -39,28 +41,28 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "        LEFT JOIN\n" +
                     "    (\n" +
                     "        SELECT\n" +
-                    "            i.supplier_id_id,\n" +
-                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id_id) AS total_paid_amount\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
                     "        FROM\n" +
                     "            invoice i\n" +
                     "        WHERE\n" +
                     "            i.flag_deleted = 0\n" +
-                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id_id\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
                     "        LEFT JOIN\n" +
                     "    (\n" +
                     "        SELECT\n" +
-                    "            i.supplier_id_id,\n" +
-                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id_id) AS total_invoice_detail_amount\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
                     "        FROM\n" +
                     "            invoice_detail id\n" +
                     "                JOIN\n" +
-                    "            invoice i ON id.invoice_id_id = i.id\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
                     "                JOIN\n" +
-                    "            medicine m ON id.medicine_id_id = m.id\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
                     "        WHERE\n" +
                     "            i.flag_deleted = 0\n" +
                     "          AND id.flag_deleted = 0\n" +
-                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id_id\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
                     "WHERE\n" +
                     "    s.flag_deleted = 0 \n" +
                     "    AND code like concat ('%',:code ,'%')\n" +
@@ -77,17 +79,598 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
                     "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
                     "    END\n" +
-                    " ORDER BY " +
-                    "    CASE :sortBy " +
-                    "        WHEN 'code' THEN code " +
-                    "        WHEN 'phone_number' THEN phone_number " +
-                    "        WHEN 'address' THEN address " +
-                    "        WHEN 'name' THEN name " +
-                    "        ELSE null " +
-                    "    END")
+                    " ORDER BY :sortBy ")
     Page<ISupplierProjection> getListSupplier(Pageable pageable,@Param("code")String code,@Param("name")String name,
                                               @Param("phoneNumber")String phoneNumber,@Param("address")String address,
                                               @Param("sortBy")String sortBy);
+    /**
+     * method :getListSupplierSortDefault()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY id DESC")
+    Page<ISupplierProjection> getListSupplierSortDefault(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                              @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortCodeDesc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY code DESC")
+    Page<ISupplierProjection> getListSupplierSortCodeDesc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortCodeAsc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY code ASC")
+    Page<ISupplierProjection> getListSupplierSortCodeAsc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortNameDesc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY name DESC")
+    Page<ISupplierProjection> getListSupplierSortNameDesc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortNameAsc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY name asc")
+    Page<ISupplierProjection> getListSupplierSortNameAsc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortAddressDesc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY address DESC")
+    Page<ISupplierProjection> getListSupplierSortAddressDesc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortAddressAsc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY address asc")
+    Page<ISupplierProjection> getListSupplierSortAddressAsc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortPhoneNumberDesc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY phone_number DESC")
+    Page<ISupplierProjection> getListSupplierSortPhoneNumberDesc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                         @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+    /**
+     * method :getListSupplierSortPhoneNumberAsc()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: Pageable pageable ,name,code,address,phoneNumber,sortBy
+     * return Page<ISupplierProjection>
+     */
+    @Query(nativeQuery = true,
+            value = "SELECT\n" +
+                    "    s.id AS idSupplier,\n" +
+                    "    s.code AS codeSupplier,\n" +
+                    "    s.name AS nameSupplier,\n" +
+                    "    s.phone_number AS phoneNumber,\n" +
+                    "    s.address AS address,\n" +
+                    "    s.note AS note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END AS debt\n" +
+                    "FROM\n" +
+                    "    supplier s\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
+                    "        FROM\n" +
+                    "            invoice i\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
+                    "        LEFT JOIN\n" +
+                    "    (\n" +
+                    "        SELECT\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
+                    "        FROM\n" +
+                    "            invoice_detail id\n" +
+                    "                JOIN\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
+                    "                JOIN\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
+                    "        WHERE\n" +
+                    "            i.flag_deleted = 0\n" +
+                    "          AND id.flag_deleted = 0\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "WHERE\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
+                    "GROUP BY\n" +
+                    "    s.id,\n" +
+                    "    s.code,\n" +
+                    "    s.name,\n" +
+                    "    s.phone_number,\n" +
+                    "    s.address,\n" +
+                    "    s.note,\n" +
+                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
+                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY phone_number asc")
+    Page<ISupplierProjection> getListSupplierSortPhoneNumberAsc(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                                                 @Param("phoneNumber")String phoneNumber,@Param("address")String address);
+
+
+
     /**
      * method :createSupplier()
      * created by :ThanhVH
@@ -162,28 +745,28 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "        LEFT JOIN\n" +
                     "    (\n" +
                     "        SELECT\n" +
-                    "            i.supplier_id_id,\n" +
-                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id_id) AS total_paid_amount\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
                     "        FROM\n" +
                     "            invoice i\n" +
                     "        WHERE\n" +
                     "                i.flag_deleted = 0\n" +
-                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id_id\n" +
+                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
                     "        LEFT JOIN\n" +
                     "    (\n" +
                     "        SELECT\n" +
-                    "            i.supplier_id_id,\n" +
-                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id_id) AS total_invoice_detail_amount\n" +
+                    "            i.supplier_id,\n" +
+                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
                     "        FROM\n" +
                     "            invoice_detail id\n" +
                     "                JOIN\n" +
-                    "            invoice i ON id.invoice_id_id = i.id\n" +
+                    "            invoice i ON id.invoice_id = i.id\n" +
                     "                JOIN\n" +
-                    "            medicine m ON id.medicine_id_id = m.id\n" +
+                    "            medicine m ON id.medicine_id = m.id\n" +
                     "        WHERE\n" +
                     "                i.flag_deleted = 0\n" +
                     "          AND id.flag_deleted = 0\n" +
-                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id_id\n" +
+                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
                     "WHERE\n" +
                     "        s.flag_deleted = 0 AND s.id = :id\n" +
                     "\n" +
@@ -222,15 +805,85 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "                    FROM\n" +
                     "                      invoice\n" +
                     "                    JOIN\n" +
-                    "                      invoice_detail ON invoice_detail.invoice_id_id = invoice.id\n" +
+                    "                      invoice_detail ON invoice_detail.invoice_id = invoice.id\n" +
                     "                    JOIN\n" +
-                    "                      medicine ON invoice_detail.medicine_id_id = medicine.id\n" +
+                    "                      medicine ON invoice_detail.medicine_id = medicine.id\n" +
                     "                    JOIN\n" +
-                    "                      supplier ON invoice.supplier_id_id = supplier.id\n" +
-                    "                    WHERE supplier.id = :id\n" +
+                    "                      supplier ON invoice.supplier_id = supplier.id\n" +
+                    "                    WHERE supplier.id = :id \n " +
+                    "                    AND (DATE(invoice.creation_date) >= :startDate OR :startDate IS NULL OR :startDate = '')\n " +
+                    "                    AND (DATE(invoice.creation_date) <= :endDate OR :endDate IS NULL OR :endDate = '' )\n " +
                     "                    GROUP BY\n" +
                     "                      invoice.id")
-    Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable);
+    Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable,@Param("startDate")String startDate,
+                                                            @Param("endDate") String endDate);
+    /**
+     * method :getListSupplier()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param:
+     * return List<IInvoiceProjection>
+     */
+    @Query(nativeQuery = true,
+           value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
+                   "from supplier s")
+    List<Supplier> getListSupplier();
+    /**
+     * method :getSupplierByCode()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: code
+     * return Supplier
+     */
+    @Query(nativeQuery = true,
+            value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
+                    "from supplier s " +
+                    "where s.code = :code and s.flag_deleted = 0")
+    Supplier getSupplierByCode(@Param("code") String code);
+    /**
+     * method :getSupplierByName()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: name
+     * return Supplier
+     */
+    @Query(nativeQuery = true,
+            value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
+                    "from supplier s " +
+                    "where s.name = :name and s.flag_deleted = 0")
+    Supplier getSupplierByName(@Param("name") String name);
+    /**
+     * method :getSupplierByName()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: email
+     * return Supplier
+     */
+    @Query(nativeQuery = true,
+            value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
+                    "from supplier s " +
+                    "where s.email = :email and s.flag_deleted = 0")
+    Supplier getSupplierByEmail(@Param("email") String email);
+    /**
+     * method :getSupplierByPhoneNumber()
+     * created by :ThanhVH
+     * date create: 21/09/2023
+     *
+     * @param: phoneNumber
+     * return Supplier
+     */
+    @Query(nativeQuery = true,
+            value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
+                    "from supplier s " +
+                    "where s.phone_number = :phoneNumber and s.flag_deleted = 0")
+    Supplier getSupplierByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+
+
+
 
 
 }

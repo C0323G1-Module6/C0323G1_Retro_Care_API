@@ -2,7 +2,6 @@ package com.example.retro_care.supplier.model;
 
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Supplier {
