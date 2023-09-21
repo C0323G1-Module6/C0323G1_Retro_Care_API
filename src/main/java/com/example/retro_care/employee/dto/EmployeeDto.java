@@ -126,7 +126,7 @@ public class EmployeeDto implements Validator {
         if (employeeDto.getNameEmployee() == null) {
             errors.rejectValue(NAME_EMPLOYEE, null, "Vui lòng nhập tên");
         } else if (employeeDto.getNameEmployee().length() > 100) {
-            errors.rejectValue(NAME_EMPLOYEE, null, "Quá ký tự cho phép");
+            errors.rejectValue(NAME_EMPLOYEE, null, MESSAGE_CHARACTER);
         } else if (!employeeDto.getNameEmployee().matches("^[\\p{L}\\s]+$")) {
             errors.rejectValue(NAME_EMPLOYEE, null, "Tên chỉ chứa định dạng chữ");
         }
@@ -134,7 +134,7 @@ public class EmployeeDto implements Validator {
         if (employeeDto.getAddress() == null) {
             errors.rejectValue("address", null, "Vui lòng nhập địa chỉ");
         } else if (employeeDto.getAddress().length() > 100) {
-            errors.rejectValue("address", null, "Quá ký tự cho phép");
+            errors.rejectValue("address", null, MESSAGE_CHARACTER);
         }
 
         if (employeeDto.getPhoneNumber() == null) {
@@ -162,7 +162,7 @@ public class EmployeeDto implements Validator {
         if (employeeDto.getIdCard() == null) {
             errors.rejectValue("idCard", null, "Vui lòng nhập CCCD");
         } else if (employeeDto.getIdCard().length() > 20) {
-            errors.rejectValue("idCard", null, "Quá ký tự cho phép");
+            errors.rejectValue("idCard", null, MESSAGE_CHARACTER);
         } else if (!employeeDto.getIdCard().matches("^\\d{9}(\\d{3})?$")) {
             errors.rejectValue("idCard", null, "Sai định dạng");
         }
