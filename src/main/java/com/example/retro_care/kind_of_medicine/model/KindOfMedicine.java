@@ -19,6 +19,12 @@ public class KindOfMedicine {
     public KindOfMedicine() {
     }
 
+    public KindOfMedicine(String code, String name, Boolean flagDeleted) {
+        this.code = code;
+        this.name = name;
+        this.flagDeleted = flagDeleted;
+    }
+
     public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
@@ -56,5 +62,15 @@ public class KindOfMedicine {
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
+    }
+
+    @Override
+    public String toString() {
+        return "KindOfMedicine{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                '}';
     }
 }
