@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -138,15 +137,16 @@ public class MedicineController {
      * - HttpStatus.OK If I get the id and delete it
      * - HttpStatus.NO_CONTENT If I don't get the id or status of medicine is true
      */
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
+    @DeleteMapping("/{" +
+            "id}")
+    public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
 
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         List<Medicine> medicinePage = iMedicineService.getAll();
         for (Medicine m : medicinePage) {
-            if (m.getId() == id) {
+            if (m.getId().equals(id)) {
                 iMedicineService.removeMedicine(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
