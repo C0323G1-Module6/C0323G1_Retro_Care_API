@@ -16,11 +16,10 @@ public class CustomerDto implements Validator {
     private String birthday;
     private String address;
     private String phoneNumber;
-    @Column(unique = true)
     private String email;
     private Long point;
     private String note;
-    private Boolean flagDeleted = true;
+    private Boolean flagDeleted = false;
     private AppUser appUser;
     private static final String NAME_DTO = "name";
     private static final String BIRTHDAY_DTO = "birthday";
