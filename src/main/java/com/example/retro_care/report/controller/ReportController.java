@@ -6,11 +6,8 @@ import com.example.retro_care.report.service.IReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +19,8 @@ public class ReportController {
 
     @Autowired
     private IReportService reportService;
+
+    public static final String PROFIT = "profit";
 
     /**
      * Author: DuyTV
@@ -36,19 +35,18 @@ public class ReportController {
 
 
     @GetMapping("/general")
-    public ResponseEntity<?> findReport(@RequestParam(defaultValue = "") String startDate,
-                                        @RequestParam(defaultValue = "") String endDate,
-                                        @RequestParam(defaultValue = "", required = false) String reportName) {
+    public ResponseEntity<Object> findReport(@RequestParam(defaultValue = "") String startDate,
+                                             @RequestParam(defaultValue = "") String endDate,
+                                             @RequestParam(defaultValue = "", required = false) String reportName) {
 
         Map<String, String> errMap = new HashMap<>();
-        errMap = ValidateReportInput.validate(startDate, endDate, reportName, errMap);
+        errMap = ValidateReportInput.validate(startDate, endDate, errMap);
         if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(errMap);
 
         }
-
         switch (reportName) {
             case "revenue":
                 List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
@@ -56,7 +54,7 @@ public class ReportController {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
                 return new ResponseEntity<>(revenueList, HttpStatus.OK);
-            case "profit":
+            case PROFIT:
                 List<Profit> profitList = reportService.findProfit(startDate, endDate);
                 if (profitList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -96,8 +94,8 @@ public class ReportController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-
     }
+
 
     /**
      * Author: DuyTV
@@ -111,10 +109,10 @@ public class ReportController {
 
 
     @GetMapping("/chart/revenue")
-    public ResponseEntity<?> findRevenue(@RequestParam(defaultValue = "", required = false) String startDate,
-                                         @RequestParam(defaultValue = "", required = false) String endDate) {
+    public ResponseEntity<Object> findRevenue(@RequestParam(defaultValue = "", required = false) String startDate,
+                                              @RequestParam(defaultValue = "", required = false) String endDate) {
         Map<String, String> errMap = new HashMap<>();
-        errMap = ValidateReportInput.validate(startDate, endDate, "revenue", errMap);
+        errMap = ValidateReportInput.validate(startDate, endDate, errMap);
         if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
@@ -139,10 +137,10 @@ public class ReportController {
      * @return ResponseEntity includes revenue data, HttpStatus
      */
     @GetMapping("/chart/profit")
-    public ResponseEntity<?> findProfit(@RequestParam(defaultValue = "", required = false) String startDate,
-                                        @RequestParam(defaultValue = "", required = false) String endDate) {
+    public ResponseEntity<Object> findProfit(@RequestParam(defaultValue = "", required = false) String startDate,
+                                             @RequestParam(defaultValue = "", required = false) String endDate) {
         Map<String, String> errMap = new HashMap<>();
-        errMap = ValidateReportInput.validate(startDate, endDate, "profit", errMap);
+        errMap = ValidateReportInput.validate(startDate, endDate, errMap);
         if (!errMap.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
@@ -154,6 +152,32 @@ public class ReportController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(profitList, HttpStatus.OK);
+    }
+
+    @GetMapping("/sum")
+    public ResponseEntity<Object> findSum(@RequestParam(defaultValue = "", required = false) String startDate,
+                                          @RequestParam(defaultValue = "", required = false) String endDate) {
+        Map<String, String> errMap = new HashMap<>();
+        errMap = ValidateReportInput.validate(startDate, endDate, errMap);
+        if (!errMap.isEmpty()) {
+            return ResponseEntity
+                    .status(HttpStatus.NOT_ACCEPTABLE)
+                    .body(errMap);
+
+        }
+        List<Profit> profitList = reportService.findProfit(startDate, endDate);
+        List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
+        if (profitList.isEmpty() || revenueList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        long sumProfit = 0;
+        long sumRevenue = 0;
+        for (int i = 0; i < profitList.size(); i++) {
+            sumProfit += Math.round(Double.parseDouble(profitList.get(i).getTotal()));
+            sumRevenue += Math.round(Double.parseDouble(revenueList.get(i).getTotal()));
+        }
+        SumReport sumReport = new SumReport(sumProfit, sumRevenue, sumProfit / profitList.size(), sumRevenue / revenueList.size());
+        return new ResponseEntity<>(sumReport, HttpStatus.OK);
     }
 
 }
