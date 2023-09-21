@@ -44,8 +44,8 @@ public class OrderController {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    @GetMapping(value = {"/", "/list"})
-    public ResponseEntity<Page<IOrderProjection>> getListOrder(@PageableDefault(size = 5) Pageable pageable, @RequestParam("page") String page) {
+    @GetMapping(value = { "/list"})
+    public ResponseEntity<Page<IOrderProjection>> getListOrder(@PageableDefault(size = 5)Pageable pageable,@RequestParam("page") String page) {
         int currentPage;
 
         try {
@@ -68,8 +68,9 @@ public class OrderController {
      * @return : If the id parameter is found, the data of that id will be displayed.
      * @Param Long id;
      */
-    @GetMapping({"/id"})
-    public ResponseEntity<?> getOrderById(@PathVariable Long id) {
+
+    @GetMapping({"/{id}"})
+    public ResponseEntity<?> getOrderById(@PathVariable Long id){
         Orders orders = iOrderService.findOrderById(id);
         if (orders == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

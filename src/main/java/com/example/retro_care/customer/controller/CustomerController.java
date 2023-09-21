@@ -41,7 +41,6 @@ public class CustomerController {
             for (FieldError err : bindingResult.getFieldErrors()) {
                 error.put(err.getField(), err.getDefaultMessage());
             }
-
         }
 
         if(customerService.existsByEmail(customerDto.getEmail(), customerDto.getId())){
@@ -189,6 +188,7 @@ public class CustomerController {
             }
             return ResponseEntity.noContent().build();
         }
+
 
 
     /**
