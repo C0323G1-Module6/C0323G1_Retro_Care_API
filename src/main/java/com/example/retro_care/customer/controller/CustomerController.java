@@ -106,9 +106,9 @@ public class CustomerController {
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         BeanUtils.copyProperties(customerDto, customer);
-         customerService.saveCustomer(customer);
+        customerService.saveCustomer(customer);
 
-            return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>( HttpStatus.OK);
 
     }
 
@@ -145,9 +145,9 @@ public class CustomerController {
         if (customer == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else {
-        BeanUtils.copyProperties(customerDto,customer);
-        customer.setId(id);
-        customerService.updateCustomer(customer);}
+            BeanUtils.copyProperties(customerDto,customer);
+            customer.setId(id);
+            customerService.updateCustomer(customer);}
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -164,7 +164,7 @@ public class CustomerController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         CustomerDto customerDto = new CustomerDto();
-                BeanUtils.copyProperties(customer, customerDto);
+        BeanUtils.copyProperties(customer, customerDto);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
@@ -174,20 +174,20 @@ public class CustomerController {
      * return list of customers
      */
     @GetMapping("/list")
-        public ResponseEntity<Page<ICustomerDto>> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                                 @RequestParam(defaultValue = "", required = false) String name,
-                                                 @RequestParam(defaultValue = "", required = false) String code,
-                                                 @RequestParam(defaultValue = "", required = false) String address,
-                                                 @RequestParam(defaultValue = "", required = false) String phoneNumber,
-                                                 @RequestParam(defaultValue = "") String groupValue,
-                                                 @RequestParam(defaultValue = "") String sortItem) {
-            Pageable pageable = PageRequest.of(page, 5);
-            Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
-            if (customers.getTotalElements() != 0) {
-                return ResponseEntity.ok(customers);
-            }
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Page<ICustomerDto>> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                              @RequestParam(defaultValue = "", required = false) String name,
+                                                              @RequestParam(defaultValue = "", required = false) String code,
+                                                              @RequestParam(defaultValue = "", required = false) String address,
+                                                              @RequestParam(defaultValue = "", required = false) String phoneNumber,
+                                                              @RequestParam(defaultValue = "") String groupValue,
+                                                              @RequestParam(defaultValue = "") String sortItem) {
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
+        if (customers.getTotalElements() != 0) {
+            return ResponseEntity.ok(customers);
         }
+        return ResponseEntity.noContent().build();
+    }
 
 
 
