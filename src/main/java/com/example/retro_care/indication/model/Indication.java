@@ -96,15 +96,4 @@ public class Indication {
         this.prescription = prescription;
     }
 
-    @Override
-    public String toString() {
-        return "Indication{" +
-                "id=" + id +
-                ", dosage=" + dosage +
-                ", frequency=" + frequency +
-                ", flagDeleted=" + flagDeleted +
-                ", prescription=" + prescription +
-                ", medicine=" + medicine +
-                '}';
-    }
 }

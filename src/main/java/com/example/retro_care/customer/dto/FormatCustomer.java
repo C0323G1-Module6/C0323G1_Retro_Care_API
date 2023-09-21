@@ -9,12 +9,13 @@ import java.util.Random;
  * Goal:  The class includes methods to manipulate the customer format
  */
 public class FormatCustomer {
+    private static final Random random = new Random();
+
     /**
      * Author: TinDT
      * Goal:  Create an automatic format for customers
      */
     public static String generateCustomerCode() {
-        Random random = new Random();
         int randomNumber = random.nextInt(10000);
         return "KH"+ randomNumber;
     }
@@ -37,11 +38,7 @@ public class FormatCustomer {
         LocalDate currentDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(dateStr, formatter);
-        if (date.isAfter(currentDate)) {
-            return false;
-        }
-
-        return true;
+      return !date.isAfter(currentDate);
     }
 
 }
