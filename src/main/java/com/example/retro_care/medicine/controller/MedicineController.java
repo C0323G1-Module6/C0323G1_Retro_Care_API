@@ -141,7 +141,7 @@ public class MedicineController {
      * - HttpStatus.OK if the drug list has data.
      * - HttpStatus.NO_CONTENT if drug list has no data.
      */
-    @GetMapping("/api/medicine")
+    @GetMapping("/get-medicine")
     @ResponseBody
     public ResponseEntity<Page<IMedicineListDto>> medicineList(@RequestParam(defaultValue = "0", required = false) Integer page) {
         Pageable pageable = PageRequest.of(page, 5);
@@ -184,7 +184,9 @@ public class MedicineController {
     public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                                    @RequestParam(defaultValue = "",required = false) String searchInMedicine,
-                                                                   @RequestParam(defaultValue = "", required = false) String search){
+                                                                   @RequestParam(defaultValue = "", required = false) String search,
+                                                                   @RequestParam(defaultValue = "", required = false) String conditional
+                                                                   ){
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
         Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
@@ -199,6 +201,9 @@ public class MedicineController {
                 break;
             case "searchByNameKindOfMedicine":
                medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                break;
+            case "searchByPrice":
+                medicines = iMedicineService.searchByPrice(pageable,search, conditional);
                 break;
             default:
                 medicines = iMedicineService.findAll(pageable,search);
