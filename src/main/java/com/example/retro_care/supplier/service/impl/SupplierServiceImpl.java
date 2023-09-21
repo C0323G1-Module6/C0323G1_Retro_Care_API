@@ -45,4 +45,9 @@ public class SupplierServiceImpl implements ISupplierService {
     public Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable) {
         return iSupplierRepository.findAllListInvoiceByIdSupplier(id,pageable);
     }
+
+    @Override
+    public ISupplierProjection getSupplierDetailById(Long id) {
+        return iSupplierRepository.getSupplierDetailById(id);
+    }
 }

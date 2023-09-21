@@ -3,6 +3,10 @@ package com.example.retro_care.indication.controller;
 import com.example.retro_care.indication.dto.IndicationDto;
 import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.indication.service.IIndicationService;
+import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.service.IMedicineService;
+import com.example.retro_care.prescription.model.Prescription;
+import com.example.retro_care.prescription.service.IPrescriptionService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +26,11 @@ public class IndicationController {
     @Autowired
     private IIndicationService indicationService;
 
+    @Autowired
+    private IMedicineService medicineService;
+
+    @Autowired
+    private IPrescriptionService prescriptionService;
     /**
      * Author: ThanhKN
      * Goal:get indication by id
@@ -61,17 +71,23 @@ public class IndicationController {
      * @param indicationDto
      */
     @PostMapping("/indication/create")
-    public ResponseEntity<?> createIndication(@RequestBody IndicationDto indicationDto, BindingResult bindingResult) {
+    public ResponseEntity<?> createIndication(@RequestBody IndicationDto indicationDto,BindingResult bindingResult) {
         Indication indication = new Indication();
         new IndicationDto().validate(indicationDto,bindingResult);
         if(bindingResult.hasErrors()){
             Map<String,String> errors = new HashMap<>();
-            for (FieldError e: bindingResult.getFieldErrors()) {
-                errors.put(e.getField(),e.getDefaultMessage());
+            for (FieldError error: bindingResult.getFieldErrors()){
+                errors.put(error.getField(),error.getDefaultMessage());
             }
             return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
         }
+
+        Prescription prescription = prescriptionService.getPrescriptionById(indicationService.maxId());
+        System.out.println(indicationDto.getDosage());
+        Medicine medicine = medicineService.findMedicineById(indicationDto.getMedicine());
         BeanUtils.copyProperties(indicationDto,indication);
+        indication.setMedicine(medicine);
+        indication.setPrescription(prescription);
         indicationService.createIndication(indication);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }

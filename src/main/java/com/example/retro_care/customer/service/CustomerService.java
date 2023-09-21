@@ -28,11 +28,6 @@ public class CustomerService implements ICustomerService {
         return checkingCustomer;
     }
 
-    @Override
-    public Page<Customer> findAllByName(Pageable pageable, String searchName) {
-        return customerRepository.findCustomerByNameContaining(pageable,searchName);
-    }
-
     /**
      * Author: TinDT
      * Goal: update for customer
@@ -89,8 +84,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
-        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
+    public Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(name, code, address, phoneNumber, groupValue, sortItem, pageable);
 
     }
 

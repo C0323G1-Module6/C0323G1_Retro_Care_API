@@ -3,7 +3,11 @@ package com.example.retro_care.customer.model;
 import com.example.retro_care.user.model.AppUser;
 
 import javax.persistence.*;
-
+/**
+ * Author: TinDT & QuyenHT
+ * Goal: class initializes the customer
+ * return customer
+ */
 @Entity
 @Table(name = "customer")
 public class Customer {
