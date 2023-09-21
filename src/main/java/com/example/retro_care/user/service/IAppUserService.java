@@ -13,5 +13,5 @@ public interface IAppUserService extends UserDetailsService {
     Boolean logout(String userName);
     Long findAppUserIdByUserName(String userName);
 
-
+    boolean existsById(Long id);
 }
