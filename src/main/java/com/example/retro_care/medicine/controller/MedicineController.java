@@ -1,7 +1,11 @@
 package com.example.retro_care.medicine.controller;
 
+import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
+import com.example.retro_care.medicine.dto.ImageMedicineDto;
+import com.example.retro_care.medicine.dto.KindOfMedicineDto;
 import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.dto.MedicineDto;
+import com.example.retro_care.medicine.dto.UnitDetailDto;
 import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.medicine.model.UnitDetail;
@@ -13,14 +17,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 
 @RestController
@@ -45,10 +47,24 @@ public class MedicineController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity findMedicineById(@PathVariable("id") Long id) {
-        iImageMedicineService.findImageMedicineByMedicineId(id);
-        iUnitDetailService.findUnitDetailByMedicineId(id);
-        iMedicineService.findMedicineById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        ImageMedicine imageMedicines = iImageMedicineService.findImageMedicineByMedicineId(id);
+        UnitDetail unitDetails = iUnitDetailService.findUnitDetailByMedicineId(id);
+        Medicine medicine = iMedicineService.findMedicineById(id);
+        ImageMedicineDto imageMedicineDto = new ImageMedicineDto();
+        KindOfMedicineDto kindOfMedicineDto = new KindOfMedicineDto();
+        UnitDetailDto unitDetailDto = new UnitDetailDto();
+        BeanUtils.copyProperties(unitDetails, unitDetailDto);
+        BeanUtils.copyProperties(medicine.getKindOfMedicine(), kindOfMedicineDto);
+        BeanUtils.copyProperties(imageMedicines, imageMedicineDto);
+        MedicineDto medicineDto = new MedicineDto();
+        medicineDto.setKindOfMedicineDto(kindOfMedicineDto);
+        BeanUtils.copyProperties(medicine, medicineDto);
+        unitDetailDto.setMedicine(medicine.getId());
+        imageMedicineDto.setMedicine(medicine.getId());
+        unitDetailDto.setUnit(unitDetails.getUnit().getId());
+        medicineDto.setImageMedicineDto(imageMedicineDto);
+        medicineDto.setUnitDetailDto(unitDetailDto);
+        return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
 
     /**
@@ -66,17 +82,21 @@ public class MedicineController {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        // Create Medicine, UnitDetail, and ImageMedicine objects from medicineDto
         Medicine medicine = new Medicine();
+        KindOfMedicine kindOfMedicine = new KindOfMedicine();
         UnitDetail unitDetail = new UnitDetail();
         ImageMedicine imageMedicine = new ImageMedicine();
         BeanUtils.copyProperties(medicineDto, medicine);
+        BeanUtils.copyProperties(medicineDto.getKindOfMedicineDto(), kindOfMedicine);
+        medicine.setKindOfMedicine(kindOfMedicine);
         BeanUtils.copyProperties(medicineDto.getUnitDetailDto(), unitDetail);
-        BeanUtils.copyProperties(medicineDto.getImageMedicine(), imageMedicine);
-        // Call the services to add medicine, image, and unit detail information to the system
+        BeanUtils.copyProperties(medicineDto.getImageMedicineDto(), imageMedicine);
         iMedicineService.addMedicine(medicine);
-        iImageMedicineService.addImageMedicine(imageMedicine);
-        iUnitDetailService.addUnitDetail(unitDetail);
+        Long idMedicine = iMedicineService.getLastInsertedId();
+        if (idMedicine != null) {
+            iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+            iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -96,14 +116,17 @@ public class MedicineController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
+        KindOfMedicine kindOfMedicine = new KindOfMedicine();
         UnitDetail unitDetail = new UnitDetail();
         ImageMedicine imageMedicine = new ImageMedicine();
         BeanUtils.copyProperties(medicineDto, medicine);
+        BeanUtils.copyProperties(medicineDto.getKindOfMedicineDto(), kindOfMedicine);
+        medicine.setKindOfMedicine(kindOfMedicine);
         BeanUtils.copyProperties(medicineDto.getUnitDetailDto(), unitDetail);
-        BeanUtils.copyProperties(medicineDto.getImageMedicine(), imageMedicine);
+        BeanUtils.copyProperties(medicineDto.getImageMedicineDto(), imageMedicine);
         iMedicineService.editMedicine(medicine);
-        iImageMedicineService.updateImageMedicine(imageMedicine);
-        iUnitDetailService.updateUnitDetailByMedicineId(unitDetail);
+        iImageMedicineService.updateImageMedicine(imageMedicine, medicine.getId());
+        iUnitDetailService.updateUnitDetailByMedicineId(unitDetail, medicine.getId(), medicineDto.getUnitDetailDto().getUnit());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -116,7 +139,7 @@ public class MedicineController {
      * - HttpStatus.OK if the drug list has data.
      * - HttpStatus.NO_CONTENT if drug list has no data.
      */
-    @GetMapping("/get-medicine")
+    @GetMapping("/api/medicine")
     @ResponseBody
     public ResponseEntity<Page<IMedicineListDto>> medicineList(@RequestParam(defaultValue = "0", required = false) Integer page) {
         Pageable pageable = PageRequest.of(page, 5);
@@ -127,16 +150,6 @@ public class MedicineController {
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
-
-    /**
-     * author: DaoPTA
-     * workday: 16/09/2023
-     *
-     * @param id Pass the id to get the object to delete
-     * @return ResponseEntity with the corresponding HTTP status code.
-     * - HttpStatus.OK If I get the id and delete it
-     * - HttpStatus.NO_CONTENT If I don't get the id or status of medicine is true
-     */
     @DeleteMapping("/{" +
             "id}")
     public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {

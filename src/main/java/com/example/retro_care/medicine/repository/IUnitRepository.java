@@ -12,6 +12,6 @@ public interface IUnitRepository extends JpaRepository<Unit, Long> {
      *
      * @return A list of all Units.
      */
-    @Query(value = "SELECT u.id, u.name FROM retro_care.unit as u;", nativeQuery = true)
+    @Query(value = "SELECT u.id, u.name, u.flag_deleted FROM retro_care.unit as u", nativeQuery = true)
     List<Unit> findAll();
 }
