@@ -8,13 +8,10 @@ import com.example.retro_care.user.model.AppUser;
 import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import com.example.retro_care.employee.service.IEmployeeService;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,9 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.util.Collections.sort;
-
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/employees")
@@ -60,8 +54,8 @@ public class EmployeeController {
      * Receive data and validate, if there is an error, return BAD_REQUEST,
      * then save the employee to the DB. If saved successfully, return OK, otherwise NO_CONTENT
      *
-     * @param employeeDto
-     * @param bindingResult
+     * @param employeeDto validate
+     * @param bindingResult errors
      * @return Response entity
      */
     @PostMapping("/create")
@@ -116,7 +110,7 @@ public class EmployeeController {
      * Author: TanNV
      * Date: 15/09/2023
      * Use to get employee by id and return Http status OK if it can find it else  return http status NO_CONTENT
-     * @param id
+     * @param id employee id
      * @return Reponse entity
      */
     @GetMapping("/{id}")
@@ -171,36 +165,29 @@ public class EmployeeController {
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Call the database to retrieve paginated data with fields idRole and employee name
-     * @param page
-     * @param limit
-     * @param sort
-     * @param idRole
-     * @param nameEmployee
+     * @param page number of page
+     * @param limit limit element in page
+     * @param sort sort
+     * @param nameEmployee name employee
      * @return ResponseEntity<?>
      */
     @GetMapping("/list/{page}/{limit}/{sort}")
     public ResponseEntity<Page<Employee>> searchEmployee(@PathVariable(value = "page", required = false) Integer page,
                                                          @PathVariable(value = "limit", required = false) Integer limit,
                                                          @PathVariable(value = "sort", required = false) String sort,
-                                                         @RequestParam(value = "role", required = false) Long idRole,
                                                          @RequestParam(value = "name", required = false) String nameEmployee) {
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, sort));
         Page<Employee> employees;
         if (nameEmployee == null) {
              employees = employeeService.getListEmployee(pageable);
-            if (employees.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>(employees, HttpStatus.OK);
-            }
 
         } else {
              employees = employeeService.searchEmployee(pageable, nameEmployee);
-            if (employees.isEmpty()) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-            } else {
-                return new ResponseEntity<>(employees, HttpStatus.OK);
-            }
+        }
+        if (employees.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(employees, HttpStatus.OK);
         }
     }
 
@@ -208,7 +195,7 @@ public class EmployeeController {
      * Create:SonTT
      * Date create: 15/09/2023
      * Function: with the correct input parameter id true then return HttpStatus.OK otherwise return false
-     * @param id
+     * @param id id employee
      * @return ResponseEntity<>
      */
     @DeleteMapping("/delete-employee")
