@@ -35,6 +35,7 @@ public class PrescriptionService implements IPrescriptionService{
      */
     @Override
     public void createPrescription(Prescription prescription) {
+        prescription.setFlagDeleted(false);
         prescriptionRepository.createPrescription(prescription);
     }
 

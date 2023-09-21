@@ -3,6 +3,7 @@ package com.example.retro_care.medicine.controller;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.dto.MedicineDto;
 import com.example.retro_care.medicine.dto.UnitDetailDto;
 import com.example.retro_care.medicine.model.ImageMedicine;
@@ -134,65 +135,85 @@ public class MedicineController {
      * Medicine List
      *
      * @param page pagination of medication list
-     * @param size Divide the number of records per page
      * @return ResponseEntity with the corresponding HTTP status code.
      * - HttpStatus.OK if the drug list has data.
      * - HttpStatus.NO_CONTENT if drug list has no data.
      */
     @GetMapping("/api/medicine")
     @ResponseBody
-    public ResponseEntity<Page<Medicine>> medicineList(@RequestParam(defaultValue = "0", required = false) int page,
-                                                       @RequestParam(defaultValue = "5", required = false) int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Medicine> medicinePage = iMedicineService.findAll(pageable);
+    public ResponseEntity<Page<IMedicineListDto>> medicineList(@RequestParam(defaultValue = "0", required = false) Integer page) {
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<IMedicineListDto> medicinePage = iMedicineService.findAll(pageable, "");
         if (medicinePage.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
+    @DeleteMapping("/{" +
+            "id}")
+    public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
+
+        if (id == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        List<Medicine> medicinePage = iMedicineService.getAll();
+        for (Medicine m : medicinePage) {
+            if (m.getId().equals(id)) {
+                iMedicineService.removeMedicine(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     /**
+     * Multi-field search method for medicine
+     * workday: 19/09/2023
      * author: DaoPTA
-     * workday: 16/09/2023
      *
-     * @param id Pass the id to get the object to delete
-     * @return ResponseEntity with the corresponding HTTP status code.
-     * - HttpStatus.OK If I get the id and delete it
-     * - HttpStatus.NO_CONTENT If I don't get the id or status of medicine is true
+     * @param page parameters for paging
+     * @param limit Limit the number of records in the page
+     * @param searchInMedicine parameters contain different search methods
+     * @param search Search by input box
+     * @return - If empty, list medicine will be returned
+     *         - If there is data, the list to search will be returned
      */
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Page<Medicine>> deleteMedicine(@PathVariable Long id) {
-//        if (iMedicineService.removeMedicine(id)) {
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } else {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//    }
-//
-//    /**
-//     * author: DaoPTA
-//     * workday: 18/09/2023
-//     * Search by name Medicine
-//     *
-//     * @param page         Pagination after search
-//     * @param limit        Limit the number per page
-//     * @param sort         Arrange records in each page
-//     * @param searchByName value when filtering
-//     * @return ResponseEntity<?>
-//     */
-//    @GetMapping("/search/{page}/{limit}")
-//    public ResponseEntity<Page<Medicine>> searchCodeMedicine(@RequestParam(value = "page", required = false) Integer page,
-//                                                             @RequestParam(value = "limit", required = false) Integer limit,
-//                                                             @RequestParam(value = "sort", required = false) String sort,
-//                                                             @RequestParam(value = "searchByName", required = false) String searchByName,
-//                                                             @RequestParam(value = "searchByCode", required = false) String searchByCode,
-//                                                             @RequestParam(value = "searchByActiveElement", required = false) String searchByActiveElement) {
-//        Pageable pageable = PageRequest.of(page, limit, Sort.by(sort));
-//        Page<Medicine> medicines = iMedicineService.searchByMedicine(pageable, searchByName, searchByCode, searchByActiveElement);
-//        if (medicines.isEmpty()) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(medicines, HttpStatus.OK);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                                   @RequestParam(defaultValue = "5", required = false) Integer limit,
+                                                                   @RequestParam(defaultValue = "",required = false) String searchInMedicine,
+                                                                   @RequestParam(defaultValue = "", required = false) String search){
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
+        Page<IMedicineListDto> medicines;
+        switch (searchInMedicine){
+            case "searchByName":
+                medicines = iMedicineService.searchByNameMedicine(pageable,search);
+                break;
+            case "searchByCode":
+               medicines = iMedicineService.searchByCodeMedicine(pageable,search);
+                break;
+            case "searchByActiveElement":
+               medicines = iMedicineService.searchActiveElement(pageable,search);
+                break;
+            case "searchByNameKindOfMedicine":
+               medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                break;
+            default:
+                medicines = iMedicineService.findAll(pageable,search);
+        }
+        if (medicines.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new  ResponseEntity<>(medicines, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-list")
+    public ResponseEntity<List<Medicine>> medicineGetList(){
+        List<Medicine> medicine = iMedicineService.getAll();
+        if (medicine.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
 }

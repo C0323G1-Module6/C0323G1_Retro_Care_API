@@ -29,9 +29,16 @@ public class HomeController_findFavoriteMedicineForHomepage {
                 .andDo(print())
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$").isArray())
-                .andExpect(jsonPath("$[0].id").value(3))
-                .andExpect(jsonPath("$[0].code").value("VITC01"))
-                .andExpect(jsonPath("$[0].quantity").value(1200));
+                .andExpect(jsonPath("$[0].medicineId").value(4))
+                .andExpect(jsonPath("$[0].medicineName").value("Aspirin"))
+                .andExpect(jsonPath("$[0].medicinePrice").value(7.9))
+                .andExpect(jsonPath("$[0].medicineImage").exists())
+                .andExpect(jsonPath("$[0].medicineSaleQuantity").value(16))
+                .andExpect(jsonPath("$[29].medicineId").value(19))
+                .andExpect(jsonPath("$[29].medicineName").value("Lisinopril"))
+                .andExpect(jsonPath("$[29].medicinePrice").value(12.8))
+                .andExpect(jsonPath("$[29].medicineImage").exists())
+                .andExpect(jsonPath("$[29].medicineSaleQuantity").value(1));
     }
 
     /**
