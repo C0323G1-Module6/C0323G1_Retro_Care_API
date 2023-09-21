@@ -40,17 +40,8 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     @Modifying
     @Transactional
     @Query(value = "insert into employee(code_employee,name_employee,address,phone_number,start_day,birthday,id_card,image,note,flag_delete,app_user_id) " +
-            "value (:code_employee,:name_employee,:address,:phone_number,:start_day,:birthday,:id_card,:image,:note,:flag_delete,:app_user_id)",nativeQuery = true)
-    void addEmployee(@Param(value = "code_employee") String code,
-                         @Param(value = "name_employee") String name,
-                         @Param(value = "address") String address,
-                         @Param(value = "phone_number") String phoneNumber,
-                         @Param(value = "start_day") String startDay,
-                         @Param(value = "birthday") String birthday,
-                         @Param(value = "id_card") String idCard,
-                         @Param(value = "image") String image,
-                         @Param(value = "note") String note,
-                         @Param(value = "flag_delete") Boolean flagDelete,
+            "value (:#{#employee.codeEmployee},:#{#employee.nameEmployee},:#{#employee.address},:#{#employee.phoneNumber},:#{#employee.startDay},:#{#employee.birthday},:#{#employee.idCard},:#{#employee.image},:#{#employee.note},:#{#employee.flagDelete},:app_user_id)",nativeQuery = true)
+    void addEmployee(@Param(value = "employee") Employee employee,
                          @Param(value = "app_user_id") Long appUserId
     );
    /**
@@ -69,17 +60,9 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     */
    @Modifying
    @Transactional
-   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
-   void updateEmployee(@Param(value = "name_employee") String name,
-                        @Param(value = "address") String address,
-                        @Param(value = "phone_number") String phoneNumber,
-                        @Param(value = "start_day") String startDay,
-                        @Param(value = "birthday") String birthday,
-                        @Param(value = "id_card") String idCard,
-                        @Param(value = "image") String image,
-                        @Param(value = "note") String note,
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
+   void updateEmployee(@Param(value = "employee")Employee employee,
                         @Param(value = "id") Long id
-
    );
     @Query(value = "SELECT * from employee where employee.phone_number = :phoneNumber and employee.flag_delete = true and employee.id <> :id", nativeQuery = true)
     Employee findEmployeeByPhoneNumber(@Param(value = "phoneNumber") String phoneNumber,@Param(value = "id") Long id);

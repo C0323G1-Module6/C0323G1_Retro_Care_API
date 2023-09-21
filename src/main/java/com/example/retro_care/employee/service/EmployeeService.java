@@ -41,10 +41,7 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public void addEmployee(Employee employee, Long userId) {
 
-        employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
-                employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
-                employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.isFlagDelete(),userId);
+        employeeRepository.addEmployee(employee,userId);
     }
   /**
      * Create: SonTT
@@ -124,10 +121,7 @@ public class EmployeeService implements IEmployeeService{
      */
     @Override
     public void updateEmployee(Employee employee) {
-        employeeRepository.updateEmployee(employee.getNameEmployee(),
-                employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
-                employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.getId());
+        employeeRepository.updateEmployee(employee,employee.getId());
     }
     /**
      * Author: TanNV

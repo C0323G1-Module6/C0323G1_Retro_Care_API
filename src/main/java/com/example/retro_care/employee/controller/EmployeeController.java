@@ -66,7 +66,6 @@ public class EmployeeController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
-        System.out.println("employeeDto");
         new EmployeeDto().validate(employeeDto, bindingResult);
         Map<String, String> errorMap= new HashMap<>();
         if (bindingResult.hasErrors()) {
@@ -89,7 +88,7 @@ public class EmployeeController {
         }
 
         Boolean userNameExisted = appUserService.existsByUsername(employeeDto.getAppUser());
-        if (userNameExisted) {
+        if (Boolean.TRUE.equals(userNameExisted)) {
             errorMap.put("appUser","Tài khoản này đã tồn tại");
 
         }
@@ -101,7 +100,7 @@ public class EmployeeController {
         appUser.setUserName(employeeDto.getAppUser());
         appUser.setPassword(passwordEncoder.encode("123"));
         Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_EMPLOYEE");
-        if (!checkAddNewAppUser) {
+        if (!Boolean.TRUE.equals(checkAddNewAppUser)) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Đăng ký thất bại, vui lòng chờ trong giây lát");
