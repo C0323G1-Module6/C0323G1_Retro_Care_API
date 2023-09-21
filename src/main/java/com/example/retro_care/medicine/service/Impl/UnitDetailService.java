@@ -1,6 +1,5 @@
 package com.example.retro_care.medicine.service.Impl;
 
-import com.example.retro_care.medicine.model.ImageMedicine;
 import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.repository.IUnitDetailRepository;
 import com.example.retro_care.medicine.service.IUnitDetailService;

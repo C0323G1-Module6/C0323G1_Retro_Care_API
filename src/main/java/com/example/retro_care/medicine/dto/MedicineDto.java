@@ -2,7 +2,6 @@ package com.example.retro_care.medicine.dto;
 
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.model.ImageMedicine;
-import com.example.retro_care.medicine.model.UnitDetail;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -39,7 +38,7 @@ public class MedicineDto implements Validator {
     public MedicineDto() {
     }
 
-    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine, UnitDetail unitDetail, ImageMedicine imageMedicine) {
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine, UnitDetailDto unitDetailDto, ImageMedicine imageMedicine) {
         this.id = id;
         this.code = code;
         this.name = name;
