@@ -28,7 +28,7 @@ public class Employee {
     @Column(columnDefinition = "longtext")
     private String note;
     @Column(columnDefinition = "bit(1)")
-    private Boolean flagDelete = true;
+    private Boolean flagDelete = false;
     @OneToOne
     @JoinColumn(name = "app_user_id",nullable = false,unique = true)
     private AppUser appUser;

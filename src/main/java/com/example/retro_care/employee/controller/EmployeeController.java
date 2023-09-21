@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
 public class EmployeeController {
     @Autowired
     private IEmployeeService employeeService;
