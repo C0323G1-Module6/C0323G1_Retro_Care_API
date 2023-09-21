@@ -1,16 +1,14 @@
 package com.example.retro_care.employee.repository;
 
 import com.example.retro_care.employee.model.Employee;
-import com.example.retro_care.user.model.AppRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-  import org.springframework.transaction.annotation.Transactional;
-  import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
 
-import java.util.List;
 
 public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
    /**

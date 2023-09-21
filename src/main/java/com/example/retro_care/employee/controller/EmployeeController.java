@@ -3,15 +3,12 @@ package com.example.retro_care.employee.controller;
 
 import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
-import com.example.retro_care.user.model.AppUser;
 import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import com.example.retro_care.employee.service.IEmployeeService;
-import org.apache.coyote.Request;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,8 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
-
-import static java.util.Collections.sort;
 
 @RestController
 @CrossOrigin("*")
@@ -56,7 +51,6 @@ public class EmployeeController {
      */
     @PostMapping("/create")
     public ResponseEntity<String> createEmployee(@RequestBody EmployeeDto employeeDto, BindingResult bindingResult) {
-        System.out.println("employeeDto");
         new EmployeeDto().validate(employeeDto, bindingResult);
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(bindingResult.getAllErrors().toString(),HttpStatus.BAD_REQUEST);
