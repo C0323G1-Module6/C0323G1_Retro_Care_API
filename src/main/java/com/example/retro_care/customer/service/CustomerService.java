@@ -26,7 +26,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public boolean existsByEmail(String email, Long id) {
-        return customerRepository.existsByEmailAndIdNot(email,id);
+        return customerRepository.existsByEmailAndIdNotAndFlagDeletedIsFalse(email,id);
     }
     /**
      * Author: HANHNLM
@@ -34,7 +34,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public boolean existsByPhoneNumber(String phoneNumber, Long id) {
-        return customerRepository.existsByPhoneNumberAndIdNot(phoneNumber,id);
+        return customerRepository.existsByPhoneNumberAndIdNotAndFlagDeletedIsFalse(phoneNumber,id);
     }
 
     /**
@@ -47,9 +47,7 @@ public class CustomerService implements ICustomerService {
         customer.setFlagDeleted(true);
         customer.setPoint(0l);
         customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
-
-        Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
-        return checkingCustomer;
+                return customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
     }
 
     /**
@@ -59,7 +57,6 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        System.out.println(customer);
         customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
 
     }
