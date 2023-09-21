@@ -27,21 +27,22 @@ import java.util.Map;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+
     /**
      * Author: HanhNLM
      * Goal: update online customer
      * return HttpStatus or error
      */
     @PatchMapping("/online-customer")
-    public ResponseEntity<?> updateOnlineCustomer(@RequestBody Customer customer){
+    public ResponseEntity<?> updateOnlineCustomer(@RequestBody Customer customer) {
         Map<String, String> errors = new HashMap<>();
-        if(customerService.existsByEmail(customer.getEmail(), customer.getId())){
+        if (customerService.existsByEmail(customer.getEmail(), customer.getId())) {
             errors.put("email", "Email đã tồn tại trong hệ thống!");
         }
-        if(customerService.existsByPhoneNumber(customer.getPhoneNumber(), customer.getId())){
+        if (customerService.existsByPhoneNumber(customer.getPhoneNumber(), customer.getId())) {
             errors.put("phoneNumber", "Số điện thoại đã tồn tại!");
         }
-        if(errors.size() > 0){
+        if (errors.size() > 0) {
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         customerService.updateOnlineCustomer(customer);
@@ -69,7 +70,6 @@ public class CustomerController {
     }
 
 
-
     /**
      * Author: TinDT
      * Goal: create customer
@@ -87,20 +87,20 @@ public class CustomerController {
 
         }
         Customer customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
-        if (customerCheck != null){
-            errors.put("email","Email đã được đăng ký");
+        if (customerCheck != null) {
+            errors.put("email", "Email đã được đăng ký");
         }
-        Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+        Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
         if (customerCheckPhone != null) {
             errors.put("phoneNumber", "Số điện thoại đã được đăng ký");
         }
-        if (errors.size() != 0){
+        if (errors.size() != 0) {
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         BeanUtils.copyProperties(customerDto, customer);
-         customerService.saveCustomer(customer);
+        customerService.saveCustomer(customer);
 
-            return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
+        return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
 
     }
 
@@ -110,38 +110,38 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
-        Customer customer= customerService.findCustomerById(id);
-        new CustomerDto().validate(customerDto,bindingResult);
+    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto, @PathVariable Long id, BindingResult bindingResult) {
+        Customer customer = customerService.findCustomerById(id);
+        new CustomerDto().validate(customerDto, bindingResult);
         Map<String, String> errors = new HashMap<>();
         if (bindingResult.hasErrors()) {
             for (FieldError err : bindingResult.getFieldErrors()) {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
         }
-        if (!(customer.getEmail().equals(customerDto.getEmail()))){
+        if (!(customer.getEmail().equals(customerDto.getEmail()))) {
             Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
-            if (customerCheckEmail != null){
-                errors.put("email","Email đã tồn tại");
+            if (customerCheckEmail != null) {
+                errors.put("email", "Email đã tồn tại");
             }
         }
-        if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))){
+        if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))) {
             Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
-            if (customerCheckPhone != null){
-                errors.put("phoneNumber","Số điện thoại đã tồn tại");
+            if (customerCheckPhone != null) {
+                errors.put("phoneNumber", "Số điện thoại đã tồn tại");
             }
         }
-        if (errors.size() != 0){
+        if (errors.size() != 0) {
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (customer==null){
-            return new ResponseEntity<>("Không tìm thấy thông tin khách hàng",HttpStatus.NOT_FOUND);
+        if (customer == null) {
+            return new ResponseEntity<>("Không tìm thấy thông tin khách hàng", HttpStatus.NOT_FOUND);
         }
-        BeanUtils.copyProperties(customerDto,customer);
+        BeanUtils.copyProperties(customerDto, customer);
         customer.setId(id);
 
         customerService.updateCustomer(customer);
-        return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
+        return new ResponseEntity<>("Cập nhật thông tin khách hành thành công", HttpStatus.OK);
     }
 
 
@@ -153,11 +153,11 @@ public class CustomerController {
     @GetMapping("/{id}")
     public ResponseEntity<?> detailCustomer(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
-        if (customer == null){
+        if (customer == null) {
             return new ResponseEntity<>("Không tìm thấy khách hàng", HttpStatus.NOT_FOUND);
         }
         CustomerDto customerDto = new CustomerDto();
-                BeanUtils.copyProperties(customer, customerDto);
+        BeanUtils.copyProperties(customer, customerDto);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
@@ -167,20 +167,20 @@ public class CustomerController {
      * return list of customers
      */
     @GetMapping("/list")
-        public ResponseEntity<Page<ICustomerDto>> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                                 @RequestParam(defaultValue = "", required = false) String name,
-                                                 @RequestParam(defaultValue = "", required = false) String code,
-                                                 @RequestParam(defaultValue = "", required = false) String address,
-                                                 @RequestParam(defaultValue = "", required = false) String phoneNumber,
-                                                 @RequestParam(defaultValue = "") String groupValue,
-                                                 @RequestParam(defaultValue = "") String sortItem) {
-            Pageable pageable = PageRequest.of(page, 5);
-            Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
-            if (customers.getTotalElements() != 0) {
-                return ResponseEntity.ok(customers);
-            }
-            return ResponseEntity.noContent().build();
+    public ResponseEntity<Page<ICustomerDto>> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                              @RequestParam(defaultValue = "", required = false) String name,
+                                                              @RequestParam(defaultValue = "", required = false) String code,
+                                                              @RequestParam(defaultValue = "", required = false) String address,
+                                                              @RequestParam(defaultValue = "", required = false) String phoneNumber,
+                                                              @RequestParam(defaultValue = "") String groupValue,
+                                                              @RequestParam(defaultValue = "") String sortItem) {
+        Pageable pageable = PageRequest.of(page, 5);
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
+        if (customers.getTotalElements() != 0) {
+            return ResponseEntity.ok(customers);
         }
+        return ResponseEntity.noContent().build();
+    }
 
     /**
      * Author: QuyenHT
