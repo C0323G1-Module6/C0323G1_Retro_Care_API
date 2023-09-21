@@ -13,4 +13,8 @@ public interface IPrescriptionService {
     void removePrescription(Long id);
     Prescription getPrescriptionById(Long id);
     void editPrescription(Prescription prescription);
+    Page<Prescription> searchByNamePrescription(String name,Pageable pageable);
+    Page<Prescription> searchByCodePrescription(String code,Pageable pageable);
+    Page<Prescription> searchBySymptomsPrescription(String symptoms, Pageable pageable);
+
 }

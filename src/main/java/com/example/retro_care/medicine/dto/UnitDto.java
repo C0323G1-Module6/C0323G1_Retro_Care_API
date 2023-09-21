@@ -1,34 +1,26 @@
-package com.example.retro_care.medicine.model;
+package com.example.retro_care.medicine.dto;
+
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "unit")
-public class Unit {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class UnitDto {
     private Long id;
-
-    @Column(name = "name")
+    //    @Size(max = 255, message = "Đơn vị không được vượt quá 255 kí tự")
     private String name;
-
-    @Column(name = "flag_deleted")
     private Boolean flagDeleted;
 
-    public Unit(Long id, String name, Boolean flagDeleted) {
+    public UnitDto(Long id, String name, Boolean flagDeleted) {
         this.id = id;
         this.name = name;
         this.flagDeleted = flagDeleted;
-
     }
 
-    public Unit() {
+    public UnitDto() {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -36,7 +28,7 @@ public class Unit {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -44,7 +36,7 @@ public class Unit {
     }
 
     public Boolean getFlagDeleted() {
-        return this.flagDeleted;
+        return flagDeleted;
     }
 
     public void setFlagDeleted(Boolean flagDeleted) {
