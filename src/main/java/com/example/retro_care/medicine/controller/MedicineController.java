@@ -113,7 +113,6 @@ public class MedicineController {
      * Medicine List
      *
      * @param page pagination of medication list
-     * @param size Divide the number of records per page
      * @return ResponseEntity with the corresponding HTTP status code.
      * - HttpStatus.OK if the drug list has data.
      * - HttpStatus.NO_CONTENT if drug list has no data.
@@ -143,7 +142,7 @@ public class MedicineController {
     public ResponseEntity<?> deleteMedicine(@PathVariable("id") Long id) {
 
         if (id == null) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         List<Medicine> medicinePage = iMedicineService.getAll();
         for (Medicine m : medicinePage) {
@@ -152,7 +151,7 @@ public class MedicineController {
                 return new ResponseEntity<>(HttpStatus.OK);
             }
         }
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -170,7 +169,6 @@ public class MedicineController {
     @GetMapping("/search")
     public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
-//                                                                   @RequestParam(defaultValue = "code", required = false) String sort,
                                                                    @RequestParam(defaultValue = "",required = false) String searchInMedicine,
                                                                    @RequestParam(defaultValue = "", required = false) String search){
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
@@ -192,7 +190,7 @@ public class MedicineController {
                 medicines = iMedicineService.findAll(pageable,search);
         }
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new  ResponseEntity<>(medicines, HttpStatus.OK);
     }
