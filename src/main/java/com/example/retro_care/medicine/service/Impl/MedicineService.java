@@ -35,10 +35,7 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public void editMedicine(Medicine medicine) {
-        iMedicineRepository.updateMedicine(medicine.getId(), medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(), medicine.getRetailProfits(),
-                medicine.getKindOfMedicine().getId());
+        iMedicineRepository.updateMedicine(medicine);
     }
 
     /**
@@ -50,10 +47,18 @@ public class MedicineService implements IMedicineService {
     public void addMedicine(Medicine medicine) {
         UUID uuid = UUID.randomUUID();
         String code = uuid.toString().replace("-", "").substring(0, 8);
-        iMedicineRepository.addMedicine(code, medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(),
-                medicine.getRetailProfits(), medicine.getKindOfMedicine().getId());
+        medicine.setCode(code);
+        iMedicineRepository.addMedicine(medicine);
+    }
+
+    /**
+     * Retrieves the ID of the last inserted record in the database-TinVV
+     *
+     * @return The ID of the last inserted record as a {@code Long} value.
+     */
+    @Override
+    public Long getLastInsertedId() {
+        return iMedicineRepository.getLastInsertedId();
     }
 
 
@@ -101,6 +106,7 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable, String searchByCode) {
         return iMedicineRepository.searchCode(searchByCode, pageable);
+
     }
 
     /**

@@ -1,42 +1,41 @@
-package com.example.retro_care.medicine.model;
+package com.example.retro_care.medicine.dto;
 
 
-import javax.persistence.*;
 
-@Entity
-@Table(name = "unit")
-public class Unit {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class KindOfMedicineDto {
     private Long id;
-
-    @Column(name = "name")
+    private String code;
     private String name;
-
-    @Column(name = "flag_deleted")
     private Boolean flagDeleted;
 
-    public Unit(Long id, String name, Boolean flagDeleted) {
+    public KindOfMedicineDto(Long id, String code, String name, Boolean flagDeleted) {
         this.id = id;
+        this.code = code;
         this.name = name;
         this.flagDeleted = flagDeleted;
-
     }
 
-    public Unit() {
+    public KindOfMedicineDto() {
     }
 
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {
@@ -44,7 +43,7 @@ public class Unit {
     }
 
     public Boolean getFlagDeleted() {
-        return this.flagDeleted;
+        return flagDeleted;
     }
 
     public void setFlagDeleted(Boolean flagDeleted) {
