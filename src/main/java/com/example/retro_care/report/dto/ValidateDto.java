@@ -14,6 +14,10 @@ public class ValidateDto implements Validator {
     private String endDate;
     private String reportName;
 
+    private static final String START_DATE = "startDate";
+    private static final String END_DATE = "endDate";
+    private static final String REGEX = "^((19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|1\\d|2\\d|3[01])$";
+
     public ValidateDto() {
     }
 
@@ -57,43 +61,43 @@ public class ValidateDto implements Validator {
         ValidateDto validateDto = (ValidateDto) target;
         LocalDate presentDate = LocalDate.now();
         if (validateDto.getStartDate() == null) {
-            errors.rejectValue("startDate", null, "Nhập sai ngày bắt đầu");
+            errors.rejectValue(START_DATE, "", "Nhập sai ngày bắt đầu");
         } else if (validateDto.getStartDate().equals("")) {
-            errors.rejectValue("startDate", "", "Vui lòng chọn ngày bắt đầu");
-        } else if (!validateDto.getStartDate().matches("^((19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$")) {
-            errors.rejectValue("startDate", null, "Sai định dạng ngày bắt đầu. Vui lòng nhập lại");
+            errors.rejectValue(START_DATE, "", "Vui lòng chọn ngày bắt đầu");
+        } else if (!validateDto.getStartDate().matches(REGEX)) {
+            errors.rejectValue(START_DATE, "", "Sai định dạng ngày bắt đầu. Vui lòng nhập lại");
         } else {
-            LocalDate startDate = LocalDate.parse(validateDto.getStartDate());
-            Period dayPeriod = Period.between(startDate, presentDate);
+            LocalDate beginDate = LocalDate.parse(validateDto.getStartDate());
+            Period dayPeriod = Period.between(beginDate, presentDate);
             int days = dayPeriod.getDays();
             if (days < 0) {
-                errors.rejectValue("startDate", null, "Ngày bắt đầu vượt quá ngày hiện tại");
+                errors.rejectValue(START_DATE, "", "Ngày bắt đầu vượt quá ngày hiện tại");
             }
         }
         if (validateDto.getEndDate() == null) {
-            errors.rejectValue("endDate", null, "Nhập sai ngày kết thúc");
+            errors.rejectValue(END_DATE, "", "Nhập sai ngày kết thúc");
         } else if (validateDto.getEndDate().equals("")) {
-            errors.rejectValue("endDate", "", "Vui lòng chọn ngày kết thúc");
-        } else if (!validateDto.getEndDate().matches("^((19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$")) {
-            errors.rejectValue("endDate", null, "Sai định dạng ngày kết thúc. Vui lòng nhập lại");
+            errors.rejectValue(END_DATE, "", "Vui lòng chọn ngày kết thúc");
+        } else if (!validateDto.getEndDate().matches(REGEX)) {
+            errors.rejectValue(END_DATE, "", "Sai định dạng ngày kết thúc. Vui lòng nhập lại");
         } else {
-            LocalDate endDate = LocalDate.parse(validateDto.endDate);
-            Period dayPeriod = Period.between(endDate, presentDate);
+            LocalDate finishDate = LocalDate.parse(validateDto.endDate);
+            Period dayPeriod = Period.between(finishDate, presentDate);
             int days = dayPeriod.getDays();
             if (days < 0) {
-                errors.rejectValue("endDate", null, "Ngày kết thúc vượt quá ngày hiện tại");
+                errors.rejectValue(END_DATE, "", "Ngày kết thúc vượt quá ngày hiện tại");
             } else {
                 if (validateDto.getStartDate() == null || validateDto.getStartDate().equals("")) {
-                    errors.rejectValue("startDate", null, "Vui lòng chọn ngày bắt đầu");
-                } else if (!validateDto.getStartDate().matches("^((19|20)\\d\\d)-(0[1-9]|1[012])-(0[1-9]|1[0-9]|2[0-9]|3[01])$")) {
-                    errors.rejectValue("startDate", null, "Sai định dạng ngày bắt đầu. Vui lòng nhập lại");
+                    errors.rejectValue(START_DATE, "", "Vui lòng chọn ngày bắt đầu");
+                } else if (!validateDto.getStartDate().matches(REGEX)) {
+                    errors.rejectValue(START_DATE, "", "Sai định dạng ngày bắt đầu. Vui lòng nhập lại");
                 } else {
-                    LocalDate beginDate = LocalDate.parse(validateDto.getStartDate());
-                    LocalDate finishDate = LocalDate.parse(validateDto.getEndDate());
-                    Period startAndEndPeriod = Period.between(beginDate, finishDate);
+                    LocalDate beginingDate = LocalDate.parse(validateDto.getStartDate());
+                    LocalDate finishingDate = LocalDate.parse(validateDto.getEndDate());
+                    Period startAndEndPeriod = Period.between(beginingDate, finishingDate);
                     int startAndEndDays = startAndEndPeriod.getDays();
                     if (startAndEndDays < 0) {
-                        errors.rejectValue("endDate", null, "Ngày kết thúc sớm hơn ngày bắt đầu");
+                        errors.rejectValue(END_DATE, "", "Ngày kết thúc sớm hơn ngày bắt đầu");
                     }
                 }
             }
