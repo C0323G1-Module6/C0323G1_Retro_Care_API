@@ -1,5 +1,6 @@
 package com.example.retro_care.employee.dto;
 
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.user.model.AppUser;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -159,7 +160,9 @@ public class EmployeeDto implements Validator {
 
         if (employeeDto.getBirthday() == null) {
             errors.rejectValue("birthday", null, "Vui lòng nhập ngày sinh");
-        }else if (!employeeDto.getBirthday().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
+        } else if (!FormatCustomer.check18YearsOld(employeeDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Nhân viên chưa đủ 18 tuổi");
+        } else if (!employeeDto.getBirthday().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
             errors.rejectValue("birthday",null,"Vui lòng nhập đúng định dạng yyyy-mm-dd");
         }
 
