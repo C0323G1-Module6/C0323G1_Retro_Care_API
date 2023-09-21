@@ -29,8 +29,8 @@ public class Customer {
     private Long point;
     @Column(columnDefinition = "text")
     private String note;
-    @Column(name = "flag_deleted", columnDefinition = "bit(1)")
-    private Boolean flagDeleted = true;
+    @Column(name = "flag_deleted", columnDefinition = "bit(0)")
+    private Boolean flagDeleted = false;
     @OneToOne
     @JoinColumn(name = "app_user_id ",referencedColumnName = "id",nullable = true)
     private AppUser appUser;
