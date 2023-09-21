@@ -5,6 +5,7 @@ import com.example.retro_care.supplier.model.ISupplierProjection;
 import com.example.retro_care.supplier.model.Supplier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
 public interface ISupplierService {
@@ -16,7 +17,7 @@ public interface ISupplierService {
      * @param: Pageable pageable
      * return Page<ISupplierProjection>
      */
-    Page<ISupplierProjection> getListSupplier(Pageable pageable);
+    Page<ISupplierProjection> getListSupplier(Pageable pageable, String code,String name, String phoneNumber,String address, String sortBy);
     /**
      * method :createSupplier()
      * created by :ThanhVH
@@ -62,4 +63,6 @@ public interface ISupplierService {
      * return Page<IInvoiceProjection>
      */
     Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable);
+
+    ISupplierProjection getSupplierDetailById(@Param("id") Long id);
 }

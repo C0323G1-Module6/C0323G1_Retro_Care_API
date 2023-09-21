@@ -1,6 +1,7 @@
 package com.example.retro_care.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.springframework.context.annotation.Lazy;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -15,11 +16,12 @@ public class AppUser {
     private Boolean flagDeleted;
     private Boolean flagOnline;
     @JsonBackReference
-    @OneToMany(mappedBy = "appUser")
+    @OneToMany(mappedBy = "appUser",fetch = FetchType.EAGER)
     private Set<UserRole> userRoleSet;
 
     public AppUser() {
     }
+
 
     public AppUser(Long id, String userName, String password, Boolean flagDeleted, Boolean flagOnline, Set<UserRole> userRoleSet) {
         this.id = id;

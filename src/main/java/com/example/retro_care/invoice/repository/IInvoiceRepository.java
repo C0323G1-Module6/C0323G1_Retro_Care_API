@@ -3,6 +3,7 @@ package com.example.retro_care.invoice.repository;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 
+import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,6 +11,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     /**
@@ -21,32 +24,32 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *                 {@literal null}.
      * @return
      */
-    @Query(value = "SELECT i.id,i.app_user_id, i.code,i.creation_date,i.flag_deleted,i.paid,i.supplier_id," +
-            " DATE(i.creation_date) as creation_day, TIME(i.creation_date) as creation_time,\n" +
-            "       i.document_number, i.note, sum(m.price * ind.medicine_quantity) as total,\n" +
-            "       (sum(m.price * ind.medicine_quantity) - i.paid) as bill_owed\n" +
-            "FROM invoice i\n" +
-            "         JOIN invoice_detail ind ON i.id = ind.invoice_id_id\n" +
-            "         JOIN medicine m ON m.id = ind.medicine_id_id\n" +
-            "WHERE i.flag_deleted = false\n" +
-            "GROUP BY i.id,i.app_user_id,i.creation_date,i.flag_deleted, i.code, i.creation_date,i.paid," +
-            " i.supplier_id,i.document_number, i.note, i.paid", nativeQuery = true)
-    Page<Invoice> findAllInvoice(Pageable pageable);
-
-    @Query(value = "SELECT i.id, i.app_user_id_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
+    @Query(value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
             "s.name, s.address , DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
             "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
             "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
             "FROM invoice i " +
-            "JOIN invoice_detail ind ON i.id = ind.invoice_id_id " +
-            "JOIN medicine m ON m.id = ind.medicine_id_id " +
+            "JOIN invoice_detail ind ON i.id = ind.invoice_id " +
+            "JOIN medicine m ON m.id = ind.medicine_id " +
             "JOIN supplier s ON s.id = i.supplier_id " +
             "WHERE i.flag_deleted = false " +
-            "GROUP BY i.id, i.app_user_id_id, i.creation_date, i.flag_deleted, i.code, i.paid, " +
-            "i.supplier_id_id, i.document_number, i.note, i.paid " +
+            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.paid, " +
+            "i.supplier_id, i.document_number, i.note, i.paid " +
             "ORDER BY i.code DESC",
             nativeQuery = true)
     Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable);
+
+
+    @Query(value = "SELECT m.id as idMedicine, m.active_element, m.code as codeMedicine, m.maker, m.name as nameMedicine,\n" +
+            "       m.note as noteMedicine, m.origin, m.price, m.quantity, m.retail_profits as retailProfits,m.active_element as activeElement, m.vat,\n" +
+            "       m.kind_of_medicine_id, k.code as codeKind, k.name as nameKind\n " +
+            "        FROM invoice i \n" +
+            "        JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
+            "        JOIN medicine m ON m.id = ind.medicine_id\n" +
+            "        JOIN supplier s ON s.id = i.supplier_id\n" +
+            "        JOIN kind_of_medicine k ON k.id = m.kind_of_medicine_id\n" +
+            "WHERE i.id = :id",nativeQuery = true)
+    List<IInvoiceResult> getInvoiceDetailById(@Param("id") Long id);
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
@@ -70,43 +73,39 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      * Date create: 15/09/2023;
      * Function: Search by invoice creation time, and sort by column;
      *
-     * @param start_date
-     * @param end_date
-     * @param start_time
-     * @param end_time
-     * @param sort_column
+     *
      * @return
      */
-    @Query(nativeQuery = true, value = "SELECT i.id,i.app_user_id, i.code,i.creation_date,i.flag_deleted,i.paid,i.supplier_id," +
-            " DATE(i.creation_date) as creation_day, TIME(i.creation_date) as creation_time,\n" +
-            "       i.document_number, i.note, sum(m.price * ind.medicine_quantity) as total,\n" +
-            "       (sum(m.price * ind.medicine_quantity) - i.paid) as bill_owed\n" +
-            "FROM invoice i\n" +
-            "         JOIN invoice_detail ind ON i.id = ind.invoice_id_id\n" +
-            "         JOIN medicine m ON m.id = ind.medicine_id_id\n" +
-            "WHERE i.flag_deleted = false\n" +
-
-            "  AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL)\n" +
-            "  AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL)\n" +
-            "  AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL)\n" +
-            "  AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL)\n" +
-            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.creation_date, i.paid," +
-            " i.supplier_id, i.document_number, i.note, i.paid\n" +
-            "ORDER BY CASE\n" +
-            "  WHEN :sort_column = '1' THEN i.code\n" +
-            "  WHEN :sort_column = '2' THEN i.document_number\n" +
-            "  WHEN :sort_column = '3' THEN creation_time\n" +
-            "  WHEN :sort_column = '4' THEN creation_day\n" +
-            "  WHEN :sort_column = '5' THEN total\n" +
-            "  WHEN :sort_column = '6' THEN bill_owed\n" +
-            "  WHEN :sort_column = '7' THEN i.supplier_id_id\n" +
+    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
+            "s.name, s.address, DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
+            "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
+            "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
+            "FROM invoice i " +
+            "JOIN invoice_detail ind ON i.id = ind.invoice_id " +
+            "JOIN medicine m ON m.id = ind.medicine_id " +
+            "JOIN supplier s ON s.id = i.supplier_id " +
+            "WHERE i.flag_deleted = false " +
+            "AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '') " +
+            "AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '') " +
+            "AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '') " +
+            "AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '') " +
+            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.creation_date, i.paid, " +
+            "i.supplier_id, i.document_number, i.note, i.paid " +
+            "ORDER BY CASE " +
+            "WHEN :sort_column = '1' THEN i.code " +
+            "WHEN :sort_column = '2' THEN i.document_number " +
+            "WHEN :sort_column = '3' THEN TIME(i.creation_date) " +
+            "WHEN :sort_column = '4' THEN DATE(i.creation_date) " +
+            "WHEN :sort_column = '5' THEN total " +
+            "WHEN :sort_column = '6' THEN (sum(m.price * ind.medicine_quantity) - i.paid) " +
+            "WHEN :sort_column = '7' THEN i.supplier_id " +
             "END DESC")
-    Page<Invoice> searchInvoice(Pageable pageable,
-                                @Param("start_date") String startDate,
-                                @Param("end_date") String endDate,
-                                @Param("start_time") String startTime,
-                                @Param("end_time") String endTime,
-                                @Param("sort_column") String sortColumn);
+    Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
+                                             @Param("start_date") String startDate,
+                                             @Param("end_date") String endDate,
+                                             @Param("start_time") String startTime,
+                                             @Param("end_time") String endTime,
+                                             @Param("sort_column") String sortColumn);
 
     /**
      * create an Invoice
