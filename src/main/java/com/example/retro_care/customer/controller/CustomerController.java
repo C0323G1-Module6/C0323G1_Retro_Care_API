@@ -27,23 +27,33 @@ import java.util.Map;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+    private static final String EMAIL = "email";
     /**
      * Author: HanhNLM
      * Goal: update online customer
      * return HttpStatus or error
      */
     @PatchMapping("/online-customer")
-    public ResponseEntity<?> updateOnlineCustomer(@RequestBody Customer customer){
-        Map<String, String> errors = new HashMap<>();
-        if(customerService.existsByEmail(customer.getEmail(), customer.getId())){
-            errors.put("email", "Email đã tồn tại trong hệ thống!");
+    public ResponseEntity<Map<String,String>> updateOnlineCustomer(@RequestBody CustomerDto customerDto,BindingResult bindingResult){
+        Map<String, String> error = new HashMap<>();
+        Customer customer = new Customer();
+        if (bindingResult.hasErrors()) {
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                error.put(err.getField(), err.getDefaultMessage());
+            }
+
         }
-        if(customerService.existsByPhoneNumber(customer.getPhoneNumber(), customer.getId())){
-            errors.put("phoneNumber", "Số điện thoại đã tồn tại!");
+
+        if(customerService.existsByEmail(customerDto.getEmail(), customerDto.getId())){
+            error.put(EMAIL, "Email đã tồn tại trong hệ thống!");
         }
-        if(errors.size() > 0){
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        if(customerService.existsByPhoneNumber(customerDto.getPhoneNumber(), customerDto.getId())){
+            error.put("numberPhone", "Số điện thoại đã tồn tại!");
         }
+        if(error.size() > 0){
+            return new ResponseEntity<>(error, HttpStatus.NOT_ACCEPTABLE);
+        }
+        BeanUtils.copyProperties(customerDto,customer);
         customerService.updateOnlineCustomer(customer);
         return new ResponseEntity<>(HttpStatus.OK);
 
@@ -64,7 +74,6 @@ public class CustomerController {
             }
         }
         customerDto.setCode(customerCode);
-        System.out.println(customerDto.getCode());
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
 
@@ -76,7 +85,7 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PostMapping("/create")
-    public ResponseEntity<?> saveCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
+    public ResponseEntity<Map<String,String>> saveCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult bindingResult) {
         Customer customer = new Customer();
         Map<String, String> errors = new HashMap<>();
         new CustomerDto().validate(customerDto, bindingResult);
@@ -88,7 +97,7 @@ public class CustomerController {
         }
         Customer customerCheck = customerService.findCustomerByEmail(customerDto.getEmail());
         if (customerCheck != null){
-            errors.put("email","Email đã được đăng ký");
+            errors.put(EMAIL,"Email đã được đăng ký");
         }
         Customer  customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
         if (customerCheckPhone != null) {
@@ -100,7 +109,7 @@ public class CustomerController {
         BeanUtils.copyProperties(customerDto, customer);
          customerService.saveCustomer(customer);
 
-            return new ResponseEntity<>("Thêm mới khách hàng thành công", HttpStatus.OK);
+            return new ResponseEntity<>( HttpStatus.OK);
 
     }
 
@@ -110,7 +119,7 @@ public class CustomerController {
      * * return HttpStatus
      */
     @PatchMapping("/update/{id}")
-    public ResponseEntity<?> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
+    public ResponseEntity<Map<String,String>> updateCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
         Customer customer= customerService.findCustomerById(id);
         new CustomerDto().validate(customerDto,bindingResult);
         Map<String, String> errors = new HashMap<>();
@@ -119,10 +128,10 @@ public class CustomerController {
                 errors.put(err.getField(), err.getDefaultMessage());
             }
         }
-        if (!(customer.getEmail().equals(customerDto.getEmail()))){
+        else if (!(customer.getEmail().equals(customerDto.getEmail()))){
             Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
             if (customerCheckEmail != null){
-                errors.put("email","Email đã tồn tại");
+                errors.put(EMAIL,"Email đã tồn tại");
             }
         }
         if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))){
@@ -134,14 +143,13 @@ public class CustomerController {
         if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
-        if (customer==null){
-            return new ResponseEntity<>("Không tìm thấy thông tin khách hàng",HttpStatus.NOT_FOUND);
-        }
+        if (customer == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
         BeanUtils.copyProperties(customerDto,customer);
         customer.setId(id);
-
-        customerService.updateCustomer(customer);
-        return new ResponseEntity<>("Cập nhật thông tin khách hành thành công",HttpStatus.OK);
+        customerService.updateCustomer(customer);}
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
@@ -151,10 +159,10 @@ public class CustomerController {
      * * return HttpStatus
      */
     @GetMapping("/{id}")
-    public ResponseEntity<?> detailCustomer(@PathVariable Long id) {
+    public ResponseEntity<CustomerDto> detailCustomer(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null){
-            return new ResponseEntity<>("Không tìm thấy khách hàng", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         CustomerDto customerDto = new CustomerDto();
                 BeanUtils.copyProperties(customer, customerDto);
@@ -167,21 +175,21 @@ public class CustomerController {
      * return list of customers
      */
     @GetMapping("/list")
-    public ResponseEntity<?> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
+    public ResponseEntity<Object> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
                                              @RequestParam(defaultValue = "", required = false) String name,
                                              @RequestParam(defaultValue = "", required = false) String code,
                                              @RequestParam(defaultValue = "", required = false) String address,
-
                                              @RequestParam(defaultValue = "", required = false) String phoneNumber,
                                              @RequestParam(defaultValue = "") String groupValue,
                                              @RequestParam(defaultValue = "") String sortItem) {
         Pageable pageable = PageRequest.of(page, 5);
         Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
         if (customers.getTotalElements() != 0) {
-            return new ResponseEntity<>(customers, HttpStatus.OK);
+            return new ResponseEntity<>( customers,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 
     /**
      * Author: QuyenHT
@@ -189,7 +197,7 @@ public class CustomerController {
      * return HttpStatus
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
