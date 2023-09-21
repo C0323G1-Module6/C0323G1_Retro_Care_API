@@ -129,4 +129,15 @@ public class EmployeeService implements IEmployeeService{
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
                 employee.getNote(),employee.getId());
     }
+    /**
+     * Author: TanNV
+     * Date:20/09/2023
+     * find employee by phone number
+     * @param phoneNumber
+     * @return
+     */
+    @Override
+    public Employee getByPhoneNumber(String phoneNumber,Long id) {
+        return employeeRepository.findEmployeeByPhoneNumber(phoneNumber,id);
+    }
 }

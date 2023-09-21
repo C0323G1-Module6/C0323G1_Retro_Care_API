@@ -1,5 +1,6 @@
 package com.example.retro_care.kind_of_medicine.controller;
 
+import com.example.retro_care.kind_of_medicine.dto.IKindOfMedicineDto;
 import com.example.retro_care.kind_of_medicine.dto.KindOfMedicineCreationDto;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.kind_of_medicine.service.IKindOfMedicineService;
@@ -34,24 +35,21 @@ public class KindOfMedicineController {
     }
 
     //    Delete
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<List<KindOfMedicine>> deleteKindOfMedicine(@PathVariable("id") Long id) {
         if (id == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        kindOfMedicineService.deleteKindOfMedicineById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        List<KindOfMedicine> kindOfMedicineList = kindOfMedicineService.getListKindOfMedicine();
+        for (KindOfMedicine k : kindOfMedicineList) {
+            if (k.getId() == id) {
+                kindOfMedicineService.deleteKindOfMedicineById(id);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteKindOfMedicine(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        if (kindOfMedicineService.deleteKindOfMedicine(id)) {
-            redirectAttributes.addFlashAttribute("message", "Delete successfully");
-        } else {
-            redirectAttributes.addFlashAttribute("message", "id not found");
-        }
-        return "redirect: /kindOfMedicine";
-    }
 
     //    Create
     @PostMapping("/create")
@@ -94,14 +92,17 @@ public class KindOfMedicineController {
     }
 
     // Pagination
-    @Transactional
     @GetMapping("/get")
-    public ResponseEntity<Page<KindOfMedicine>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0")
-                                                                             Integer page, String searchCode, String searchName) {
-        Pageable pageable = PageRequest.of(page, 3, Sort.by(Sort.Order.asc("id")));
-        Page<KindOfMedicine> contractsPage = kindOfMedicineService.getPageKindOfMedicine(pageable, searchCode, searchName);
-        if (contractsPage == null) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Page<?>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                     @RequestParam(value = "searchCode", defaultValue = "") String searchCode,
+                                                                     @RequestParam(value = "searchName", defaultValue = "") String searchName) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Order.asc("id")));
+        Page<IKindOfMedicineDto> contractsPage = kindOfMedicineService.getPageKindOfMedicine(pageable, "%"+searchCode+"%", "%"+searchName+"%");
+        if (contractsPage.getTotalElements() == 0) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if(page > contractsPage.getTotalPages()-1){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(contractsPage, HttpStatus.OK);
 

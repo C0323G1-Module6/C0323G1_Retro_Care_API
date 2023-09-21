@@ -1,7 +1,13 @@
 package com.example.retro_care.employee.dto;
 
+import com.example.retro_care.customer.dto.FormatCustomer;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import javax.persistence.Column;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 public class EmployeeDto implements Validator {
     private String codeEmployee;
@@ -116,25 +122,24 @@ public class EmployeeDto implements Validator {
     public boolean supports(Class<?> clazz) {
         return false;
     }
-    private static final String NAME_EMPLOYEE = "nameEmployee";
-    private static final String MESSAGE_CHARACTER = "Quá ký tự cho phép";
+
     @Override
     public void validate(Object target, Errors errors) {
 //    codeEmployee ,nameEmployee, address,image,phoneNumber,birthday,idCard,note,appUser
         EmployeeDto employeeDto = (EmployeeDto) target;
 
         if (employeeDto.getNameEmployee() == null) {
-            errors.rejectValue(NAME_EMPLOYEE, null, "Vui lòng nhập tên");
+            errors.rejectValue("nameEmployee", null, "Vui lòng nhập tên");
         } else if (employeeDto.getNameEmployee().length() > 100) {
-            errors.rejectValue(NAME_EMPLOYEE, null, MESSAGE_CHARACTER);
+            errors.rejectValue("nameEmployee", null, "Quá ký tự cho phép");
         } else if (!employeeDto.getNameEmployee().matches("^[\\p{L}\\s]+$")) {
-            errors.rejectValue(NAME_EMPLOYEE, null, "Tên chỉ chứa định dạng chữ");
+            errors.rejectValue("nameEmployee", null, "Tên chỉ chứa định dạng chữ");
         }
 
         if (employeeDto.getAddress() == null) {
             errors.rejectValue("address", null, "Vui lòng nhập địa chỉ");
         } else if (employeeDto.getAddress().length() > 100) {
-            errors.rejectValue("address", null, MESSAGE_CHARACTER);
+            errors.rejectValue("address", null, "Quá ký tự cho phép");
         }
 
         if (employeeDto.getPhoneNumber() == null) {
@@ -149,20 +154,22 @@ public class EmployeeDto implements Validator {
 
         if (employeeDto.getStartDay() == null) {
             errors.rejectValue("startDay", null, "Vui lòng nhập ngày bắt đầu");
-        } else if (!employeeDto.getStartDay().matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+        } else if (!employeeDto.getStartDay().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
             errors.rejectValue("startDay",null,"Vui lòng nhập đúng định dạng yyyy-mm-dd");
         }
 
         if (employeeDto.getBirthday() == null) {
             errors.rejectValue("birthday", null, "Vui lòng nhập ngày sinh");
-        }else if (!employeeDto.getBirthday().matches("^\\d{4}-\\d{2}-\\d{2}$")) {
+        } else if (!FormatCustomer.check18YearsOld(employeeDto.getBirthday())) {
+            errors.rejectValue("birthday", null, "Nhân viên chưa đủ 18 tuổi");
+        } else if (!employeeDto.getBirthday().matches("^[0-9]{4}-[0-9]{2}-[0-9]{2}$")) {
             errors.rejectValue("birthday",null,"Vui lòng nhập đúng định dạng yyyy-mm-dd");
         }
 
         if (employeeDto.getIdCard() == null) {
             errors.rejectValue("idCard", null, "Vui lòng nhập CCCD");
         } else if (employeeDto.getIdCard().length() > 20) {
-            errors.rejectValue("idCard", null, MESSAGE_CHARACTER);
+            errors.rejectValue("idCard", null, "Quá ký tự cho phép");
         } else if (!employeeDto.getIdCard().matches("^\\d{9}(\\d{3})?$")) {
             errors.rejectValue("idCard", null, "Sai định dạng");
         }
