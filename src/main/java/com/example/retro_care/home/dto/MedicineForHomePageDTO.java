@@ -6,5 +6,7 @@ public interface MedicineForHomePageDTO {
     Double getMedicinePrice();
     String getMedicineImage();
     Integer getMedicineSaleQuantity();
+    String getMedicineUnit();
+    String getMedicineType();
 }
 
