@@ -68,7 +68,7 @@ public class PrescriptionController {
      * @param prescriptionDto
      */
     @PostMapping("/prescription/create")
-    public ResponseEntity<?> createPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
+    public ResponseEntity<Object> createPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
         Prescription prescription = new Prescription();
 
         Medicine medicine;
@@ -110,7 +110,7 @@ public class PrescriptionController {
     public ResponseEntity<Prescription> getPrescriptionById(@PathVariable Long id) {
         List<Prescription> prescriptionList = prescriptionService.getAll();
         for (Prescription p : prescriptionList) {
-            if (p.getId() == id) {
+            if (p.getId().equals(id)) {
                 Prescription prescription = prescriptionService.getPrescriptionById(id);
                 return new ResponseEntity<>(prescription, HttpStatus.OK);
             }
@@ -127,13 +127,13 @@ public class PrescriptionController {
      * @param id
      */
     @DeleteMapping("/prescription/delete/{id}")
-    public ResponseEntity<?> removePrescription(@PathVariable Long id) {
+    public ResponseEntity<Object> removePrescription(@PathVariable Long id) {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Prescription> prescriptionList = prescriptionService.getAll();
         for (Prescription p : prescriptionList) {
-            if (p.getId() == id) {
+            if (p.getId().equals(id)) {
                 prescriptionService.removePrescription(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -149,9 +149,10 @@ public class PrescriptionController {
      *
      * @param prescriptionDto
      */
-    @PatchMapping("/prescription/edit/{id}")
-    public ResponseEntity<?> editPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
+    @PatchMapping("/prescription/edit")
+    public ResponseEntity<Object> editPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
         Prescription prescription = new Prescription();
+        Medicine medicine;
         new PrescriptionDto().validate(prescriptionDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
@@ -160,8 +161,23 @@ public class PrescriptionController {
             }
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
+        Patient patient = patientService.patientById(prescriptionDto.getPatient());
         BeanUtils.copyProperties(prescriptionDto, prescription);
+        prescription.setPatient(patient);
         prescriptionService.editPrescription(prescription);
+        List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
+        for (IndicationDto i : indicationDtoList) {
+            if (i.getDosage() != null) {
+                i.setFlagDeleted(true);
+                Indication indication = new Indication();
+                medicine = medicineService.findMedicineById(i.getMedicine());
+                BeanUtils.copyProperties(i, indication);
+                indication.setMedicine(medicine);
+                indication.setFlagDeleted(false);
+                indication.setPrescription(prescription);
+                indicationService.editIndication(indication);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

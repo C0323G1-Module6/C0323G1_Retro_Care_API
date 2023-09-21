@@ -83,8 +83,6 @@ public class PrescriptionService implements IPrescriptionService{
      */
     @Override
     public void editPrescription(Prescription prescription) {
-        System.out.println(">>>"+prescription.getId());
-       Integer a = prescriptionRepository.editPrescription(prescription);
-        System.out.println(a);
+        prescriptionRepository.editPrescription(prescription);
     }
 }
