@@ -30,25 +30,6 @@ public class InvoiceDetail {
     public InvoiceDetail() {
     }
 
-    public InvoiceDetail(Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
-        this.discount = discount;
-        this.expiry = expiry;
-        this.medicineQuantity = medicineQuantity;
-        this.lot = lot;
-        this.flagDeleted = flagDeleted;
-        this.medicineId = medicineId;
-        this.invoiceId = invoiceId;
-    }
-
-    public InvoiceDetail(Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId) {
-        this.discount = discount;
-        this.expiry = expiry;
-        this.medicineQuantity = medicineQuantity;
-        this.lot = lot;
-        this.flagDeleted = flagDeleted;
-        this.medicineId = medicineId;
-    }
-
     public InvoiceDetail(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
         this.id = id;
         this.discount = discount;
@@ -123,5 +104,6 @@ public class InvoiceDetail {
     public void setExpiry(Date expiry) {
         this.expiry = expiry;
     }
+
 
 }

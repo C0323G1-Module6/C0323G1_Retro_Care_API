@@ -5,9 +5,6 @@ import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDetailDto;
 import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.service.IInvoiceService;
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.supplier.model.Supplier;
-import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -84,7 +81,7 @@ public class InvoiceController {
      * @return
      */
     @GetMapping("/search")
-    public ResponseEntity<?> searchInvoice(@RequestParam(required = false) String start_date,
+    public ResponseEntity<List<Invoice>> searchInvoice(@RequestParam(required = false) String start_date,
                                            @RequestParam(required = false) String end_date,
                                            @RequestParam(required = false) String start_time,
                                            @RequestParam(required = false) String end_time,
@@ -107,6 +104,7 @@ public class InvoiceController {
      */
     @PostMapping("/create")
     public ResponseEntity<?> createInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        System.out.println(invoiceDto);
         if (invoiceDto.getInvoiceDetailDtoSet() == null)
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         new InvoiceDto().validate(invoiceDto, bindingResult);
@@ -149,6 +147,8 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> err = new HashMap<>();
@@ -159,11 +159,8 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-
-        if (invoiceService.getInvoiceById(invoice.getId()) == null)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
-        System.out.println(selectedInvoice);
+
         return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 
@@ -176,6 +173,7 @@ public class InvoiceController {
     @GetMapping("/code")
     public ResponseEntity<String> getCodeInvoice() {
         String maxCode = invoiceService.findMaxCode();
+        System.out.println(maxCode);
         if (maxCode == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(maxCode, HttpStatus.OK);

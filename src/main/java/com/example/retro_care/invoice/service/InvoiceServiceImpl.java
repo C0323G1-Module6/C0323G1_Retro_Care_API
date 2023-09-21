@@ -41,8 +41,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        invoice.setCode(findMaxCode());
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
-        System.out.println(selectedInvoice);
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             Medicine medicine = new Medicine();
@@ -50,20 +50,18 @@ public class InvoiceServiceImpl implements IInvoiceService {
             BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
             invoiceDetail.setMedicineId(medicine);
             invoiceDetail.setInvoiceId(selectedInvoice);
+            System.out.println(invoiceDetail);
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
         }
         return selectedInvoice;
     }
 
     public Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto) {
-//        invoice.setCreationDate(new Date());
 //        Set AppUserId
-        AppUser appUser = new AppUser();
-        appUser.setId(1L);
-        invoice.setAppUserId(appUser);
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        System.out.println(invoice);
         return invoiceRepository.editInvoice(invoice);
     }
 
@@ -89,12 +87,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        if (maxCode == null) {
-            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
-        }
-
+        System.out.println(maxCode);
+        if (maxCode.equals(""))
+            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
-        String numericPart = maxCode.substring(2);
+        String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
 
         // Tăng giá trị số lên 1
