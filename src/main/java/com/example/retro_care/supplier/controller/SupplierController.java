@@ -37,21 +37,18 @@ public class SupplierController {
      */
 
     @GetMapping("")
-    public ResponseEntity<Page<ISupplierProjection>> getListSupplier(@PageableDefault(size = 5) Pageable pageable,@RequestParam("page")String page) {
-//        Page<ISupplierProjection> listSupplier = iSupplierService.getListSupplier(pageable);
-//        if (listSupplier.hasContent()) {
-//            return ResponseEntity.ok(listSupplier);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
+    public ResponseEntity<Page<ISupplierProjection>> getListSupplier(@PageableDefault(size = 5) Pageable pageable,@RequestParam("page")String page,
+                                                                     @RequestParam("code")String code,@RequestParam("name")String name,
+                                                                      @RequestParam("phoneNumber")String phoneNumber,@RequestParam("address")String address
+                                                                    ,@RequestParam("sortBy")String sortBy) {
         int currentPage;
         currentPage = Integer.parseInt(page);
         if (currentPage < 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (iSupplierService.getListSupplier(pageable).isEmpty()) {
+        } else if (iSupplierService.getListSupplier(pageable,code,name,phoneNumber,address,sortBy).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else{
-            return new ResponseEntity<>(iSupplierService.getListSupplier(pageable), HttpStatus.OK);
+            return new ResponseEntity<>(iSupplierService.getListSupplier(pageable,code,name,phoneNumber,address,sortBy), HttpStatus.OK);
         }
     }
     /**
@@ -130,9 +127,7 @@ public class SupplierController {
 
         if (iSupplierService.getSupplierDetailById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (iSupplierService.findAllListInvoiceByIdSupplier(id,pageable).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }  else{
+        }else{
             return new ResponseEntity<>(iSupplierService.findAllListInvoiceByIdSupplier(id,pageable),HttpStatus.OK);
         }
     }

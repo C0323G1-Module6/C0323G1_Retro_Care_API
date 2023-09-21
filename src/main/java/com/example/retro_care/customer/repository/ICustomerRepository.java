@@ -12,6 +12,28 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update customer set name = :#{#customer.name}, email = :#{#customer.email}," +
+            "address = :#{#customer.address}, phone_number = :#{#customer.phoneNumber}, note = :#{#customer.note} " +
+            "where id = :#{#customer.id}")
+    int updateOnlineCustomer(@Param("customer") Customer customer);
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+
+    boolean existsByEmailAndIdNot(String email, Long id);
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+
+    boolean existsByPhoneNumberAndIdNot(String phoneNumber, Long id);
+    /**
      * Author: TinDT
      * Goal: save customers
      */

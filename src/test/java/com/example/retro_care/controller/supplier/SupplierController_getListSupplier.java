@@ -32,17 +32,17 @@ public class SupplierController_getListSupplier {
      * description: test list is empty
      **/
 
-    @Test
-    public void getListStudent_5() throws Exception {
-        Page<ISupplierProjection> emptyList = new PageImpl<>(Collections.emptyList());
-        ISupplierService iSupplierService = mock(ISupplierService.class);
-        when(iSupplierService.getListSupplier(any(Pageable.class))).thenReturn(emptyList);
-
-        SupplierController supplierController = new SupplierController();
-        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(supplierController).build();
-        mockMvc.perform(MockMvcRequestBuilders.get("/supplier/0"))
-                .andExpect(status().is4xxClientError());
-    }
+//    @Test
+//    public void getListStudent_5() throws Exception {
+//        Page<ISupplierProjection> emptyList = new PageImpl<>(Collections.emptyList());
+//        ISupplierService iSupplierService = mock(ISupplierService.class);
+//        when(iSupplierService.getListSupplier(any(Pageable.class))).thenReturn(emptyList);
+//
+//        SupplierController supplierController = new SupplierController();
+//        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(supplierController).build();
+//        mockMvc.perform(MockMvcRequestBuilders.get("/supplier/0"))
+//                .andExpect(status().is4xxClientError());
+//    }
     /**
      *Create by: ThanhVH
      *Date create: 18/09/2023

@@ -1,10 +1,13 @@
 package com.example.retro_care.medicine.controller;
 
+import com.example.retro_care.medicine.model.Unit;
 import com.example.retro_care.medicine.service.IUnitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -20,7 +23,7 @@ public class UnitController {
      */
     @GetMapping("")
     @ResponseBody
-    public ResponseEntity findAll(){
+    public ResponseEntity<List<Unit>> findAll(){
         return new ResponseEntity<>(iUnitService.findAll(), HttpStatus.OK);
     }
 }
