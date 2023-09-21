@@ -5,7 +5,6 @@ import com.example.retro_care.user.model.UserRole;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.persistence.OneToMany;
 import java.util.Set;
 
 /**

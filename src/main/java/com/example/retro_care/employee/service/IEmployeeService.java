@@ -76,4 +76,13 @@ public interface IEmployeeService {
   * @param employee
   */
  void updateEmployee(Employee employee);
+
+ /**
+  * Author: TanNV
+  * Date:20/09/2023
+  * find employee by phone number
+  * @param phoneNumber
+  * @return
+  */
+    Employee getByPhoneNumber(String phoneNumber,Long id);
 }
