@@ -56,7 +56,7 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * Goal: find customers by id
      * return customer
      */
-    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id and flag_deleted = true", nativeQuery = true)
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id and flag_deleted = false", nativeQuery = true)
     Customer findCustomerById(@Param(value = "id") Long id);
     /**
      * Author: TinDT
@@ -113,6 +113,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = " UPDATE retro_care.customer set flag_deleted = true WHERE id = :id ", nativeQuery = true)
+    @Query(value = " UPDATE retro_care.customer set flag_deleted = 1 WHERE id = :id ", nativeQuery = true)
     void removeCustomer(@Param(value = "id") Long id);
 }
