@@ -24,16 +24,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     * Author: TanNV
     * Date: 15/09/2023
     * Use to save employee
-    * @param code
-    * @param name
-    * @param address
-    * @param phoneNumber
-    * @param startDay
-    * @param birthday
-    * @param idCard
-    * @param image
-    * @param note
-    * @param flagDelete
+    * @param employee
     * @param appUserId
     * @return void
     */
@@ -48,14 +39,8 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     * Author: TanNV
     * Date: 16/09/2023
     * Use to update employee
-    * @param name
-    * @param address
-    * @param phoneNumber
-    * @param startDay
-    * @param birthday
-    * @param idCard
-    * @param image
-    * @param note
+    * @param employee
+    * @param id
     * @return void
     */
    @Modifying
@@ -87,7 +72,6 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * Date create: 15/09/2023
      * Function: Retrieve data from the database as long as it has not been deleted and request the employee name or employee position
      * @param pageable
-     * @param id
      * @param name
      * @return Page with data Employee
      */
