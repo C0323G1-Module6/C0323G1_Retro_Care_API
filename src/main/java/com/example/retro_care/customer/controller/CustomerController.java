@@ -167,21 +167,20 @@ public class CustomerController {
      * return list of customers
      */
     @GetMapping("/list")
-    public ResponseEntity<?> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
-                                             @RequestParam(defaultValue = "", required = false) String name,
-                                             @RequestParam(defaultValue = "", required = false) String code,
-                                             @RequestParam(defaultValue = "", required = false) String address,
-
-                                             @RequestParam(defaultValue = "", required = false) String phoneNumber,
-                                             @RequestParam(defaultValue = "") String groupValue,
-                                             @RequestParam(defaultValue = "") String sortItem) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
-        if (customers.getTotalElements() != 0) {
-            return new ResponseEntity<>(customers, HttpStatus.OK);
+        public ResponseEntity<Page<ICustomerDto>> getAllCustomers(@RequestParam(defaultValue = "0", required = false) Integer page,
+                                                 @RequestParam(defaultValue = "", required = false) String name,
+                                                 @RequestParam(defaultValue = "", required = false) String code,
+                                                 @RequestParam(defaultValue = "", required = false) String address,
+                                                 @RequestParam(defaultValue = "", required = false) String phoneNumber,
+                                                 @RequestParam(defaultValue = "") String groupValue,
+                                                 @RequestParam(defaultValue = "") String sortItem) {
+            Pageable pageable = PageRequest.of(page, 5);
+            Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
+            if (customers.getTotalElements() != 0) {
+                return ResponseEntity.ok(customers);
+            }
+            return ResponseEntity.noContent().build();
         }
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
 
     /**
      * Author: QuyenHT
@@ -189,7 +188,7 @@ public class CustomerController {
      * return HttpStatus
      */
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteCustomerById(@PathVariable Long id) {
+    public ResponseEntity<HttpStatus> deleteCustomerById(@PathVariable Long id) {
         Customer customer = customerService.findCustomerById(id);
         if (customer == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
