@@ -4,7 +4,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 
 /*
 This is class is required for creating a response containing the JWT to be returned to the user.

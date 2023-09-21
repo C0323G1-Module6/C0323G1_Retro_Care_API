@@ -1,8 +1,6 @@
 package com.example.retro_care.user.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import org.springframework.context.annotation.Lazy;
-
 import javax.persistence.*;
 import java.util.Set;
 

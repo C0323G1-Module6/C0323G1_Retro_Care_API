@@ -37,7 +37,6 @@ public class AppUserService implements IAppUserService {
         for (UserRole userRole : appUser.getUserRoleSet()) {
             grantList.add(new SimpleGrantedAuthority(userRole.getAppRole().getName()));
         }
-//            UserDetails userDetails = new User(appUser.getUserName(),appUser.getPassword(),grantList);
         UserDetails userDetails = new JwtResponseUserDetails(
                 appUser.getUserName(),
                 appUser.getPassword(),
