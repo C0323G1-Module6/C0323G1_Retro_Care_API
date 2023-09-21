@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -159,8 +160,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String
-            endTime, String sortColumn) {
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
         return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
     }
+
 }

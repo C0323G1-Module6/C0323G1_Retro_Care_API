@@ -40,7 +40,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable);
 
 
-    @Query(value = "SELECT m.id as idMedicine, m.active_element, m.code as codeMedicine, m.maker, m.name as nameMedicine,\n" +
+    @Query(value = "SELECT i.code, m.id as idMedicine, m.active_element, m.code as codeMedicine, m.maker, m.name as nameMedicine,\n" +
             "       m.note as noteMedicine, m.origin, m.price, m.quantity, m.retail_profits as retailProfits,m.active_element as activeElement, m.vat,\n" +
             "       m.kind_of_medicine_id, k.code as codeKind, k.name as nameKind\n " +
             "        FROM invoice i \n" +
@@ -106,6 +106,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
                                              @Param("start_time") String startTime,
                                              @Param("end_time") String endTime,
                                              @Param("sort_column") String sortColumn);
+
 
     /**
      * create an Invoice
