@@ -16,7 +16,7 @@ public interface IReportService {
 
     List<BestSellerMedicine> findBestSellerMedicine();
 
-    List<SaleDiary> findSaleDiary();
+    List<SaleDiary> findSaleDiary(String startDate, String endDate);
 
     List<MedicineNeedMore> findMedicineNeedMore();
 
