@@ -62,7 +62,11 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "          AND id.flag_deleted = 0\n" +
                     "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id_id\n" +
                     "WHERE\n" +
-                    "    s.flag_deleted = 0\n" +
+                    "    s.flag_deleted = 0 \n" +
+                    "    AND code like concat ('%',:code ,'%')\n" +
+                    "    AND name like concat ('%',:name ,'%')\n" +
+                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "    AND address like concat ('%',:address ,'%')\n" +
                     "GROUP BY\n" +
                     "    s.id,\n" +
                     "    s.code,\n" +
@@ -72,8 +76,18 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
                     "    s.note,\n" +
                     "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
                     "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
+                    "    END\n" +
+                    " ORDER BY " +
+                    "    CASE :sortBy " +
+                    "        WHEN 'code' THEN code " +
+                    "        WHEN 'phone_number' THEN phone_number " +
+                    "        WHEN 'address' THEN address " +
+                    "        WHEN 'name' THEN name " +
+                    "        ELSE null " +
                     "    END")
-    Page<ISupplierProjection> getListSupplier(Pageable pageable);
+    Page<ISupplierProjection> getListSupplier(Pageable pageable,@Param("code")String code,@Param("name")String name,
+                                              @Param("phoneNumber")String phoneNumber,@Param("address")String address,
+                                              @Param("sortBy")String sortBy);
     /**
      * method :createSupplier()
      * created by :ThanhVH
