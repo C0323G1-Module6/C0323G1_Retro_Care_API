@@ -44,7 +44,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        customer.setFlagDeleted(true);
+        customer.setFlagDeleted(false);
         customer.setPoint(0l);
         customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
                 return customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
