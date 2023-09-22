@@ -17,12 +17,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/kindOfMedicine")
+@RequestMapping("/api/kindOfMedicines")
 @CrossOrigin(origins = "*")
 public class KindOfMedicineController {
     @Autowired
@@ -34,6 +33,15 @@ public class KindOfMedicineController {
         return new ResponseEntity<>(kindOfMedicineService.getListKindOfMedicine(), HttpStatus.OK);
     }
 
+    // Get by id
+    @GetMapping("/kindOfMedicine/{id}")
+    public ResponseEntity<KindOfMedicine> getKindOfMedicineById(@PathVariable("id") Long id) {
+        if (id == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(kindOfMedicineService.getKindOfMedicineById(id), HttpStatus.OK);
+    }
+
     //    Delete
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<List<KindOfMedicine>> deleteKindOfMedicine(@PathVariable("id") Long id) {
@@ -42,7 +50,7 @@ public class KindOfMedicineController {
         }
         List<KindOfMedicine> kindOfMedicineList = kindOfMedicineService.getListKindOfMedicine();
         for (KindOfMedicine k : kindOfMedicineList) {
-            if (k.getId() == id) {
+            if (k.getId().equals(id)) {
                 kindOfMedicineService.deleteKindOfMedicineById(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -50,58 +58,53 @@ public class KindOfMedicineController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    // Deletes
+    @PostMapping("/delete-items")
+    public ResponseEntity<KindOfMedicine> deleteItems(@RequestBody List<Long> ids) {
+        if (ids == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
     //    Create
     @PostMapping("/create")
     public ResponseEntity<?> getCreationForm(@RequestBody KindOfMedicine kindOfMedicine) {
-
+        kindOfMedicine.setFlagDeleted(false);
         try {
+
             kindOfMedicineService.addKindOfMedicine(kindOfMedicine);
             return ResponseEntity.status(HttpStatus.OK).body("add successfully");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("add fail");
         }
     }
-
-    //    Edit
-    @GetMapping("/edit/{id}")
-    public String getFormEdit(@PathVariable Long id, RedirectAttributes redirectAttributes, Model model) {
-        if (kindOfMedicineService.getKindOfMedicineById(id) == null) {
-            redirectAttributes.addFlashAttribute("message", "id not found");
-            return "redirect: /kindOfMedicine";
+    // Edit
+    @PutMapping("/edit")
+    public ResponseEntity<?> editKindOfMedicine(@RequestBody KindOfMedicine kindOfMedicine) {
+        List<KindOfMedicine> kindOfMedicineList = kindOfMedicineService.getListKindOfMedicine();
+        System.err.println(kindOfMedicine.getId());
+        kindOfMedicine.setFlagDeleted(false);
+        if (kindOfMedicineService.getKindOfMedicineById(kindOfMedicine.getId()) == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
-            KindOfMedicineCreationDto kindOfMedicineCreationDto = new KindOfMedicineCreationDto();
-            BeanUtils.copyProperties(kindOfMedicineService.getKindOfMedicineById(id), kindOfMedicineCreationDto);
-            model.addAttribute("kindOfMedicineCreationDto", kindOfMedicineCreationDto);
-            return "edit";
+            kindOfMedicineService.editKindOfMedicine(kindOfMedicine);
+            return ResponseEntity.status(HttpStatus.OK).body("Update successfully");
         }
     }
 
-    @PostMapping("/edit")
-    public String editKindOfMedicine(@Valid @ModelAttribute KindOfMedicineCreationDto kindOfMedicineCreationDto,
-                                     BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
-        new KindOfMedicineCreationDto().validate(kindOfMedicineCreationDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "edit";
-        }
-        KindOfMedicine kindOfMedicine = new KindOfMedicine();
-        BeanUtils.copyProperties(kindOfMedicineCreationDto, kindOfMedicine);
-        kindOfMedicineService.editKindOfMedicine(kindOfMedicine);
-        redirectAttributes.addFlashAttribute("message", "edit successfully");
-        return "redirect:/kindOfMedicine";
-    }
 
     // Pagination
     @GetMapping("/get")
-    public ResponseEntity<Page<?>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                     @RequestParam(value = "searchCode", defaultValue = "") String searchCode,
-                                                                     @RequestParam(value = "searchName", defaultValue = "") String searchName) {
-        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Order.asc("id")));
-        Page<IKindOfMedicineDto> contractsPage = kindOfMedicineService.getPageKindOfMedicine(pageable, "%"+searchCode+"%", "%"+searchName+"%");
+    public ResponseEntity<Page<?>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
+                                                        @RequestParam(value = "searchCode", defaultValue = "", required = false) String searchCode,
+                                                        @RequestParam(value = "searchName", defaultValue = "", required = false) String searchName) {
+        Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Order.desc("id")));
+        Page<IKindOfMedicineDto> contractsPage = kindOfMedicineService.getPageKindOfMedicine(pageable, "%" + searchCode + "%", "%" + searchName + "%");
         if (contractsPage.getTotalElements() == 0) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if(page > contractsPage.getTotalPages()-1){
+        if (page > contractsPage.getTotalPages() - 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(contractsPage, HttpStatus.OK);
