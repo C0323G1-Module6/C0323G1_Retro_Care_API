@@ -1,4 +1,5 @@
 package com.example.retro_care.medicine.controller;
+
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
@@ -20,12 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
-
-
-
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -37,6 +39,7 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
     /**
      * Find a medicine by its ID-TinVV
      *
@@ -66,6 +69,7 @@ public class MedicineController {
         medicineDto.setUnitDetailDto(unitDetailDto);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
+
     /**
      * Add a new medicine to the system-TinVV
      *
@@ -79,7 +83,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity addMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -98,6 +106,7 @@ public class MedicineController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     /**
      * Edit an existing medicine-TinVV
      *
@@ -111,7 +120,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -196,9 +209,6 @@ public class MedicineController {
                 break;
             case "searchByNameKindOfMedicine":
                 medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
-                break;
-            case "searchByPrice":
-                medicines = iMedicineService.searchByPrice(pageable,search, conditional);
                 break;
             case "searchByPrice":
                 medicines = iMedicineService.searchByPrice(pageable,search, conditional);
