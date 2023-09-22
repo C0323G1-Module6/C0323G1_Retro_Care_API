@@ -17,7 +17,7 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
      */
 
     @Transactional()
-    @Query(value = "select * from retro_care.app_user where user_name = :name", nativeQuery = true)
+    @Query(value = "select * from retro_care.app_user where user_name = :name and flag_deleted = 0 ", nativeQuery = true)
     AppUser findAppUserByName(@Param("name") String userName);
 
 
