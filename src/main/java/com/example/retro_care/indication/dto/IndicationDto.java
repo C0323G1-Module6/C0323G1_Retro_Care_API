@@ -1,7 +1,5 @@
 package com.example.retro_care.indication.dto;
 
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.prescription.model.Prescription;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -89,18 +87,18 @@ public class IndicationDto implements Validator {
 
     @Override
     public void validate(Object target, Errors errors) {
-//        IndicationDto indicationDto = (IndicationDto) target;
-//
-//        if(indicationDto.getDosage() == null){
-//            errors.rejectValue("dosage",null,"Không được để trống");
-//        } else if (indicationDto.getDosage()<=0) {
-//            errors.rejectValue("dosage",null,"Không được nhỏ hơn 0");
-//        }
-//
-//        if(indicationDto.getFrequency() == null){
-//            errors.rejectValue("frequency",null,"Không được để trống");
-//        } else if (indicationDto.getDosage()<=0) {
-//            errors.rejectValue("frequency",null,"Không được nhỏ hơn 0");
-//        }
+        IndicationDto indicationDto = (IndicationDto) target;
+
+        if(indicationDto.getDosage() == null){
+            errors.rejectValue("dosage","","Không được để trống");
+        } else if (indicationDto.getDosage()<=0) {
+            errors.rejectValue("dosage","","Không được nhỏ hơn 0");
+        }
+
+        if(indicationDto.getFrequency() == null){
+            errors.rejectValue("frequency","","Không được để trống");
+        } else if (indicationDto.getDosage()<=0) {
+            errors.rejectValue("frequency","","Không được nhỏ hơn 0");
+        }
     }
 }

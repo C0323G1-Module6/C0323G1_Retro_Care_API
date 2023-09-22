@@ -22,12 +22,12 @@ public class KindOfMedicineService implements IKindOfMedicineService {
 
     @Override
     public Page<IKindOfMedicineDto> getPageKindOfMedicine(Pageable pageable, String searchCode, String searchName) {
-        return kindOfMedicineRepository.findAllKindOfMedicine(pageable,searchCode,searchName);
+        return kindOfMedicineRepository.findAllKindOfMedicine(pageable, searchCode, searchName);
     }
 
     @Override
     public KindOfMedicine getKindOfMedicineById(Long id) {
-        return null;
+        return kindOfMedicineRepository.findById(id).get();
     }
 
     @Override
@@ -43,11 +43,23 @@ public class KindOfMedicineService implements IKindOfMedicineService {
 
     @Override
     public void addKindOfMedicine(KindOfMedicine kindOfMedicine) {
-        kindOfMedicineRepository.save(kindOfMedicine);
+        List<KindOfMedicine> kindOfMedicineList = kindOfMedicineRepository.findAll();
+        // get max id
+        int maxId = kindOfMedicineRepository.getMaxId();
+        int newId = maxId + 1;
+        String newCode = "NT" + newId;
+        String newName = kindOfMedicine.getName();
+        Boolean newFlagDeleted = false;
+        KindOfMedicine newKindOfMedicine = new KindOfMedicine(newCode, newName, newFlagDeleted);
+        System.out.println(newKindOfMedicine);
+        if (!kindOfMedicineList.contains(kindOfMedicine.getName())) {
+            kindOfMedicineRepository.save(newKindOfMedicine);
+        }
+
     }
 
     @Override
     public void editKindOfMedicine(KindOfMedicine kindOfMedicine) {
-
+        kindOfMedicineRepository.save(kindOfMedicine);
     }
 }

@@ -1,5 +1,6 @@
 package com.example.retro_care.indication.service;
 
+import com.example.retro_care.indication.dto.IndicationDto;
 import com.example.retro_care.indication.model.Indication;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface IIndicationService {
     void editIndication(Indication indication);
     List<Indication> getAll();
     Long maxId();
+    List<IndicationDto> getAllIndicationDto(Long idPrescription);
+
 }
