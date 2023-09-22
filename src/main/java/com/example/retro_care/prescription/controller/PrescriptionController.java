@@ -50,11 +50,23 @@ public class PrescriptionController {
      */
     @GetMapping("/prescription")
     public ResponseEntity<Page<Prescription>> getAllPrescription(@RequestParam(defaultValue = "0", required = false) int page,
-                                                                 @RequestParam(defaultValue = "5", required = false) int size) {
+                                                                 @RequestParam(defaultValue = "5", required = false) int size,
+                                                                 @RequestParam(defaultValue = "", required = false) String searchPrescription,
+                                                                 @RequestParam(defaultValue = "",required = false) String search) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<Prescription> prescriptionPage = prescriptionService.findAllPrescription(pageable);
-        if (prescriptionPage.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Page<Prescription> prescriptionPage ;
+        switch (searchPrescription){
+            case "searchByName":
+                prescriptionPage =prescriptionService.searchByNamePrescription(search,pageable);
+                break;
+            case "searchByCode":
+                prescriptionPage = prescriptionService.searchByCodePrescription(search,pageable);
+                break;
+            case "searchBySymptoms":
+                prescriptionPage = prescriptionService.searchBySymptomsPrescription(search,pageable);
+                break;
+            default:
+                prescriptionPage = prescriptionService.findAllPrescription(pageable);
         }
         return new ResponseEntity<>(prescriptionPage, HttpStatus.OK);
     }
@@ -88,7 +100,7 @@ public class PrescriptionController {
         for (IndicationDto i : indicationDtoList) {
             if (i.getDosage() != null) {
                 Indication indication = new Indication();
-                medicine = medicineService.findMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineById(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);
@@ -170,7 +182,7 @@ public class PrescriptionController {
             if (i.getDosage() != null) {
                 i.setFlagDeleted(true);
                 Indication indication = new Indication();
-                medicine = medicineService.findMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineById(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);

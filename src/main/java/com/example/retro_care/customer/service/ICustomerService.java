@@ -63,7 +63,7 @@ public interface ICustomerService {
      * Goal: find all customers
      * return customers
      */
-    Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable);
+    Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, Pageable pageable);
      /**
      * Author: QuyenHT
      * Goal: delete customers

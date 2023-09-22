@@ -16,7 +16,14 @@ public class FormatCustomer {
      * Goal:  Create an automatic format for customers
      */
     public static String generateCustomerCode() {
-        int randomNumber = random.nextInt(10000);
+        int randomNumber = random.nextInt(9999);
+        if (randomNumber < 10){
+            return "KH000"+randomNumber;
+        } else if (randomNumber < 100) {
+            return "KH00"+randomNumber;
+        } else if (randomNumber < 1000) {
+            return "KH0"+randomNumber;
+        }
         return "KH"+ randomNumber;
     }
     /**

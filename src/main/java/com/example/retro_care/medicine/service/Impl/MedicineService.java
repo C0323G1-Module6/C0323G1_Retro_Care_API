@@ -35,10 +35,7 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public void editMedicine(Medicine medicine) {
-        iMedicineRepository.updateMedicine(medicine.getId(), medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(), medicine.getRetailProfits(),
-                medicine.getKindOfMedicine().getId());
+        iMedicineRepository.updateMedicine(medicine);
     }
 
     /**
@@ -50,10 +47,23 @@ public class MedicineService implements IMedicineService {
     public void addMedicine(Medicine medicine) {
         UUID uuid = UUID.randomUUID();
         String code = uuid.toString().replace("-", "").substring(0, 8);
-        iMedicineRepository.addMedicine(code, medicine.getName(), medicine.getPrice(),
-                medicine.getQuantity(), medicine.getVat(), medicine.getNote(), medicine.getMaker(),
-                medicine.getActiveElement(), medicine.getOrigin(),
-                medicine.getRetailProfits(), medicine.getKindOfMedicine().getId());
+        medicine.setCode(code);
+        iMedicineRepository.addMedicine(medicine);
+    }
+
+    /**
+     * Retrieves the ID of the last inserted record in the database-TinVV
+     *
+     * @return The ID of the last inserted record as a {@code Long} value.
+     */
+    @Override
+    public Long getLastInsertedId() {
+        return iMedicineRepository.getLastInsertedId();
+    }
+
+    @Override
+    public boolean existsByIdAndFlagDeletedIsFalse(Long id) {
+        return iMedicineRepository.existsByIdAndFlagDeletedIsFalse(id);
     }
 
 
@@ -101,6 +111,7 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable, String searchByCode) {
         return iMedicineRepository.searchCode(searchByCode, pageable);
+
     }
 
     /**
@@ -143,6 +154,63 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByNameKindOfMedicine) {
         return iMedicineRepository.searchByKindOfName(searchByNameKindOfMedicine, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithEqualPrice(price, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithBiggerPrice(price, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithLittlePrice(price, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithGreaterThanOrEqualPrice(price, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithSmallerThanOrEqualPrice(price, pageable);
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price) {
+        return iMedicineRepository.searchWithPriceNotEqual(price, pageable);
+    }
+
+    @Override
+    public Medicine getMedicineById(Long id) {
+        return iMedicineRepository.findById(id).get();
+    }
+
+    @Override
+    public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
+        Float price = Float.parseFloat(search);
+        switch (conditional) {
+            case "equal":
+               return searchWithEqualPrice(pageable,price);
+            case "bigger":
+                return searchWithBiggerPrice(pageable,price);
+            case "litter":
+                return searchWithLittlePrice(pageable,price);
+            case "greater":
+                return searchWithGreaterThanOrEqualPrice(pageable, price);
+            case "small":
+                return searchWithSmallerThanOrEqualPrice(pageable, price);
+            case "notEqual":
+                return searchWithPriceNotEqual(pageable,price);
+            default:
+                return findAll(pageable,search);
+        }
+
     }
 
 }

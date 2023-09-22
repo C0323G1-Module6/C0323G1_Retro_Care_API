@@ -85,4 +85,19 @@ public class PrescriptionService implements IPrescriptionService{
     public void editPrescription(Prescription prescription) {
         prescriptionRepository.editPrescription(prescription);
     }
+
+    @Override
+    public Page<Prescription> searchByNamePrescription(String name, Pageable pageable) {
+        return prescriptionRepository.searchByNamePrescription(name,pageable);
+    }
+
+    @Override
+    public Page<Prescription> searchByCodePrescription(String code, Pageable pageable) {
+        return prescriptionRepository.searchByCodePrescription(code,pageable);
+    }
+
+    @Override
+    public Page<Prescription> searchBySymptomsPrescription(String symptoms, Pageable pageable) {
+        return prescriptionRepository.searchBySymptomsPrescription(symptoms,pageable);
+    }
 }
