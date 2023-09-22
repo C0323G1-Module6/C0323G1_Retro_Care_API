@@ -65,6 +65,16 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     void updateMedicine(@Param("medicine") Medicine medicine);
 
     /**
+     * author: HanhNLM
+     * date create: 21/09/2023
+     * function: check medicine existence
+     *
+     * @param id
+     * @return boolean
+     */
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
+
+    /**
      * Author: medicine_DaoPTA
      * workday: 15/09/2023
      * function: Display Medicine list

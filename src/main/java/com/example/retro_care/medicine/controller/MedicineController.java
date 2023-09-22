@@ -19,9 +19,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @RestController
@@ -79,7 +82,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity addMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -112,7 +119,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
