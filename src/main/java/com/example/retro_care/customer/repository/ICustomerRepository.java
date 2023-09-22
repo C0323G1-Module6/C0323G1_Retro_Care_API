@@ -93,11 +93,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
             "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
             "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
             "END ",
-//            "ORDER BY " +
-//            "CASE WHEN :sortItem = 'group' THEN c.app_user_id " +
-//            "     WHEN :sortItem = 'name' THEN c.name " +
-//            "     ELSE c.code " +
-//            "END ",
             countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.flag_deleted = false AND c.name LIKE :name AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
                     "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
                     "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
