@@ -1,6 +1,7 @@
 package com.example.retro_care.kind_of_medicine.model;
 
-import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.model.Medicine
+        ;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
@@ -15,20 +16,20 @@ public class KindOfMedicine {
     private  String name;
     private Boolean flagDeleted;
 
-//    @JsonBackReference
-    @OneToMany(mappedBy = "kindOfMedicine")
-    @JsonBackReference
-    private Set<Medicine> medicineSet;
-
     public KindOfMedicine() {
     }
 
-    public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted, Set<Medicine> medicineSet) {
+    public KindOfMedicine(String code, String name, Boolean flagDeleted) {
+        this.code = code;
+        this.name = name;
+        this.flagDeleted = flagDeleted;
+    }
+
+    public KindOfMedicine(Long id, String code, String name, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
         this.flagDeleted = flagDeleted;
-        this.medicineSet = medicineSet;
     }
 
     public Long getId() {
@@ -63,11 +64,13 @@ public class KindOfMedicine {
         this.flagDeleted = flagDeleted;
     }
 
-    public Set<Medicine> getMedicineSet() {
-        return medicineSet;
-    }
-
-    public void setMedicineSet(Set<Medicine> medicineSet) {
-        this.medicineSet = medicineSet;
+    @Override
+    public String toString() {
+        return "KindOfMedicine{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                '}';
     }
 }
