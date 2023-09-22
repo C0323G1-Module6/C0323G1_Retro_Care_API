@@ -232,6 +232,12 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
     List<Medicine> findAll();
 
+    @Query(value = "select * from medicine m " +
+            "join unit_detail u on m.id = u.medicine_id " +
+            "where u.conversion_unit like 'Viên' " +
+            "and m.flag_deleted = false",nativeQuery = true)
+    List<Medicine> getMedicineList();
+
     /**
      * author: VuNL
      * date create: 16/09/2023
