@@ -54,7 +54,7 @@ public class IndicationService implements IIndicationService {
             IndicationDto indicationDto = new IndicationDto();
             indicationDto.setDosage(i.getDosage());
             indicationDto.setFrequency(i.getFrequency());
-            indicationDto.setMedicine(i.getMedicine().getId());
+            indicationDto.setMedicine(i.getMedicine().getName());
             indicationDto.setFlagDeleted(i.getFlagDeleted());
             indicationDto.setPrescription(i.getPrescription().getId());
             indicationDto.setId(i.getId());
