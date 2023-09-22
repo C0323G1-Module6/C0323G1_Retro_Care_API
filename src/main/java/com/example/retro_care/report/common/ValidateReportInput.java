@@ -29,16 +29,19 @@ public class ValidateReportInput {
         } else if (isAfterPresentDate(startDate)) {
             errMap.put(START_DATE, "Ngày bắt đầu vượt quá ngày hiện tại");
         }
-
     }
 
     public static void validateEndDate(String startDate, String endDate, Map<String, String> errMap) {
+
+
         if (endDate == null || endDate.trim().equals("")) {
             errMap.put(END_DATE, "Vui lòng chọn ngày kết thúc");
         } else if (!isValidDateFormat(endDate)) {
             errMap.put(END_DATE, "Nhập sai định dạng ngày bắt đầu");
         } else if (isAfterPresentDate(endDate)) {
             errMap.put(END_DATE, "Ngày kết thúc vượt quá ngày hiện tại");
+        } else if (startDate == null || startDate.trim().equals("")) {
+            errMap.put(START_DATE, "Vui lòng chọn ngày bắt đầu");
         } else if (isBeforeStartDate(startDate, endDate)) {
             errMap.put(END_DATE, "Ngày kết thúc sớm hơn ngày bắt đầu");
         }
