@@ -91,6 +91,16 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     void updateMedicine(@Param("medicine") Medicine medicine);
 
     /**
+     * author: HanhNLM
+     * date create: 21/09/2023
+     * function: check medicine existence
+     *
+     * @param id
+     * @return boolean
+     */
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
+
+    /**
      * Author: medicine_DaoPTA
      * workday: 15/09/2023
      * function: Display Medicine list
@@ -189,25 +199,25 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
             "group by m.id " +
-            "HAVING :price > sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+            "HAVING :price < sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
     Page<IMedicineListDto> searchWithBiggerPrice(@Param("price") Float price, Pageable pageable);
 
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             "where m.flag_deleted = false " +
             "group by m.id " +
-            "HAVING :price < sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+            "HAVING :price > sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
     Page<IMedicineListDto> searchWithLittlePrice(@Param("price") Float price, Pageable pageable);
 
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
             "group by m.id " +
-            "HAVING :price >= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+            "HAVING :price <= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            " where m.flag_deleted = false" +
+            " where m.flag_deleted = false " +
             "group by m.id " +
-            "HAVING :price <= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+            "HAVING :price >= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
     @Query(value =  PREFIX_SEARCH_NOT_PRICE +"where m.flag_deleted = false " +

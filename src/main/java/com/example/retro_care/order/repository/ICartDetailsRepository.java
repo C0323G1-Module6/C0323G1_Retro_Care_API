@@ -1,10 +1,8 @@
 package com.example.retro_care.order.repository;
 
 
-import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.model.CartDetails;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
+import com.example.retro_care.order.projection.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -98,8 +96,6 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "WHERE m.id = :medicineId " +
             "GROUP BY m.id")
     MedicineProjection getMedicine(@Param("medicineId") Long medicineId);
-
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;

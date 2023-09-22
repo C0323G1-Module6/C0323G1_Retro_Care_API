@@ -1,8 +1,10 @@
 package com.example.retro_care.medicine.dto;
 
 
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-public class KindOfMedicineDto {
+public class KindOfMedicineDto implements Validator {
     private Long id;
     private String code;
     private String name;
@@ -48,5 +50,15 @@ public class KindOfMedicineDto {
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }

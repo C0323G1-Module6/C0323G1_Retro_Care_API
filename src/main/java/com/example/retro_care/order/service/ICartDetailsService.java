@@ -1,11 +1,7 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
-
 import com.example.retro_care.order.projection.*;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
+
 import java.util.List;
 
 public interface ICartDetailsService {
@@ -25,7 +21,6 @@ public interface ICartDetailsService {
      * @param : appUserId, medicineId, quantity;
      */
     void addToCart(Long appUserId, Long medicineId, Integer quantity);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -33,7 +28,6 @@ public interface ICartDetailsService {
      * @param : appUserId;
      */
     int clearAllCartFromUser(Long appUserId);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
