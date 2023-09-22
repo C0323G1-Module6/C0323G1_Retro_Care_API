@@ -32,7 +32,7 @@ public interface IInvoiceResult {
 
     Supplier getSupplier();
 
-    String getName();
+    String getNameSupplier();
 
     String getAddress();
 

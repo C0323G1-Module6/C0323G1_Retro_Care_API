@@ -76,33 +76,78 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *
      * @return
      */
-    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid,\n" +
-            "            s.name, s.address,\n" +
-            "            DATE(i.creation_date) as creationDay,\n" +
-            "            TIME(i.creation_date) as creationTime,\n" +
-            "            i.document_number as documentNumber, i.note,\n" +
-            "       ROUND((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) AS importPrice,\n" +
-            "       ROUND(SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) AS total,\n" +
-            "       ROUND((SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) - i.paid) AS billOwed\n" +
-            "            FROM invoice i\n" +
-            "            JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
-            "            JOIN medicine m ON m.id = ind.medicine_id\n" +
-            "            JOIN supplier s ON s.id = i.supplier_id\n" +
-            "            WHERE i.flag_deleted = false\n" +
-            "            AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '')\n" +
-            "            AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '')\n" +
-            "            AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '')\n" +
-            "            AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '')\n" +
-            "            GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code,\n" +
-            "                     i.creation_date, i.paid, i.supplier_id, i.document_number, i.note, \n" +
-            "            m.price, m.retail_profits, m.vat,\n" +
-            "            ind.discount, ind.medicine_quantity\n" +
-            "            ORDER BY i.code DESC" )
+    @Query(nativeQuery = true, value = "SELECT\n" +
+            "    i.id,\n" +
+            "    i.app_user_id,\n" +
+            "    i.code,\n" +
+            "    i.creation_date,\n" +
+            "    i.flag_deleted,\n" +
+            "    i.paid,\n" +
+            "    DATE(i.creation_date) AS creationDay,\n" +
+            "    TIME(i.creation_date) AS creationTime,\n" +
+            "    i.document_number AS documentNumber,\n" +
+            "    i.note,\n" +
+            "    subquery.nameSupplier,\n" +
+            "    subquery.address,\n" +
+            "    sum(subquery.total) AS total,\n" +
+            "    sum(subquery.billOwed) AS billOwed\n" +
+            "FROM\n" +
+            "    invoice i\n" +
+            "JOIN (\n" +
+            "    SELECT\n" +
+            "        i.id,\n" +
+            "        s.name AS nameSupplier,\n" +
+            "        s.address AS address,\n" +
+            "        ROUND((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) AS importPrice,\n" +
+            "        ROUND(SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) AS total,\n" +
+            "        ROUND((SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) - i.paid) AS billOwed\n" +
+            "    FROM\n" +
+            "        invoice i\n" +
+            "    JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
+            "    JOIN medicine m ON m.id = ind.medicine_id\n" +
+            "    JOIN supplier s ON s.id = i.supplier_id\n" +
+            "    GROUP BY\n" +
+            "        i.id,\n" +
+            "        i.app_user_id,\n" +
+            "        i.creation_date,\n" +
+            "        i.flag_deleted,\n" +
+            "        i.code,\n" +
+            "        i.paid,\n" +
+            "        i.supplier_id,\n" +
+            "        i.document_number,\n" +
+            "        i.note,\n" +
+            "        m.price,\n" +
+            "        m.retail_profits,\n" +
+            "        m.vat,\n" +
+            "        ind.discount,\n" +
+            "        ind.medicine_quantity\n" +
+            ") AS subquery ON i.id = subquery.id\n" +
+            "WHERE\n" +
+            "    i.flag_deleted = false\n" +
+            "    AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '')\n" +
+            "    AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '')\n" +
+            "    AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '')\n" +
+            "    AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '')\n" +
+            "GROUP BY\n" +
+            "    i.id,\n" +
+            "    i.app_user_id,\n" +
+            "    i.code,\n" +
+            "    i.creation_date,\n" +
+            "    i.flag_deleted,\n" +
+            "    i.paid,\n" +
+            "    DATE(i.creation_date),\n" +
+            "    TIME(i.creation_date),\n" +
+            "    i.document_number,\n" +
+            "    i.note,\n" +
+            "    subquery.nameSupplier,\n" +
+            "    subquery.address\n" +
+            "ORDER BY  :sortColum DESC\n")
     Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
                                              @Param("start_date") String startDate,
                                              @Param("end_date") String endDate,
                                              @Param("start_time") String startTime,
-                                             @Param("end_time") String endTime
+                                             @Param("end_time") String endTime,
+                                             @Param("sortColum") String sortColum
                                              );
 
 
