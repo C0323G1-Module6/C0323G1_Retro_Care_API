@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -180,9 +181,16 @@ public class CustomerController {
                                                               @RequestParam(defaultValue = "", required = false) String address,
                                                               @RequestParam(defaultValue = "", required = false) String phoneNumber,
                                                               @RequestParam(defaultValue = "") String groupValue,
-                                                              @RequestParam(defaultValue = "") String sortItem) {
-        Pageable pageable = PageRequest.of(page, 5);
-        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, sortItem, pageable);
+                                                              @RequestParam(defaultValue = "id") String sortItem,
+                                                              @RequestParam(defaultValue = "DESC") String sort) {
+        Sort sortable = null;
+        if (sort.equals("ASC")) {
+            sortable = Sort.by(sortItem).ascending();
+        } else if (sort.equals("DESC")) {
+            sortable = Sort.by(sortItem).descending();
+        }
+        Pageable pageable = PageRequest.of(page, 5, sortable);
+        Page<ICustomerDto> customers = customerService.findAllCustomer("%" + name + "%", "%" + code + "%", "%" + address + "%", "%" + phoneNumber + "%", groupValue, pageable);
         if (customers.getTotalElements() != 0) {
             return ResponseEntity.ok(customers);
         }
