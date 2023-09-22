@@ -13,4 +13,6 @@ public interface IMedicineListDto {
     Float getDiscount();
     Float getVat();
     Float getRetailProfits();
+    Float getRetailPrice();
+
 }
