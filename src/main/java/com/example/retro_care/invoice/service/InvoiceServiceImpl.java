@@ -151,7 +151,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @param endDate
      * @param startTime
      * @param endTime
-     * @param sortColumn
      * @return
      */
 
