@@ -104,4 +104,20 @@ public interface IMedicineService {
      * @return the drug group of the drug approximated by the filter
      */
     Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
+
+    Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price);
+
+    Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price);
+
+    Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price);
+
+    Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price);
+
+    Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price);
+
+    Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
+
+    Medicine getMedicineById(Long id);
+
+    Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
 }

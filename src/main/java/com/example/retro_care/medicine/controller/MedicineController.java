@@ -23,6 +23,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
+
+
+
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/medicine")
@@ -142,6 +146,9 @@ public class MedicineController {
         }
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
+
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
         if (id == null) {
@@ -173,8 +180,8 @@ public class MedicineController {
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                                    @RequestParam(defaultValue = "",required = false) String searchInMedicine,
                                                                    @RequestParam(defaultValue = "", required = false) String search,
-                                                                   @RequestParam(defaultValue = "", required = false) String conditional
-    ){
+                                                                   @RequestParam(defaultValue = "", required = false) String conditional){
+
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
         Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
@@ -189,6 +196,9 @@ public class MedicineController {
                 break;
             case "searchByNameKindOfMedicine":
                 medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                break;
+            case "searchByPrice":
+                medicines = iMedicineService.searchByPrice(pageable,search, conditional);
                 break;
             case "searchByPrice":
                 medicines = iMedicineService.searchByPrice(pageable,search, conditional);
