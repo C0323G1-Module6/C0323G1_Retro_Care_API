@@ -38,7 +38,6 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
 //    @Query(nativeQuery = true, value = "select * from orders")
     Page<IOrderProjection> getAllList1(Pageable pageable);
 
-
 //
     /**
      * Create by: VuDT;

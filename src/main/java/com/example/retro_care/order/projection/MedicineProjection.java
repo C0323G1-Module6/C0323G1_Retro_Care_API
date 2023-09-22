@@ -12,5 +12,6 @@ public interface MedicineProjection {
     Long getQuantity();
     Long getConversion_Rate();
     String getKind_Of_Medicine_Name();
+
 }
 

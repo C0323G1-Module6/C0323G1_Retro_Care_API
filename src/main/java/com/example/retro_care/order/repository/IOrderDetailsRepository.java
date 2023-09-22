@@ -19,6 +19,7 @@ public interface IOrderDetailsRepository extends JpaRepository<OrderDetails, Lon
      * @param medicineId
      * @param quantity
      */
+
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "insert into order_details(current_price, order_id, medicine_id, quantity)\n" +

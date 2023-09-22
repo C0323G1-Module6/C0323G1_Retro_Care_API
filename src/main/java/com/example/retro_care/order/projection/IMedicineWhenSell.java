@@ -6,4 +6,5 @@ public interface IMedicineWhenSell {
     String getName();
     Double getPrice();
     Long getQuantity();
+
 }

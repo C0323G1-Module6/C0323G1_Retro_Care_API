@@ -48,7 +48,6 @@ public class OrderController {
     @GetMapping(value = { "/list"})
     public ResponseEntity<Page<IOrderProjection>> getListOrder(@PageableDefault(size = 5)Pageable pageable,@RequestParam("page") String page) {
         int currentPage;
-
         try {
             currentPage = Integer.parseInt(page);
         } catch (NumberFormatException e) {

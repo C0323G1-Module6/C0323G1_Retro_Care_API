@@ -20,5 +20,4 @@ public interface IUserOrderRepository extends JpaRepository<UserOrder, Long> {
     @Modifying
     @Query(nativeQuery = true, value = "insert into user_order(app_user_id, order_id) values (:app_user_id, :order_id)")
     void createUserOrder(@Param("app_user_id") Long appUserId, @Param("order_id") Long orderId);
-
 }

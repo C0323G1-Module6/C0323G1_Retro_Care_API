@@ -84,7 +84,6 @@ public class CartDetailsService implements ICartDetailsService{
     }
 
     /**
-
      * author: VuNL
      * date: 15/09/2023
      * function: get list medicine by name

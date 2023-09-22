@@ -8,4 +8,5 @@ public interface IOrderProjection {
     String getOrderTime();
     String getOrderDetailsPrice();
     String getOrderNote();
+
 }

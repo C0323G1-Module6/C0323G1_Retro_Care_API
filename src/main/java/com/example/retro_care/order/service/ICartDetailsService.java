@@ -21,7 +21,6 @@ public interface ICartDetailsService {
      * @param : appUserId, medicineId, quantity;
      */
     void addToCart(Long appUserId, Long medicineId, Integer quantity);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;

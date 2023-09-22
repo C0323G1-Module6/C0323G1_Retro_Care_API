@@ -14,7 +14,6 @@ public class EmailSenderService implements IEmailSenderService {
 
     private final JavaMailSender mailSender;
 
-
     public EmailSenderService(JavaMailSender mailSender){
         this.mailSender = mailSender;
     }
