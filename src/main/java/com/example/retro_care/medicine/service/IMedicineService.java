@@ -118,6 +118,8 @@ public interface IMedicineService {
     Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
 
     Medicine getMedicineById(Long id);
+    Medicine getMedicineByName(String nameMedicine);
+
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
 }

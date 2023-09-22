@@ -192,6 +192,11 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
+    public Medicine getMedicineByName(String nameMedicine) {
+        return iMedicineRepository.getMedicinesByName(nameMedicine);
+    }
+
+    @Override
     public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
         Float price = Float.parseFloat(search);
         switch (conditional) {

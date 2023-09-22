@@ -60,6 +60,7 @@ public class CartDetailsController {
     public ResponseEntity<?> addToCartCart(@RequestParam("appUserId") Long appUserId,
                                            @RequestParam("medicineId") Long medicineId,
                                            @RequestParam("quantity") Integer quantity) {
+
         if (!iAppUserService.existsById(appUserId) || !iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)) {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         } else {
@@ -133,7 +134,7 @@ public class CartDetailsController {
     @GetMapping("/getMedicine")
     public ResponseEntity<?> getMedicine(@RequestParam("name") String name) {
         List<IMedicineWhenSell> list = iCartDetailsService.getMedicineByNameWhenOrder(name);
-        System.out.println(list);
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
@@ -236,10 +237,12 @@ public class CartDetailsController {
      */
     @GetMapping("/get-all")
     public ResponseEntity<?> getAllCarts(@RequestParam("appUserId") Long appUserId) {
+
         if (iAppUserService.existsById(appUserId)) {
             return new ResponseEntity<>(iCartDetailsService.findCartDetailsByUserId(appUserId), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
     }
 
     /**
@@ -253,6 +256,7 @@ public class CartDetailsController {
     @GetMapping("/get-quantity-in-cart")
     public ResponseEntity<?> getQuantityInCart(@RequestParam("appUserId") Long appUserId,
                                                @RequestParam("medicineId") Long medicineId) {
+
         if (iAppUserService.existsById(appUserId) && iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)) {
             return new ResponseEntity<>(iCartDetailsService.findMedicineQuantityInCart(appUserId, medicineId), HttpStatus.OK);
         }
@@ -269,6 +273,7 @@ public class CartDetailsController {
      */
     @GetMapping("/get-loyalty-point")
     public ResponseEntity<?> getLoyaltyPoint(@RequestParam("appUserId") Long appUserId) {
+
         if (iAppUserService.existsById(appUserId)) {
             return new ResponseEntity<>(iCartDetailsService.getLoyaltyPoint(appUserId), HttpStatus.OK);
         } else {
@@ -287,6 +292,7 @@ public class CartDetailsController {
      */
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam("appUserId") Long appUserId) {
+
         if (iAppUserService.existsById(appUserId)) {
             List<CartProjection> carts = iCartDetailsService.findCartDetailsByUserId(appUserId);
             Map<Long, Long> meds = new HashMap<>();
@@ -305,6 +311,22 @@ public class CartDetailsController {
             return new ResponseEntity<>(meds, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
+
         }
+    }
+
+
+    /**
+     * author: VuNL
+     * Date start: 20/09/2023
+     *
+     * @param appUserId
+     * @return name
+     */
+    @GetMapping("/getNameEmployee")
+    public ResponseEntity<String> getEmployeeName(@RequestParam("appUserId") Long appUserId) {
+        String name = iCartDetailsService.getNameEmployeeByAppUserId(appUserId);
+        return new ResponseEntity<>(name, HttpStatus.OK);
     }
 }
