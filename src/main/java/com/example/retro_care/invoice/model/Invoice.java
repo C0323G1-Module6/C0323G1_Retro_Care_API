@@ -2,14 +2,11 @@ package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 @Entity
 public class Invoice {
     @Id

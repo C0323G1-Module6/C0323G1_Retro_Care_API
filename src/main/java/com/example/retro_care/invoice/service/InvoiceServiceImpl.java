@@ -1,6 +1,6 @@
 package com.example.retro_care.invoice.service;
 
-import com.example.retro_care.invoice.model.Invoice;
+
 import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDetailDto;
 import com.example.retro_care.invoice.model.InvoiceDto;
