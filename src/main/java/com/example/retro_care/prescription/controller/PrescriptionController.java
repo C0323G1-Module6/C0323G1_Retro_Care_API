@@ -108,7 +108,7 @@ public class PrescriptionController {
         for (IndicationDto i : indicationDtoList) {
             if (i.getDosage() != null) {
                 Indication indication = new Indication();
-                medicine = medicineService.getMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineByName(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);
@@ -190,7 +190,7 @@ public class PrescriptionController {
             if (i.getDosage() != null) {
                 i.setFlagDeleted(true);
                 Indication indication = new Indication();
-                medicine = medicineService.getMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineByName(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);
