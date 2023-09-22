@@ -89,7 +89,7 @@ public class IndicationController {
         }
 
         Prescription prescription = prescriptionService.getPrescriptionById(indicationService.maxId());
-        Medicine medicine = medicineService.findMedicineById(indicationDto.getMedicine());
+        Medicine medicine = medicineService.getMedicineByName(indicationDto.getMedicine());
         BeanUtils.copyProperties(indicationDto,indication);
         indication.setMedicine(medicine);
         indication.setPrescription(prescription);
