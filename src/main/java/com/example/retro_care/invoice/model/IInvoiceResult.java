@@ -29,7 +29,6 @@ public interface IInvoiceResult {
     Double getPrice();
     Double getImportPrice();
     Double getTotal();
-
     Supplier getSupplier();
 
     String getNameSupplier();

@@ -28,7 +28,6 @@ public class InvoiceDetail {
 
     public InvoiceDetail() {
     }
-
     public InvoiceDetail(Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
         this.discount = discount;
         this.expiry = expiry;

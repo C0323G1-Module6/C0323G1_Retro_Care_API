@@ -10,7 +10,6 @@ public interface IInvoiceDetailRepository extends JpaRepository<InvoiceDetail, L
     /**
      * Create an invoiceDetail
      * Code by CuongHLT
-     *
      * @param invoiceDetail Return void
      */
     @Transactional

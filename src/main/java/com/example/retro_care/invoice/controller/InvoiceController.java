@@ -163,7 +163,6 @@ public class InvoiceController {
         }
 
 
-        // Check for empty string ("") and set to null
 
         Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
 

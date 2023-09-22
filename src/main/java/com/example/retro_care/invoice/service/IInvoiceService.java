@@ -53,7 +53,6 @@ public interface IInvoiceService {
     Invoice findById(Long id);
     List<IInvoiceResult> getInvoiceDetailById(Long id);
 
-
     Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
                                 String startDate,
                                 String endDate,

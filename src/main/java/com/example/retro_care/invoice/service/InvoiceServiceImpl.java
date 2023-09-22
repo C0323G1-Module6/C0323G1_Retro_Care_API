@@ -149,7 +149,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
-     *
      * @param pageable
      * @param startDate
      * @param endDate

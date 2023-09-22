@@ -28,11 +28,9 @@ public class Invoice {
     @JoinColumn(name = "app_user_id", referencedColumnName = "id")
     private AppUser appUserId;
 
-
     @OneToMany(mappedBy = "invoiceId")
     @JsonBackReference
     Set<InvoiceDetail> invoiceDetailSet;
-
     public Invoice() {
     }
 

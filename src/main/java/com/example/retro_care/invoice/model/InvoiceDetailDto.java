@@ -3,7 +3,6 @@ package com.example.retro_care.invoice.model;
 
 import java.sql.Date;
 
-
 public class InvoiceDetailDto {
     private Long id;
     private Float discount;

@@ -150,8 +150,6 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
                                              @Param("sortColum") String sortColum
                                              );
 
-
-
     /**
      * create an Invoice
      * Code by CuongHLT
