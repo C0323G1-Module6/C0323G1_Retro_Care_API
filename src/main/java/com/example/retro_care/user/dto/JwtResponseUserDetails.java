@@ -2,11 +2,9 @@ package com.example.retro_care.user.dto;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.util.Assert;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+
 /**
  * class: JwtResponseUserDetails
  * Creater: NhatNHH
@@ -27,6 +25,26 @@ public class JwtResponseUserDetails implements UserDetails {
         this.username = username;
         this.password = password;
         this.online = online;
+        this.authorities = authorities;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getOnline() {
+        return online;
+    }
+
+    public void setOnline(Boolean online) {
+        this.online = online;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
         this.authorities = authorities;
     }
 

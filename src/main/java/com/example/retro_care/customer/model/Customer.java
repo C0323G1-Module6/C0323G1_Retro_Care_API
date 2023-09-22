@@ -3,7 +3,11 @@ package com.example.retro_care.customer.model;
 import com.example.retro_care.user.model.AppUser;
 
 import javax.persistence.*;
-
+/**
+ * Author: TinDT & QuyenHT
+ * Goal: class initializes the customer
+ * return customer
+ */
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -25,8 +29,8 @@ public class Customer {
     private Long point;
     @Column(columnDefinition = "text")
     private String note;
-    @Column(name = "flag_deleted", columnDefinition = "bit(1)")
-    private Boolean flagDeleted = true;
+    @Column(name = "flag_deleted", columnDefinition = "bit(0)")
+    private Boolean flagDeleted = false;
     @OneToOne
     @JoinColumn(name = "app_user_id ",referencedColumnName = "id",nullable = true)
     private AppUser appUser;
@@ -49,6 +53,15 @@ public class Customer {
     }
     // HANHNLM 's constructor
     public Customer(String name, String phoneNumber, String email, String address, String note){
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.note = note;
+    }
+    // HANHNLM 's constructor
+    public Customer(Long id, String name, String phoneNumber, String email, String address, String note){
+        this.id = id;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.email = email;

@@ -22,4 +22,9 @@ public class PatientService implements IPatientService{
     public List<Patient> getAllPatient() {
         return patientRepository.getAllPatient();
     }
+
+    @Override
+    public Patient patientById(Long id) {
+        return patientRepository.findById(id).orElse(null);
+    }
 }

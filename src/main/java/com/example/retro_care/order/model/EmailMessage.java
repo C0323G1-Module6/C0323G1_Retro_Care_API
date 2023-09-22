@@ -5,20 +5,24 @@ import com.example.retro_care.order.projection.CartProjection;
 import java.util.List;
 
 public class EmailMessage {
-
     private String to;
     private String subject;
     private String message;
+
+    private Long totalPrice;
+
     private List<CartProjection> cartProjections;
 
     public EmailMessage() {
     }
 
-    public EmailMessage(String to, String subject, String message, List<CartProjection> cartProjections) {
+    public EmailMessage(String to, String subject, String message,Long totalPrice, List<CartProjection> cartProjections) {
         this.to = to;
         this.subject = subject;
         this.message = message;
+        this.totalPrice = totalPrice;
         this.cartProjections = cartProjections;
+
     }
 
     public String getTo() {
@@ -43,6 +47,14 @@ public class EmailMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public Long getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     public List<CartProjection> getCartProjections() {

@@ -2,13 +2,11 @@ package com.example.retro_care.employee.service;
 
 import com.example.retro_care.employee.model.Employee;
 import com.example.retro_care.employee.repository.IEmployeeRepository;
-import com.example.retro_care.user.model.AppRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class EmployeeService implements IEmployeeService{
@@ -35,16 +33,15 @@ public class EmployeeService implements IEmployeeService{
     /**
      * author: TanNV
      * this function use to give employee to repository and save this employee
+     *
      * @param employee
+     * @param userId
      * @return this employee have id
      */
     @Override
-    public void addEmployee(Employee employee) {
+    public void addEmployee(Employee employee, Long userId) {
 
-        employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
-                employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
-                employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.isFlagDelete(),employee.getAppUser().getId());
+        employeeRepository.addEmployee(employee,userId);
     }
   /**
      * Create: SonTT
@@ -63,13 +60,12 @@ public class EmployeeService implements IEmployeeService{
      * Date create: 15/09/2023
      * Function: search employee with id and name and with pagination
      * @param pageable
-     * @param id
      * @param name
      * @return Page
      */
     @Override
-    public Page<Employee> searchEmployee(Pageable pageable, Long id, String name) {
-        return employeeRepository.searchEmployeeByNameAndRole(pageable,id,name);
+    public Page<Employee> searchEmployee(Pageable pageable, String name) {
+        return employeeRepository.searchEmployeeByNameAndRole(pageable,name);
     }
 
     /**
@@ -79,8 +75,13 @@ public class EmployeeService implements IEmployeeService{
      * @return List
      */
     @Override
-    public List<AppRole> getRole() {
-        return employeeRepository.getRole();
+    public Employee findEmployee(Long id) {
+        try{
+            return employeeRepository.findEmployeeById(id);
+        }catch (Exception e){
+            return null;
+        }
+
     }
 
     /**
@@ -92,11 +93,11 @@ public class EmployeeService implements IEmployeeService{
      */
     @Override
     public boolean deleteEmployee(Long id) {
-        if (employeeRepository.findEmployeeById(id) == null){
-            return false;
-        }else {
+        try{
             employeeRepository.deleteEmployeeById(id);
             return true;
+        }catch (Exception e){
+            return false;
         }
     }
 
@@ -120,9 +121,17 @@ public class EmployeeService implements IEmployeeService{
      */
     @Override
     public void updateEmployee(Employee employee) {
-        employeeRepository.updateEmployee(employee.getNameEmployee(),
-                employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
-                employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote());
+        employeeRepository.updateEmployee(employee,employee.getId());
+    }
+    /**
+     * Author: TanNV
+     * Date:20/09/2023
+     * find employee by phone number
+     * @param phoneNumber
+     * @return
+     */
+    @Override
+    public Employee getByPhoneNumber(String phoneNumber,Long id) {
+        return employeeRepository.findEmployeeByPhoneNumber(phoneNumber,id);
     }
 }

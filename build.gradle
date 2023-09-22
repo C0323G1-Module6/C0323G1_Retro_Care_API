@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 //	Apache PDFBOX:
+
 	implementation 'org.apache.pdfbox:pdfbox:2.0.27'
 
 	implementation 'org.springframework.social:spring-social-facebook:2.0.3.RELEASE'

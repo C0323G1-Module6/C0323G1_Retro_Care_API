@@ -1,9 +1,10 @@
+-- HanhNLM procedure Query SQL - altered 199 1700
+
 ALTER TABLE cart_details
     ADD UNIQUE INDEX user_medicine_index (app_user_id, medicine_id);
 
-
 -------------------------------------------------------------------------
-CREATE PROCEDURE createOrder(IN user_id BIGINT)
+CREATE PROCEDURE createOrder(IN user_id BIGINT, IN loyaltyPoint BIGINT)
 BEGIN
     -- create a new order
     INSERT INTO orders (date_time, flag_deleted)
@@ -30,27 +31,32 @@ BEGIN
 
     -- update the quantity in the medicine table
     UPDATE medicine AS m
-        INNER JOIN cart_details AS c ON m.id = c.medicine_id
-    SET m.quantity = m.quantity - c.quantity
+    INNER JOIN cart_details AS c ON m.id = c.medicine_id
+    INNER JOIN unit_detail AS ud ON m.id = ud.medicine_id
+    SET m.quantity = m.quantity - (c.quantity * ud.conversion_rate)
     WHERE c.app_user_id = user_id;
+
+    -- update point
+    update customer c
+    set c.point = loyaltyPoint
+    where c.app_user_id = user_id;
 
     -- delete the items from the cart
     DELETE FROM cart_details WHERE app_user_id = user_id;
 
 END;
 
-
-
-
 -------------------------------------------------------------------------
 drop procedure createOrder;
+drop procedure getCartDetailsForMail;
 
 
 -------------------------------------------------------------------------
 
 CREATE PROCEDURE getCartDetailsForMail(IN user_id BIGINT)
 BEGIN
-    SELECT c.email as customerEmail, m.name AS medicineName,
+    SELECT c.id as customerId, c.phone_number as phoneNumber,
+     cd.id as cartId, m.id as medicineId, c.email as customerEmail, m.name AS medicineName,
            ( SELECT image_path
              FROM image_medicine im
              WHERE im.medicine_id = m.id
@@ -59,7 +65,8 @@ BEGIN
            m.price as medicinePrice,
            cd.quantity AS quantityInCart,
            c.name AS customerName,
-           c.address AS address
+           c.address AS address,
+           c.point as loyaltyPoint
     FROM cart_details as cd
              JOIN medicine m ON cd.medicine_id = m.id
              JOIN app_user au ON cd.app_user_id = au.id
@@ -67,4 +74,8 @@ BEGIN
     WHERE cd.app_user_id = user_id;
 END;
 
--- alter
+-----
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+--------
+
+-- altered 219 23:23

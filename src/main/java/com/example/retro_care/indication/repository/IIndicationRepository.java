@@ -19,7 +19,6 @@ public interface IIndicationRepository extends JpaRepository<Indication, Long> {
             "from indication i where i.prescription_id = :#{#idPrescription} and i.flag_deleted = 0 ;", nativeQuery = true)
     List<Indication> getAllIndication(Long idPrescription);
 
-
     /**
      * Author: ThanhKN
      * Goal:Create indication
@@ -63,6 +62,6 @@ public interface IIndicationRepository extends JpaRepository<Indication, Long> {
      */
     @Transactional
     @Modifying
-    @Query(value = "UPDATE indication SET flagDeleted = 1 WHERE id = :idIndication",nativeQuery = true)
+    @Query(value = "UPDATE indication SET flag_deleted = 1 WHERE id = :idIndication",nativeQuery = true)
     void removePrescription(Long idIndication);
 }

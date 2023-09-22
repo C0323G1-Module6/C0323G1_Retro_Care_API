@@ -1,13 +1,16 @@
 package com.example.retro_care.home.service;
 
-import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.home.dto.MedicineForHomePageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 public interface IHomeService {
-    List<Medicine> findAllMedicineForHomepage();
 
-    List<Medicine> searchMedicineForHomepage(String keyword, String type);
+    List<MedicineForHomePageDTO> findMedicineForHomepage(String keyword, String type);
 
-    List<Medicine> findFavoriteMedicineForHomepage();
+    List<MedicineForHomePageDTO> findFavoriteMedicineForHomepage();
+
+    Page<MedicineForHomePageDTO> getListMedicineWithPagination(String keyword, String type, Pageable pageable);
 }

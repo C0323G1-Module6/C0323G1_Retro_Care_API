@@ -6,8 +6,8 @@ import javax.persistence.*;
 @Table(name = "unit_detail")
 public class UnitDetail {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "flag_deleted")
@@ -79,6 +79,18 @@ public class UnitDetail {
 
     public String getConversionUnit() {
         return this.conversionUnit;
+    }
+
+    @Override
+    public String toString() {
+        return "UnitDetail{" +
+                "id=" + id +
+                ", flagDeleted=" + flagDeleted +
+                ", conversionRate=" + conversionRate +
+                ", conversionUnit='" + conversionUnit + '\'' +
+                ", medicine=" + medicine +
+                ", unit=" + unit +
+                '}';
     }
 
     public void setConversionUnit(String conversionUnit) {

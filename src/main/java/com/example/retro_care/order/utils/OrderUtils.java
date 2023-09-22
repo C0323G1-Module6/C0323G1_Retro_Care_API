@@ -2,12 +2,16 @@ package com.example.retro_care.order.utils;
 
 import com.example.retro_care.order.projection.CartProjection;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderUtils {
 
-    public static String generateHTMLForMail(List<CartProjection> carts) {
-        double totalPrice = 0;
+    public static String generateHTMLForMail(List<CartProjection> carts, Long totalPrice) {
+        NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
+        double fixedPrice = 0;
+
         StringBuilder html = new StringBuilder(
                 "<p>Cảm ơn bạn vì đã tin tưởng và lựa chọn sản phẩm tại công ty chúng tôi. Chúng tôi chân thành cảm ơn bạn và hy vọng sẽ gặp lại bạn vào một ngày sớm nhất! <p>"+
                         "<div style='padding: 10px'>" +
@@ -60,20 +64,28 @@ public class OrderUtils {
             Double price = cart.getMedicinePrice();
             Integer quantity = cart.getQuantityInCart();
             Double totalProductPrice = price * quantity;
-            totalPrice += totalProductPrice;
+            fixedPrice += totalProductPrice;
             html.append(String.format("<tr>" +
                     "<td style='text-align:center' ><img src='%s' style='width:50px; height:50px' alt='%s'></td>" +
                     "<td style='text-align:center'>%s</td>" +
-                    "<td style='text-align:center'>%.0fVND</td>" +
+                    "<td style='text-align:center'>%s VND</td>" +
                     "<td style='text-align:center'>%d</td>" +
-                    "<td style='text-align:center'>%.0fVND</td>" +
-                    "</tr>", image, name,name, price, quantity, totalProductPrice));
+                    "<td style='text-align:center'>%s VND</td>" +
+                    "</tr>", image, name,name,numberFormat.format(price) , quantity, numberFormat.format(totalProductPrice)));
         }
-        html.append(String.format("<tr><td colspan='4'><h3>Thành tiền:<h3></td><td style='text-align:center'><h3>%.0fVND<h3></td></tr>" +
+        double discount = fixedPrice - totalPrice;
+        String formattedFixedPrice = numberFormat.format(fixedPrice);
+        String formattedDiscount = numberFormat.format(discount);
+        String formattedTotalPrice = numberFormat.format(totalPrice);
+
+        html.append(String.format(
+                "<tr><td colspan='4'><h3>Tạm tính:<h3></td><td style='text-align:center'><h3>%s VND<h3></td></tr>" +
+                        "<tr><td colspan='4'><h3>Giảm giá:<h3></td><td style='text-align:center'><h3>%s VND<h3></td></tr>" +
+                        "<tr><td colspan='4'><h3>Thành tiền:<h3></td><td style='text-align:center'><h3>%s VND<h3></td></tr>" +
                 "<tr><hr></tr>" +
                 "<tr><td colspan='4'>Hình thức vận chuyển:</td><td><h4 style='text-align:center'>Giao hàng tiêu chuẩn</h4></td></tr>" +
                 "<tr><td colspan='4'>Hình thức thanh toán:</td><td><h4 style='text-align:center'>PAYPAL</h4></td></tr>" +
-                "</table>", totalPrice));
+                "</table>", formattedFixedPrice, formattedDiscount, formattedTotalPrice));
         html.append("<p>Nếu bạn cần thêm thông tin, vui lòng liên hệ hotline 1900-77-77-77 để được hỗ trợ. RetroCare xin cảm ơn!</p>" +
                 "<p>Đội ngũ RetroCare!</p>" +
                 "<small>(Đây là email tự động, vui lòng không trả lời email này)</small>");
