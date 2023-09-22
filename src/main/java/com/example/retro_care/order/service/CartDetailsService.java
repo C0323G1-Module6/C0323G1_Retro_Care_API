@@ -2,7 +2,6 @@ package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
-import com.example.retro_care.order.projection.MedicineProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,9 +82,7 @@ public class CartDetailsService implements ICartDetailsService{
     public List<CartProjection> findCartDetailsByUserId(Long appUserId) {
         return iCartDetailsRepository.findCartDetailsByUserId(appUserId);
     }
-
     /**
-
      * author: VuNL
      * date: 15/09/2023
      * function: get list medicine by name

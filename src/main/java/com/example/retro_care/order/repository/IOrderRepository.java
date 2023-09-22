@@ -1,8 +1,7 @@
 package com.example.retro_care.order.repository;
 
-import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-
+import com.example.retro_care.order.projection.IOrderProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,8 +11,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,9 +26,9 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    @Query(value = "SELECT  o.code , e.name_employee AS name_employee , c.name AS name_customer, " +
-            "DATE(o.date_time) AS order_date, TIME(o.date_time) AS order_time, od.current_price AS order_details_price, " +
-            "o.note AS order_note " +
+    @Query(value = "SELECT  o.code , e.name_employee AS nameEmployee , c.name AS nameCustomer, " +
+            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
+            "o.note AS orderNote " +
             "FROM orders o " +
             "INNER JOIN employee e ON o.id = e.id " +
             "INNER JOIN user_order uo ON o.id = uo.id " +
@@ -40,8 +37,6 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
 //    @Query(nativeQuery = true, value = "select * from orders")
     Page<IOrderProjection> getAllList1(Pageable pageable);
-
-
 //
     /**
      * Create by: VuDT;

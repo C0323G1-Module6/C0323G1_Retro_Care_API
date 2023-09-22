@@ -1,9 +1,9 @@
 package com.example.retro_care.order.controller;
 
+import com.example.retro_care.medicine.service.IMedicineService;
 import com.example.retro_care.order.projection.*;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
+import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +22,12 @@ public class CartDetailsController {
     @Autowired
     private ICartDetailsService iCartDetailsService;
 
+    @Autowired
+    private IAppUserService iAppUserService;
+
+    @Autowired
+    private IMedicineService iMedicineService;
+
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -31,11 +37,15 @@ public class CartDetailsController {
      * @return : HTTPStatus;
      */
     @PostMapping("/add-from-home-details")
-    public ResponseEntity<Object> addToCartFromHomeAndDetails(@RequestParam("appUserId") Long appUserId,
-                                                              @RequestParam("medicineId") Long medicineId,
-                                                              @RequestParam("newQuantity") Integer newQuantity) {
-        iCartDetailsService.addToCartFromDetailsAndHome(appUserId, medicineId, newQuantity);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<?> addToCartFromHomeAndDetails(@RequestParam("appUserId") Long appUserId,
+                                                         @RequestParam("medicineId") Long medicineId,
+                                                         @RequestParam("newQuantity") Integer newQuantity) {
+        if (!iAppUserService.existsById(appUserId) || !iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            iCartDetailsService.addToCartFromDetailsAndHome(appUserId, medicineId, newQuantity);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**
@@ -51,8 +61,12 @@ public class CartDetailsController {
                                            @RequestParam("medicineId") Long medicineId,
                                            @RequestParam("quantity") Integer quantity) {
 
-        iCartDetailsService.addToCart(appUserId, medicineId, quantity);
-        return new ResponseEntity<>(HttpStatus.OK);
+        if (!iAppUserService.existsById(appUserId) || !iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        } else {
+            iCartDetailsService.addToCart(appUserId, medicineId, quantity);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 
     /**
@@ -65,11 +79,10 @@ public class CartDetailsController {
      */
     @DeleteMapping("/delete-all")
     public ResponseEntity<?> clearAllCartFrom(@RequestParam("appUserId") Long appUserId) {
-        if (iCartDetailsService.clearAllCartFromUser(appUserId) > 0) {
+        if (iAppUserService.existsById(appUserId) && iCartDetailsService.clearAllCartFromUser(appUserId) > 0) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
+        return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
     }
 
     /**
@@ -102,11 +115,12 @@ public class CartDetailsController {
     @GetMapping("/check-quantity")
     public ResponseEntity<?> checkQuantity(@RequestParam("medicineId") Long medicineId,
                                            @RequestParam("inputQuantity") Long inputQuantity) {
-
         MedicineProjection med = iCartDetailsService.getMedicineToCheckAndDisplay(medicineId);
-        if (med.getQuantity() >= (inputQuantity * med.getConversion_Rate())) {
+        if (iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)
+                && med.getQuantity() >= (inputQuantity * med.getConversion_Rate())) {
             return new ResponseEntity<>(HttpStatus.OK);
-        } else return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
@@ -201,8 +215,16 @@ public class CartDetailsController {
      * @return : product with all info;
      */
     @GetMapping("/get-details")
-    public ResponseEntity<?> getMedicineDetailsForDisplay(@RequestParam("medicineId") Long medicineId) {
-        return new ResponseEntity<>(iCartDetailsService.getMedicineToCheckAndDisplay(medicineId), HttpStatus.OK);
+    public ResponseEntity<?> getMedicineDetailsForDisplay(@RequestParam("medicineId") String medicineId) {
+        try {
+            Long id = Long.parseLong(medicineId);
+            if (iMedicineService.existsByIdAndFlagDeletedIsFalse(id)) {
+                return new ResponseEntity<>(iCartDetailsService.getMedicineToCheckAndDisplay(id), HttpStatus.OK);
+            }
+        } catch (NumberFormatException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
@@ -215,7 +237,12 @@ public class CartDetailsController {
      */
     @GetMapping("/get-all")
     public ResponseEntity<?> getAllCarts(@RequestParam("appUserId") Long appUserId) {
-        return new ResponseEntity<>(iCartDetailsService.findCartDetailsByUserId(appUserId), HttpStatus.OK);
+
+        if (iAppUserService.existsById(appUserId)) {
+            return new ResponseEntity<>(iCartDetailsService.findCartDetailsByUserId(appUserId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
     }
 
     /**
@@ -229,7 +256,11 @@ public class CartDetailsController {
     @GetMapping("/get-quantity-in-cart")
     public ResponseEntity<?> getQuantityInCart(@RequestParam("appUserId") Long appUserId,
                                                @RequestParam("medicineId") Long medicineId) {
-        return new ResponseEntity<>(iCartDetailsService.findMedicineQuantityInCart(appUserId, medicineId), HttpStatus.OK);
+
+        if (iAppUserService.existsById(appUserId) && iMedicineService.existsByIdAndFlagDeletedIsFalse(medicineId)) {
+            return new ResponseEntity<>(iCartDetailsService.findMedicineQuantityInCart(appUserId, medicineId), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
 
     /**
@@ -242,7 +273,12 @@ public class CartDetailsController {
      */
     @GetMapping("/get-loyalty-point")
     public ResponseEntity<?> getLoyaltyPoint(@RequestParam("appUserId") Long appUserId) {
-        return new ResponseEntity<>(iCartDetailsService.getLoyaltyPoint(appUserId), HttpStatus.OK);
+
+        if (iAppUserService.existsById(appUserId)) {
+            return new ResponseEntity<>(iCartDetailsService.getLoyaltyPoint(appUserId), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
     }
 
 
@@ -256,21 +292,27 @@ public class CartDetailsController {
      */
     @GetMapping("/check-availability")
     public ResponseEntity<?> checkAvailability(@RequestParam("appUserId") Long appUserId) {
-        List<CartProjection> carts = iCartDetailsService.findCartDetailsByUserId(appUserId);
-        Map<Long, Long> meds = new HashMap<>();
-        MedicineProjection temp;
-        for (CartProjection med : carts) {
-            temp = iCartDetailsService.getMedicineToCheckAndDisplay(med.getMedicineId());
-            // hihii
-            if (med.getQuantityInCart() * temp.getConversion_Rate() > temp.getQuantity()) {
-                if (temp.getQuantity() >= temp.getConversion_Rate()) {
-                    meds.put(temp.getId(), (temp.getQuantity() / temp.getConversion_Rate()));
-                } else {
-                    meds.put(temp.getId(), 0L);
+
+        if (iAppUserService.existsById(appUserId)) {
+            List<CartProjection> carts = iCartDetailsService.findCartDetailsByUserId(appUserId);
+            Map<Long, Long> meds = new HashMap<>();
+            MedicineProjection temp;
+            for (CartProjection med : carts) {
+                temp = iCartDetailsService.getMedicineToCheckAndDisplay(med.getMedicineId());
+                // hihii
+                if (med.getQuantityInCart() * temp.getConversion_Rate() > temp.getQuantity()) {
+                    if (temp.getQuantity() >= temp.getConversion_Rate()) {
+                        meds.put(temp.getId(), (temp.getQuantity() / temp.getConversion_Rate()));
+                    } else {
+                        meds.put(temp.getId(), 0L);
+                    }
                 }
             }
+            return new ResponseEntity<>(meds, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+
         }
-        return new ResponseEntity<>(meds, HttpStatus.OK);
     }
 
 

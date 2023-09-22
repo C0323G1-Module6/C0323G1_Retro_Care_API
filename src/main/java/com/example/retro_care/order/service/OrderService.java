@@ -1,23 +1,17 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.OrderDetails;
+import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.ICartDetailProjectionWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
-import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
 import com.example.retro_care.order.repository.IOrderDetailsRepository;
 import com.example.retro_care.order.repository.IOrderRepository;
 import com.example.retro_care.order.repository.IUserOrderRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,8 +24,6 @@ public class OrderService implements IOrderService {
     private IOrderDetailsRepository iOrderDetailsRepository;
     @Autowired
     private IUserOrderRepository iUserOrderRepository;
-
-
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023

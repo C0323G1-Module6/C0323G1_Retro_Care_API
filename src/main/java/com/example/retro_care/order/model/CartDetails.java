@@ -25,7 +25,6 @@ public class CartDetails {
     private Medicine medicine;
 
     private Integer quantity;
-
     public CartDetails() {
     }
 

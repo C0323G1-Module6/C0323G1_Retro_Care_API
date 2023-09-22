@@ -1,6 +1,9 @@
 package com.example.retro_care.order.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 public class OrderAppUser {
@@ -22,7 +25,6 @@ public class OrderAppUser {
         this.flagDelete = flagDelete;
         this.flagOnline = flagOnline;
     }
-
     public Long getId() {
         return id;
     }
