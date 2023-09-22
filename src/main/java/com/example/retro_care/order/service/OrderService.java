@@ -1,22 +1,17 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.OrderDetails;
+import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.ICartDetailProjectionWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
-import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
 import com.example.retro_care.order.repository.IOrderDetailsRepository;
 import com.example.retro_care.order.repository.IOrderRepository;
 import com.example.retro_care.order.repository.IUserOrderRepository;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,8 +24,6 @@ public class OrderService implements IOrderService {
     private IOrderDetailsRepository iOrderDetailsRepository;
     @Autowired
     private IUserOrderRepository iUserOrderRepository;
-
-
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -108,13 +101,14 @@ public class OrderService implements IOrderService {
      */
     @Override
     public void createOrders(String code, String note) {
-        iOrderRepository.createOrder(code,  note);
+        iOrderRepository.createOrder(code, note);
     }
 
 
     /**
      * author: VuNL
      * date: 15/09/2023
+     *
      * @param customerUserId
      * @param employeeUserId
      * @param code
@@ -125,7 +119,7 @@ public class OrderService implements IOrderService {
     public String doEverythingWhenPay(Long customerUserId, Long employeeUserId, String code, String note) {
         String name = "";
         //check quantity
-        System.out.println(iCartDetailsRepository.getAllCardByAppUserId(employeeUserId));
+        double point = 0;
 
         List<ICartDetailProjectionWhenSell> list = (List<ICartDetailProjectionWhenSell>) iCartDetailsRepository.getAllCardByAppUserId(employeeUserId);
         for (ICartDetailProjectionWhenSell cart : list) {
@@ -144,13 +138,19 @@ public class OrderService implements IOrderService {
         //create order detail
         for (ICartDetailProjectionWhenSell cart : list) {
             iOrderRepository.updateMedicineQuantity(cart.getM_quantity() - cart.getCd_quantity(), cart.getM_id());
-            iOrderDetailsRepository.createOrderDetails(cart.getPrice(), id, cart.getM_id(),cart.getCd_quantity());
+            iOrderDetailsRepository.createOrderDetails(cart.getPrice(), id, cart.getM_id(), cart.getCd_quantity());
+            point += cart.getCd_quantity() * cart.getPrice();
         }
         iCartDetailsRepository.clearAllCartFromUser(employeeUserId);
 
         //create user order
         iUserOrderRepository.createUserOrder(employeeUserId, id);
-        iUserOrderRepository.createUserOrder(customerUserId, id);
+        if (customerUserId != -1) {
+            iUserOrderRepository.createUserOrder(customerUserId, id);
+            Long currentPoint = iOrderRepository.getPointCustomerByAppUserId(customerUserId);
+            Long newPoint = currentPoint + (long) Math.floor(point * 0.1);
+            iOrderRepository.updatePointCustomer(newPoint, customerUserId);
+        }
         return "true";
     }
 
@@ -158,6 +158,7 @@ public class OrderService implements IOrderService {
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: create new order and update loyalty point of a customer;
+     *
      * @param : appUserId, loyaltyPoint;
      */
     @Override

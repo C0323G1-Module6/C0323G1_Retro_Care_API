@@ -74,6 +74,11 @@ public class PrescriptionService implements IPrescriptionService{
         return prescriptionRepository.getPrescriptionById(id);
     }
 
+    @Override
+    public Prescription getPrescriptionByCode(String code) {
+        return prescriptionRepository.getPrescriptionByCode(code);
+    }
+
     /**
      * Author: ThanhKN
      * Goal:edit prescription by id

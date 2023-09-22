@@ -95,8 +95,9 @@ public class MedicineService implements IMedicineService {
 
     @Override
     public List<Medicine> getAll() {
-        return iMedicineRepository.findAll();
+        return iMedicineRepository.getMedicineList();
     }
+
 
 
     /**
@@ -198,22 +199,27 @@ public class MedicineService implements IMedicineService {
 
     @Override
     public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
-        Float price = Float.parseFloat(search);
-        switch (conditional) {
-            case "equal":
-               return searchWithEqualPrice(pageable,price);
-            case "bigger":
-                return searchWithBiggerPrice(pageable,price);
-            case "litter":
-                return searchWithLittlePrice(pageable,price);
-            case "greater":
-                return searchWithGreaterThanOrEqualPrice(pageable, price);
-            case "small":
-                return searchWithSmallerThanOrEqualPrice(pageable, price);
-            case "notEqual":
-                return searchWithPriceNotEqual(pageable,price);
-            default:
-                return findAll(pageable,search);
+        Float price = null;
+        try{
+           price  = Float.parseFloat(search);
+            switch (conditional) {
+                case "equal":
+                    return searchWithEqualPrice(pageable,price);
+                case "bigger":
+                    return searchWithBiggerPrice(pageable,price);
+                case "litter":
+                    return searchWithLittlePrice(pageable,price);
+                case "greater":
+                    return searchWithGreaterThanOrEqualPrice(pageable, price);
+                case "small":
+                    return searchWithSmallerThanOrEqualPrice(pageable, price);
+                case "notEqual":
+                    return searchWithPriceNotEqual(pageable,price);
+                default:
+                    return findAll(pageable,search);
+            }
+        }catch (NumberFormatException e){
+            return findAll(pageable,search);
         }
 
     }
