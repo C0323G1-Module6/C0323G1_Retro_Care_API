@@ -21,13 +21,13 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    m.quantity AS quantity," +
             "    m.vat AS vat," +
             "    m.price AS price," +
-            " m.retail_profits AS retailProfits," +
+            "    m.retail_profits AS retailProfits," +
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
             "    id.discount AS discount, " +
             "    ud.conversion_unit AS conversionUnit," +
-            " ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
-            "FROM " +
+            "    ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
+            " FROM " +
             " medicine m" +
             " JOIN" +
             " kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
