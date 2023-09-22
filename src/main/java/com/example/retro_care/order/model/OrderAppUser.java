@@ -25,7 +25,6 @@ public class OrderAppUser {
         this.flagDelete = flagDelete;
         this.flagOnline = flagOnline;
     }
-
     public Long getId() {
         return id;
     }

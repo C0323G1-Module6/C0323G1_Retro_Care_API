@@ -28,7 +28,6 @@ public interface ICartDetailsService {
      * @param : appUserId;
      */
     int clearAllCartFromUser(Long appUserId);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;

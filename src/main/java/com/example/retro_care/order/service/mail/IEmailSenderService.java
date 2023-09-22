@@ -5,5 +5,4 @@ import com.example.retro_care.order.model.EmailMessage;
 
 public interface IEmailSenderService {
     void sendEmail(EmailMessage emailMessage);
-
 }

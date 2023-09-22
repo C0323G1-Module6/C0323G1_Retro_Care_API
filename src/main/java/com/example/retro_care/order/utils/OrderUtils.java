@@ -12,7 +12,6 @@ public class OrderUtils {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         double fixedPrice = 0;
 
-
         StringBuilder html = new StringBuilder(
                 "<p>Cảm ơn bạn vì đã tin tưởng và lựa chọn sản phẩm tại công ty chúng tôi. Chúng tôi chân thành cảm ơn bạn và hy vọng sẽ gặp lại bạn vào một ngày sớm nhất! <p>"+
                         "<div style='padding: 10px'>" +

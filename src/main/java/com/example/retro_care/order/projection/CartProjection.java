@@ -3,7 +3,6 @@ package com.example.retro_care.order.projection;
 public interface CartProjection {
         Long getCustomerId();
         String getPhoneNumber();
-
         Long getCartId();
         Long getMedicineId();
         String getCustomerEmail();

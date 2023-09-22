@@ -53,7 +53,6 @@ public class OrderController {
         } catch (NumberFormatException e) {
             currentPage = 0;
         }
-
         pageable = PageRequest.of(currentPage, pageable.getPageSize(), pageable.getSort());
         Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
         System.out.println("00000" + currentPage);

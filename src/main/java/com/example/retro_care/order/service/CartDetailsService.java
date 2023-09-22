@@ -82,7 +82,6 @@ public class CartDetailsService implements ICartDetailsService{
     public List<CartProjection> findCartDetailsByUserId(Long appUserId) {
         return iCartDetailsRepository.findCartDetailsByUserId(appUserId);
     }
-
     /**
      * author: VuNL
      * date: 15/09/2023

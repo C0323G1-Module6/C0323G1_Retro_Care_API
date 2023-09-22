@@ -96,7 +96,6 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "WHERE m.id = :medicineId " +
             "GROUP BY m.id")
     MedicineProjection getMedicine(@Param("medicineId") Long medicineId);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;

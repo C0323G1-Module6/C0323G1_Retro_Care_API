@@ -37,7 +37,6 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
 //    @Query(nativeQuery = true, value = "select * from orders")
     Page<IOrderProjection> getAllList1(Pageable pageable);
-
 //
     /**
      * Create by: VuDT;
