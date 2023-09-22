@@ -234,6 +234,8 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> err = new HashMap<>();
@@ -244,10 +246,8 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoiceService.getInvoiceById(invoice.getId()) == null)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
-        System.out.println(selectedInvoice);
+
         return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 
@@ -260,8 +260,10 @@ public class InvoiceController {
     @GetMapping("/code")
     public ResponseEntity<String> getCodeInvoice() {
         String maxCode = invoiceService.findMaxCode();
+        System.out.println(maxCode);
         if (maxCode == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(maxCode, HttpStatus.OK);
     }
 }
+

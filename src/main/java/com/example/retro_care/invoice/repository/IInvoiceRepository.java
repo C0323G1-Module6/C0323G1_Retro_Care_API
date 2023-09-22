@@ -173,7 +173,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
 
     @Transactional
-    @Query(value = "call edit_invoice(:#{#invoice.id},:#{#invoice.code},:#{#invoice.documentNumber}, :#{#invoice.creationDate}, :#{#invoice.paid},:#{#invoice.note},0,:#{#invoice.supplierId.id})", nativeQuery = true)
+    @Query(value = "call edit_invoice(:#{#invoice.id},:#{#invoice.documentNumber}, :#{#invoice.paid},:#{#invoice.note},:#{#invoice.supplierId.id})", nativeQuery = true)
     Invoice editInvoice(@Param("invoice") Invoice invoice);
 
     /**
@@ -182,7 +182,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *
      * @return Next code String
      */
-    @Query(value = "SELECT MAX(code) FROM invoice", nativeQuery = true)
+    @Query(value = "SELECT MAX(code) FROM invoice where flag_deleted = 0", nativeQuery = true)
     String findMaxCode();
 
 }

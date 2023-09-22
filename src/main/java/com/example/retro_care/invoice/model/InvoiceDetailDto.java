@@ -1,6 +1,4 @@
 package com.example.retro_care.invoice.model;
-
-
 import java.sql.Date;
 
 public class InvoiceDetailDto {
@@ -72,5 +70,17 @@ public class InvoiceDetailDto {
 
     public void setMedicineId(Long medicineId) {
         this.medicineId = medicineId;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceDetailDto{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", expiry=" + expiry +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", medicineId=" + medicineId +
+                '}';
     }
 }
