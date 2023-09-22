@@ -110,7 +110,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
     Page<Prescription> searchBySymptomsPrescription(@Param("symptoms") String symptoms, Pageable pageable);
 
     @Query(value = "SELECT p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n" +
-            " FROM prescription p WHERE code = :#{#codePrescription}", nativeQuery = true)
+            " FROM prescription p WHERE code = :#{#codePrescription} and p.flag_deleted = false ", nativeQuery = true)
     Prescription getPrescriptionByCode(String codePrescription);
 
 }
