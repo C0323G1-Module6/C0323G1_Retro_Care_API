@@ -1,13 +1,10 @@
 package com.example.retro_care.medicine.dto;
 
-
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 
@@ -44,6 +41,7 @@ public class MedicineDto implements Validator {
 
     public MedicineDto() {
     }
+
 
     public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicineDto kindOfMedicineDto, UnitDetailDto unitDetailDto, ImageMedicineDto imageMedicineDto) {
         this.id = id;

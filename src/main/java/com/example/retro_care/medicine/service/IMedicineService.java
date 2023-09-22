@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.service;
 
+import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +47,7 @@ public interface IMedicineService {
      * @param pageable pagination of medication list
      * @return : Medicine list with pagination
      */
-    Page<Medicine> findAll(Pageable pageable);
+    Page<IMedicineListDto> findAll(Pageable pageable, String search);
 
     /**
      * author: DaoPTA
@@ -60,49 +61,47 @@ public interface IMedicineService {
 
     List<Medicine> getAll();
 
-    //    /**
-//     * author: DaoPTA
-//     * workday: 17/09/2023
-//     * Search for drugs by medicine code
-//     *
-//     * @param pageable Pagination after search
-//     * @param searchByCode Parameters used to search
-//     * @return approximate drug code with filter.
-//     */
-//    Page<Medicine> searchByCodeMedicine(Pageable pageable,String searchByCode);
-//
-//    /**
-//     * author: DaoPTA
-//     * workday: 17/06/2023
-//     * Search by medicine name
-//     *
-//     * @param pageable Pagination after search
-//     * @param searchByName Parameters used to search
-//     * @return the drug name that approximates the filter
-//     */
-//    Page<Medicine> searchByNameMedicine(Pageable pageable,String searchByName);
-//
-//    /**
-//     * author: DaoPTA
-//     * workday: 17/09/2023
-//     * Search by active element of medicine
-//     *
-//     * @param pageable Pagination after search
-//     * @param searchByActiveElement Parameters used to search
-//     * @return the drug's active ingredient approximated by the filter
-//     */
-//    Page<Medicine> searchActiveElement(Pageable pageable,String searchByActiveElement);
-//
-//    /**
-//     * author: DaoPTA
-//     * workday: 17/09/2023
-//     * Search by kind of medicine
-//     *
-//     * @param pageable Pagination after search
-//     * @param searchByNameKindOf Parameters used to search
-//     * @return the drug group of the drug approximated by the filter
-//     */
-//    Page<Medicine> searchByKind(Pageable pageable,String searchByNameKindOf);
-//
-    Page<Medicine> searchByMedicine(Pageable pageable, String searchByName, String searchByCode, String searchByActiveElement, String searchByNameKindOf);
+    /**
+     * author: DaoPTA
+     * workday: 17/09/2023
+     * Search for drugs by medicine code
+     *
+     * @param pageable Pagination after search
+     * @param searchByCode Parameters used to search
+     * @return approximate drug code with filter.
+     */
+    Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable,String searchByCode);
+
+    /**
+     * author: DaoPTA
+     * workday: 17/06/2023
+     * Search by medicine name
+     *
+     * @param pageable Pagination after search
+     * @param searchByName Parameters used to search
+     * @return the drug name that approximates the filter
+     */
+    Page<IMedicineListDto> searchByNameMedicine(Pageable pageable,String searchByName);
+
+    /**
+     * author: DaoPTA
+     * workday: 17/09/2023
+     * Search by active element of medicine
+     *
+     * @param pageable Pagination after search
+     * @param searchByActiveElement Parameters used to search
+     * @return the drug's active ingredient approximated by the filter
+     */
+    Page<IMedicineListDto> searchActiveElement(Pageable pageable,String searchByActiveElement);
+
+    /**
+     * author: DaoPTA
+     * workday: 17/09/2023
+     * Search by kind of medicine
+     *
+     * @param pageable Pagination after search
+     * @param searchByNameKindOfMedicine Parameters used to search
+     * @return the drug group of the drug approximated by the filter
+     */
+    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
 }
