@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -101,7 +102,7 @@ public class InvoiceController {
      * @param endDate
      * @param startTime
      * @param endTime
-     * @param sortColumn
+     * @param
      * @return
      */
     @GetMapping("/search/result")
@@ -111,7 +112,15 @@ public class InvoiceController {
                                                  @RequestParam(required = false) String endDate,
                                                  @RequestParam(required = false) String startTime,
                                                  @RequestParam(required = false) String endTime,
-                                                 @RequestParam(required = false) String sortColumn) {
+                                                 @RequestParam(defaultValue = "id") String sortColumn,
+                                                 @RequestParam(defaultValue = "DESC") String sort) {
+        Sort sortable = null;
+        if (sort.equals("ASC")) {
+            sortable = Sort.by(sortColumn).ascending();
+        } else if (sort.equals("DESC")) {
+            sortable = Sort.by(sortColumn).descending();
+        }
+
         if (startDate != null && startDate.isEmpty()) {
             startDate = null;
         }
@@ -127,6 +136,7 @@ public class InvoiceController {
         if (endTime != null && endTime.isEmpty()) {
             endTime = null;
         }
+
 
 
         if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
@@ -147,7 +157,7 @@ public class InvoiceController {
 
         Pageable pageable;
         if (page != null && size != null) {
-            pageable = PageRequest.of(page, size);
+            pageable = PageRequest.of(page, size, sortable);
         } else {
             pageable = Pageable.unpaged();
         }
@@ -155,7 +165,7 @@ public class InvoiceController {
 
         // Check for empty string ("") and set to null
 
-        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime );
+        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
