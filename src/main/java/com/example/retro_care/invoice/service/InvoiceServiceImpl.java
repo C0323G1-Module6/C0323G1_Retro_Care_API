@@ -1,6 +1,5 @@
 package com.example.retro_care.invoice.service;
 
-import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDetailDto;
@@ -38,12 +37,12 @@ public class InvoiceServiceImpl implements IInvoiceService {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
         invoice.setAppUserId(new AppUser());
-
+        invoice.setCreationDate(new Date());
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        invoice.setCode(findMaxCode());
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
-        System.out.println(selectedInvoice);
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             Medicine medicine = new Medicine();
@@ -51,20 +50,18 @@ public class InvoiceServiceImpl implements IInvoiceService {
             BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
             invoiceDetail.setMedicineId(medicine);
             invoiceDetail.setInvoiceId(selectedInvoice);
+            System.out.println(invoiceDetail);
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
         }
         return selectedInvoice;
     }
 
     public Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto) {
-//        invoice.setCreationDate(new Date());
 //        Set AppUserId
-        AppUser appUser = new AppUser();
-        appUser.setId(1L);
-        invoice.setAppUserId(appUser);
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        System.out.println(invoice);
         return invoiceRepository.editInvoice(invoice);
     }
 
@@ -90,18 +87,17 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        if (maxCode == null) {
-            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
-        }
-
+        System.out.println(maxCode);
+        if (maxCode.equals(""))
+            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
-        String numericPart = maxCode.substring(2);
+        String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
 
         // Tăng giá trị số lên 1
         numericValue++;
 
-        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HD"
+        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
         String newNumericPart = String.format("%05d", numericValue);
         String newCode = "HDN" + newNumericPart;
 
@@ -117,8 +113,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> findAllInvoiceResult(Pageable pageable) {
-        return invoiceRepository.findAllInvoiceResult(pageable);
+    public Page<Invoice> findAllInvoice(Pageable pageable) {
+        return invoiceRepository.findAllInvoice(pageable);
     }
 
     /**
@@ -139,28 +135,21 @@ public class InvoiceServiceImpl implements IInvoiceService {
         return invoiceRepository.findById(id).get();
     }
 
-    @Override
-    public List<IInvoiceResult> getInvoiceDetailById(Long id) {
-        return invoiceRepository.getInvoiceDetailById(id);
-    }
-
     /**
      * Create by: HuyHD;
      * Date create: 15/09/2023
      * Function: Search by invoice creation time, and sort by column;
      *
-     * @param pageable
-     * @param startDate
-     * @param endDate
-     * @param startTime
-     * @param endTime
-     * @param sortColumn
+     * @param start_date
+     * @param end_date
+     * @param start_time
+     * @param end_time
+     * @param sort_column
      * @return
      */
-
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String
-            endTime, String sortColumn) {
-        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+    public List<Invoice> searchInvoice(String start_date, String end_date, String start_time, String
+            end_time, String sort_column) {
+        return invoiceRepository.searchInvoice(start_date, end_date, start_time, end_time, sort_column);
     }
 }

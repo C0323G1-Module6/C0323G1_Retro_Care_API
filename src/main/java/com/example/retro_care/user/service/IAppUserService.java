@@ -12,10 +12,7 @@ public interface IAppUserService extends UserDetailsService {
 
     Boolean existsByUsername(String userName);
 
-    Boolean createNewAppUser(AppUser appUser,String role);
+    Boolean createNewAppUser(AppUser appUser);
 
     Boolean logout(String userName);
-    Long findAppUserIdByUserName(String userName);
-
-
 }

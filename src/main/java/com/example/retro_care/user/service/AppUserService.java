@@ -24,7 +24,6 @@ import java.util.Map;
 public class AppUserService implements IAppUserService {
     @Autowired
     private IAppUserRepository appUserRepository;
-
     /**
      * method: loadUserByUsername
      * Creater: NhatNHH
@@ -51,7 +50,6 @@ public class AppUserService implements IAppUserService {
                 grantList);
         return userDetails;
     }
-
     /**
      * method: existsByUsername
      * Creater: NhatNHH
@@ -64,7 +62,6 @@ public class AppUserService implements IAppUserService {
         AppUser appUser = appUserRepository.findAppUserByName(userName);
         return appUser != null;
     }
-
     /**
      * method: createNewAppUser
      * Creater: NhatNHH
@@ -73,14 +70,10 @@ public class AppUserService implements IAppUserService {
      * return: Boolean
      */
     @Override
-    public Boolean createNewAppUser(AppUser appUser,String role) {
-        Integer amountAppUserCreated = appUserRepository.addNewAppUser(appUser);
-        Long roleId = appUserRepository.findAppRoleIdByName(role);
-        AppUser currentAppUser = appUserRepository.findAppUserByName(appUser.getUserName());
-        appUserRepository.insertRoleForCustomer(roleId, currentAppUser.getId());
-        return amountAppUserCreated > 0;
+    public Boolean createNewAppUser(AppUser appUser) {
+      Integer amountAppUserCreated = appUserRepository.addNewAppUser(appUser);
+      return amountAppUserCreated > 0;
     }
-
     /**
      * method: logout
      * Creater: NhatNHH
@@ -90,12 +83,7 @@ public class AppUserService implements IAppUserService {
      */
     @Override
     public Boolean logout(String userName) {
-        return appUserRepository.updateAppUserIsOffline(userName) > 0;
-    }
-
-    @Override
-    public Long findAppUserIdByUserName(String userName) {
-        return appUserRepository.findIdByUserName(userName);
+       return appUserRepository.updateAppUserIsOffline(userName) > 0;
     }
 
 }

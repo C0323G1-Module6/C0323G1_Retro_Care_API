@@ -22,8 +22,7 @@ public class CustomerService implements ICustomerService {
     public Customer saveCustomer(Customer customer) {
         customer.setFlagDeleted(true);
         customer.setPoint(0l);
-        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
-
+        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted(),customer.getAppUser().getId());
         Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
         return checkingCustomer;
     }
@@ -40,9 +39,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        System.out.println(customer);
-        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
-
+        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getId());
     }
 
     /**
@@ -64,24 +61,6 @@ public class CustomerService implements ICustomerService {
     public Customer findCustomerByCode(String code) {
         return customerRepository.findCustomerByCode(code);
     }
-    /**
-     * Author: TinDT
-     * Goal: find customer by email
-     * * return customer
-     */
-    @Override
-    public Customer findCustomerByEmail(String email) {
-        return customerRepository.findCustomerByEmail(email);
-    }
-    /**
-     * Author: TinDT
-     * Goal: find customer by email
-     * * return customer
-     */
-    @Override
-    public Customer findCustomerByPhone(String phoneNumber) {
-        return customerRepository.findCustomerByPhoneNumber(phoneNumber);
-    }
 
     /**
      * Author: QuyenHT
@@ -89,8 +68,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
-        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
+    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String groupValue, String sortItem, Pageable pageable) {
+        return customerRepository.findAllCustomer(searchInput, code, address, groupValue, sortItem, pageable);
 
     }
 

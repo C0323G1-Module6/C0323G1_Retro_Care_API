@@ -7,6 +7,4 @@ public interface ICustomerDto {
     String getAddress();
     String getPhoneNumber();
     String getNote();
-    String getCustomerType();
-
 }

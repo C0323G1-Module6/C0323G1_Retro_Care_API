@@ -76,7 +76,8 @@ public class IndicationService implements IIndicationService {
      */
     @Override
     public void removeIndication(Long idIndication) {
-        indicationRepository.removePrescription(idIndication);
+        Indication indication = indicationRepository.indicationById(idIndication);
+        indication.setFlagDeleted(true);
     }
 
     /**
@@ -89,11 +90,6 @@ public class IndicationService implements IIndicationService {
     @Override
     public void editIndication(Indication indication) {
         indicationRepository.editIndication(indication);
-    }
-
-    @Override
-    public List<Indication> getAll() {
-        return indicationRepository.findAll();
     }
 
 }

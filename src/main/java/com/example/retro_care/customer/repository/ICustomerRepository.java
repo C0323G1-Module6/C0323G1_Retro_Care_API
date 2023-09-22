@@ -17,18 +17,16 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Modifying
     @Transactional
-    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted)", nativeQuery = true)
-    void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted);
-
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted,:app_user_id)", nativeQuery = true)
+    void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted, @Param(value = "app_user_id") Long appUserId);
     /**
      * Author: TinDT
      * Goal: update customers
      */
     @Modifying
     @Transactional
-    @Query(value = "UPDATE retro_care.customer set name = :name,birth_day = :birth_day ,address = :address ,phone_number = :phone_number,email = :email,note= :note  WHERE id =:id", nativeQuery = true)
-    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "note")String note,@Param(value = "id")Long id);
-
+    @Query(value = "UPDATE retro_care.customer set name = :name,birth_day = :birth_day ,address = :address ,phone_number = :phone_number,email = :email ,flag_deleted = true WHERE id =:id", nativeQuery = true)
+    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "id")Long id);
     /**
      * Author: TinDT
      * Goal: find customers by id
@@ -45,13 +43,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
     /**
      * Author: TinDT
-     * Goal: find customers by email
-     * return customer
-     */
-    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where email =:email", nativeQuery = true)
-    Customer findCustomerByEmail(@Param(value = "email") String email);
-    /**
-     * Author: TinDT
      * Goal: find customers by code
      * return customer
      */
@@ -63,31 +54,29 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      * Goal: get all customers
      * return list of customers
      */
-
     @Query(value = " SELECT c.code, c.name, c.birth_day as birthDay, c.address, c.phone_number as phoneNumber, c.note, " +
-            "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customerType " +
+            "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customer_type " +
             "FROM retro_care.customer c " +
-            "WHERE c.flag_deleted = 1 AND c.name LIKE :searchInput AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
+            "WHERE c.flag_deleted = 1 AND c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
             "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
             "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
             "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
             "END " +
             "ORDER BY " +
-            "CASE WHEN :sortItem = 'group' THEN c.app_user_id " +
+            "CASE WHEN :sortItem = 'code' THEN c.code " +
             "     WHEN :sortItem = 'name' THEN c.name " +
             "     ELSE c.code " +
             "END ",
-            countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.flag_deleted = 1 AND c.name LIKE :searchInput AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
+            countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.name LIKE :searchInput AND c.code LIKE :code AND c.address like :address AND " +
                     "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
                     "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
                     "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
                     "END ", nativeQuery = true)
-    Page<ICustomerDto> findAllCustomer(@Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "phoneNumber") String phoneNumber, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem, Pageable pageable);
-
-
+    Page<ICustomerDto> findAllCustomer(@Param(value = "searchInput") String searchInput, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "groupValue") String groupValue, @Param(value = "sortItem") String sortItem, Pageable pageable);
 
 
     Page<Customer> findCustomerByNameContaining(Pageable pageable, String searchName);
+
     /**
      * Author: QuyenHT
      * Goal: Delete customer by id

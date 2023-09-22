@@ -1,8 +1,11 @@
 package com.example.retro_care.employee.service;
 
 import com.example.retro_care.employee.model.Employee;
+import com.example.retro_care.user.model.AppRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 public interface IEmployeeService {
    /**
@@ -17,12 +20,10 @@ public interface IEmployeeService {
     * Author: TanNV
     * Date create: 15/09/2023
     * Save employee
-    *
     * @param employee
-    * @param userId
     * @return void
     */
-    void addEmployee(Employee employee, Long userId);
+    void addEmployee(Employee employee);
     /**
      * Create: SonTT
      * Date create: 15/09/2023
@@ -37,19 +38,19 @@ public interface IEmployeeService {
      * Date create: 15/09/2023
      * Function: Create a method that takes data and returns it to the Page
      * @param pageable
+     * @param id
      * @param name
      * @return Page
      */
-    Page<Employee> searchEmployee(Pageable pageable, String name);
+    Page<Employee> searchEmployee(Pageable pageable, Long id , String name);
 
     /**
      * Create: SonTT
      * Date create: 15/09/2023
      * Function: Get data AppUser from database
-     *
      * @return List
      */
-    Employee findEmployee(Long id);
+    List<AppRole> getRole();
 
     /**
      * Create: SonTT

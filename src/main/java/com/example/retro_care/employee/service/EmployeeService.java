@@ -24,7 +24,6 @@ public class EmployeeService implements IEmployeeService{
     @Override
     public String getNextCode() {
         String code = employeeRepository.getLastCodeEmployee();
-        System.out.println(code);
         if(code==null){
             return "NV001";
         }
@@ -36,18 +35,16 @@ public class EmployeeService implements IEmployeeService{
     /**
      * author: TanNV
      * this function use to give employee to repository and save this employee
-     *
      * @param employee
-     * @param userId
      * @return this employee have id
      */
     @Override
-    public void addEmployee(Employee employee, Long userId) {
+    public void addEmployee(Employee employee) {
 
         employeeRepository.addEmployee(employee.getCodeEmployee(),employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.isFlagDelete(),userId);
+                employee.getNote(),employee.isFlagDelete(),employee.getAppUser().getId());
     }
   /**
      * Create: SonTT
@@ -66,12 +63,13 @@ public class EmployeeService implements IEmployeeService{
      * Date create: 15/09/2023
      * Function: search employee with id and name and with pagination
      * @param pageable
+     * @param id
      * @param name
      * @return Page
      */
     @Override
-    public Page<Employee> searchEmployee(Pageable pageable, String name) {
-        return employeeRepository.searchEmployeeByNameAndRole(pageable,name);
+    public Page<Employee> searchEmployee(Pageable pageable, Long id, String name) {
+        return employeeRepository.searchEmployeeByNameAndRole(pageable,id,name);
     }
 
     /**
@@ -81,13 +79,8 @@ public class EmployeeService implements IEmployeeService{
      * @return List
      */
     @Override
-    public Employee findEmployee(Long id) {
-        try{
-            return employeeRepository.findEmployeeById(id);
-        }catch (Exception e){
-            return null;
-        }
-
+    public List<AppRole> getRole() {
+        return employeeRepository.getRole();
     }
 
     /**
@@ -99,11 +92,11 @@ public class EmployeeService implements IEmployeeService{
      */
     @Override
     public boolean deleteEmployee(Long id) {
-        try{
+        if (employeeRepository.findEmployeeById(id) == null){
+            return false;
+        }else {
             employeeRepository.deleteEmployeeById(id);
             return true;
-        }catch (Exception e){
-            return false;
         }
     }
 
@@ -130,6 +123,6 @@ public class EmployeeService implements IEmployeeService{
         employeeRepository.updateEmployee(employee.getNameEmployee(),
                 employee.getAddress(),employee.getPhoneNumber(),employee.getStartDay(),
                 employee.getBirthday(),employee.getIdCard(),employee.getImage(),
-                employee.getNote(),employee.getId());
+                employee.getNote());
     }
 }

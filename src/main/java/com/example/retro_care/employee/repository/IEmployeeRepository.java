@@ -71,7 +71,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     */
    @Modifying
    @Transactional
-   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :address, `birthday` = :birthday, `id_card` = :id_card, `image` = :image, `name_employee` = :name_employee, `note` = :note, `phone_number` = :phone_number, `start_day` = :start_day WHERE (`id` = '2')",nativeQuery = true)
    void updateEmployee(@Param(value = "name_employee") String name,
                         @Param(value = "address") String address,
                         @Param(value = "phone_number") String phoneNumber,
@@ -79,9 +79,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
                         @Param(value = "birthday") String birthday,
                         @Param(value = "id_card") String idCard,
                         @Param(value = "image") String image,
-                        @Param(value = "note") String note,
-                        @Param(value = "id") Long id
-
+                        @Param(value = "note") String note
    );
 
 
@@ -92,11 +90,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * @param pageable
      * @return Page with data Employee
      */
-    @Query(value = "SELECT e.* ,uses.user_name FROM employee e " +
-            "JOIN app_user uses on uses.id = e.app_user_id " +
-            "JOIN user_role ur on ur.app_user_id = uses.id " +
-            "JOIN app_role role on role.id = ur.app_role_id " +
-            "WHERE e.flag_delete = true", nativeQuery = true)
+    @Query(value = "SELECT * FROM employee JOIN app_user on app_user.id = employee.app_user_id JOIN user_role on user_role.app_user_id = app_user.id JOIN app_role on app_role.id = user_role.app_role_id WHERE employee.flag_delete = true", nativeQuery = true)
     Page<Employee> getListEmployee(Pageable pageable);
 
     /**
@@ -108,13 +102,22 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * @param name
      * @return Page with data Employee
      */
-    @Query(value = "SELECT e.*, uses.id, uses.user_name, role.name FROM employee e" +
-            " JOIN app_user uses on uses.id = e.app_user_id" +
-            " JOIN user_role ur on ur.app_user_id = uses.id" +
-            " JOIN app_role role on role.id = ur.app_role_id" +
-            " WHERE e.flag_delete = true AND" +
-            " e.name_employee LIKE concat('%', :name_employee,'%')", nativeQuery = true)
-    Page<Employee> searchEmployeeByNameAndRole(Pageable pageable, @Param("name_employee") String name);
+    @Query(value = "SELECT employee.*,app_role.name FROM employee" +
+            " JOIN app_user on app_user.id = employee.app_user_id" +
+            " JOIN user_role on user_role.app_user_id = app_user.id" +
+            " JOIN app_role on app_role.id = user_role.app_role_id" +
+            " WHERE employee.flag_delete = true AND" +
+            " employee.name_employee LIKE concat('%',:name_employee,'%') OR app_role.id = :id_position", nativeQuery = true)
+    Page<Employee> searchEmployeeByNameAndRole(Pageable pageable, @Param("id_position") Long id, @Param("name_employee") String name);
+
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Get data AppRole from database
+     * @return List with data AppRole
+     */
+    @Query(value = "select * from app_role where flag_delete = true ", nativeQuery = true)
+    List<AppRole> getRole();
 
     /**
      * Create: SonTT
@@ -132,8 +135,6 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
      * Function: delete employee with id
      * @param id
      */
-    @Transactional
-    @Modifying
     @Query(value = "update employee set flag_delete = false where employee.id = :id",nativeQuery = true)
     void deleteEmployeeById(@Param("id") Long id);
 }

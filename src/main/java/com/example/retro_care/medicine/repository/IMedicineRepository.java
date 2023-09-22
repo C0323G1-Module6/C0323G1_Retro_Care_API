@@ -7,7 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -90,9 +89,8 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             " LEFT JOIN " +
             "    unit_detail ud ON m.id = ud.medicine_id " +
             " LEFT JOIN " +
-            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false AND m.name like CONCAT('%', :search ,'%')", nativeQuery = true)
-    Page<Medicine> findAll(Pageable pageable,
-                           @Param("search") String search);
+            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
+    Page<Medicine> findAll(Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -101,68 +99,77 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      *
      * @param id Search medicine by id to delete
      */
-    @Transactional
-    @Modifying
-    @Query(value = "update medicine set medicine.flag_deleted = 1 where medicine.id = :id", nativeQuery = true)
-    int deleteMedicineById(@Param("id") Long id);
+    @Query(value = "update medicine set flag_deleted = true where medicine.id = :id", nativeQuery = true)
+    void deleteMedicineById(@Param("id") Long id);
 
-        /**
-     * author: DaoPTA
-     * workday: 17/09/2023
-     * Search by code medicine
-     *
-     * @param searchByCode
-     * @param pageable pagination after search
-     * @return returns approximate drug code with filter.
-     */
-    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
-    Page<Medicine> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by code medicine
+//     *
+//     * @param searchByCode
+//     * @param pageable pagination after search
+//     * @return returns approximate drug code with filter.
+//     */
+//    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
+//    Page<Medicine> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by name medicine
+//     *
+//     * @param searchByName
+//     * @param pageable pagination after search
+//     * @return Returns the drug name that approximates the filter
+//     */
+//    @Query(value = "select * from medicine where medicine.name like CONCAT('%', :searchByName ,'%')",nativeQuery = true)
+//    Page<Medicine> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by active element of medicine
+//     *
+//     * @param searchByActiveElement
+//     * @param pageable pagination after search
+//     * @return returns the drug's active ingredient approximated by the filter
+//     */
+//    @Query(value = "select * from medicine where medicine.active_element like CONCAT('%', :searchByActiveElement ,'%')",nativeQuery = true)
+//    Page<Medicine> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
+//
+//    /**
+//     * author: DaoPTA
+//     * workday: 17/09/2023
+//     * Search by kind of medicine
+//     *
+//     * @param searchByNameKindOf Method to search for drug group names
+//     * @param pageable pagination after search
+//     * @return returns the drug group of the drug approximated by the filter
+//     */
+//    @Query(value = "select " +
+//            "* from (select medicine.*, kind_of_medicine.name from medicine join kind_of_medicine  " +
+//            "on kind_of_medicine.id = medicine.kind_of_medicine_id where name like CONCAT('%', :searchByNameKindOf ,'%') \"m . * n\") ", nativeQuery = true)
+//    Page<Medicine> searchByKindOfName(@Param("searchByNameKindOf") String searchByNameKindOf ,Pageable pageable);
 
-    /**
-     * author: DaoPTA
-     * workday: 17/09/2023
-     * Search by name medicine
-     *
-     * @param searchByName
-     * @param pageable pagination after search
-     * @return Returns the drug name that approximates the filter
-     */
-    @Query(value = "select * from medicine where medicine.name like CONCAT('%', :searchByName ,'%')",nativeQuery = true)
-    Page<Medicine> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
+    @Query(value = "SELECT " +
+            " m.name AS medicine_name," +
+            " m.code AS medicine_code," +
+            " k.name AS kind_of_medicine_name," +
+            " m.active_element AS medicine_active_element" +
+            " FROM" +
+            " medicine m" +
+            " INNER JOIN" +
+            " kind_of_medicine k ON m.kind_of_medicine_id = k.id" +
+            " WHERE" +
+            " m.flag_deleted = false" +
+            " AND (m.name LIKE CONCAT('%', :searchByName ,'%')  OR m.code LIKE CONCAT('%', :searchByCode ,'%') " +
+            " OR m.active_element LIKE CONCAT('%', :searchByActiveElement ,'%'))",nativeQuery = true)
+    Page<Medicine> searchMedicine(@Param("searchByName") String searchByName,
+                                  @Param("searchByCode") String searchByCode,
+                                  @Param("searchByActiveElement") String searchByActiveElement,
+                                  Pageable pageable);
 
-    /**
-     * author: DaoPTA
-     * workday: 17/09/2023
-     * Search by active element of medicine
-     *
-     * @param searchByActiveElement
-     * @param pageable pagination after search
-     * @return returns the drug's active ingredient approximated by the filter
-     */
-    @Query(value = "select * from medicine where medicine.active_element like CONCAT('%', :searchByActiveElement ,'%')",nativeQuery = true)
-    Page<Medicine> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
-
-    /**
-     * author: DaoPTA
-     * workday: 17/09/2023
-     * Search by kind of medicine
-     *
-     * @param searchByNameKindOfMedicine Method to search for drug group names
-     * @param pageable pagination after search
-     * @return returns the drug group of the drug approximated by the filter
-     */
-    @Query(value = "SELECT * FROM (SELECT medicine.*, kind_of_medicine.name FROM medicine m " +
-            " INNER JOIN kind_of_medicine k ON k.id = m.kind_of_medicine_id " +
-            "WHERE k.name LIKE CONCAT('%', :searchByNameKindOfMedicine, '%')) AS m", nativeQuery = true)
-
-    Page<Medicine> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
-
-    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
-            " LEFT JOIN " +
-            "    unit_detail ud ON m.id = ud.medicine_id " +
-            " LEFT JOIN " +
-            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
-    List<Medicine> findAll();
 
     /**
      * author: VuNL
