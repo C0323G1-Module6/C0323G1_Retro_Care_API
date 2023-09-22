@@ -1,5 +1,4 @@
 package com.example.retro_care.medicine.controller;
-
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
@@ -22,9 +21,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
+
+
 
 
 @RestController
@@ -37,8 +37,6 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
-
-
     /**
      * Find a medicine by its ID-TinVV
      *
@@ -68,7 +66,6 @@ public class MedicineController {
         medicineDto.setUnitDetailDto(unitDetailDto);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
-
     /**
      * Add a new medicine to the system-TinVV
      *
@@ -101,7 +98,6 @@ public class MedicineController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     /**
      * Edit an existing medicine-TinVV
      *
@@ -131,7 +127,6 @@ public class MedicineController {
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail, medicine.getId(), medicineDto.getUnitDetailDto().getUnit());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     /**
      * author: DaoPTA
      * Medicine List
@@ -152,9 +147,10 @@ public class MedicineController {
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
-
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -167,7 +163,6 @@ public class MedicineController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
     /**
      * Multi-field search method for medicine
      * workday: 19/09/2023
@@ -185,8 +180,8 @@ public class MedicineController {
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                                    @RequestParam(defaultValue = "",required = false) String searchInMedicine,
                                                                    @RequestParam(defaultValue = "", required = false) String search,
-                                                                   @RequestParam(defaultValue = "", required = false) String conditional
-                                                                   ){
+                                                                   @RequestParam(defaultValue = "", required = false) String conditional){
+
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
         Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
@@ -194,13 +189,16 @@ public class MedicineController {
                 medicines = iMedicineService.searchByNameMedicine(pageable,search);
                 break;
             case "searchByCode":
-               medicines = iMedicineService.searchByCodeMedicine(pageable,search);
+                medicines = iMedicineService.searchByCodeMedicine(pageable,search);
                 break;
             case "searchByActiveElement":
-               medicines = iMedicineService.searchActiveElement(pageable,search);
+                medicines = iMedicineService.searchActiveElement(pageable,search);
                 break;
             case "searchByNameKindOfMedicine":
-               medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                break;
+            case "searchByPrice":
+                medicines = iMedicineService.searchByPrice(pageable,search, conditional);
                 break;
             case "searchByPrice":
                 medicines = iMedicineService.searchByPrice(pageable,search, conditional);
@@ -213,7 +211,6 @@ public class MedicineController {
         }
         return new  ResponseEntity<>(medicines, HttpStatus.OK);
     }
-
     @GetMapping("/get-list")
     public ResponseEntity<List<Medicine>> medicineGetList(){
         List<Medicine> medicine = iMedicineService.getAll();

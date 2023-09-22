@@ -1,9 +1,10 @@
 package com.example.retro_care.medicine.dto;
 
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class ImageMedicineDto {
+public class ImageMedicineDto implements Validator {
     private Long id;
     private String imagePath;
     private Boolean flagDeleted;
@@ -49,5 +50,16 @@ public class ImageMedicineDto {
 
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
+    }
+
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }

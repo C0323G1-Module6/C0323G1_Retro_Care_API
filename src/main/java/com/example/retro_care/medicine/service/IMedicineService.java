@@ -29,12 +29,15 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
+
     /**
      * Retrieves the ID of the last inserted record in the database-TinVV
      *
      * @return The ID of the last inserted record as a {@code Long} value.
      */
     Long getLastInsertedId();
+
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
 
     /**
      * Display list Medicine
