@@ -105,7 +105,7 @@ public class InvoiceController {
      * @return
      */
     @GetMapping("/search/result")
-    public ResponseEntity<Page<IInvoiceResult>> searchInvoiceResult(@RequestParam(required = false) Integer page,
+    public ResponseEntity<?> searchInvoiceResult(@RequestParam(required = false) Integer page,
                                                  @RequestParam(required = false) Integer size,
                                                  @RequestParam(required = false) String startDate,
                                                  @RequestParam(required = false) String endDate,
@@ -128,20 +128,21 @@ public class InvoiceController {
             endTime = null;
         }
 
+
         if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
         }
 
         if (endDate != null && !isValidDateFormat(endDate, "yyyy-MM-dd")) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid end_date format", HttpStatus.BAD_REQUEST);
         }
 
         if (startTime != null && !isValidDateFormat(startTime, "HH:mm:ss")) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid start_time format", HttpStatus.BAD_REQUEST);
         }
 
         if (endTime != null && !isValidDateFormat(endTime, "HH:mm:ss")) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Invalid end_time format", HttpStatus.BAD_REQUEST);
         }
 
         Pageable pageable;
@@ -150,13 +151,11 @@ public class InvoiceController {
         } else {
             pageable = Pageable.unpaged();
         }
-        if (sortColumn != null && !isValidSortColumn(sortColumn)) {
-            return new ResponseEntity<>( HttpStatus.BAD_REQUEST);
-        }
+
 
         // Check for empty string ("") and set to null
 
-        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime );
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -166,7 +165,7 @@ public class InvoiceController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<List<IInvoiceResult>> getInvoiceDetailById(@PathVariable Long id ){
+    public ResponseEntity<?> getInvoiceDetailById(@PathVariable Long id ){
         List<IInvoiceResult> medicine = invoiceService.getInvoiceDetailById(id);
         if(medicine==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -239,7 +238,7 @@ public class InvoiceController {
         if (invoiceService.getInvoiceById(invoice.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
-
+        System.out.println(selectedInvoice);
         return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 

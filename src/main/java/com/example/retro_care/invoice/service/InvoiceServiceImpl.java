@@ -160,8 +160,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
-        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime) {
+        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime );
     }
 
 }

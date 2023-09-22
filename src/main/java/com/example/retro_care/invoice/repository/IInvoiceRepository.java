@@ -76,36 +76,35 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
      *
      * @return
      */
-    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid, " +
-            "s.name, s.address, DATE(i.creation_date) as creationDay, TIME(i.creation_date) as creationTime, " +
-            "i.document_number as documentNumber, i.note, sum(m.price * ind.medicine_quantity) as total, " +
-            "(sum(m.price * ind.medicine_quantity) - i.paid) as billOwed " +
-            "FROM invoice i " +
-            "JOIN invoice_detail ind ON i.id = ind.invoice_id " +
-            "JOIN medicine m ON m.id = ind.medicine_id " +
-            "JOIN supplier s ON s.id = i.supplier_id " +
-            "WHERE i.flag_deleted = false " +
-            "AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '') " +
-            "AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '') " +
-            "AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '') " +
-            "AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '') " +
-            "GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code, i.creation_date, i.paid, " +
-            "i.supplier_id, i.document_number, i.note, i.paid " +
-            "ORDER BY CASE " +
-            "WHEN :sort_column = '1' THEN i.code " +
-            "WHEN :sort_column = '2' THEN i.document_number " +
-            "WHEN :sort_column = '3' THEN TIME(i.creation_date) " +
-            "WHEN :sort_column = '4' THEN DATE(i.creation_date) " +
-            "WHEN :sort_column = '5' THEN total " +
-            "WHEN :sort_column = '6' THEN (sum(m.price * ind.medicine_quantity) - i.paid) " +
-            "WHEN :sort_column = '7' THEN i.supplier_id " +
-            "END DESC")
+    @Query(nativeQuery = true, value = "SELECT i.id, i.app_user_id, i.code, i.creation_date, i.flag_deleted, i.paid,\n" +
+            "            s.name, s.address,\n" +
+            "            DATE(i.creation_date) as creationDay,\n" +
+            "            TIME(i.creation_date) as creationTime,\n" +
+            "            i.document_number as documentNumber, i.note,\n" +
+            "       ROUND((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) AS importPrice,\n" +
+            "       ROUND(SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) AS total,\n" +
+            "       ROUND((SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) - i.paid) AS billOwed\n" +
+            "            FROM invoice i\n" +
+            "            JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
+            "            JOIN medicine m ON m.id = ind.medicine_id\n" +
+            "            JOIN supplier s ON s.id = i.supplier_id\n" +
+            "            WHERE i.flag_deleted = false\n" +
+            "            AND (DATE(i.creation_date) >= :start_date OR :start_date IS NULL OR :start_date = '')\n" +
+            "            AND (DATE(i.creation_date) <= :end_date OR :end_date IS NULL OR :end_date = '')\n" +
+            "            AND (TIME(i.creation_date) >= :start_time OR :start_time IS NULL OR :start_time = '')\n" +
+            "            AND (TIME(i.creation_date) <= :end_time OR :end_time IS NULL OR :end_time = '')\n" +
+            "            GROUP BY i.id, i.app_user_id, i.creation_date, i.flag_deleted, i.code,\n" +
+            "                     i.creation_date, i.paid, i.supplier_id, i.document_number, i.note, \n" +
+            "            m.price, m.retail_profits, m.vat,\n" +
+            "            ind.discount, ind.medicine_quantity\n" +
+            "            ORDER BY i.code DESC" )
     Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
                                              @Param("start_date") String startDate,
                                              @Param("end_date") String endDate,
                                              @Param("start_time") String startTime,
-                                             @Param("end_time") String endTime,
-                                             @Param("sort_column") String sortColumn);
+                                             @Param("end_time") String endTime
+                                             );
+
 
 
     /**

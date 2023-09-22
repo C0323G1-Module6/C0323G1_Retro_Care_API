@@ -58,7 +58,7 @@ public interface IInvoiceService {
                                 String startDate,
                                 String endDate,
                                 String startTime,
-                                String endTime,
-                                String sortColumn
+                                String endTime
+
     );
 }
