@@ -1,11 +1,13 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.IOrderProjection;
+import com.example.retro_care.order.projection.IMedicineWhenSell;
+import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface IOrderService {
 
