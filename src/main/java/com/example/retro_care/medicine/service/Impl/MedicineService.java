@@ -61,6 +61,11 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.getLastInsertedId();
     }
 
+    @Override
+    public boolean existsByIdAndFlagDeletedIsFalse(Long id) {
+        return iMedicineRepository.existsByIdAndFlagDeletedIsFalse(id);
+    }
+
 
     /**
      * author: DaoPTA
