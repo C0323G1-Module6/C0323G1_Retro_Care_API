@@ -55,7 +55,6 @@ public class OrderController {
         }
         pageable = PageRequest.of(currentPage, pageable.getPageSize(), pageable.getSort());
         Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
-        System.out.println("00000" + currentPage);
         return new ResponseEntity<>(ordersPage, HttpStatus.OK);
     }
 
@@ -121,8 +120,9 @@ public class OrderController {
                                                     @RequestParam("code") String code,
                                                     @RequestParam("note") String note) {
 
+
         String str = iOrderService.doEverythingWhenPay(customerUserId, employeeUserId, code, note);
-        return new ResponseEntity<>( HttpStatus.OK);
+        return new ResponseEntity<>(str, HttpStatus.OK);
     }
 
     /**

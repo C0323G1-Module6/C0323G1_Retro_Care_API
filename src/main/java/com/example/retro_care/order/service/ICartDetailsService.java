@@ -1,7 +1,6 @@
 package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.projection.*;
-
 import java.util.List;
 
 public interface ICartDetailsService {
@@ -130,4 +129,13 @@ public interface ICartDetailsService {
      * @return : loyalty point;
      */
     Long getLoyaltyPoint(Long appUserId);
+
+
+    /**
+     * author: VuNL
+     * Date start: 20/09/2023
+     * @param id
+     * @return name
+     */
+    String getNameEmployeeByAppUserId(Long id);
 }
