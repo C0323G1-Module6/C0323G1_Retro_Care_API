@@ -109,4 +109,8 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
             "where p.flag_deleted = 0 and p.symptoms like CONCAT('%', :symptoms ,'%') ", nativeQuery = true)
     Page<Prescription> searchBySymptomsPrescription(@Param("symptoms") String symptoms, Pageable pageable);
 
+    @Query(value = "SELECT p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n" +
+            " FROM prescription p WHERE code = :#{#codePrescription}", nativeQuery = true)
+    Prescription getPrescriptionByCode(String codePrescription);
+
 }
