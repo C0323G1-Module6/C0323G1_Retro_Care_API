@@ -2,7 +2,6 @@ package com.example.retro_care.indication.model;
 
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.prescription.model.Prescription;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
