@@ -1,10 +1,10 @@
 package com.example.retro_care.order.utils;
 
 import com.example.retro_care.order.projection.CartProjection;
-import java.text.NumberFormat;
-import java.util.Locale;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderUtils {
 
@@ -71,7 +71,7 @@ public class OrderUtils {
                     "<td style='text-align:center'>%s</td>" +
                     "<td style='text-align:center'>%s VND</td>" +
                     "<td style='text-align:center'>%d</td>" +
-                    "<td style='text-align:center'>s VND</td>" +
+                    "<td style='text-align:center'>%s VND</td>" +
                     "</tr>", image, name,name,numberFormat.format(price) , quantity, numberFormat.format(totalProductPrice)));
         }
         double discount = fixedPrice - totalPrice;

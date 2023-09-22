@@ -1,11 +1,7 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
-
 import com.example.retro_care.order.projection.*;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
+
 import java.util.List;
 
 public interface ICartDetailsService {

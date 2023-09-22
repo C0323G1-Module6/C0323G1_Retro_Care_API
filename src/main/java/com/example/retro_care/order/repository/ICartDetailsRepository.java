@@ -1,10 +1,8 @@
 package com.example.retro_care.order.repository;
 
 
-import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.model.CartDetails;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
+import com.example.retro_care.order.projection.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

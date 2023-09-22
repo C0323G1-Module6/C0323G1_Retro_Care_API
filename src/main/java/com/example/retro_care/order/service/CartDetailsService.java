@@ -2,7 +2,6 @@ package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.projection.*;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
-import com.example.retro_care.order.projection.MedicineProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
