@@ -19,7 +19,7 @@ public interface IBestSellerRepository extends JpaRepository<Medicine,Long> {
     @Query(value = "select od.medicine_id as id, m.name, sum(od.quantity) as amount " +
             "from order_details od join medicine m on od.medicine_id = m.id " +
             "group by od.medicine_id " +
-            " ORDER BY o.date_time ASC " +
+            " ORDER BY od.medicine_id ASC " +
             "limit 100 ", nativeQuery = true)
     List<BestSellerMedicine> findBestSellerMedicine();
 }
