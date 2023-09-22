@@ -10,12 +10,12 @@ public class IndicationDto implements Validator {
     private Integer frequency;
     private Boolean flagDeleted;
     private Long prescription;
-    private Long medicine;
+    private String medicine;
 
     public IndicationDto() {
     }
 
-    public IndicationDto(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, Long medicine) {
+    public IndicationDto(Long id, Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, String medicine) {
         this.id = id;
         this.dosage = dosage;
         this.frequency = frequency;
@@ -24,7 +24,7 @@ public class IndicationDto implements Validator {
         this.medicine = medicine;
     }
 
-    public IndicationDto(Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, Long medicine) {
+    public IndicationDto(Integer dosage, Integer frequency, Boolean flagDeleted, Long prescription, String medicine) {
         this.dosage = dosage;
         this.frequency = frequency;
         this.flagDeleted = flagDeleted;
@@ -72,11 +72,11 @@ public class IndicationDto implements Validator {
         this.prescription = prescription;
     }
 
-    public Long getMedicine() {
+    public String getMedicine() {
         return medicine;
     }
 
-    public void setMedicine(Long medicine) {
+    public void setMedicine(String medicine) {
         this.medicine = medicine;
     }
 

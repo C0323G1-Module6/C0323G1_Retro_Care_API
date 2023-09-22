@@ -28,6 +28,13 @@ public class CartDetails {
     public CartDetails() {
     }
 
+    public CartDetails(Long id, AppUser appUser, Medicine medicine, Integer quantity) {
+        this.id = id;
+        this.appUser = appUser;
+        this.medicine = medicine;
+        this.quantity = quantity;
+    }
+
     public AppUser getAppUser() {
         return appUser;
     }
