@@ -6,14 +6,12 @@ import com.example.retro_care.invoice.model.InvoiceDetail;
 import com.example.retro_care.invoice.model.InvoiceDetailDto;
 import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.service.IInvoiceService;
-import com.example.retro_care.medicine.model.Medicine;
-import com.example.retro_care.supplier.model.Supplier;
-import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -104,7 +102,7 @@ public class InvoiceController {
      * @param endDate
      * @param startTime
      * @param endTime
-     * @param sortColumn
+     * @param
      * @return
      */
     @GetMapping("/search/result")
@@ -114,7 +112,15 @@ public class InvoiceController {
                                                  @RequestParam(required = false) String endDate,
                                                  @RequestParam(required = false) String startTime,
                                                  @RequestParam(required = false) String endTime,
-                                                 @RequestParam(required = false) String sortColumn) {
+                                                 @RequestParam(defaultValue = "id") String sortColumn,
+                                                 @RequestParam(defaultValue = "DESC") String sort) {
+        Sort sortable = null;
+        if (sort.equals("ASC")) {
+            sortable = Sort.by(sortColumn).ascending();
+        } else if (sort.equals("DESC")) {
+            sortable = Sort.by(sortColumn).descending();
+        }
+
         if (startDate != null && startDate.isEmpty()) {
             startDate = null;
         }
@@ -130,6 +136,8 @@ public class InvoiceController {
         if (endTime != null && endTime.isEmpty()) {
             endTime = null;
         }
+
+
 
         if (startDate != null && !isValidDateFormat(startDate, "yyyy-MM-dd")) {
             return new ResponseEntity<>("Invalid start_date format", HttpStatus.BAD_REQUEST);
@@ -149,13 +157,11 @@ public class InvoiceController {
 
         Pageable pageable;
         if (page != null && size != null) {
-            pageable = PageRequest.of(page, size);
+            pageable = PageRequest.of(page, size, sortable);
         } else {
             pageable = Pageable.unpaged();
         }
-        if (sortColumn != null && !isValidSortColumn(sortColumn)) {
-            return new ResponseEntity<>("Invalid sort_column value", HttpStatus.BAD_REQUEST);
-        }
+
 
         // Check for empty string ("") and set to null
 
@@ -229,6 +235,8 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);
         if (bindingResult.hasErrors()) {
             Map<String, String> err = new HashMap<>();
@@ -239,10 +247,8 @@ public class InvoiceController {
         }
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
-        if (invoiceService.getInvoiceById(invoice.getId()) == null)
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);
-        System.out.println(selectedInvoice);
+
         return new ResponseEntity<>(selectedInvoice, HttpStatus.OK);
     }
 
@@ -255,8 +261,10 @@ public class InvoiceController {
     @GetMapping("/code")
     public ResponseEntity<String> getCodeInvoice() {
         String maxCode = invoiceService.findMaxCode();
+        System.out.println(maxCode);
         if (maxCode == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(maxCode, HttpStatus.OK);
     }
 }
+

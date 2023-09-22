@@ -13,87 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
-    /**
-     * Find a Medicine by its ID-TinVV
-     *
-     * @param id The ID of the Medicine to find.
-     * @return The Medicine object with the specified ID.
-     */
-    @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name\n" +
-            "FROM retro_care.medicine AS m\n" +
-            "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id\n" +
-            "where m.kind_of_medicine_id=3; ", nativeQuery = true)
-    Medicine findMedicineById(@Param("id") Long id);
-
-    /**
-     * Add a new Medicine to the system-TinVV
-     *
-     * @param code             The code of the Medicine.
-     * @param name             The name of the Medicine.
-     * @param price            The price of the Medicine.
-     * @param quantity         The quantity of the Medicine.
-     * @param vat              The VAT (Value Added Tax) of the Medicine.
-     * @param note             The note for the Medicine.
-     * @param maker            The maker of the Medicine.
-     * @param activeElement    The active element of the Medicine.
-     * @param origin           The origin of the Medicine.
-     * @param retailProfits    The retail profits of the Medicine.
-     * @param kindOfMedicineId The ID of the associated KindOfMedicine.
-     */
-
-    @Modifying
-    @Query(value = "INSERT INTO medicine (code, name, price, quantity, vat, note, maker, active_element, origin, " +
-            "retail_profits, kind_of_medicine_id, flag_deleted) VALUES (:code, :name, :price, :quantity, :vat, :note, " +
-            ":maker, :activeElement, :origin, :retailProfits, :kindOfMedicineId, 0)", nativeQuery = true)
-    void addMedicine(@Param("code") String code, @Param("name") String name, @Param("price") Double price,
-                     @Param("quantity") Long quantity, @Param("vat") Float vat, @Param("note") String note,
-                     @Param("maker") String maker, @Param("activeElement") String activeElement, @Param("origin")
-                     String origin, @Param("retailProfits") Float retailProfits, @Param("kindOfMedicineId")
-                     Long kindOfMedicineId);
-
-    /**
-     * Update an existing Medicine in the system-TinVV
-     *
-     * @param id               The ID of the Medicine to update.
-     * @param name             The updated name of the Medicine.
-     * @param price            The updated price of the Medicine.
-     * @param quantity         The updated quantity of the Medicine.
-     * @param vat              The updated VAT (Value Added Tax) of the Medicine.
-     * @param note             The updated note for the Medicine.
-     * @param maker            The updated maker of the Medicine.
-     * @param activeElement    The updated active element of the Medicine.
-     * @param origin           The updated origin of the Medicine.
-     * @param retailProfits    The updated retail profits of the Medicine.
-     * @param kindOfMedicineId The updated ID of the associated KindOfMedicine.
-     */
-    @Modifying
-    @Query(value = "UPDATE medicine SET name = :name, price = :price, quantity = :quantity, vat = :vat, " +
-            "note = :note, maker = :maker, active_element = :activeElement, origin = :origin, " +
-            "retail_profits = :retailProfits, kind_of_medicine_id = :kindOfMedicineId " +
-            "WHERE id = :id", nativeQuery = true)
-    void updateMedicine(@Param("id") Long id, @Param("name") String name, @Param("price") Double price,
-                        @Param("quantity") Long quantity, @Param("vat") Float vat, @Param("note") String note,
-                        @Param("maker") String maker, @Param("activeElement") String activeElement,
-                        @Param("origin") String origin, @Param("retailProfits") Float retailProfits,
-                        @Param("kindOfMedicineId") Long kindOfMedicineId);
-
-    /**
-     * Author: medicine_DaoPTA
-     * workday: 15/09/2023
-     * function: Display Medicine list
-     *
-     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be
-     *                 {@literal null}.
-     * @return : Medicine list with pagination
-     */
-//    @Modifying
-//    @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
-//            " LEFT JOIN " +
-//            "    unit_detail ud ON m.id = ud.medicine_id " +
-//            " LEFT JOIN " +
-//            "    unit u ON ud.unit_id = u.id where m.flag_deleted = false AND m.name like CONCAT('%', :search ,'%')", nativeQuery = true)
-
-    @Query(value = "SELECT" +
+     String PREFIX_SEARCH_NOT_PRICE = " SELECT " +
             "    m.id AS id," +
             "    m.code AS code," +
             "    m.name AS name," +
@@ -104,20 +24,98 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             " m.retail_profits AS retailProfits," +
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
-            "    id.discount AS discount," +
-            "    ud.conversion_unit AS conversionUnit " +
-            "FROM" +
-            "    medicine m" +
-            "        JOIN" +
-            "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
+            "    id.discount AS discount, " +
+            "    ud.conversion_unit AS conversionUnit," +
+            " sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)) as retailPrice " +
+            "FROM " +
+            " medicine m" +
+            " JOIN" +
+            " kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
             "        JOIN" +
             "    unit_detail ud ON m.id = ud.medicine_id" +
             "        JOIN" +
             "    unit u ON ud.unit_id = u.id" +
             "        LEFT JOIN" +
-            "    invoice_detail id ON m.id = id.medicine_id where m.flag_deleted = false", nativeQuery = true)
+            "    invoice_detail id ON m.id = id.medicine_id ";
+
+    /**
+     * Find a Medicine by its ID-TinVV
+     *
+     * @param id The ID of the Medicine to find.
+     * @return The Medicine object with the specified ID.
+     */
+    @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name\n" +
+            "FROM retro_care.medicine AS m\n" +
+            "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id\n" +
+            "where m.id=:id ", nativeQuery = true)
+    Medicine findMedicineById(@Param("id") Long id);
+
+    /**
+     * Adds a new Medicine to the database-TinVV
+     *
+     * @param medicine The Medicine object to be added.
+     */
+
+    @Transactional
+    @Modifying
+    @Query(value = "INSERT INTO medicine (code, name, price, quantity, vat, note, maker, active_element, origin, " +
+            "retail_profits, kind_of_medicine_id, flag_deleted) VALUES (:#{#medicine.code}, :#{#medicine.name}, " +
+            ":#{#medicine.price}, :#{#medicine.quantity}, :#{#medicine.vat}, :#{#medicine.note}, :#{#medicine.maker}, " +
+            ":#{#medicine.activeElement}, :#{#medicine.origin}, :#{#medicine.retailProfits}, " +
+            ":#{#medicine.kindOfMedicine.id}, false)", nativeQuery = true)
+    void addMedicine(@Param("medicine") Medicine medicine);
+
+    /**
+     * Retrieves the last inserted ID from the database-TinVV
+     *
+     * @return The last inserted ID as a {@code Long} value.
+     */
+    @Query(value = "SELECT LAST_INSERT_ID()", nativeQuery = true)
+    Long getLastInsertedId();
+
+
+    /**
+     * Updates the information of a Medicine in the database-TinVV
+     *
+     * @param medicine The updated Medicine object containing the new information.
+     */
+
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE medicine SET name = :#{#medicine.name}, price = :#{#medicine.price}, " +
+            "quantity = :#{#medicine.quantity}, vat = :#{#medicine.vat}, note = :#{#medicine.note}, " +
+            "maker = :#{#medicine.maker}, active_element = :#{#medicine.activeElement}, " +
+            "origin = :#{#medicine.origin}, retail_profits = :#{#medicine.retailProfits}, " +
+            "kind_of_medicine_id = :#{#medicine.kindOfMedicine.id} " +
+            "WHERE id = :#{#medicine.id}", nativeQuery = true)
+    void updateMedicine(@Param("medicine") Medicine medicine);
+
+    /**
+     * author: HanhNLM
+     * date create: 21/09/2023
+     * function: check medicine existence
+     *
+     * @param id
+     * @return boolean
+     */
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
+
+    /**
+     * Author: medicine_DaoPTA
+     * workday: 15/09/2023
+     * function: Display Medicine list
+     *
+     * @param pageable the pageable to request a paged result, can be {@link Pageable#unpaged()}, must not be
+     *                 {@literal null}.
+     * @return : Medicine list with pagination
+     */
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            " where " +
+            " m.flag_deleted = false " +
+            "group by m.id", nativeQuery = true)
     Page<IMedicineListDto> findAll(Pageable pageable,
-                                   @Param("search") String search);
+                                          @Param("search") String search);
 
     /**
      * author: DaoPTA
@@ -142,29 +140,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      */
 //    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
 
-        @Query(value = "SELECT" +
-                "    m.id AS id," +
-                "    m.code AS code," +
-                "    m.name AS name," +
-                "    m.active_element AS activeElement," +
-                "    m.quantity AS quantity," +
-                "    m.vat AS vat," +
-                "    m.price AS price," +
-                " m.retail_profits AS retailProfits," +
-                "    km.name AS kindOfMedicineName," +
-                "    u.name AS unitName," +
-                "    id.discount AS discount," +
-                "    ud.conversion_unit AS conversionUnit " +
-                "FROM" +
-                "    medicine m" +
-                "        JOIN" +
-                "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
-                "        JOIN" +
-                "    unit_detail ud ON m.id = ud.medicine_id" +
-                "        JOIN" +
-                "    unit u ON ud.unit_id = u.id" +
-                "        LEFT JOIN" +
-                "    invoice_detail id ON m.id = id.medicine_id where m.flag_deleted = false AND m.code like CONCAT('%', :searchByCode ,'%')", nativeQuery = true)
+        @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
+                "AND m.code like CONCAT('%', :searchByCode ,'%')" +
+                " group by m.id", nativeQuery = true)
     Page<IMedicineListDto> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
 
     /**
@@ -176,30 +154,10 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return Returns the drug name that approximates the filter
      */
-//    @Query(value = "select * from medicine where medicine.name like CONCAT('%',:searchByName,'%')",nativeQuery = true)
-    @Query(value = "SELECT" +
-            "    m.id AS id," +
-            "    m.code AS code," +
-            "    m.name AS name," +
-            "    m.active_element AS activeElement," +
-            "    m.quantity AS quantity," +
-            "    m.vat AS vat," +
-            "    m.price AS price," +
-            " m.retail_profits AS retailProfits," +
-            "    km.name AS kindOfMedicineName," +
-            "    u.name AS unitName," +
-            "    id.discount AS discount," +
-            "    ud.conversion_unit AS conversionUnit " +
-            "FROM" +
-            "    medicine m" +
-            "        JOIN" +
-            "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
-            "        JOIN" +
-            "    unit_detail ud ON m.id = ud.medicine_id" +
-            "        JOIN" +
-            "    unit u ON ud.unit_id = u.id" +
-            "        LEFT JOIN" +
-            "    invoice_detail id ON m.id = id.medicine_id where m.flag_deleted = false AND m.name like CONCAT('%', :searchByName ,'%')", nativeQuery = true)
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE + " where m.flag_deleted = false " +
+            "AND m.name like CONCAT('%', :searchByName ,'%') " +
+            "group by m.id", nativeQuery = true)
     Page<IMedicineListDto> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
 
     /**
@@ -211,30 +169,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return returns the drug's active ingredient approximated by the filter
      */
-//    @Query(value = "select * from medicine where medicine.active_element like CONCAT('%', :searchByActiveElement ,'%')",nativeQuery = true)
-    @Query(value = "SELECT" +
-            "    m.id AS id," +
-            "    m.code AS code," +
-            "    m.name AS name," +
-            "    m.active_element AS activeElement," +
-            "    m.quantity AS quantity," +
-            "    m.vat AS vat," +
-            "    m.price AS price," +
-            " m.retail_profits AS retailProfits," +
-            "    km.name AS kindOfMedicineName," +
-            "    u.name AS unitName," +
-            "    id.discount AS discount," +
-            "    ud.conversion_unit AS conversionUnit " +
-            "FROM" +
-            "    medicine m" +
-            "        JOIN" +
-            "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
-            "        JOIN" +
-            "    unit_detail ud ON m.id = ud.medicine_id" +
-            "        JOIN" +
-            "    unit u ON ud.unit_id = u.id" +
-            "        LEFT JOIN" +
-            "    invoice_detail id ON m.id = id.medicine_id where m.flag_deleted = false AND m.active_element like CONCAT('%', :searchByActiveElement ,'%')", nativeQuery = true)
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
+            "AND m.active_element like CONCAT('%', :searchByActiveElement ,'%') " +
+            "group by m.id", nativeQuery = true)
     Page<IMedicineListDto> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
 
     /**
@@ -246,34 +183,47 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return returns the drug group of the drug approximated by the filter
      */
-//    @Query(value = "SELECT * FROM (SELECT m.*, k.name FROM medicine m " +
-//            " INNER JOIN kind_of_medicine k ON k.id = m.kind_of_medicine_id " +
-//            "WHERE k.name LIKE CONCAT('%', :searchByNameKindOfMedicine, '%')) AS m", nativeQuery = true)
 
-    @Query(value = "SELECT" +
-            "    m.id AS id," +
-            "    m.code AS code," +
-            "    m.name AS name," +
-            "    m.active_element AS activeElement," +
-            "    m.quantity AS quantity," +
-            "    m.vat AS vat," +
-            "    m.price AS price," +
-            " m.retail_profits AS retailProfits," +
-            "    km.name AS kindOfMedicineName," +
-            "    u.name AS unitName," +
-            "    id.discount AS discount," +
-            "    ud.conversion_unit AS conversionUnit " +
-            "FROM" +
-            "    medicine m" +
-            "        JOIN" +
-            "    kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
-            "        JOIN" +
-            "    unit_detail ud ON m.id = ud.medicine_id" +
-            "        JOIN" +
-            "    unit u ON ud.unit_id = u.id" +
-            "        LEFT JOIN" +
-            "    invoice_detail id ON m.id = id.medicine_id where m.flag_deleted = false AND km.name like CONCAT('%', :searchByNameKindOfMedicine ,'%')", nativeQuery = true)
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            "where m.flag_deleted = false " +
+            "AND km.name like CONCAT('%', :searchByNameKindOfMedicine ,'%') " +
+            "group by m.id", nativeQuery = true)
     Page<IMedicineListDto> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            "where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price = sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithEqualPrice(@Param("price") Float price, Pageable pageable);
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            " where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price < sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithBiggerPrice(@Param("price") Float price, Pageable pageable);
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            "where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price > sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithLittlePrice(@Param("price") Float price, Pageable pageable);
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            " where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price <= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
+
+    @Query(value = PREFIX_SEARCH_NOT_PRICE +
+            " where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price >= sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
+
+    @Query(value =  PREFIX_SEARCH_NOT_PRICE +"where m.flag_deleted = false " +
+            "group by m.id " +
+            "HAVING :price != sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))",nativeQuery = true)
+    Page<IMedicineListDto> searchWithPriceNotEqual(@Param("price") Float price, Pageable pageable);
 
     @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +

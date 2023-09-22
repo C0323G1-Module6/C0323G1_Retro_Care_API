@@ -91,5 +91,8 @@ public class AppUserService implements IAppUserService {
     public Long findAppUserIdByUserName(String userName) {
         return appUserRepository.findIdByUserName(userName);
     }
-
+    @Override
+    public boolean existsById(Long id){
+        return appUserRepository.existsById(id);
+    }
 }

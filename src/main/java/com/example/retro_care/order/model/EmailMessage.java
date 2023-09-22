@@ -5,7 +5,6 @@ import com.example.retro_care.order.projection.CartProjection;
 import java.util.List;
 
 public class EmailMessage {
-
     private String to;
     private String subject;
     private String message;

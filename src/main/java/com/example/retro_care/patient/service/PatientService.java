@@ -25,6 +25,6 @@ public class PatientService implements IPatientService{
 
     @Override
     public Patient patientById(Long id) {
-        return patientRepository.findById(id).get();
+        return patientRepository.findById(id).orElse(null);
     }
 }

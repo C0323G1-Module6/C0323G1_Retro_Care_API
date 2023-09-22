@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.method.P;
 
 
 import javax.transaction.Transactional;
@@ -19,6 +20,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * Goal:get all prescription
      * Return page prescription
      * Date:17/09/2023
+     *
      * @param pageable
      */
     @Query(value = "select p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n " +
@@ -41,6 +43,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * Goal:get all prescription
      * Return void
      * Date:17/09/2023
+     *
      * @param prescription
      */
     @Modifying
@@ -55,6 +58,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * Goal:get prescription by id
      * Return prescription
      * Date:17/09/2023
+     *
      * @param idPrescription
      */
     @Query(value = "SELECT p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n" +
@@ -67,6 +71,7 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * Goal:edi prescription by id
      * Return void
      * Date:17/09/2023
+     *
      * @param prescription
      */
     @Modifying
@@ -81,11 +86,31 @@ public interface IPrescriptionRepository extends JpaRepository<Prescription, Lon
      * Goal:remove prescription by id
      * Return void
      * Date:17/09/2023
+     *
      * @param idPrescription
      */
     @Transactional
     @Modifying
     @Query("UPDATE Prescription SET flagDeleted = 1 WHERE id = :idPrescription")
     void removePrescription(Long idPrescription);
+
+    @Query(value = "select p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n " +
+            "from prescription p " +
+            "where p.flag_deleted = 0 and p.name like CONCAT('%', :name ,'%') ", nativeQuery = true)
+    Page<Prescription> searchByNamePrescription(@Param("name") String name, Pageable pageable);
+
+    @Query(value = "select p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n " +
+            "from prescription p " +
+            "where p.flag_deleted = 0 and p.code like CONCAT('%', :code ,'%') ", nativeQuery = true)
+    Page<Prescription> searchByCodePrescription(@Param("code") String code, Pageable pageable);
+
+    @Query(value = "select p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n " +
+            "from prescription p " +
+            "where p.flag_deleted = 0 and p.symptoms like CONCAT('%', :symptoms ,'%') ", nativeQuery = true)
+    Page<Prescription> searchBySymptomsPrescription(@Param("symptoms") String symptoms, Pageable pageable);
+
+    @Query(value = "SELECT p.id, p.code,p.duration, p.flag_deleted,p.name,p.note,p.symptoms,p.patient_id\n" +
+            " FROM prescription p WHERE code = :#{#codePrescription}", nativeQuery = true)
+    Prescription getPrescriptionByCode(String codePrescription);
 
 }

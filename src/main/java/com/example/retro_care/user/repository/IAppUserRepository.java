@@ -17,7 +17,7 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
      */
 
     @Transactional()
-    @Query(value = "select * from retro_care.app_user where user_name = :name", nativeQuery = true)
+    @Query(value = "select * from retro_care.app_user where user_name = :name and flag_deleted = 0 ", nativeQuery = true)
     AppUser findAppUserByName(@Param("name") String userName);
 
 
@@ -89,5 +89,14 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
     @Transactional
     @Query(value = " call addRoleForAppUser(:appRoleId,:appUserId) ",nativeQuery = true)
     void insertRoleForCustomer(@Param("appRoleId") Long appRoleId,@Param("appUserId") Long appUserId);
-
+    /**
+     * method:  existsById
+     * Creater: HanhNLM
+     * Date: 15-09-2023
+     * param: Long aLong
+     * return: boolean
+     * function: check user existence by id
+     */
+    @Override
+    boolean existsById(Long aLong);
 }
