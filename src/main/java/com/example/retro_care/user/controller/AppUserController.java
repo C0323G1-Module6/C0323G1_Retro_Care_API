@@ -101,9 +101,10 @@ public class AppUserController {
                     .badRequest()
                     .body(LOGIN_FAILED);
         }
+
         String facebookMail = facebookMailRequest.getFacebookMail();
         boolean checkExistAppUser = appUserService.existsByUsername(facebookMail);
-        if (checkExistAppUser) {
+        if (!checkExistAppUser) {
             AppUser appUser = new AppUser();
             appUser.setUserName(facebookMail);
             String randomPassword = RandomStringGenerator.generateRandomString();
