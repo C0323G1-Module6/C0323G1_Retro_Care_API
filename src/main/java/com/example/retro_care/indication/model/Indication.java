@@ -2,6 +2,7 @@ package com.example.retro_care.indication.model;
 
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.prescription.model.Prescription;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 
@@ -15,13 +16,15 @@ public class Indication {
     private Long id;
     private Integer dosage;
     private Integer frequency;
-    @Column(columnDefinition = "BIT(1)")
+
     private Boolean flagDeleted;
     @ManyToOne
     @JoinColumn(name = "prescription_id")
+    @JsonManagedReference
     private Prescription prescription;
     @ManyToOne
     @JoinColumn(name = "medicine_id")
+    @JsonManagedReference
     private Medicine medicine;
 
     public Indication() {
@@ -88,15 +91,8 @@ public class Indication {
         return prescription;
     }
 
-//    public Medicine getMedicine() {
-//        return medicine;
-//    }
-//
-//    public void setMedicine(Medicine medicine) {
-//        this.medicine = medicine;
-//    }
-
     public void setPrescription(Prescription prescription) {
         this.prescription = prescription;
     }
+
 }

@@ -312,6 +312,7 @@ public class CartDetailsController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
+
         }
     }
 

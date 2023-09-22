@@ -1,11 +1,12 @@
 package com.example.retro_care.prescription.dto;
 
 
-import com.example.retro_care.patient.model.Patient;
+import com.example.retro_care.indication.dto.IndicationDto;
+import com.example.retro_care.indication.model.Indication;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Min;
+import java.util.List;
 
 
 public class PrescriptionDto implements Validator {
@@ -18,20 +19,25 @@ public class PrescriptionDto implements Validator {
 
     private String note;
     private Integer duration;
-    private Patient patient;
+    private Long patient;
+    private List<IndicationDto> indicationDto;
+    private List<Indication> indicationList;
+
     private Boolean flagDeleted;
 
-    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Patient patient, Boolean flagDeleted) {
+
+    public PrescriptionDto(String code, String name, String symptoms, String note, Integer duration, Long patient, List<IndicationDto> indicationDto, Boolean flagDeleted) {
         this.code = code;
         this.name = name;
         this.symptoms = symptoms;
         this.note = note;
         this.duration = duration;
         this.patient = patient;
+        this.indicationDto = indicationDto;
         this.flagDeleted = flagDeleted;
     }
 
-    public PrescriptionDto(Long id, String code, String name, String symptoms, String note, Integer duration, Patient patient, Boolean flagDeleted) {
+    public PrescriptionDto(Long id, String code, String name, String symptoms, String note, Integer duration, Long patient, List<IndicationDto> indicationDto, Boolean flagDeleted) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -39,17 +45,26 @@ public class PrescriptionDto implements Validator {
         this.note = note;
         this.duration = duration;
         this.patient = patient;
+        this.indicationDto = indicationDto;
         this.flagDeleted = flagDeleted;
+    }
+
+    public List<IndicationDto> getIndicationDto() {
+        return indicationDto;
+    }
+
+    public void setIndicationDto(List<IndicationDto> indicationDto) {
+        this.indicationDto = indicationDto;
     }
 
     public PrescriptionDto() {
     }
 
-    public Patient getPatient() {
+    public Long getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(Long patient) {
         this.patient = patient;
     }
 
@@ -117,30 +132,30 @@ public class PrescriptionDto implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         PrescriptionDto prescriptionDto = (PrescriptionDto) target;
-        if(prescriptionDto.code.equals("")){
-            errors.rejectValue("code",null,"Không được để trống mã toa thuốc");
-        }else if(prescriptionDto.code.length()>=6){
-            errors.rejectValue("code",null,"Độ dài mã toa thuốc không được dài hơn 6 ký tự");
+        if (prescriptionDto.code.equals("")) {
+            errors.rejectValue("code", "", "Không được để trống mã toa thuốc");
+        } else if (prescriptionDto.code.length() > 6) {
+            errors.rejectValue("code", "", "Độ dài mã toa thuốc không được dài hơn 6 ký tự");
         }
 
-        if (prescriptionDto.name.equals("")){
-            errors.rejectValue("name",null,"Tên toa thuốc không được để trống");
-        }else if(prescriptionDto.name.length()>25){
-            errors.rejectValue("name",null,"Tên toa thuốc không được dài hơn 25 ký tự");
+        if (prescriptionDto.name.equals("")) {
+            errors.rejectValue("name", "", "Tên toa thuốc không được để trống");
+        } else if (prescriptionDto.name.length() > 25) {
+            errors.rejectValue("name", "", "Tên toa thuốc không được dài hơn 25 ký tự");
         }
 
-        if(prescriptionDto.symptoms.equals("")){
-            errors.rejectValue("symptoms",null,"Triệu chứng không được để trống");
-        } else if(prescriptionDto.symptoms.length()>50){
-            errors.rejectValue("symptoms",null,"Triệu chứng không được dài quá 50 ký tự");
+        if (prescriptionDto.symptoms.equals("")) {
+            errors.rejectValue("symptoms", "", "Triệu chứng không được để trống");
+        } else if (prescriptionDto.symptoms.length() > 50) {
+            errors.rejectValue("symptoms", "", "Triệu chứng không được dài quá 50 ký tự");
         }
 
-        if(prescriptionDto.note.length()>50){
-            errors.rejectValue("note",null,"Ghi chú không được dài quá 50 ký tự");
+        if (prescriptionDto.note.length() > 50) {
+            errors.rejectValue("note", "", "Ghi chú không được dài quá 50 ký tự");
         }
 
-        if(prescriptionDto.duration<=0){
-            errors.rejectValue("duration",null,"Không được để nhỏ hơn 0");
+        if (prescriptionDto.duration <= 0) {
+            errors.rejectValue("duration", "", "Không được để nhỏ hơn 0");
         }
     }
 }

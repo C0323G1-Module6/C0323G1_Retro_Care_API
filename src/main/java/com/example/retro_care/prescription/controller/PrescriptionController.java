@@ -1,5 +1,12 @@
 package com.example.retro_care.prescription.controller;
 
+import com.example.retro_care.indication.dto.IndicationDto;
+import com.example.retro_care.indication.model.Indication;
+import com.example.retro_care.indication.service.IIndicationService;
+import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.service.IMedicineService;
+import com.example.retro_care.patient.model.Patient;
+import com.example.retro_care.patient.service.IPatientService;
 import com.example.retro_care.prescription.dto.PrescriptionDto;
 import com.example.retro_care.prescription.model.Prescription;
 import com.example.retro_care.prescription.service.IPrescriptionService;
@@ -24,22 +31,44 @@ public class PrescriptionController {
     @Autowired
     private IPrescriptionService prescriptionService;
 
+    @Autowired
+    private IPatientService patientService;
+
+    @Autowired
+    private IMedicineService medicineService;
+
+    @Autowired
+    private IIndicationService indicationService;
+
     /**
      * Author: ThanhKN
      * Goal:get all prescription
      * Return page prescription
      * Date:17/09/2023
+     *
      * @param page, size
      */
     @GetMapping("/prescription")
-    public ResponseEntity<Page<Prescription>> getAllPrescription(@RequestParam(defaultValue = "0",required = false) int page,
-                                                                 @RequestParam(defaultValue = "5",required = false) int size){
-        Pageable pageable = PageRequest.of(page,size);
-        Page<Prescription> prescriptionPage = prescriptionService.findAllPrescription(pageable);
-        if(prescriptionPage.isEmpty()){
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<Page<Prescription>> getAllPrescription(@RequestParam(defaultValue = "0", required = false) int page,
+                                                                 @RequestParam(defaultValue = "5", required = false) int size,
+                                                                 @RequestParam(defaultValue = "", required = false) String searchPrescription,
+                                                                 @RequestParam(defaultValue = "",required = false) String search) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Prescription> prescriptionPage ;
+        switch (searchPrescription){
+            case "searchByName":
+                prescriptionPage =prescriptionService.searchByNamePrescription(search,pageable);
+                break;
+            case "searchByCode":
+                prescriptionPage = prescriptionService.searchByCodePrescription(search,pageable);
+                break;
+            case "searchBySymptoms":
+                prescriptionPage = prescriptionService.searchBySymptomsPrescription(search,pageable);
+                break;
+            default:
+                prescriptionPage = prescriptionService.findAllPrescription(pageable);
         }
-        return new ResponseEntity<>(prescriptionPage,HttpStatus.OK);
+        return new ResponseEntity<>(prescriptionPage, HttpStatus.OK);
     }
 
     /**
@@ -47,21 +76,37 @@ public class PrescriptionController {
      * Goal:create prescription
      * Return http status
      * Date:17/09/2023
+     *
      * @param prescriptionDto
      */
     @PostMapping("/prescription/create")
-    public ResponseEntity<?> createPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult){
+    public ResponseEntity<Object> createPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
         Prescription prescription = new Prescription();
-        new PrescriptionDto().validate(prescriptionDto,bindingResult);
-        if(bindingResult.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for (FieldError error: bindingResult.getFieldErrors()){
-                errors.put(error.getField(),error.getDefaultMessage());
+
+        Medicine medicine;
+        new PrescriptionDto().validate(prescriptionDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
+        Patient patient = patientService.patientById(prescriptionDto.getPatient());
         BeanUtils.copyProperties(prescriptionDto, prescription);
+        prescription.setPatient(patient);
         prescriptionService.createPrescription(prescription);
+        List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
+        for (IndicationDto i : indicationDtoList) {
+            if (i.getDosage() != null) {
+                Indication indication = new Indication();
+                medicine = medicineService.getMedicineById(i.getMedicine());
+                BeanUtils.copyProperties(i, indication);
+                indication.setMedicine(medicine);
+                indication.setFlagDeleted(false);
+                indicationService.createIndication(indication);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -70,15 +115,16 @@ public class PrescriptionController {
      * Goal:get prescription by id
      * Return prescription
      * Date:17/09/2023
+     *
      * @param id
      */
     @GetMapping("/prescription/{id}")
     public ResponseEntity<Prescription> getPrescriptionById(@PathVariable Long id) {
         List<Prescription> prescriptionList = prescriptionService.getAll();
-        for (Prescription p: prescriptionList) {
-            if(p.getId()== id){
+        for (Prescription p : prescriptionList) {
+            if (p.getId().equals(id)) {
                 Prescription prescription = prescriptionService.getPrescriptionById(id);
-                return new ResponseEntity<>(prescription,HttpStatus.OK);
+                return new ResponseEntity<>(prescription, HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -89,16 +135,17 @@ public class PrescriptionController {
      * Goal:remove prescription by id
      * Return http status
      * Date:17/09/2023
+     *
      * @param id
      */
     @DeleteMapping("/prescription/delete/{id}")
-    public ResponseEntity<?> removePrescription(@PathVariable Long id){
-        if(id == null){
+    public ResponseEntity<Object> removePrescription(@PathVariable Long id) {
+        if (id == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         List<Prescription> prescriptionList = prescriptionService.getAll();
-        for (Prescription p: prescriptionList) {
-            if(p.getId()== id){
+        for (Prescription p : prescriptionList) {
+            if (p.getId().equals(id)) {
                 prescriptionService.removePrescription(id);
                 return new ResponseEntity<>(HttpStatus.OK);
             }
@@ -111,21 +158,38 @@ public class PrescriptionController {
      * Goal:edit all prescription
      * Return void
      * Date:17/09/2023
+     *
      * @param prescriptionDto
      */
-    @PatchMapping("/prescription/edit/{id}")
-    public ResponseEntity<?> editPrescription(@RequestBody PrescriptionDto prescriptionDto,BindingResult bindingResult){
+    @PatchMapping("/prescription/edit")
+    public ResponseEntity<Object> editPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
         Prescription prescription = new Prescription();
-        new PrescriptionDto().validate(prescriptionDto,bindingResult);
-        if(bindingResult.hasErrors()){
-            Map<String,String> errors = new HashMap<>();
-            for (FieldError error: bindingResult.getFieldErrors()){
-                errors.put(error.getField(),error.getDefaultMessage());
+        Medicine medicine;
+        new PrescriptionDto().validate(prescriptionDto, bindingResult);
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errors.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(errors,HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
+        Patient patient = patientService.patientById(prescriptionDto.getPatient());
         BeanUtils.copyProperties(prescriptionDto, prescription);
+        prescription.setPatient(patient);
         prescriptionService.editPrescription(prescription);
+        List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
+        for (IndicationDto i : indicationDtoList) {
+            if (i.getDosage() != null) {
+                i.setFlagDeleted(true);
+                Indication indication = new Indication();
+                medicine = medicineService.getMedicineById(i.getMedicine());
+                BeanUtils.copyProperties(i, indication);
+                indication.setMedicine(medicine);
+                indication.setFlagDeleted(false);
+                indication.setPrescription(prescription);
+                indicationService.editIndication(indication);
+            }
+        }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
