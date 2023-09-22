@@ -2,7 +2,6 @@ package com.example.retro_care.user.dto;
 
 import com.example.retro_care.user.common.ValidateAppUser;
 import com.example.retro_care.user.model.UserRole;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
