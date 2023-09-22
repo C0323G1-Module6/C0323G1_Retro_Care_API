@@ -3,7 +3,6 @@ package com.example.retro_care.invoice.service;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDto;
-import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -51,6 +50,7 @@ public interface IInvoiceService {
     void deleteInvoice(Long id);
 
     Invoice findById(Long id);
+
     List<IInvoiceResult> getInvoiceDetailById(Long id);
 
 

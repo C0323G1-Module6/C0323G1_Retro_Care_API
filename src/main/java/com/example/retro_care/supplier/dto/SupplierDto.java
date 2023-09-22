@@ -1,33 +1,32 @@
 package com.example.retro_care.supplier.dto;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-public class SupplierDto implements Validator {
+public class SupplierDto  {
     private Long id;
-    @NotBlank(message = "Vui lòng không được để trống trường này")
-    @Size(max = 30, min = 3 , message = "Mã nhà cung cấp tối thiểu 3 ký tự và tối đa 30 ký tự")
+    @NotBlank(message = "Vui lòng không được để trống trường này.")
+    @Size(max = 30, min = 3 , message = "Mã nhà cung cấp tối thiểu 3 ký tự và tối đa 30 ký tự.")
     @Pattern(regexp = "^(?!.*[^A-Z])(?!.*\\s)[A-Z]{3,30}$",message = "Các ký tự được viết hoa,không có khoảng trắng,không có ký tự đặc biệt vd: NUTINE")
     private String code;
-    @NotBlank(message = "Vui lòng không được để trống trường này")
-    @Size(max = 100, min = 3,message = "Tên nhà cung cấp tối thiểu 3 ký tự và tối đa 100 ký tự")
-    @Pattern(regexp = "^[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$",message = "Vui lòng viết hoa chữ cái đầu của từng từ và có khoảng trắng giữa các từ, vd: Dược Phẩm Pharmacity")
+    @NotBlank(message = "Vui lòng không được để trống trường này.")
+    @Size(max = 100, min = 3,message = "Tên nhà cung cấp tối thiểu 3 ký tự và tối đa 100 ký tự.")
+            @Pattern(regexp = "^[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$",message = "Vui lòng viết hoa chữ cái đầu của từng từ và có khoảng trắng giữa các từ, vd: Dược Phẩm Pharmacity")
     private String name;
 
-    @NotBlank(message = "Vui lòng không được để trống trường này")
-    @Size(min = 12,max = 50,message = "Email tối thiểu 12 ký tự và tối đa 50 ký tự" )
+    @NotBlank(message = "Vui lòng không được để trống trường này.")
+    @Size(min = 12,max = 50,message = "Email tối thiểu 12 ký tự và tối đa 50 ký tự." )
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$", message = "Vui lòng nhập theo định dạng: xxx@xxx.xxx với x không phải là ký tự đặc biệt ")
     private String email;
-    @NotBlank(message = "Vui lòng không được để trống trường này")
-    @Size(min = 5,max = 150,message = "Địa chỉ tối thiểu 5 ký tự và tối đa 150 ký tự" )
+    @NotBlank(message = "Vui lòng không được để trống trường này.")
+    @Size(min = 5,max = 150,message = "Địa chỉ tối thiểu 5 ký tự và tối đa 150 ký tự." )
     private String address;
-    @NotBlank(message = "Vui lòng không được để trống trường này")
-    @Size(min = 10,max = 10, message = "Vui lòng nhập 10 chữ số")
-    @Pattern(regexp = "^0[0-9]{9}$" ,message = "Vui lòng nhập theo định dạng 0xxxxxxxxx với x là ký tự số")
+    @NotBlank(message = "Vui lòng không được để trống trường này.")
+    @Size(min = 10,max = 10, message = "Vui lòng nhập 10 chữ số.")
+    @Pattern(regexp = "^0\\d{9}$" ,message = "Vui lòng nhập theo định dạng 0xxxxxxxxx với x là ký tự số.")
     private String phoneNumber;
     private String note;
     private Boolean flagDeleted;
@@ -35,16 +34,6 @@ public class SupplierDto implements Validator {
     public SupplierDto() {
     }
 
-    public SupplierDto(Long id, String code, String name, String email, String address, String phoneNumber, String note, Boolean flagDeleted) {
-        this.id = id;
-        this.code = code;
-        this.name = name;
-        this.email = email;
-        this.address = address;
-        this.phoneNumber = phoneNumber;
-        this.note = note;
-        this.flagDeleted = flagDeleted;
-    }
 
     public SupplierDto(String code, String name, String email, String address, String phoneNumber, String note) {
         this.code = code;
@@ -129,13 +118,4 @@ public class SupplierDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-
-    }
 }

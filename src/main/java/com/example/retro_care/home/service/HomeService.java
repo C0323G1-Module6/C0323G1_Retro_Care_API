@@ -4,6 +4,8 @@ import com.example.retro_care.home.dto.MedicineForHomePageDTO;
 import com.example.retro_care.home.repository.HomeRepository;
 import com.example.retro_care.medicine.model.Medicine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +37,12 @@ public class HomeService implements IHomeService {
     @Override
     public List<MedicineForHomePageDTO> findFavoriteMedicineForHomepage() {
         return homeRepository.findFavoriteMedicineForHomepage();
+    }
+
+    @Override
+    public Page<MedicineForHomePageDTO> getListMedicineWithPagination(String keyword, String type, Pageable pageable) {
+        String keywordParam = '%' + keyword + '%';
+        String typeParam = '%' + type + '%';
+        return homeRepository.getListMedicineWithPagination(keywordParam,typeParam,pageable);
     }
 }

@@ -8,12 +8,9 @@ import java.util.Set;
 
 public class InvoiceDto implements Validator {
     private Long id;
-    private String code;
     private String documentNumber;
-    private Date creationDate;
     private Double paid;
     private String note;
-    private Boolean flagDeleted;
 
     private Long supplierId;
 
@@ -23,14 +20,11 @@ public class InvoiceDto implements Validator {
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String code, String documentNumber, Date creationDate, Double paid, String note, Boolean flagDeleted, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+    public InvoiceDto(Long id, String documentNumber, Double paid, String note, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.id = id;
-        this.code = code;
         this.documentNumber = documentNumber;
-        this.creationDate = creationDate;
         this.paid = paid;
         this.note = note;
-        this.flagDeleted = flagDeleted;
         this.supplierId = supplierId;
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
@@ -43,28 +37,12 @@ public class InvoiceDto implements Validator {
         this.id = id;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public String getDocumentNumber() {
         return documentNumber;
     }
 
     public void setDocumentNumber(String documentNumber) {
         this.documentNumber = documentNumber;
-    }
-
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Double getPaid() {
@@ -81,14 +59,6 @@ public class InvoiceDto implements Validator {
 
     public void setNote(String note) {
         this.note = note;
-    }
-
-    public Boolean getFlagDeleted() {
-        return flagDeleted;
-    }
-
-    public void setFlagDeleted(Boolean flagDeleted) {
-        this.flagDeleted = flagDeleted;
     }
 
     public Long getSupplierId() {
@@ -108,21 +78,6 @@ public class InvoiceDto implements Validator {
     }
 
     @Override
-    public String toString() {
-        return "InvoiceDto{" +
-                "id=" + id +
-                ", code='" + code + '\'' +
-                ", documentNumber='" + documentNumber + '\'' +
-                ", creationDate=" + creationDate +
-                ", paid=" + paid +
-                ", note='" + note + '\'' +
-                ", flagDeleted=" + flagDeleted +
-                ", supplierId=" + supplierId +
-                ", invoiceDetailDtoSet=" + invoiceDetailDtoSet +
-                '}';
-    }
-
-    @Override
     public boolean supports(Class<?> clazz) {
         return false;
     }
@@ -131,17 +86,6 @@ public class InvoiceDto implements Validator {
     public void validate(Object target, Errors errors) {
         InvoiceDto invoiceDto = (InvoiceDto) target;
 
-        if (invoiceDto.getCode() == null) {
-            errors.rejectValue("code", null, "Không được để trống trường này");
-        } else if (invoiceDto.getCode().equals("")) {
-            errors.rejectValue("code", null, "Không được để trống trường này");
-        } else if (!invoiceDto.getCode().matches("^HDN[0-9]{5}$")) {
-            errors.rejectValue("code", null, "Nhập không đúng định dạng");
-        }
-
-        if (invoiceDto.getFlagDeleted() == null) {
-            errors.rejectValue("flagDeleted", null, "Có lỗi đang xảy ra");
-        }
         if (invoiceDto.getDocumentNumber() == null) {
             errors.rejectValue("documentNumber", null, "Không được để trống trường này");
         } else if (invoiceDto.getDocumentNumber().equals("")) {
