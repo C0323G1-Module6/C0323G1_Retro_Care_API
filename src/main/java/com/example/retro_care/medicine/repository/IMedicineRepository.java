@@ -138,7 +138,6 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return returns approximate drug code with filter.
      */
-//    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
 
         @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
                 "AND m.code like CONCAT('%', :searchByCode ,'%')" +
@@ -190,40 +189,35 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "group by m.id", nativeQuery = true)
     Page<IMedicineListDto> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
 
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            "where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price = ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithEqualPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            " where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price < ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithBiggerPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            "where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price > ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithLittlePrice(@Param("price") Float price, Pageable pageable);
-
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     * search by retail price with conditional greater than or equal
+     *
+     * @param price
+     * @param pageable
+     * @return Price value is greater than or equal to the input price.
+     */
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
             "group by m.id " +
             "HAVING :price <= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     * search by retail price with conditional smaller than or equal
+     *
+     * @param price
+     * @param pageable
+     * @return Price value is less than or equal to the input price.
+     */
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
             "group by m.id " +
             "HAVING :price >= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value =  PREFIX_SEARCH_NOT_PRICE +"where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price != ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithPriceNotEqual(@Param("price") Float price, Pageable pageable);
 
     @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +
