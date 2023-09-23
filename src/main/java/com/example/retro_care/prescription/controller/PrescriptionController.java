@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -53,8 +54,9 @@ public class PrescriptionController {
     public ResponseEntity<Page<Prescription>> getAllPrescription(@RequestParam(defaultValue = "0", required = false) int page,
                                                                  @RequestParam(defaultValue = "5", required = false) int size,
                                                                  @RequestParam(defaultValue = "", required = false) String searchPrescription,
-                                                                 @RequestParam(defaultValue = "",required = false) String search) {
-        Pageable pageable = PageRequest.of(page, size);
+                                                                 @RequestParam(defaultValue = "",required = false) String search,
+                                                                 @RequestParam(defaultValue = "id",required = false) String sortBy) {
+        Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
         Page<Prescription> prescriptionPage ;
         switch (searchPrescription){
             case "searchByName":
@@ -99,11 +101,9 @@ public class PrescriptionController {
         if(prescriptionCheckCode != null) {
             errors.put("code","Mã toa thuốc đã tồn tại!");
         }
-        if (errors.size() != 0){
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
-        }
 
-        prescriptionService.createPrescription(prescription);
+
+
         List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
         for (IndicationDto i : indicationDtoList) {
             if (i.getDosage() != null) {
@@ -115,6 +115,10 @@ public class PrescriptionController {
                 indicationService.createIndication(indication);
             }
         }
+        if (errors.size() != 0){
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        }
+        prescriptionService.createPrescription(prescription);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
