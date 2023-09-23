@@ -8,6 +8,7 @@ import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
 import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.repository.IMedicineRepository;
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     IInvoiceRepository invoiceRepository;
     @Autowired
     IInvoiceDetailRepository invoiceDetailRepository;
+    @Autowired
+    IMedicineRepository medicineRepository;
 
     /**
      * create an Invoice and call method for create InvoiceDetail
@@ -38,22 +41,37 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
-        invoice.setAppUserId(new AppUser());
+        AppUser appUser = new AppUser();
+        appUser.setId(invoiceDto.getAppUserId());
+        invoice.setAppUserId(appUser);
+        // Set CreationDate
         invoice.setCreationDate(new Date());
+//        Set Supplier
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        //Set Max code
         invoice.setCode(findMaxCode());
+        //Create invoice
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
+        //Create invoiceDetail
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
+
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             Medicine medicine = new Medicine();
             medicine.setId(invoiceDetailDto.getMedicineId());
             BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
+            //Set medicineID
             invoiceDetail.setMedicineId(medicine);
+            //Set invoiceID
             invoiceDetail.setInvoiceId(selectedInvoice);
-            System.out.println(invoiceDetail);
+            //Create InvoiceDetail
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+            //Get quantity medicine
+            Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
+//            //Update quantity medicine
+            medicineRepository.updateQuantity(invoiceDetail.getMedicineId().getId(), currentQuantity + invoiceDetail.getMedicineQuantity());
+
         }
         return selectedInvoice;
     }
