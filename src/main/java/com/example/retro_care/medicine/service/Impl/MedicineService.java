@@ -197,4 +197,9 @@ public class MedicineService implements IMedicineService {
 
     }
 
+    @Override
+    public List<Medicine> getAllForInvoice() {
+        return iMedicineRepository.getAllForInvoice();
+    }
+
 }

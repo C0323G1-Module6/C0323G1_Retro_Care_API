@@ -268,5 +268,15 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     List<Medicine> getMedicineByPrescriptionWhenSell(@Param("id") Long id);
 
     Medicine getMedicinesByName(String nameMedicine);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE medicine SET medicine.quantity= :updateQuantity WHERE medicine.id = :medicineId AND flag_deleted = 0")
+    void updateQuantity(@Param("medicineId") Long medicineId, @Param("updateQuantity") Long quantity);
+    @Query(nativeQuery = true, value = "SELECT quantity FROM medicine WHERE medicine.id = :id AND flag_deleted = 0")
+    Long getMedicineQuantity(@Param("id") Long medicineId);
+
+    @Query(value = "select * from medicine where flag_deleted =0",nativeQuery = true)
+    List<Medicine> getAllForInvoice();
 }
 
