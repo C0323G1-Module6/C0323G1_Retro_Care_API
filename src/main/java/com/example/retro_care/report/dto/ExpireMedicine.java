@@ -4,4 +4,6 @@ public interface ExpireMedicine {
     String getName();
 
     String getQuantity();
+
+    String getExpiry();
 }
