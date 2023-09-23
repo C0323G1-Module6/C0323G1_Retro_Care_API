@@ -220,7 +220,7 @@ public class MedicineController {
                 medicines = iMedicineService.findAll(pageable,search);
                 break;
         }
-        if (medicines.isEmpty()) {
+        if (medicines.getTotalElements() == 0) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new  ResponseEntity<>(medicines, HttpStatus.OK);
