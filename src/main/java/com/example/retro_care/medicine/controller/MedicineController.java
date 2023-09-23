@@ -167,7 +167,7 @@ public class MedicineController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        List<Medicine> medicinePage = iMedicineService.getAll();
+        List<Medicine> medicinePage = iMedicineService.listMedicine();
         for (Medicine m : medicinePage) {
             if (m.getId().equals(id)) {
                 iMedicineService.removeMedicine(id);
@@ -207,7 +207,7 @@ public class MedicineController {
             case "searchByActiveElement":
                 medicines = iMedicineService.searchActiveElement(pageable,search);
                 break;
-            case "searchByNameKindOfMedicine":
+            case "searchByKindOfMedicine":
                 medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
                 break;
             case "searchByPrice":

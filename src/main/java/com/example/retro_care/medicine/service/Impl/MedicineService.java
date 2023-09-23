@@ -80,7 +80,6 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.findAll(pageable, search);
     }
 
-
     /**
      * author: DaoPTA
      * workday: 16/09/2023
@@ -98,8 +97,6 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.getMedicineList();
     }
 
-
-
     /**
      * author: DaoPTA
      * workday: 17/09/2023
@@ -112,7 +109,6 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable, String searchByCode) {
         return iMedicineRepository.searchCode(searchByCode, pageable);
-
     }
 
     /**
@@ -149,12 +145,12 @@ public class MedicineService implements IMedicineService {
      * Search by kind of medicine
      *
      * @param pageable Pagination after search
-     * @param searchByNameKindOfMedicine Parameters used to search
+     * @param searchByKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
     @Override
-    public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByNameKindOfMedicine) {
-        return iMedicineRepository.searchByKindOfName(searchByNameKindOfMedicine, pageable);
+    public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByKindOfMedicine) {
+        return iMedicineRepository.searchByKindOfName(searchByKindOfMedicine, pageable);
     }
 
     @Override
@@ -175,6 +171,11 @@ public class MedicineService implements IMedicineService {
     @Override
     public Medicine getMedicineByName(String nameMedicine) {
         return iMedicineRepository.getMedicinesByName(nameMedicine);
+    }
+
+    @Override
+    public List<Medicine> listMedicine() {
+        return iMedicineRepository.findAll();
     }
 
     @Override
