@@ -11,6 +11,7 @@ public class InvoiceDto implements Validator {
     private String documentNumber;
     private Double paid;
     private String note;
+    private Long appUserId;
 
     private Long supplierId;
 
@@ -20,11 +21,12 @@ public class InvoiceDto implements Validator {
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String documentNumber, Double paid, String note, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+    public InvoiceDto(Long id, String documentNumber, Double paid, String note, Long appUserId, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.id = id;
         this.documentNumber = documentNumber;
         this.paid = paid;
         this.note = note;
+        this.appUserId = appUserId;
         this.supplierId = supplierId;
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
@@ -75,6 +77,14 @@ public class InvoiceDto implements Validator {
 
     public void setInvoiceDetailDtoSet(Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
+    }
+
+    public Long getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(Long appUserId) {
+        this.appUserId = appUserId;
     }
 
     @Override
