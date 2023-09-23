@@ -1,7 +1,6 @@
 package com.example.retro_care.invoice.model;
 
 import com.example.retro_care.medicine.model.Medicine;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -105,5 +104,17 @@ public class InvoiceDetail {
         this.expiry = expiry;
     }
 
-
+    @Override
+    public String toString() {
+        return "InvoiceDetail{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", expiry=" + expiry +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicineId=" + medicineId +
+                ", invoiceId=" + invoiceId +
+                '}';
+    }
 }

@@ -182,7 +182,38 @@ public class EmployeeController {
              employees = employeeService.getListEmployee(pageable);
 
         } else {
-             employees = employeeService.searchEmployee(pageable, nameEmployee);
+            String trimName = nameEmployee.replaceAll("\\s+", " ");
+             employees = employeeService.searchEmployee(pageable, trimName);
+        }
+        if (employees.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(employees, HttpStatus.OK);
+        }
+    }
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Call the database to retrieve paginated data with fields idRole and employee name
+     * @param page number of page
+     * @param limit limit element in page
+     * @param sort sort
+     * @param nameEmployee name employee
+     * @return ResponseEntity<?>
+     */
+    @GetMapping("/list1/{page}/{limit}/{sort}")
+    public ResponseEntity<Page<Employee>> listEmployee(@PathVariable(value = "page", required = false) Integer page,
+                                                         @PathVariable(value = "limit", required = false) Integer limit,
+                                                         @PathVariable(value = "sort", required = false) String sort,
+                                                         @RequestParam(value = "name", required = false) String nameEmployee) {
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, sort));
+        Page<Employee> employees;
+        if (nameEmployee == null) {
+            employees = employeeService.getListEmployee(pageable);
+
+        } else {
+            String trimName = nameEmployee.replaceAll("\\s+", " ");
+            employees = employeeService.searchEmployee(pageable, trimName);
         }
         if (employees.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

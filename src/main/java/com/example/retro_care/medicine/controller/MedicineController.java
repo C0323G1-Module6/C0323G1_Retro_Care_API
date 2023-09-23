@@ -212,9 +212,13 @@ public class MedicineController {
                 break;
             case "searchByPrice":
                 medicines = iMedicineService.searchByPrice(pageable,search, conditional);
+                if(conditional.equals("")){
+                    return new ResponseEntity<>(medicines,HttpStatus.NO_CONTENT);
+                }
                 break;
             default:
                 medicines = iMedicineService.findAll(pageable,search);
+                break;
         }
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
