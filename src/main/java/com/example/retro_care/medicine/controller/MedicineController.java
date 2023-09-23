@@ -215,6 +215,7 @@ public class MedicineController {
                 if(conditional.equals("")){
                     return new ResponseEntity<>(medicines,HttpStatus.NO_CONTENT);
                 }
+                break;
             default:
                 medicines = iMedicineService.findAll(pageable,search);
                 break;
