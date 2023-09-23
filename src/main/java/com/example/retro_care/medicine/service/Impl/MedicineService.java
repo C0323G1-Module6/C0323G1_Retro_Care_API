@@ -158,21 +158,6 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
-    public Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithEqualPrice(price, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithBiggerPrice(price, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithLittlePrice(price, pageable);
-    }
-
-    @Override
     public Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price) {
         return iMedicineRepository.searchWithGreaterThanOrEqualPrice(price, pageable);
     }
@@ -180,11 +165,6 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price) {
         return iMedicineRepository.searchWithSmallerThanOrEqualPrice(price, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithPriceNotEqual(price, pageable);
     }
 
     @Override
@@ -203,22 +183,14 @@ public class MedicineService implements IMedicineService {
         try{
            price  = Float.parseFloat(search);
             switch (conditional) {
-                case "equal":
-                    return searchWithEqualPrice(pageable,price);
-                case "bigger":
-                    return searchWithBiggerPrice(pageable,price);
-                case "litter":
-                    return searchWithLittlePrice(pageable,price);
                 case "greater":
                     return searchWithGreaterThanOrEqualPrice(pageable, price);
                 case "small":
                     return searchWithSmallerThanOrEqualPrice(pageable, price);
-                case "notEqual":
-                    return searchWithPriceNotEqual(pageable,price);
                 default:
                     return findAll(pageable,search);
             }
-        }catch (NumberFormatException e){
+        }catch (Exception e){
             return findAll(pageable,search);
         }
 
