@@ -115,4 +115,6 @@ public interface IMedicineService {
     List<Medicine> listMedicine();
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
+
+    List<Medicine> getAllForInvoice();
 }
