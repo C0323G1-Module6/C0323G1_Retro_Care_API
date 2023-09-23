@@ -138,7 +138,6 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return returns approximate drug code with filter.
      */
-//    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
 
         @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
                 "AND m.code like CONCAT('%', :searchByCode ,'%')" +
