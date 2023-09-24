@@ -1,4 +1,113 @@
 package com.example.retro_care.customer.repository;
 
-public interface ICustomerRepository {
+import com.example.retro_care.customer.dto.ICustomerDto;
+import com.example.retro_care.customer.model.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+
+public interface ICustomerRepository extends JpaRepository<Customer, Long> {
+    /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    @Modifying
+    @Transactional
+    @Query(nativeQuery = true, value = "update customer set name = :#{#customer.name}, email = :#{#customer.email}," +
+            "address = :#{#customer.address}, phone_number = :#{#customer.phoneNumber}, note = :#{#customer.note} " +
+            "where id = :#{#customer.id}")
+    int updateOnlineCustomer(@Param("customer") Customer customer);
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+
+    boolean existsByEmailAndIdNotAndFlagDeletedIsFalse(String email, Long id);
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+
+    boolean existsByPhoneNumberAndIdNotAndFlagDeletedIsFalse(String phoneNumber, Long id);
+    /**
+     * Author: TinDT
+     * Goal: save customers
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted)", nativeQuery = true)
+    void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted);
+
+    /**
+     * Author: TinDT
+     * Goal: update customers
+     */
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE retro_care.customer set name = :name,birth_day = :birth_day ,address = :address ,phone_number = :phone_number,email = :email,note= :note  WHERE id =:id and flag_deleted = false", nativeQuery = true)
+    void updateCustomer(@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "note")String note,@Param(value = "id")Long id);
+
+    /**
+     * Author: TinDT
+     * Goal: find customers by id
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where id =:id and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerById(@Param(value = "id") Long id);
+    /**
+     * Author: TinDT
+     * Goal: find customers by phone number
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where phone_number =:phone_number and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerByPhoneNumber(@Param(value = "phone_number") String phoneNumber);
+    /**
+     * Author: TinDT
+     * Goal: find customers by email
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where email =:email and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerByEmail(@Param(value = "email") String email);
+    /**
+     * Author: TinDT
+     * Goal: find customers by code
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerByCode(@Param(value = "code") String code);
+
+    /**
+     * Author: QuyenHT
+     * Goal: get all customers
+     * return list of customers
+     */
+    @Query(value = " SELECT c.id, c.code, c.name, c.birth_day as birthDay, c.address, c.phone_number as phoneNumber, c.note, " +
+            "CASE WHEN c.app_user_id is null then 'Khách offline' ELSE 'Khách online' END AS customerType " +
+            "FROM retro_care.customer c " +
+            "WHERE c.flag_deleted = false AND c.name LIKE :name AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
+            "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
+            "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
+            "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
+            "END ",
+            countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.flag_deleted = false AND c.name LIKE :name AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
+                    "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
+                    "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
+                    "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
+                    "END ", nativeQuery = true)
+    Page<ICustomerDto> findAllCustomer(@Param(value = "name") String name, @Param(value = "code") String code, @Param(value = "address") String address, @Param(value = "phoneNumber") String phoneNumber, @Param(value = "groupValue") String groupValue, Pageable pageable);
+
+
+    /**
+     * Author: QuyenHT
+     * Goal: Delete customer by id
+     * return boolean
+     */
+    @Modifying
+    @Transactional
+    @Query(value = " UPDATE retro_care.customer set flag_deleted = true WHERE id = :id ", nativeQuery = true)
+    void removeCustomer(@Param(value = "id") Long id);
 }

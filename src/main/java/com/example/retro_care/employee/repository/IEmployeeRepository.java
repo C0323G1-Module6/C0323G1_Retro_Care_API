@@ -1,4 +1,106 @@
 package com.example.retro_care.employee.repository;
 
-public interface IEmployeeRepository {
+import com.example.retro_care.employee.model.Employee;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.Modifying;
+
+
+public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
+   /**
+    * Author: TanNV
+    * Date: 15/09/2023
+    * Get code of employee latest
+    * @return  code of employee latest
+    */
+    @Query(value = "select code_employee from employee where id = (select max(id) from employee) and flag_delete = false",nativeQuery = true)
+    String getLastCodeEmployee();
+
+   /**
+    * Author: TanNV
+    * Date: 15/09/2023
+    * Use to save employee
+    * @param employee
+    * @param appUserId
+    * @return void
+    */
+    @Modifying
+    @Transactional
+    @Query(value = "insert into employee(code_employee,name_employee,address,phone_number,start_day,birthday,id_card,image,note,flag_delete,app_user_id) " +
+            "value (:#{#employee.codeEmployee},:#{#employee.nameEmployee},:#{#employee.address},:#{#employee.phoneNumber},:#{#employee.startDay},:#{#employee.birthday},:#{#employee.idCard},:#{#employee.image},:#{#employee.note},:#{#employee.flagDelete},:app_user_id)",nativeQuery = true)
+    void addEmployee(@Param(value = "employee") Employee employee,
+                         @Param(value = "app_user_id") Long appUserId
+    );
+   /**
+    * Author: TanNV
+    * Date: 16/09/2023
+    * Use to update employee
+    * @param employee
+    * @param id
+    * @return void
+    */
+   @Modifying
+   @Transactional
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
+   void updateEmployee(@Param(value = "employee")Employee employee,
+                        @Param(value = "id") Long id
+   );
+    @Query(value = "SELECT * from employee where employee.phone_number = :phoneNumber and employee.flag_delete = false and employee.id <> :id", nativeQuery = true)
+    Employee findEmployeeByPhoneNumber(@Param(value = "phoneNumber") String phoneNumber,@Param(value = "id") Long id);
+
+
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Get data from database with condition flag_delete = true
+     * @param pageable
+     * @return Page with data Employee
+     */
+    @Query(value = "SELECT e.* ,uses.user_name FROM employee e " +
+            "JOIN app_user uses on uses.id = e.app_user_id " +
+            "JOIN user_role ur on ur.app_user_id = uses.id " +
+            "JOIN app_role role on role.id = ur.app_role_id " +
+            "WHERE e.flag_delete = false", nativeQuery = true)
+    Page<Employee> getListEmployee(Pageable pageable);
+
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Retrieve data from the database as long as it has not been deleted and request the employee name or employee position
+     * @param pageable
+     * @param name
+     * @return Page with data Employee
+     */
+    @Query(value = "SELECT e.*, uses.id, uses.user_name, role.name FROM employee e" +
+            " JOIN app_user uses on uses.id = e.app_user_id" +
+            " JOIN user_role ur on ur.app_user_id = uses.id" +
+            " JOIN app_role role on role.id = ur.app_role_id" +
+            " WHERE e.flag_delete = false AND" +
+            " e.name_employee LIKE concat('%', :name_employee,'%')", nativeQuery = true)
+    Page<Employee> searchEmployeeByNameAndRole(Pageable pageable, @Param("name_employee") String name);
+
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: Find employee not been deleted and is id
+     * @param id
+     * @return Object Employee
+     */
+    @Query(value = "SELECT * from employee where employee.id = :id and employee.flag_delete = false", nativeQuery = true)
+    Employee findEmployeeById(@Param("id") Long id);
+
+    /**
+     * Create: SonTT
+     * Date create: 15/09/2023
+     * Function: delete employee with id
+     * @param id
+     */
+    @Transactional
+    @Modifying
+    @Query(value = "update employee set flag_delete = true where employee.id = :id",nativeQuery = true)
+    void deleteEmployeeById(@Param("id") Long id);
 }
