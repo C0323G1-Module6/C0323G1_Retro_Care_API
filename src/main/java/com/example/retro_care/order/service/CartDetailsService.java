@@ -197,4 +197,9 @@ public class CartDetailsService implements ICartDetailsService{
         return iCartDetailsRepository.getNameEmployeeByAppUserId(id);
     }
 
+    @Override
+    public List<MailProjection> findCartDetailsByOrderId(Long orderId) {
+        return iCartDetailsRepository.findCartDetailsByOrderId(orderId);
+    }
+
 }
