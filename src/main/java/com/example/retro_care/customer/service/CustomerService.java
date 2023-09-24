@@ -58,13 +58,13 @@ public class CustomerService implements ICustomerService {
      * * return customer
      */
     @Override
-    public void saveCustomerForAppUser() {
+    public void saveCustomerForAppUser(Long id) {
         Customer customer = new Customer();
         String code = FormatCustomer.generateCustomerCode();
         customer.setCode(code);
         customer.setFlagDeleted(false);
         customer.setPoint(0l);
-        customerRepository.saveCustomerHasAppUser(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted(), customer.getAppUser().getId());
+        customerRepository.saveCustomerHasAppUser(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted(), id);
 
     }
 
