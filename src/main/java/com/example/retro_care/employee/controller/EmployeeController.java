@@ -240,8 +240,6 @@ public class EmployeeController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
-
-
     }
     @GetMapping("/by-user/{username}")
     public ResponseEntity<Employee> getEmployeeByUserName(@PathVariable String username) {
