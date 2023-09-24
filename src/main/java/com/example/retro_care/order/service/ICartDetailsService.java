@@ -1,11 +1,8 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
-
 import com.example.retro_care.order.projection.*;
-import com.example.retro_care.order.projection.CartProjection;
-import com.example.retro_care.order.projection.MedicineProjection;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface ICartDetailsService {
@@ -25,7 +22,6 @@ public interface ICartDetailsService {
      * @param : appUserId, medicineId, quantity;
      */
     void addToCart(Long appUserId, Long medicineId, Integer quantity);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -33,7 +29,6 @@ public interface ICartDetailsService {
      * @param : appUserId;
      */
     int clearAllCartFromUser(Long appUserId);
-
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
@@ -136,4 +131,26 @@ public interface ICartDetailsService {
      * @return : loyalty point;
      */
     Long getLoyaltyPoint(Long appUserId);
+
+
+    /**
+     * author: VuNL
+     * Date start: 20/09/2023
+     * @param id
+     * @return name
+     */
+    String getNameEmployeeByAppUserId(Long id);
+
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    IMedicineWhenSell getOneMedicineByNameWhenSell(String name);
+
+    List<MailProjection> findCartDetailsByOrderId(Long orderId);
+
 }

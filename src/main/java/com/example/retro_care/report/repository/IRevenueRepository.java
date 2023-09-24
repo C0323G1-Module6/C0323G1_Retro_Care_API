@@ -15,6 +15,7 @@ public interface IRevenueRepository extends JpaRepository<OrderDetails, Long> {
      * Author: DuyTV
      * Goal: Get data of revenue report
      * Date created: 15/09/2023
+     *
      * @param startDate
      * @param endDate
      * @return List of Revenue

@@ -8,6 +8,7 @@ import com.example.retro_care.invoice.model.InvoiceDto;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
 import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.repository.IMedicineRepository;
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     IInvoiceRepository invoiceRepository;
     @Autowired
     IInvoiceDetailRepository invoiceDetailRepository;
+    @Autowired
+    IMedicineRepository medicineRepository;
 
     /**
      * create an Invoice and call method for create InvoiceDetail
@@ -37,31 +41,43 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
-        invoice.setAppUserId(new AppUser());
-
+        AppUser appUser = new AppUser();
+        appUser.setId(invoiceDto.getAppUserId());
+        invoice.setAppUserId(appUser);
+        // Set CreationDate
+        invoice.setCreationDate(new Date());
+//        Set Supplier
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        //Set Max code
+        invoice.setCode(findMaxCode());
+        //Create invoice
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
-        System.out.println(selectedInvoice);
+        //Create invoiceDetail
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
+
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             Medicine medicine = new Medicine();
             medicine.setId(invoiceDetailDto.getMedicineId());
             BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
+            //Set medicineID
             invoiceDetail.setMedicineId(medicine);
+            //Set invoiceID
             invoiceDetail.setInvoiceId(selectedInvoice);
+            //Create InvoiceDetail
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+            //Get quantity medicine
+            Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
+//            //Update quantity medicine
+            medicineRepository.updateQuantity(invoiceDetail.getMedicineId().getId(), currentQuantity + invoiceDetail.getMedicineQuantity());
+
         }
         return selectedInvoice;
     }
 
     public Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto) {
-//        invoice.setCreationDate(new Date());
 //        Set AppUserId
-        AppUser appUser = new AppUser();
-        appUser.setId(1L);
-        invoice.setAppUserId(appUser);
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
@@ -90,18 +106,17 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        if (maxCode == null) {
-            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
-        }
-
+        System.out.println(maxCode);
+        if (maxCode.equals(""))
+            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
-        String numericPart = maxCode.substring(2);
+        String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
 
         // Tăng giá trị số lên 1
         numericValue++;
 
-        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HD"
+        // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
         String newNumericPart = String.format("%05d", numericValue);
         String newCode = "HDN" + newNumericPart;
 
@@ -154,13 +169,12 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @param endDate
      * @param startTime
      * @param endTime
-     * @param sortColumn
      * @return
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String
-            endTime, String sortColumn) {
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
         return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
     }
+
 }
