@@ -13,6 +13,7 @@ public interface IMedicineNeedMoreRepository extends JpaRepository<Medicine, Lon
      * Author: DuyTV
      * Goal: Get list of medicine that need buy more from suppliers ( shows medicines have quantity on stock less than 5)
      * Date created: 15/09/2023
+     *
      * @return List of Medicine
      */
     @Query(value = "select name, quantity " +

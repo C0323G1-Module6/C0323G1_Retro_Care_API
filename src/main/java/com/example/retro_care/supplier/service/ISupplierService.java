@@ -19,7 +19,7 @@ public interface ISupplierService {
      * @param: Pageable pageable
      * return Page<ISupplierProjection>
      */
-    Page<ISupplierProjection> getListSupplier(Pageable pageable, String code,String name, String phoneNumber,String address, String sortBy);
+    Page<ISupplierProjection> getListSupplier(Pageable pageable, String code,String name, String phoneNumber,String address);
     /**
      * method :createSupplier()
      * created by :ThanhVH

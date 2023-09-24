@@ -1,7 +1,6 @@
 package com.example.retro_care.supplier.controller;
 
 
-import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.supplier.dto.SupplierDto;
 import com.example.retro_care.supplier.model.IInvoiceProjection;
 import com.example.retro_care.supplier.model.ISupplierProjection;
@@ -10,7 +9,9 @@ import com.example.retro_care.supplier.service.ISupplierService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,23 +37,28 @@ public class SupplierController {
      * created by :ThanhVH
      * date create: 14/09/2023
      *
-     * @param: Pageable pageable
+     * @param :Pageable pageable
      * return Page<ISupplierProjection>
      */
 
     @GetMapping("")
-    public ResponseEntity<Page<ISupplierProjection>> getListSupplier(@PageableDefault(size = 5) Pageable pageable, @RequestParam("page") String page,
-                                                                     @RequestParam("code") String code, @RequestParam("name") String name,
-                                                                     @RequestParam("phoneNumber") String phoneNumber, @RequestParam("address") String address, @RequestParam("sortBy") String sortBy) {
+    public ResponseEntity<Page<ISupplierProjection>> getListSupplier(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                                                     @RequestParam(value = "code", defaultValue = "") String code,
+                                                                     @RequestParam(value = "name", defaultValue = "") String name,
+                                                                     @RequestParam(value = "phoneNumber", defaultValue = "") String phoneNumber,
+                                                                     @RequestParam(value = "address", defaultValue = "") String address,
+                                                                     @RequestParam("sortBy") String sortBy) {
 
+        Sort sort = checkOrderBy(sortBy);
+        Pageable pageable = PageRequest.of(page, 5, sort);
 
-        int currentPage = Integer.parseInt(page);
+        int currentPage = page;
         if (currentPage < 0) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else if (iSupplierService.getListSupplier(pageable, code, name, phoneNumber, address, sortBy).isEmpty()) {
+        } else if (iSupplierService.getListSupplier(pageable, code, name, phoneNumber, address).isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
-            return new ResponseEntity<>(iSupplierService.getListSupplier(pageable, code, name, phoneNumber, address, sortBy), HttpStatus.OK);
+            return new ResponseEntity<>(iSupplierService.getListSupplier(pageable, code, name, phoneNumber, address), HttpStatus.OK);
         }
     }
 
@@ -117,8 +123,6 @@ public class SupplierController {
         iSupplierService.createSupplier(supplier);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
     /**
      * method :updateSupplierById()
@@ -190,14 +194,36 @@ public class SupplierController {
             endDate = null;
         }
         if (currentPage < 0) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else if (iSupplierService.getSupplierDetailById(id) == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else if (iSupplierService.findAllListInvoiceByIdSupplier(id, pageable, startDate, endDate).isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } else {
             return new ResponseEntity<>(iSupplierService.findAllListInvoiceByIdSupplier(id, pageable, startDate, endDate), HttpStatus.OK);
         }
+    }
+
+    public Sort         checkOrderBy(String orderBy) {
+        Sort sort;
+        switch (orderBy) {
+            case "code":
+                sort = Sort.by("code").descending();
+                break;
+            case "name":
+                sort = Sort.by("name").ascending();
+                break;
+            case "phone_number":
+                sort = Sort.by("phone_number").ascending();
+                break;
+            case "address":
+                sort = Sort.by("address").descending();
+                break;
+            default:
+                sort = Sort.by("id").descending();
+                break;
+        }
+        return sort;
     }
 
     /**
