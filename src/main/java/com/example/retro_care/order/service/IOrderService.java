@@ -1,6 +1,5 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.projection.IMedicineWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import org.springframework.data.domain.Page;
@@ -49,7 +48,7 @@ public interface IOrderService {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     /**
      * author: VuNL

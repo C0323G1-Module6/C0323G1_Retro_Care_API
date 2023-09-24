@@ -1,15 +1,17 @@
 package com.example.retro_care.order.controller;
 
+import com.example.retro_care.order.common.SortOrders;
+import com.example.retro_care.order.dto.OrderDto;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,11 @@ import com.example.retro_care.order.service.ICartDetailsService;
 import com.example.retro_care.order.service.mail.IEmailSenderService;
 import org.springframework.stereotype.Controller;
 
+import javax.validation.Valid;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @CrossOrigin
@@ -45,19 +51,25 @@ public class OrderController {
      * @return : paginated order list with limit number of molecules per page.
      */
     @GetMapping(value = { "/list"})
-    public ResponseEntity<Page<IOrderProjection>> getListOrder(@PageableDefault(size = 5)Pageable pageable,@RequestParam("page") String page) {
-        int currentPage;
-
-        try {
-            currentPage = Integer.parseInt(page);
-        } catch (NumberFormatException e) {
-            currentPage = 0;
+    public ResponseEntity<?> getListOrder(@RequestParam("page") int page,
+                                          @RequestParam(defaultValue = "") String sortBy,
+                                          @RequestParam(defaultValue = "") String startDateTime,
+                                          @RequestParam(defaultValue = "") String endDateTime) {
+        Map<String,String> errorMap = OrderDto.validateOrder(startDateTime,endDateTime);
+        if(!errorMap.isEmpty()){
+            return new ResponseEntity<>(errorMap,HttpStatus.NOT_ACCEPTABLE);
         }
-
-        pageable = PageRequest.of(currentPage, pageable.getPageSize(), pageable.getSort());
-        Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
-        System.out.println("00000" + currentPage);
-        return new ResponseEntity<>(ordersPage, HttpStatus.OK);
+        Pageable pageable = SortOrders.sortBy(sortBy,page);
+        if(!startDateTime.equals("")||!endDateTime.equals("")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            LocalDateTime localStartDateTime = LocalDateTime.parse(startDateTime, formatter);
+            LocalDateTime localEndDateTime = LocalDateTime.parse(endDateTime, formatter);
+            Page<IOrderProjection> orders = iOrderService.findByDateTimeRange(pageable, localStartDateTime, localEndDateTime);
+            return new ResponseEntity<>(orders, HttpStatus.OK);
+        }else {
+            Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
+            return new ResponseEntity<>(ordersPage, HttpStatus.OK);
+        }
     }
 
     /**
@@ -92,29 +104,6 @@ public class OrderController {
         this.iOrderService.deleteOrderById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Filter for order by datetime;
-     *
-     * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
-     * otherwise the original list will be returned.
-     */
-    @GetMapping()
-    public ResponseEntity<List<Orders>> getOrdersByDateTimeRange(
-            @RequestParam("startDateTime") LocalDateTime startDateTime,
-            @RequestParam("endDateTime") LocalDateTime endDateTime) {
-
-        List<Orders> orders = iOrderService.findByDateTimeRange(startDateTime, endDateTime);
-
-        if (orders.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
 
     @PostMapping("/createOrder")
     public ResponseEntity<?> createNewOrderWhenSell(@RequestParam("customerUserId") Long customerUserId,

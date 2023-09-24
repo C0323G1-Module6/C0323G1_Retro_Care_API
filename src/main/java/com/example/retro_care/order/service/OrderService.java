@@ -1,6 +1,5 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.OrderDetails;
 import com.example.retro_care.order.projection.ICartDetailProjectionWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
@@ -13,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -79,8 +75,8 @@ public class OrderService implements IOrderService {
      * otherwise the original list will be returned.
      */
     @Override
-    public List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return iOrderRepository.findByDateTimeRange(startDateTime, endDateTime);
+    public Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return iOrderRepository.findByDateTimeRange(pageable,startDateTime, endDateTime);
     }
 
 

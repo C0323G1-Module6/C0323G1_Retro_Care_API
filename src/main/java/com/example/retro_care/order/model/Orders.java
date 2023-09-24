@@ -12,7 +12,7 @@ public class Orders {
 
     private String code;
 
-
+    @Column(columnDefinition = "datetime")
     private LocalDateTime dateTime;
 
     @Column(name = "flag_deleted")
