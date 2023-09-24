@@ -1,11 +1,6 @@
 package com.example.retro_care.kind_of_medicine.model;
-
-import com.example.retro_care.medicine.model.Medicine
-        ;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import javax.persistence.*;
-import java.util.Set;
+
 
 @Entity
 public class KindOfMedicine {
