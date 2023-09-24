@@ -3,6 +3,7 @@ package com.example.retro_care.invoice.service;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.model.InvoiceEditDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -27,7 +28,7 @@ public interface IInvoiceService {
      */
     Invoice editInvoice(Invoice invoice, InvoiceDto invoiceDto);
 
-    Invoice getInvoiceById(Long invoiceId);
+    InvoiceEditDto getInvoiceById(Long invoiceId);
 
     /**
      * find and create Next code for invoice

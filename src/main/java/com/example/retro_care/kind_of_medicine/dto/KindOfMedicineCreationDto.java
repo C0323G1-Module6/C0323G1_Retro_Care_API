@@ -1,11 +1,18 @@
 package com.example.retro_care.kind_of_medicine.dto;
-
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 public class KindOfMedicineCreationDto implements Validator {
+
     private int id;
+
     private String code;
+
+    @NotBlank
+    @Pattern(regexp = "^(\\p{Lu}\\p{Ll}*([\\s]\\p{Lu}\\p{Ll}*)*)\\d*$" )
     private String name;
     private Boolean flagDeleted;
 
@@ -59,8 +66,8 @@ public class KindOfMedicineCreationDto implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         KindOfMedicineCreationDto kindOfMedicineCreationDto = (KindOfMedicineCreationDto) target;
-        if (!kindOfMedicineCreationDto.getName().matches("^[A-Za-z0-9\\s\\-]{1,25}$")){
-            errors.rejectValue("name","name","Wrong Format");
+        if (!kindOfMedicineCreationDto.getName().matches("^(\\p{Lu}\\p{Ll}*([\\s]\\p{Lu}\\p{Ll}*)*)\\d*$")){
+            errors.rejectValue("name","","Wrong Format");
         }
     }
 }

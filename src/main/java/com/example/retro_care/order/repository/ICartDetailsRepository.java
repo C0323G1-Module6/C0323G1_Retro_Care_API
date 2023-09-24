@@ -87,7 +87,9 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "ud.conversion_unit AS conversion_unit," +
             "m.note AS medicine_note," +
             "m.quantity AS quantity," +
-            "km.name AS kind_of_medicine_name " +
+            "km.name AS kind_of_medicine_name, " +
+            "m.maker as maker, " +
+            "m.active_element as activeElement " +
             "FROM medicine m " +
             "JOIN kind_of_medicine km ON m.kind_of_medicine_id = km.id " +
             "LEFT JOIN image_medicine im ON m.id = im.medicine_id " +
@@ -105,7 +107,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * @return : list of CartProjection that holds some info of product,
      * as well as customer for display and mailing purpose;
      */
-    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:appUserId)")
+    @Query(nativeQuery = true, value = "call getCartDetails(:appUserId)")
     List<CartProjection> findCartDetailsByUserId(@Param("appUserId") Long appUserId);
 
 
@@ -120,6 +122,18 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
             "where name like :name% and flag_deleted = false")
     List<IMedicineWhenSell> getMedicineByNameWhenSell(@Param("name") String name);
+
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
+            "where name = :name and flag_deleted = false")
+    IMedicineWhenSell getOneMedicineByNameWhenSell(@Param("name") String name);
 
     /**
      * author: VuNL
@@ -185,11 +199,10 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * @return name and app user id
      */
     @Query(nativeQuery = true, value = "select c.name, c.app_user_id from customer c " +
-            "where c.phone_number = :phone and c.flag_deleted = false")
+            "where c.phone_number = :phone and c.flag_deleted = false and c.app_user_id > 0")
     ICustomerProjectionWhenSell getCustomerName(@Param("phone") String phone);
 
     /**
-
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: get quantity of a product in cart;
@@ -212,4 +225,27 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
     @Query(nativeQuery = true, value = "select c.point from customer c where c.app_user_id = :appUserId")
     Long getLoyaltyPoint(@Param("appUserId") Long appUserId);
 
+
+    /**
+     * author: VuNL
+     * Date start: 20/09/2023
+     * @param id
+     * @return name
+     */
+    @Query(nativeQuery = true, value = "select name_employee from employee " +
+            "where employee.app_user_id = :id and flag_delete = false")
+    String getNameEmployeeByAppUserId(@Param("id") Long id);
+
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get product and customer's info for display and mailing purpose;
+     *
+     * @param : appUserId;
+     * @return : list of CartProjection that holds some info of product,
+     * as well as customer for display and mailing purpose;
+     */
+    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:orderId)")
+    List<MailProjection> findCartDetailsByOrderId(@Param("orderId") Long orderId);
 }

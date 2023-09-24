@@ -92,7 +92,7 @@ public class CartDetailsService implements ICartDetailsService{
     @Override
     public List<IMedicineWhenSell> getMedicineByNameWhenOrder(String name) {
         List<IMedicineWhenSell> list = iCartDetailsRepository.getMedicineByNameWhenSell(name);
-        System.out.println(list);
+
         return list;
     }
 
@@ -185,4 +185,33 @@ public class CartDetailsService implements ICartDetailsService{
         return iCartDetailsRepository.getLoyaltyPoint(appUserId);
     }
 
+
+    /**
+     * author: VuNL
+     * Date start: 20/09/2023
+     * @param id
+     * @return name
+     */
+    @Override
+    public String getNameEmployeeByAppUserId(Long id) {
+        return iCartDetailsRepository.getNameEmployeeByAppUserId(id);
+    }
+
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    @Override
+    public IMedicineWhenSell getOneMedicineByNameWhenSell(String name) {
+        return iCartDetailsRepository.getOneMedicineByNameWhenSell(name);
+    }
+
+    @Override
+    public List<MailProjection> findCartDetailsByOrderId(Long orderId) {
+        return iCartDetailsRepository.findCartDetailsByOrderId(orderId);
+    }
 }

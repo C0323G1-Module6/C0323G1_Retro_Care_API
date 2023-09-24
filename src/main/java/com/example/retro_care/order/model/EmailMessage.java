@@ -1,6 +1,8 @@
 package com.example.retro_care.order.model;
 
+import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.MailProjection;
 
 import java.util.List;
 
@@ -11,17 +13,23 @@ public class EmailMessage {
 
     private Long totalPrice;
 
-    private List<CartProjection> cartProjections;
+    private List<MailProjection> mailProjections;
+    private Customer customer;
+
+    private String orderCode;
 
     public EmailMessage() {
     }
 
-    public EmailMessage(String to, String subject, String message,Long totalPrice, List<CartProjection> cartProjections) {
+    public EmailMessage(String to, String subject, String message,Long totalPrice,
+                        List<MailProjection> mailProjections, Customer customer,String orderCode) {
         this.to = to;
         this.subject = subject;
         this.message = message;
         this.totalPrice = totalPrice;
-        this.cartProjections = cartProjections;
+        this.mailProjections = mailProjections;
+        this.customer = customer;
+        this.orderCode = orderCode;
 
     }
 
@@ -57,11 +65,28 @@ public class EmailMessage {
         this.totalPrice = totalPrice;
     }
 
-    public List<CartProjection> getCartProjections() {
-        return cartProjections;
+    public List<MailProjection> getMailProjections() {
+        return mailProjections;
     }
 
-    public void setCartProjections(List<CartProjection> cartProjections) {
-        this.cartProjections = cartProjections;
+
+    public void setMailProjections(List<MailProjection> mailProjections) {
+        this.mailProjections = mailProjections;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
     }
 }
