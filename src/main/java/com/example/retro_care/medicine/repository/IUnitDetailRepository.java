@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 public interface IUnitDetailRepository extends JpaRepository<UnitDetail, Long> {
     /**
      * This method is used to add a new unit detail record to the unit_detail table in the database-TinVV

@@ -102,8 +102,14 @@ public class MedicineController {
         iMedicineService.addMedicine(medicine);
         Long idMedicine = iMedicineService.getLastInsertedId();
         if (idMedicine != null) {
-            iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
-            iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
+            if (imageMedicine.getImagePath() == null) {
+                imageMedicine.setImagePath("");
+                iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+                iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
+            }else {
+                iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+                iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
+            }
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -253,6 +259,11 @@ public class MedicineController {
         return new ResponseEntity<>(unitDetail, HttpStatus.OK);
     }
 
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
     @GetMapping("/get-list-for-invoice")
     public ResponseEntity<List<Medicine>> getListForInvoice() {
         List<Medicine> list = new ArrayList<>();

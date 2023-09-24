@@ -105,9 +105,24 @@ public interface IMedicineService {
      */
     Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByKindOfMedicine);
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     * @param price value of search
+     * @param pageable pagination with medicine list
+     * @return value to compare with conditional
+     */
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price);
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     * @param price value of search
+     * @param pageable pagination with medicine list
+     * @return value to compare with conditional
+     */
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price);
+
 
     Medicine getMedicineById(Long id);
     Medicine getMedicineByName(String nameMedicine);
@@ -116,5 +131,10 @@ public interface IMedicineService {
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
 
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
     List<Medicine> getAllForInvoice();
 }
