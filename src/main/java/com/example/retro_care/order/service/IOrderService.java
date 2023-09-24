@@ -4,6 +4,7 @@ import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.IOrderProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -92,7 +93,9 @@ public interface IOrderService {
      * Function: create new order and update loyalty point of a customer;
      * @param : appUserId, loyaltyPoint;
      */
-    void createOrderForUser(Long appUserId, Long loyaltyPoint);
+    Long createOrderForUser(Long appUserId, Long loyaltyPoint, String cartIDsInText);
+
+    String getOrderCodeByOrderId(Long orderId);
 
 
 }

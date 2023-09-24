@@ -1,6 +1,8 @@
 package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.projection.*;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface ICartDetailsService {
@@ -138,4 +140,6 @@ public interface ICartDetailsService {
      * @return name
      */
     String getNameEmployeeByAppUserId(Long id);
+
+    List<MailProjection> findCartDetailsByOrderId(@Param("orderId") Long orderId);
 }

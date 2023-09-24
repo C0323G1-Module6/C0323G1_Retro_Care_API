@@ -13,6 +13,8 @@ public interface CartProjection {
         String getCustomerName();
         String getAddress();
         Long getLoyaltyPoint();
+        Long getMedicineQuantity();
+        Long getConversionRate();
 }
 
 
