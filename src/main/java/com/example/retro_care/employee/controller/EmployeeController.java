@@ -1,6 +1,7 @@
 package com.example.retro_care.employee.controller;
 
 
+import com.example.retro_care.customer.service.ICustomerService;
 import com.example.retro_care.employee.dto.EmployeeDto;
 import com.example.retro_care.employee.model.Employee;
 import com.example.retro_care.user.common.ValidateAppUser;
@@ -33,6 +34,8 @@ public class EmployeeController {
     private IAppUserService appUserService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ICustomerService customerService;
     /**
      * Author: TanNV
      * Date: 15/09/2023
@@ -103,6 +106,7 @@ public class EmployeeController {
         Employee employee = new Employee();
         BeanUtils.copyProperties(employeeDto, employee);
         employeeService.addEmployee(employee,userId);
+        customerService.saveCustomerForAppUser(userId);
         return new ResponseEntity<>("Thêm mới thành công", HttpStatus.OK);
     }
 
