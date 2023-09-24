@@ -102,7 +102,10 @@ public class MedicineController {
         iMedicineService.addMedicine(medicine);
         Long idMedicine = iMedicineService.getLastInsertedId();
         if (idMedicine != null) {
-            iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+            if (imageMedicine.getImagePath() == null) {
+                imageMedicine.setImagePath("");
+                iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+            }
             iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
         }
         return new ResponseEntity<>(HttpStatus.OK);
