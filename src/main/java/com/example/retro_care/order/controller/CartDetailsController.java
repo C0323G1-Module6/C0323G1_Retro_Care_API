@@ -331,6 +331,20 @@ public class CartDetailsController {
     }
 
     /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     *
+     * @param name
+     * @return medicine
+     */
+    @GetMapping("/getOneMedicineByName")
+    ResponseEntity<IMedicineWhenSell> getOneMedicineWhenSell(@RequestParam("name") String name) {
+        IMedicineWhenSell iMedicineWhenSell = iCartDetailsService.getOneMedicineByNameWhenSell(name);
+        return new ResponseEntity<>(iMedicineWhenSell, HttpStatus.OK);
+    }
+
+    /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: delete a specific product in cart based on cartId;
@@ -338,12 +352,12 @@ public class CartDetailsController {
      * @param : cartId;
      * @return : HTTPStatus;
      */
-    @PostMapping ("/delete-multi")
+    @PostMapping("/delete-multi")
     public ResponseEntity<?> clearSeveralProducts(@RequestBody List<Long> deletedCartIDs) {
         System.out.println(deletedCartIDs);
         if (!deletedCartIDs.isEmpty()) {
-            for (Long cartId: deletedCartIDs) {
-              iCartDetailsService.deleteCartDetailsById(cartId);
+            for (Long cartId : deletedCartIDs) {
+                iCartDetailsService.deleteCartDetailsById(cartId);
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
