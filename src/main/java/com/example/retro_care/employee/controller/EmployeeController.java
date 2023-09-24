@@ -240,8 +240,13 @@ public class EmployeeController {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
-
-
+    }
+    @GetMapping("/by-user/{username}")
+    public ResponseEntity<Employee> getEmployeeByUserName(@PathVariable String username) {
+        Employee employee = employeeService.getEmployeeByUserName(username);
+        if (employee == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(employee, HttpStatus.OK);
     }
 
 }
