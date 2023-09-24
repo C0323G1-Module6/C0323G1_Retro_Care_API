@@ -79,7 +79,13 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code and flag_deleted = false", nativeQuery = true)
     Customer findCustomerByCode(@Param(value = "code") String code);
-
+    /**
+     * Author: TinDT
+     * Goal: find customers by app_user_id
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where app_user_id =:app_user_id and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerByAppUser(@Param(value = "app_user_id") Long app_user_id);
     /**
      * Author: QuyenHT
      * Goal: get all customers

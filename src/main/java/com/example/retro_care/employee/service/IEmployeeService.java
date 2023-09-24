@@ -5,60 +5,60 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface IEmployeeService {
-   /**
-    * Author: TanNV
-    * Date create: 15/09/2023
-    * Get next code of employee
-    * @return new code
-    */
+ /**
+  * Author: TanNV
+  * Date create: 15/09/2023
+  * Get next code of employee
+  * @return new code
+  */
  String getNextCode();
 
-   /**
-    * Author: TanNV
-    * Date create: 15/09/2023
-    * Save employee
-    *
-    * @param employee
-    * @param userId
-    * @return void
-    */
-    void addEmployee(Employee employee, Long userId);
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Create a method that takes data and returns it to the Page
-     * @param pageable
-     * @return Page
-     */
-    Page<Employee> getListEmployee(Pageable pageable);
+ /**
+  * Author: TanNV
+  * Date create: 15/09/2023
+  * Save employee
+  *
+  * @param employee
+  * @param userId
+  * @return void
+  */
+ void addEmployee(Employee employee, Long userId);
+ /**
+  * Create: SonTT
+  * Date create: 15/09/2023
+  * Function: Create a method that takes data and returns it to the Page
+  * @param pageable
+  * @return Page
+  */
+ Page<Employee> getListEmployee(Pageable pageable);
 
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Create a method that takes data and returns it to the Page
-     * @param pageable
-     * @param name
-     * @return Page
-     */
-    Page<Employee> searchEmployee(Pageable pageable, String name);
+ /**
+  * Create: SonTT
+  * Date create: 15/09/2023
+  * Function: Create a method that takes data and returns it to the Page
+  * @param pageable
+  * @param name
+  * @return Page
+  */
+ Page<Employee> searchEmployee(Pageable pageable, String name);
 
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Get data AppUser from database
-     *
-     * @return List
-     */
-    Employee findEmployee(Long id);
+ /**
+  * Create: SonTT
+  * Date create: 15/09/2023
+  * Function: Get data AppUser from database
+  *
+  * @return List
+  */
+ Employee findEmployee(Long id);
 
-    /**
-     * Create: SonTT
-     * Date create: 15/09/2023
-     * Function: Delete employee with id
-     * @param id
-     * @return boolean
-     */
-    boolean deleteEmployee(Long id);
+ /**
+  * Create: SonTT
+  * Date create: 15/09/2023
+  * Function: Delete employee with id
+  * @param id
+  * @return boolean
+  */
+ boolean deleteEmployee(Long id);
 
  /**
   * Author: TanNV
@@ -84,5 +84,5 @@ public interface IEmployeeService {
   * @param phoneNumber
   * @return
   */
-    Employee getByPhoneNumber(String phoneNumber,Long id);
+ Employee getByPhoneNumber(String phoneNumber,Long id);
 }

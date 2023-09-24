@@ -21,11 +21,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -37,7 +39,6 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
-
 
     /**
      * Find a medicine by its ID-TinVV
@@ -82,7 +83,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity addMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -115,7 +120,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -131,7 +140,6 @@ public class MedicineController {
         iUnitDetailService.updateUnitDetailByMedicineId(unitDetail, medicine.getId(), medicineDto.getUnitDetailDto().getUnit());
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     /**
      * author: DaoPTA
      * Medicine List
@@ -152,9 +160,10 @@ public class MedicineController {
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
+
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
-
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -167,7 +176,6 @@ public class MedicineController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
     /**
      * Multi-field search method for medicine
      * workday: 19/09/2023
@@ -185,8 +193,8 @@ public class MedicineController {
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
                                                                    @RequestParam(defaultValue = "",required = false) String searchInMedicine,
                                                                    @RequestParam(defaultValue = "", required = false) String search,
-                                                                   @RequestParam(defaultValue = "", required = false) String conditional
-                                                                   ){
+                                                                   @RequestParam(defaultValue = "", required = false) String conditional){
+
         Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
         Page<IMedicineListDto> medicines;
         switch (searchInMedicine){
@@ -194,26 +202,29 @@ public class MedicineController {
                 medicines = iMedicineService.searchByNameMedicine(pageable,search);
                 break;
             case "searchByCode":
-               medicines = iMedicineService.searchByCodeMedicine(pageable,search);
+                medicines = iMedicineService.searchByCodeMedicine(pageable,search);
                 break;
             case "searchByActiveElement":
-               medicines = iMedicineService.searchActiveElement(pageable,search);
+                medicines = iMedicineService.searchActiveElement(pageable,search);
                 break;
             case "searchByNameKindOfMedicine":
-               medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+                medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
                 break;
             case "searchByPrice":
                 medicines = iMedicineService.searchByPrice(pageable,search, conditional);
+                if(conditional.equals("")){
+                    return new ResponseEntity<>(medicines,HttpStatus.NO_CONTENT);
+                }
                 break;
             default:
                 medicines = iMedicineService.findAll(pageable,search);
+                break;
         }
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new  ResponseEntity<>(medicines, HttpStatus.OK);
     }
-
     @GetMapping("/get-list")
     public ResponseEntity<List<Medicine>> medicineGetList(){
         List<Medicine> medicine = iMedicineService.getAll();

@@ -29,12 +29,15 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
+
     /**
      * Retrieves the ID of the last inserted record in the database-TinVV
      *
      * @return The ID of the last inserted record as a {@code Long} value.
      */
     Long getLastInsertedId();
+
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
 
     /**
      * Display list Medicine
@@ -102,19 +105,21 @@ public interface IMedicineService {
      */
     Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
 
-    Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price);
+//    Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price);
 
-    Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price);
+//    Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price);
 
-    Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price);
+//    Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price);
 
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price);
 
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price);
 
-    Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
+//    Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
 
     Medicine getMedicineById(Long id);
+    Medicine getMedicineByName(String nameMedicine);
+
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
 }

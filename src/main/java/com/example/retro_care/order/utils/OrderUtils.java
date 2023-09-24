@@ -1,17 +1,16 @@
 package com.example.retro_care.order.utils;
 
 import com.example.retro_care.order.projection.CartProjection;
-import java.text.NumberFormat;
-import java.util.Locale;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 public class OrderUtils {
 
     public static String generateHTMLForMail(List<CartProjection> carts, Long totalPrice) {
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         double fixedPrice = 0;
-
 
         StringBuilder html = new StringBuilder(
                 "<p>Cảm ơn bạn vì đã tin tưởng và lựa chọn sản phẩm tại công ty chúng tôi. Chúng tôi chân thành cảm ơn bạn và hy vọng sẽ gặp lại bạn vào một ngày sớm nhất! <p>"+
@@ -71,7 +70,7 @@ public class OrderUtils {
                     "<td style='text-align:center'>%s</td>" +
                     "<td style='text-align:center'>%s VND</td>" +
                     "<td style='text-align:center'>%d</td>" +
-                    "<td style='text-align:center'>s VND</td>" +
+                    "<td style='text-align:center'>%s VND</td>" +
                     "</tr>", image, name,name,numberFormat.format(price) , quantity, numberFormat.format(totalProductPrice)));
         }
         double discount = fixedPrice - totalPrice;

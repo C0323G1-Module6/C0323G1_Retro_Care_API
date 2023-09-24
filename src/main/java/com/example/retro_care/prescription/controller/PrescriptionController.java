@@ -21,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,27 +81,34 @@ public class PrescriptionController {
      * @param prescriptionDto
      */
     @PostMapping("/prescription/create")
-    public ResponseEntity<Object> createPrescription(@RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
+    public ResponseEntity<Object> createPrescription(@Valid @RequestBody PrescriptionDto prescriptionDto, BindingResult bindingResult) {
         Prescription prescription = new Prescription();
-
+        Map<String, String> errors = new HashMap<>();
         Medicine medicine;
         new PrescriptionDto().validate(prescriptionDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = new HashMap<>();
             for (FieldError error : bindingResult.getFieldErrors()) {
                 errors.put(error.getField(), error.getDefaultMessage());
             }
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
         }
         Patient patient = patientService.patientById(prescriptionDto.getPatient());
         BeanUtils.copyProperties(prescriptionDto, prescription);
         prescription.setPatient(patient);
+
+        Prescription prescriptionCheckCode = prescriptionService.getPrescriptionByCode(prescriptionDto.getCode());
+        if(prescriptionCheckCode != null) {
+            errors.put("code","Mã toa thuốc đã tồn tại!");
+        }
+        if (errors.size() != 0){
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        }
+
         prescriptionService.createPrescription(prescription);
         List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
         for (IndicationDto i : indicationDtoList) {
             if (i.getDosage() != null) {
                 Indication indication = new Indication();
-                medicine = medicineService.findMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineByName(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);
@@ -182,7 +190,7 @@ public class PrescriptionController {
             if (i.getDosage() != null) {
                 i.setFlagDeleted(true);
                 Indication indication = new Indication();
-                medicine = medicineService.findMedicineById(i.getMedicine());
+                medicine = medicineService.getMedicineByName(i.getMedicine());
                 BeanUtils.copyProperties(i, indication);
                 indication.setMedicine(medicine);
                 indication.setFlagDeleted(false);

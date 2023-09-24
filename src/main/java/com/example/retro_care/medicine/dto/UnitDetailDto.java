@@ -1,11 +1,13 @@
 package com.example.retro_care.medicine.dto;
+
+
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
 
 
-public class UnitDetailDto {
+public class UnitDetailDto  implements Validator {
     private Long id;
     private Boolean flagDeleted;
     @Min(value = 1, message = "Tỷ lệ quy đổi không được nhỏ hơn 1")
@@ -72,5 +74,16 @@ public class UnitDetailDto {
 
     public void setConversionUnit(String conversionUnit) {
         this.conversionUnit = conversionUnit;
+    }
+
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }
