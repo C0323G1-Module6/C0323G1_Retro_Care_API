@@ -6,7 +6,6 @@ import org.springframework.validation.Validator;
 
 public class UnitDto  implements Validator {
     private Long id;
-    //    @Size(max = 255, message = "Đơn vị không được vượt quá 255 kí tự")
     private String name;
     private Boolean flagDeleted;
 
