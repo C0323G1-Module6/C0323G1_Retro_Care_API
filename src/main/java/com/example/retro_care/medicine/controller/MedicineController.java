@@ -1,5 +1,7 @@
 package com.example.retro_care.medicine.controller;
 
+import com.example.retro_care.customer.dto.CustomerDto;
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
@@ -28,6 +30,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -39,6 +42,25 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
+    /**
+     * This method is used to retrieve a new medicine code for creating a new medicine-TinVV
+     *
+     * @return ResponseEntity containing the MedicineDto object and the HTTP status code
+     */
+    @GetMapping("/code/create")
+    public ResponseEntity<MedicineDto> getMedicineCodeForCreate() {
+        MedicineDto medicineDto = new MedicineDto();
+        UUID uuid = UUID.randomUUID();
+        String code = uuid.toString().replace("-", "").substring(0, 8);
+        while (true) {
+            if (iMedicineService.findCustomerByCode(code) == null) {
+                break;
+            }
+        }
+        medicineDto.setCode(code);
+        return new ResponseEntity<>(medicineDto, HttpStatus.OK);
+    }
 
     /**
      * Find a medicine by its ID-TinVV
