@@ -162,8 +162,13 @@ public class OrderService implements IOrderService {
      * @param : appUserId, loyaltyPoint;
      */
     @Override
-    public void createOrderForUser(Long appUserId, Long loyaltyPoint) {
-        iOrderRepository.createOrderForUser(appUserId, loyaltyPoint);
+    public Long createOrderForUser(Long appUserId, Long loyaltyPoint, String cartIDsInText) {
+        return iOrderRepository.createOrderForUser(appUserId, loyaltyPoint, cartIDsInText);
+    }
+
+    @Override
+    public String getOrderCodeByOrderId(Long orderId) {
+        return iOrderRepository.getOrderCodeByOrderId(orderId);
     }
 
 

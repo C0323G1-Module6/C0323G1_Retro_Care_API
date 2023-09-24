@@ -2,8 +2,9 @@ package com.example.retro_care.order.controller;
 
 import com.example.retro_care.order.model.EmailMessage;
 import com.example.retro_care.order.model.Orders;
-import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.model.ReqBody;
 import com.example.retro_care.order.projection.IOrderProjection;
+import com.example.retro_care.order.projection.MailProjection;
 import com.example.retro_care.order.service.ICartDetailsService;
 import com.example.retro_care.order.service.IOrderService;
 import com.example.retro_care.order.service.mail.IEmailSenderService;
@@ -135,23 +136,38 @@ public class OrderController {
     @PostMapping("/create")
     public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId,
                                             @RequestParam("loyaltyPoint") Long loyaltyPoint,
-                                            @RequestParam("totalPrice") Long totalPrice){
-
+                                            @RequestParam("totalPrice") Long totalPrice,
+                                            @RequestBody() ReqBody reqBody){
+        System.out.println(appUserId + "hihihi");
+        String cartIDsInText = String.join(",", reqBody.getCartIDs());
+        System.out.println(cartIDsInText);
+        System.out.println(reqBody.getCustomerInfo());
         if(iAppUserService.existsById(appUserId)){
             System.out.println(totalPrice);
             System.out.println(loyaltyPoint);
-            // prepare and send email
-            List<CartProjection> cartsForBill = iCartDetailsService.findCartDetailsByUserId(appUserId);
+            //  create order and clear cart
+            Long orderID = iOrderService.createOrderForUser(appUserId,loyaltyPoint, cartIDsInText);
+            String orderCode = iOrderService.getOrderCodeByOrderId(orderID);
+
+            //get order details then prepare and send email
+            List<MailProjection> cartsForBill = iCartDetailsService.findCartDetailsByOrderId(orderID);
             System.out.println(cartsForBill);
             String subject = "Billing and Thank You Letter from RetroCare!";
-            String message = "Hi " + cartsForBill.get(0).getCustomerEmail() + "!";
-            EmailMessage emailMessage = new EmailMessage(cartsForBill.get(0).getCustomerEmail(), subject, message, totalPrice, cartsForBill);
+            String message = "Hi " + reqBody.getCustomerInfo().getName() + "!";
+            EmailMessage emailMessage = new EmailMessage(reqBody.getCustomerInfo().getEmail(),
+                    subject, message, totalPrice, cartsForBill, reqBody.getCustomerInfo(), orderCode);
             iEmailSenderService.sendEmail(emailMessage);
-            // after sending mail then create order and clear cart
-            iOrderService.createOrderForUser(appUserId,loyaltyPoint);
-            return new ResponseEntity<>( totalPrice, HttpStatus.OK);
+            System.out.println(orderID);
+            return new ResponseEntity<>( orderID, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
         }
     }
+
+    @GetMapping("/get-order-details")
+    public ResponseEntity<?> getOrderDetails(@RequestParam("orderId") Long orderId){
+        return new ResponseEntity<>( iCartDetailsService.findCartDetailsByOrderId(orderId), HttpStatus.OK);
+    }
+
+
 }

@@ -105,7 +105,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * @return : list of CartProjection that holds some info of product,
      * as well as customer for display and mailing purpose;
      */
-    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:appUserId)")
+    @Query(nativeQuery = true, value = "call getCartDetails(:appUserId)")
     List<CartProjection> findCartDetailsByUserId(@Param("appUserId") Long appUserId);
 
 
@@ -222,4 +222,16 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "where employee.app_user_id = :id and flag_delete = false")
     String getNameEmployeeByAppUserId(@Param("id") Long id);
 
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get product and customer's info for display and mailing purpose;
+     *
+     * @param : appUserId;
+     * @return : list of CartProjection that holds some info of product,
+     * as well as customer for display and mailing purpose;
+     */
+    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:orderId)")
+    List<MailProjection> findCartDetailsByOrderId(@Param("orderId") Long orderId);
 }
