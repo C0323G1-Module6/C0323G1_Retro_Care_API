@@ -91,12 +91,21 @@ public class CustomerService implements ICustomerService {
     }
     /**
      * Author: TinDT
-     * Goal: find customer by email
+     * Goal: find customer by phone
      * * return customer
      */
     @Override
     public Customer findCustomerByPhone(String phoneNumber) {
         return customerRepository.findCustomerByPhoneNumber(phoneNumber);
+    }
+    /**
+     * Author: TinDT
+     * Goal: find customer by app_user_id
+     * * return customer
+     */
+    @Override
+    public Customer findCustomerByAppUser(Long appUserId) {
+        return customerRepository.findCustomerByAppUser(appUserId);
     }
 
     /**
