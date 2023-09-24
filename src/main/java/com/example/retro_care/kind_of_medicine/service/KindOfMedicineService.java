@@ -1,5 +1,4 @@
 package com.example.retro_care.kind_of_medicine.service;
-
 import com.example.retro_care.kind_of_medicine.dto.IKindOfMedicineDto;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.kind_of_medicine.repository.IKindOfMedicineRepository;
@@ -7,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

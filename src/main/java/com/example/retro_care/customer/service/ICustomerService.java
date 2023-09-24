@@ -65,6 +65,11 @@ public interface ICustomerService {
      */
     Customer findCustomerByAppUser(Long appUserId);
     /**
+     * Author: TinDT
+     * Goal: create customer for app user
+     */
+     void saveCustomerForAppUser();
+    /**
      * Author: QuyenHT
      * Goal: find all customers
      * return customers
