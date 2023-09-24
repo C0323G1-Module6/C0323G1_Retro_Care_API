@@ -1,5 +1,6 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.ICartDetailProjectionWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
