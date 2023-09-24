@@ -197,6 +197,7 @@ public class CartDetailsService implements ICartDetailsService{
         return iCartDetailsRepository.getNameEmployeeByAppUserId(id);
     }
 
+
     /**
      * author: VuNL
      * date create: 16/09/2023
@@ -209,4 +210,8 @@ public class CartDetailsService implements ICartDetailsService{
         return iCartDetailsRepository.getOneMedicineByNameWhenSell(name);
     }
 
+    @Override
+    public List<MailProjection> findCartDetailsByOrderId(Long orderId) {
+        return iCartDetailsRepository.findCartDetailsByOrderId(orderId);
+    }
 }

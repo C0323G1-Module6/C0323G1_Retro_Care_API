@@ -168,6 +168,21 @@ public class CustomerController {
         BeanUtils.copyProperties(customer, customerDto);
         return new ResponseEntity<>(customerDto, HttpStatus.OK);
     }
+    /**
+     * Author: TinDT
+     * Goal: get information of customer by app_user
+     * * return HttpStatus
+     */
+    @GetMapping("/user/{id}")
+    public ResponseEntity<CustomerDto> detailCustomerByAppUser(@PathVariable Long id) {
+        Customer customer = customerService.findCustomerByAppUser(id);
+        if (customer == null){
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+        CustomerDto customerDto = new CustomerDto();
+        BeanUtils.copyProperties(customer, customerDto);
+        return new ResponseEntity<>(customerDto, HttpStatus.OK);
+    }
 
     /**
      * Author: QuyenHT

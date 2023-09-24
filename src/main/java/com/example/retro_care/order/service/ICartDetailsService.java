@@ -141,6 +141,7 @@ public interface ICartDetailsService {
      */
     String getNameEmployeeByAppUserId(Long id);
 
+
     /**
      * author: VuNL
      * date create: 16/09/2023
@@ -149,4 +150,7 @@ public interface ICartDetailsService {
      * @return medicine
      */
     IMedicineWhenSell getOneMedicineByNameWhenSell(String name);
+
+    List<MailProjection> findCartDetailsByOrderId(Long orderId);
+
 }

@@ -87,7 +87,9 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "ud.conversion_unit AS conversion_unit," +
             "m.note AS medicine_note," +
             "m.quantity AS quantity," +
-            "km.name AS kind_of_medicine_name " +
+            "km.name AS kind_of_medicine_name, " +
+            "m.maker as maker, " +
+            "m.active_element as activeElement " +
             "FROM medicine m " +
             "JOIN kind_of_medicine km ON m.kind_of_medicine_id = km.id " +
             "LEFT JOIN image_medicine im ON m.id = im.medicine_id " +
@@ -105,7 +107,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * @return : list of CartProjection that holds some info of product,
      * as well as customer for display and mailing purpose;
      */
-    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:appUserId)")
+    @Query(nativeQuery = true, value = "call getCartDetails(:appUserId)")
     List<CartProjection> findCartDetailsByUserId(@Param("appUserId") Long appUserId);
 
 
@@ -234,4 +236,16 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "where employee.app_user_id = :id and flag_delete = false")
     String getNameEmployeeByAppUserId(@Param("id") Long id);
 
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: get product and customer's info for display and mailing purpose;
+     *
+     * @param : appUserId;
+     * @return : list of CartProjection that holds some info of product,
+     * as well as customer for display and mailing purpose;
+     */
+    @Query(nativeQuery = true, value = "call getCartDetailsForMail(:orderId)")
+    List<MailProjection> findCartDetailsByOrderId(@Param("orderId") Long orderId);
 }
