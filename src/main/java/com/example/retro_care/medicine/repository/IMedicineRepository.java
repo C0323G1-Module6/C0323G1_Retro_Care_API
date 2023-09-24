@@ -24,6 +24,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    m.retail_profits AS retailProfits," +
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
+             " ud.conversion_unit AS conversionUnit," +
             "    ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
             " FROM " +
             " medicine m" +
@@ -229,6 +230,12 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "HAVING :price >= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     *
+     * @return get list medicine
+     */
     @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +
             "    unit_detail ud ON m.id = ud.medicine_id " +
@@ -236,6 +243,12 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
     List<Medicine> findAll();
 
+    /**
+     * author: ThanhKN
+     * workday: 23/09/2023
+     *
+     * @return
+     */
     @Query(value = "select * from medicine m " +
             "join unit_detail u on m.id = u.medicine_id " +
             "where u.conversion_unit like 'Viên' " +
@@ -243,39 +256,29 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     List<Medicine> getMedicineList();
 
     /**
-     * author: VuNL
-     * date create: 16/09/2023
-     * function: find medicine when sell offline
+     * author: ThanhKN
+     * workday: 24/09/2023
      *
-     * @param name
-     * @return List medicine
+     * @param nameMedicine search by name
+     * @return medicine list with name
      */
-    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
-            "where name like :name% and flag_delete = false")
-    List<Medicine> getMedicineByNameWhenSell(@Param("name") String name, Pageable pageable);
-
-
-    /**
-     * author: VuNL
-     * date create: 16/09/2023
-     * function: find medicine in a prescription
-     *
-     * @param id
-     * @return List medicine
-     */
-    @Query(nativeQuery = true, value = "select m.id, m.code, m.name, m.price, m.quantity from medicine " +
-            "as m join indication on i m.id = i.medicine_id where i.prescription_id = :id and flag_delete = false")
-    List<Medicine> getMedicineByPrescriptionWhenSell(@Param("id") Long id);
-
     Medicine getMedicinesByName(String nameMedicine);
+
 
     @Transactional
     @Modifying
     @Query(nativeQuery = true, value = "UPDATE medicine SET medicine.quantity= :updateQuantity WHERE medicine.id = :medicineId AND flag_deleted = 0")
     void updateQuantity(@Param("medicineId") Long medicineId, @Param("updateQuantity") Long quantity);
+
+
     @Query(nativeQuery = true, value = "SELECT quantity FROM medicine WHERE medicine.id = :id AND flag_deleted = 0")
     Long getMedicineQuantity(@Param("id") Long medicineId);
 
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
     @Query(value = "select * from medicine where flag_deleted =0",nativeQuery = true)
     List<Medicine> getAllForInvoice();
 }

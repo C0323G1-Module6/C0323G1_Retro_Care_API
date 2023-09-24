@@ -153,31 +153,70 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.searchByKindOfName(searchByKindOfMedicine, pageable);
     }
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     *
+     * @param pageable pagination with medicine list
+     * @param price Search value to compare with retail price
+     * @return value to compare with retail price
+     */
     @Override
     public Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price) {
         return iMedicineRepository.searchWithGreaterThanOrEqualPrice(price, pageable);
     }
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     *
+     * @param pageable pagination with medicine list
+     * @param price Search value to compare with retail price
+     * @return value to compare with retail price
+     */
     @Override
     public Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price) {
         return iMedicineRepository.searchWithSmallerThanOrEqualPrice(price, pageable);
     }
+
 
     @Override
     public Medicine getMedicineById(Long id) {
         return iMedicineRepository.findById(id).get();
     }
 
+    /**
+     * author: ThanhKN
+     * workday: 24/09/2023
+     *
+     * @param nameMedicine search by name
+     * @return medicine list with name
+     */
     @Override
     public Medicine getMedicineByName(String nameMedicine) {
         return iMedicineRepository.getMedicinesByName(nameMedicine);
     }
 
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     *
+     * @return get list medicine
+     */
     @Override
     public List<Medicine> listMedicine() {
         return iMedicineRepository.findAll();
     }
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     *
+     * @param pageable pagination with medicine list
+     * @param search Search value to compare with meidicne
+     * @param conditional Search value to compare with conditional
+     * @return value to compare with conditional
+     */
     @Override
     public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
         Float price = null;
@@ -197,6 +236,11 @@ public class MedicineService implements IMedicineService {
 
     }
 
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
     @Override
     public List<Medicine> getAllForInvoice() {
         return iMedicineRepository.getAllForInvoice();
