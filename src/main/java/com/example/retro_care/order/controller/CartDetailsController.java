@@ -329,4 +329,25 @@ public class CartDetailsController {
         String name = iCartDetailsService.getNameEmployeeByAppUserId(appUserId);
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
+
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: delete a specific product in cart based on cartId;
+     *
+     * @param : cartId;
+     * @return : HTTPStatus;
+     */
+    @PostMapping ("/delete-multi")
+    public ResponseEntity<?> clearSeveralProducts(@RequestBody List<Long> deletedCartIDs) {
+        System.out.println(deletedCartIDs);
+        if (!deletedCartIDs.isEmpty()) {
+            for (Long cartId: deletedCartIDs) {
+              iCartDetailsService.deleteCartDetailsById(cartId);
+            }
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
 }

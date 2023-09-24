@@ -21,22 +21,18 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    m.quantity AS quantity," +
             "    m.vat AS vat," +
             "    m.price AS price," +
-            " m.retail_profits AS retailProfits," +
+            "    m.retail_profits AS retailProfits," +
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
-            "    id.discount AS discount, " +
-            "    ud.conversion_unit AS conversionUnit," +
-            " ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
-            "FROM " +
+            "    ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
+            " FROM " +
             " medicine m" +
             " JOIN" +
             " kind_of_medicine km ON m.kind_of_medicine_id = km.id" +
             "        JOIN" +
             "    unit_detail ud ON m.id = ud.medicine_id" +
             "        JOIN" +
-            "    unit u ON ud.unit_id = u.id" +
-            "        LEFT JOIN" +
-            "    invoice_detail id ON m.id = id.medicine_id ";
+            "    unit u ON ud.unit_id = u.id ";
 
     /**
      * Find a Medicine by its ID-TinVV
@@ -113,7 +109,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where " +
             " m.flag_deleted = false " +
-            "group by m.id", nativeQuery = true)
+            "GROUP BY" +
+            "    m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            "    km.name, u.name, ud.conversion_unit ", nativeQuery = true)
     Page<IMedicineListDto> findAll(Pageable pageable,
                                           @Param("search") String search);
 
@@ -126,7 +124,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      */
     @Transactional
     @Modifying
-    @Query(value = "update medicine set medicine.flag_deleted = 1 where medicine.id = :id", nativeQuery = true)
+    @Query(value = "update medicine m set m.flag_deleted = true where m.id = :id", nativeQuery = true)
     int deleteMedicineById(@Param("id") Long id);
 
         /**
@@ -138,11 +136,12 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param pageable pagination after search
      * @return returns approximate drug code with filter.
      */
-//    @Query(value = "select * from medicine where medicine.code like CONCAT('%', :searchByCode ,'%')",nativeQuery = true)
 
         @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
                 "AND m.code like CONCAT('%', :searchByCode ,'%')" +
-                " group by m.id", nativeQuery = true)
+                "GROUP BY" +
+                "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+                " km.name, u.name, ud.conversion_unit", nativeQuery = true)
     Page<IMedicineListDto> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
 
     /**
@@ -157,7 +156,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
 
     @Query(value = PREFIX_SEARCH_NOT_PRICE + " where m.flag_deleted = false " +
             "AND m.name like CONCAT('%', :searchByName ,'%') " +
-            "group by m.id", nativeQuery = true)
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit", nativeQuery = true)
     Page<IMedicineListDto> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
 
     /**
@@ -171,7 +172,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      */
     @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
             "AND m.active_element like CONCAT('%', :searchByActiveElement ,'%') " +
-            "group by m.id", nativeQuery = true)
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit" , nativeQuery = true)
     Page<IMedicineListDto> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
 
     /**
@@ -179,51 +182,52 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * workday: 17/09/2023
      * Search by kind of medicine
      *
-     * @param searchByNameKindOfMedicine Method to search for drug group names
+     * @param searchByKindOfMedicine Method to search for drug group names
      * @param pageable pagination after search
      * @return returns the drug group of the drug approximated by the filter
      */
 
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             "where m.flag_deleted = false " +
-            "AND km.name like CONCAT('%', :searchByNameKindOfMedicine ,'%') " +
-            "group by m.id", nativeQuery = true)
-    Page<IMedicineListDto> searchByKindOfName(@Param("searchByNameKindOfMedicine") String searchByNameKindOfMedicine ,Pageable pageable);
+            "AND km.name like CONCAT('%', :searchByKindOfMedicine ,'%') " +
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit", nativeQuery = true)
+    Page<IMedicineListDto> searchByKindOfName(@Param("searchByKindOfMedicine") String searchByKindOfMedicine ,Pageable pageable);
 
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            "where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price = ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithEqualPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            " where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price < ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithBiggerPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +
-            "where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price > ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithLittlePrice(@Param("price") Float price, Pageable pageable);
-
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     * search by retail price with conditional greater than or equal
+     *
+     * @param price
+     * @param pageable
+     * @return Price value is greater than or equal to the input price.
+     */
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
-            "group by m.id " +
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit " +
             "HAVING :price <= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
+    /**
+     * author: DaoPTA
+     * workday: 23/09/2023
+     * search by retail price with conditional smaller than or equal
+     *
+     * @param price
+     * @param pageable
+     * @return Price value is less than or equal to the input price.
+     */
     @Query(value = PREFIX_SEARCH_NOT_PRICE +
             " where m.flag_deleted = false " +
-            "group by m.id " +
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit " +
             "HAVING :price >= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
-
-    @Query(value =  PREFIX_SEARCH_NOT_PRICE +"where m.flag_deleted = false " +
-            "group by m.id " +
-            "HAVING :price != ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
-    Page<IMedicineListDto> searchWithPriceNotEqual(@Param("price") Float price, Pageable pageable);
 
     @Query(value = " SELECT m.*, ud.conversion_rate, ud.conversion_unit, u.name AS unit_name FROM medicine m" +
             " LEFT JOIN " +
@@ -231,6 +235,12 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             " LEFT JOIN " +
             "    unit u ON ud.unit_id = u.id where m.flag_deleted = false", nativeQuery = true)
     List<Medicine> findAll();
+
+    @Query(value = "select * from medicine m " +
+            "join unit_detail u on m.id = u.medicine_id " +
+            "where u.conversion_unit like 'Viên' " +
+            "and m.flag_deleted = false",nativeQuery = true)
+    List<Medicine> getMedicineList();
 
     /**
      * author: VuNL
@@ -258,5 +268,15 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     List<Medicine> getMedicineByPrescriptionWhenSell(@Param("id") Long id);
 
     Medicine getMedicinesByName(String nameMedicine);
+
+    @Transactional
+    @Modifying
+    @Query(nativeQuery = true, value = "UPDATE medicine SET medicine.quantity= :updateQuantity WHERE medicine.id = :medicineId AND flag_deleted = 0")
+    void updateQuantity(@Param("medicineId") Long medicineId, @Param("updateQuantity") Long quantity);
+    @Query(nativeQuery = true, value = "SELECT quantity FROM medicine WHERE medicine.id = :id AND flag_deleted = 0")
+    Long getMedicineQuantity(@Param("id") Long medicineId);
+
+    @Query(value = "select * from medicine where flag_deleted =0",nativeQuery = true)
+    List<Medicine> getAllForInvoice();
 }
 
