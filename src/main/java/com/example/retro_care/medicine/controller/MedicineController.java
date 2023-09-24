@@ -105,8 +105,11 @@ public class MedicineController {
             if (imageMedicine.getImagePath() == null) {
                 imageMedicine.setImagePath("");
                 iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+                iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
+            }else {
+                iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
+                iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
             }
-            iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
