@@ -87,7 +87,9 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "ud.conversion_unit AS conversion_unit," +
             "m.note AS medicine_note," +
             "m.quantity AS quantity," +
-            "km.name AS kind_of_medicine_name " +
+            "km.name AS kind_of_medicine_name, " +
+            "m.maker as maker, " +
+            "m.active_element as activeElement " +
             "FROM medicine m " +
             "JOIN kind_of_medicine km ON m.kind_of_medicine_id = km.id " +
             "LEFT JOIN image_medicine im ON m.id = im.medicine_id " +
