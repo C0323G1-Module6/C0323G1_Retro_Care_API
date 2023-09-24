@@ -253,6 +253,11 @@ public class MedicineController {
         return new ResponseEntity<>(unitDetail, HttpStatus.OK);
     }
 
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
     @GetMapping("/get-list-for-invoice")
     public ResponseEntity<List<Medicine>> getListForInvoice() {
         List<Medicine> list = new ArrayList<>();

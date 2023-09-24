@@ -29,13 +29,10 @@ public class MedicineDto implements Validator {
     @NotBlank(message = "Không được để trống trường này")
     @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
-//    @NotEmpty(message = "Không được để trống trường này")
     @Min(value = 0, message = "Lợi nhuận bán lẻ không được nhỏ hơn 0")
     private Float retailProfits;
     private Boolean flagDeleted;
-//    @NotBlank(message = "Không được để trống trường này")
     private KindOfMedicineDto kindOfMedicineDto;
-    //    @Valid
     private UnitDetailDto unitDetailDto;
     private ImageMedicineDto imageMedicineDto;
 
