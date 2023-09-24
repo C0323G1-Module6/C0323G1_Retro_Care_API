@@ -141,5 +141,16 @@ public interface ICartDetailsService {
      */
     String getNameEmployeeByAppUserId(Long id);
 
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    IMedicineWhenSell getOneMedicineByNameWhenSell(String name);
+
     List<MailProjection> findCartDetailsByOrderId(Long orderId);
+
 }

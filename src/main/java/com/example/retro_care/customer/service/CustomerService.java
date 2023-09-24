@@ -1,8 +1,10 @@
 package com.example.retro_care.customer.service;
 
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.repository.ICustomerRepository;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -46,8 +48,24 @@ public class CustomerService implements ICustomerService {
     public Customer saveCustomer(Customer customer) {
         customer.setFlagDeleted(false);
         customer.setPoint(0l);
-        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
-                return customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
+        customerRepository.saveCustomer(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted());
+        return customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
+    }
+
+    /**
+     * Author: TinDT
+     * Goal: create customer for app user
+     * * return customer
+     */
+    @Override
+    public void saveCustomerForAppUser() {
+        Customer customer = new Customer();
+        String code = FormatCustomer.generateCustomerCode();
+        customer.setCode(code);
+        customer.setFlagDeleted(false);
+        customer.setPoint(0l);
+        customerRepository.saveCustomerHasAppUser(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted(), customer.getAppUser().getId());
+
     }
 
     /**
@@ -57,7 +75,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
+        customerRepository.updateCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getId());
 
     }
 
@@ -107,6 +125,7 @@ public class CustomerService implements ICustomerService {
     public Customer findCustomerByAppUser(Long appUserId) {
         return customerRepository.findCustomerByAppUser(appUserId);
     }
+
 
     /**
      * Author: QuyenHT
