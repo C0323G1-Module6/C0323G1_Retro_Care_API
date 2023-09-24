@@ -25,6 +25,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -170,7 +171,7 @@ public class MedicineController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        List<Medicine> medicinePage = iMedicineService.getAll();
+        List<Medicine> medicinePage = iMedicineService.listMedicine();
         for (Medicine m : medicinePage) {
             if (m.getId().equals(id)) {
                 iMedicineService.removeMedicine(id);
@@ -211,7 +212,7 @@ public class MedicineController {
             case "searchByActiveElement":
                 medicines = iMedicineService.searchActiveElement(pageable, search);
                 break;
-            case "searchByNameKindOfMedicine":
+            case "searchByKindOfMedicine":
                 medicines = iMedicineService.searchByNameKindOfMedicine(pageable, search);
                 break;
             case "searchByPrice":
@@ -219,6 +220,7 @@ public class MedicineController {
                 if (conditional.equals("")) {
                     return new ResponseEntity<>(medicines, HttpStatus.NO_CONTENT);
                 }
+                break;
             default:
                 medicines = iMedicineService.findAll(pageable, search);
                 break;
@@ -236,5 +238,34 @@ public class MedicineController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+    @GetMapping("get-medicine/{id}")
+    public ResponseEntity getMedicineById(@PathVariable("id") Long id) {
+        Medicine medicine = iMedicineService.getMedicineById(id);
+        if (medicine == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-unitDetail/{id}")
+    public ResponseEntity<UnitDetail> getUnitDetailById(@PathVariable("id") Long id) {
+        UnitDetail unitDetail = iUnitDetailService.findUnitDetailByMedicineId(id);
+        if (unitDetail == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(unitDetail, HttpStatus.OK);
+    }
+
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
+    @GetMapping("/get-list-for-invoice")
+    public ResponseEntity<List<Medicine>> getListForInvoice() {
+        List<Medicine> list = new ArrayList<>();
+        if (list == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }
