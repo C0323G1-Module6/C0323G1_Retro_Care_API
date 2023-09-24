@@ -52,7 +52,6 @@ public class ImageMedicineDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-
     @Override
     public boolean supports(Class<?> clazz) {
         return false;

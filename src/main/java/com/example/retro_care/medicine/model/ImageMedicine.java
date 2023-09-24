@@ -58,16 +58,6 @@ public class ImageMedicine {
         return this.flagDeleted;
     }
 
-    @Override
-    public String toString() {
-        return "ImageMedicine{" +
-                "id=" + id +
-                ", imagePath='" + imagePath + '\'' +
-                ", flagDeleted=" + flagDeleted +
-                ", medicine=" + medicine +
-                '}';
-    }
-
     public void setFlagDeleted(Boolean flagDeleted) {
         this.flagDeleted = flagDeleted;
     }
