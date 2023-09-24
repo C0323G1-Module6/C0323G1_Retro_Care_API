@@ -1,6 +1,8 @@
 package com.example.retro_care.order.service;
 
 import com.example.retro_care.order.projection.*;
+import org.springframework.data.repository.query.Param;
+
 import java.util.List;
 
 public interface ICartDetailsService {
@@ -138,4 +140,13 @@ public interface ICartDetailsService {
      * @return name
      */
     String getNameEmployeeByAppUserId(Long id);
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    IMedicineWhenSell getOneMedicineByNameWhenSell(String name);
 }

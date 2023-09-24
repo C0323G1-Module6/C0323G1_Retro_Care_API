@@ -329,4 +329,16 @@ public class CartDetailsController {
         String name = iCartDetailsService.getNameEmployeeByAppUserId(appUserId);
         return new ResponseEntity<>(name, HttpStatus.OK);
     }
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    @GetMapping("/getOneMedicineByName") ResponseEntity<IMedicineWhenSell> getOneMedicineWhenSell(@RequestParam("name")String name){
+        IMedicineWhenSell iMedicineWhenSell = iCartDetailsService.getOneMedicineByNameWhenSell(name);
+        return new ResponseEntity<>(iMedicineWhenSell, HttpStatus.OK);
+    }
 }

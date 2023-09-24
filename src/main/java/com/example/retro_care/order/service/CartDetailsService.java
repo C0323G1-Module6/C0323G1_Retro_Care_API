@@ -197,4 +197,16 @@ public class CartDetailsService implements ICartDetailsService{
         return iCartDetailsRepository.getNameEmployeeByAppUserId(id);
     }
 
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    @Override
+    public IMedicineWhenSell getOneMedicineByNameWhenSell(String name) {
+        return iCartDetailsRepository.getOneMedicineByNameWhenSell(name);
+    }
+
 }

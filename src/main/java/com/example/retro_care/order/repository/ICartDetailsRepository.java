@@ -121,6 +121,18 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
             "where name like :name% and flag_deleted = false")
     List<IMedicineWhenSell> getMedicineByNameWhenSell(@Param("name") String name);
 
+
+    /**
+     * author: VuNL
+     * date create: 16/09/2023
+     * function: get medicine when sell offline
+     * @param name
+     * @return medicine
+     */
+    @Query(nativeQuery = true, value = "select id, code, name, price, quantity from medicine " +
+            "where name = :name and flag_deleted = false")
+    IMedicineWhenSell getOneMedicineByNameWhenSell(@Param("name") String name);
+
     /**
      * author: VuNL
      * date create: 16/09/2023

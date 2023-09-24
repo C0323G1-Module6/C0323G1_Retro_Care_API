@@ -148,7 +148,7 @@ public class OrderService implements IOrderService {
         if (customerUserId != -1) {
             iUserOrderRepository.createUserOrder(customerUserId, id);
             Long currentPoint = iOrderRepository.getPointCustomerByAppUserId(customerUserId);
-            Long newPoint = currentPoint + (long) Math.floor(point * 0.1);
+            Long newPoint = currentPoint + (long) Math.floor(point * 0.01);
             iOrderRepository.updatePointCustomer(newPoint, customerUserId);
         }
         return "true";
