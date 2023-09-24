@@ -100,26 +100,41 @@ public interface IMedicineService {
      * Search by kind of medicine
      *
      * @param pageable Pagination after search
-     * @param searchByNameKindOfMedicine Parameters used to search
+     * @param searchByKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
-    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
+    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByKindOfMedicine);
 
-    Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price);
-
-    Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price);
-
-    Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price);
-
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     * @param price value of search
+     * @param pageable pagination with medicine list
+     * @return value to compare with conditional
+     */
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price);
 
+    /**
+     * author: DaoPTA
+     * workday: 22/09/2023
+     * @param price value of search
+     * @param pageable pagination with medicine list
+     * @return value to compare with conditional
+     */
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price);
 
-    Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
 
     Medicine getMedicineById(Long id);
     Medicine getMedicineByName(String nameMedicine);
 
+    List<Medicine> listMedicine();
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
+
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
+    List<Medicine> getAllForInvoice();
 }

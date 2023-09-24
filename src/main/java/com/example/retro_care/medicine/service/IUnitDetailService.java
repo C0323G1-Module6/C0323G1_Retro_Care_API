@@ -2,9 +2,6 @@ package com.example.retro_care.medicine.service;
 
 import com.example.retro_care.medicine.model.UnitDetail;
 
-import java.util.List;
-import java.util.Set;
-
 public interface IUnitDetailService {
     /**
      * Retrieve a list of UnitDetail objects associated with a specific Medicine ID-TinVV
