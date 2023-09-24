@@ -1,6 +1,5 @@
 package com.example.retro_care.order.service;
 
-import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.ICartDetailProjectionWhenSell;
 import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.repository.ICartDetailsRepository;
@@ -72,8 +71,8 @@ public class OrderService implements IOrderService {
      * otherwise the original list will be returned.
      */
     @Override
-    public List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return iOrderRepository.findByDateTimeRange(startDateTime, endDateTime);
+    public Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return iOrderRepository.findByDateTimeRange(pageable,startDateTime, endDateTime);
     }
 
 
