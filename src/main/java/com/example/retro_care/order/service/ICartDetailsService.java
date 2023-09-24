@@ -141,5 +141,5 @@ public interface ICartDetailsService {
      */
     String getNameEmployeeByAppUserId(Long id);
 
-    List<MailProjection> findCartDetailsByOrderId(@Param("orderId") Long orderId);
+    List<MailProjection> findCartDetailsByOrderId(Long orderId);
 }
