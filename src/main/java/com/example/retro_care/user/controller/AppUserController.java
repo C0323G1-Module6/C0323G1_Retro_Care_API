@@ -1,5 +1,6 @@
 package com.example.retro_care.user.controller;
 
+import com.example.retro_care.customer.service.ICustomerService;
 import com.example.retro_care.user.common.RandomStringGenerator;
 import com.example.retro_care.user.common.ValidateAppUser;
 import com.example.retro_care.user.config.JwtTokenUtil;
@@ -39,6 +40,8 @@ public class AppUserController {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ICustomerService customerService;
 
     private static final String LOGIN_FAILED = "Đăng nhập thất bại";
     /**
@@ -110,6 +113,8 @@ public class AppUserController {
             String randomPassword = RandomStringGenerator.generateRandomString();
             appUser.setPassword(passwordEncoder.encode(randomPassword));
             appUserService.createNewAppUser(appUser,"ROLE_CUSTOMER");
+            Long appUserId = appUserService.findAppUserIdByUserName(appUser.getUserName());
+            customerService.saveCustomerForAppUser(appUserId);
         }
         UserDetails userDetails = appUserService.loadUserByUsername(facebookMail);
 
@@ -158,6 +163,8 @@ public class AppUserController {
         if (Boolean.FALSE.equals(checkAddNewAppUser)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đăng ký thất bại, vui lòng chờ trong giây lất");
         }
+        Long appUserId = appUserService.findAppUserIdByUserName(appUser.getUserName());
+        customerService.saveCustomerForAppUser(appUserId);
         return ResponseEntity.ok("Đăng ký thành công, vui lòng bấm nút đăng nhập");
     }
 
