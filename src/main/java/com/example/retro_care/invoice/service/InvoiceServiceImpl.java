@@ -1,14 +1,12 @@
 package com.example.retro_care.invoice.service;
 
-import com.example.retro_care.invoice.model.IInvoiceResult;
-import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.model.InvoiceDetailDto;
-import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.model.*;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
 import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.repository.IMedicineRepository;
+import com.example.retro_care.medicine.repository.IUnitDetailRepository;
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
@@ -17,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -29,6 +25,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     IInvoiceDetailRepository invoiceDetailRepository;
     @Autowired
     IMedicineRepository medicineRepository;
+    @Autowired
+    IUnitDetailRepository unitDetailRepository;
 
     /**
      * create an Invoice and call method for create InvoiceDetail
@@ -93,8 +91,21 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return Invoice
      */
     @Override
-    public Invoice getInvoiceById(Long invoiceId) {
-        return invoiceRepository.getInvoiceById(invoiceId);
+    public InvoiceEditDto getInvoiceById(Long invoiceId) {
+        Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
+        InvoiceEditDto invoiceEditDto = new InvoiceEditDto();
+        BeanUtils.copyProperties(invoice, invoiceEditDto);
+        Set<InvoiceDetail> invoiceDetailSet = invoice.getInvoiceDetailSet();
+        List<InvoiceDetailEditDto> invoiceDetailEditDtoList = new ArrayList<>();
+        for (InvoiceDetail invoiceDetail : invoiceDetailSet) {
+            UnitDetail unitDetail = unitDetailRepository.findUnitDetailByMedicineId(invoiceDetail.getMedicineId().getId());
+            InvoiceDetailEditDto invoiceDetailEditDto = new InvoiceDetailEditDto();
+            BeanUtils.copyProperties(invoiceDetail,invoiceDetailEditDto);
+            invoiceDetailEditDto.setUnit(unitDetail.getUnit().getName());
+            invoiceDetailEditDtoList.add(invoiceDetailEditDto);
+        }
+        invoiceEditDto.setInvoiceDetailEditDtoList(invoiceDetailEditDtoList);
+        return invoiceEditDto;
     }
 
     /**
