@@ -102,8 +102,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/carts/check-availability/**",
                         "/payment/**",
                         "/customers/api/online-customer/**",
-                        "/customers/user/{id}/**"
-
+                        "/customers/user/{id}/**",
+                        "/customers/api/user/{id}/**"
                 ).hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER","ROLE_CUSTOMER","ROLE_EMPLOYEE")
                 .antMatchers(
                         "/api/carts/getMedicine/**",
@@ -155,7 +155,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/customers/api/create/**",
                         "/customers/api/update/{id}/**",
                         "/customers/api/{id}/**",
-                        "/customers/api/user/{id}/**",
                         "/customers/api/list/**",
                         "/customers/api/delete/{id}/**",
 
