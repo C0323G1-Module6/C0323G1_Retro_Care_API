@@ -21,14 +21,18 @@ public interface IInvoiceResult {
     Time getCreationTime();
 
     String getNote();
-
-    Double getTotal();
+    
+    Double getDiscount();
+    Double getPaid();
 
     Double getBillOwed();
+    Double getPrice();
+    Double getImportPrice();
+    Double getTotal();
 
     Supplier getSupplier();
 
-    String getName();
+    String getNameSupplier();
 
     String getAddress();
 
@@ -39,8 +43,6 @@ public interface IInvoiceResult {
     String getCodeMedicine();
 
     String getNameMedicine();
-
-    Double getPrice();
 
     Long getQuantity();
 
@@ -59,4 +61,7 @@ public interface IInvoiceResult {
     String getCodeKind();
 
     String getNameKind();
+
+    Long getSupplierId() ;
+
 }

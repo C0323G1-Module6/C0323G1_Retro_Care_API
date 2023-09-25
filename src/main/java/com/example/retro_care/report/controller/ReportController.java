@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,7 +178,11 @@ public class ReportController {
             sumProfit += Math.round(Double.parseDouble(profitList.get(i).getTotal()));
             sumRevenue += Math.round(Double.parseDouble(revenueList.get(i).getTotal()));
         }
-        SumReport sumReport = new SumReport(sumProfit, sumRevenue, sumProfit / profitList.size(), sumRevenue / revenueList.size());
+        LocalDate beginingDate = LocalDate.parse(startDate);
+        LocalDate finishingDate = LocalDate.parse(endDate);
+        Period startAndEndPeriod = Period.between(beginingDate, finishingDate);
+        int days = startAndEndPeriod.getDays() + 1;
+        SumReport sumReport = new SumReport(sumProfit, sumRevenue, sumProfit / days, sumRevenue / days);
         return new ResponseEntity<>(sumReport, HttpStatus.OK);
     }
 

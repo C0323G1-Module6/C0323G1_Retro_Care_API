@@ -21,11 +21,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
 
 @RestController
 @CrossOrigin("*")
@@ -37,7 +40,6 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
-
 
     /**
      * Find a medicine by its ID-TinVV
@@ -82,7 +84,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity addMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -115,7 +121,11 @@ public class MedicineController {
     @ResponseBody
     public ResponseEntity editMedicine(@Valid @RequestBody MedicineDto medicineDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         Medicine medicine = new Medicine();
         KindOfMedicine kindOfMedicine = new KindOfMedicine();
@@ -152,13 +162,13 @@ public class MedicineController {
         return new ResponseEntity<>(medicinePage, HttpStatus.OK);
     }
 
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteMedicine(@PathVariable("id") Long id) {
-
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        List<Medicine> medicinePage = iMedicineService.getAll();
+        List<Medicine> medicinePage = iMedicineService.listMedicine();
         for (Medicine m : medicinePage) {
             if (m.getId().equals(id)) {
                 iMedicineService.removeMedicine(id);
@@ -173,53 +183,81 @@ public class MedicineController {
      * workday: 19/09/2023
      * author: DaoPTA
      *
-     * @param page parameters for paging
-     * @param limit Limit the number of records in the page
+     * @param page             parameters for paging
+     * @param limit            Limit the number of records in the page
      * @param searchInMedicine parameters contain different search methods
-     * @param search Search by input box
+     * @param search           Search by input box
      * @return - If empty, list medicine will be returned
-     *         - If there is data, the list to search will be returned
+     * - If there is data, the list to search will be returned
      */
     @GetMapping("/search")
     public ResponseEntity<Page<IMedicineListDto>> searchByMedicine(@RequestParam(defaultValue = "0", required = false) Integer page,
                                                                    @RequestParam(defaultValue = "5", required = false) Integer limit,
-                                                                   @RequestParam(defaultValue = "",required = false) String searchInMedicine,
+                                                                   @RequestParam(defaultValue = "", required = false) String searchInMedicine,
                                                                    @RequestParam(defaultValue = "", required = false) String search,
-                                                                   @RequestParam(defaultValue = "", required = false) String conditional
-                                                                   ){
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC,"code"));
+                                                                   @RequestParam(defaultValue = "", required = false) String conditional) {
+
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "code"));
         Page<IMedicineListDto> medicines;
-        switch (searchInMedicine){
+        switch (searchInMedicine) {
             case "searchByName":
-                medicines = iMedicineService.searchByNameMedicine(pageable,search);
+                medicines = iMedicineService.searchByNameMedicine(pageable, search);
                 break;
             case "searchByCode":
-               medicines = iMedicineService.searchByCodeMedicine(pageable,search);
+                medicines = iMedicineService.searchByCodeMedicine(pageable, search);
                 break;
             case "searchByActiveElement":
-               medicines = iMedicineService.searchActiveElement(pageable,search);
+                medicines = iMedicineService.searchActiveElement(pageable, search);
                 break;
-            case "searchByNameKindOfMedicine":
-               medicines = iMedicineService.searchByNameKindOfMedicine(pageable,search);
+            case "searchByKindOfMedicine":
+                medicines = iMedicineService.searchByNameKindOfMedicine(pageable, search);
                 break;
             case "searchByPrice":
-                medicines = iMedicineService.searchByPrice(pageable,search, conditional);
+                medicines = iMedicineService.searchByPrice(pageable, search, conditional);
+                if (conditional.equals("")) {
+                    return new ResponseEntity<>(medicines, HttpStatus.NO_CONTENT);
+                }
                 break;
             default:
-                medicines = iMedicineService.findAll(pageable,search);
+                medicines = iMedicineService.findAll(pageable, search);
+                break;
         }
         if (medicines.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new  ResponseEntity<>(medicines, HttpStatus.OK);
+        return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
 
     @GetMapping("/get-list")
-    public ResponseEntity<List<Medicine>> medicineGetList(){
+    public ResponseEntity<List<Medicine>> medicineGetList() {
         List<Medicine> medicine = iMedicineService.getAll();
         if (medicine.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+    @GetMapping("get-medicine/{id}")
+    public ResponseEntity getMedicineById(@PathVariable("id") Long id) {
+        Medicine medicine = iMedicineService.getMedicineById(id);
+        if (medicine == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-unitDetail/{id}")
+    public ResponseEntity<UnitDetail> getUnitDetailById(@PathVariable("id") Long id) {
+        UnitDetail unitDetail = iUnitDetailService.findUnitDetailByMedicineId(id);
+        if (unitDetail == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(unitDetail, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-list-for-invoice")
+    public ResponseEntity<List<Medicine>> getListForInvoice() {
+        List<Medicine> list = new ArrayList<>();
+        if (list == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

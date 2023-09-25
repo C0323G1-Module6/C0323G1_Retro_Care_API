@@ -29,12 +29,15 @@ public interface IMedicineService {
      * @param medicine The Medicine object to be added.
      */
     void addMedicine(Medicine medicine);
+
     /**
      * Retrieves the ID of the last inserted record in the database-TinVV
      *
      * @return The ID of the last inserted record as a {@code Long} value.
      */
     Long getLastInsertedId();
+
+    boolean existsByIdAndFlagDeletedIsFalse(Long id);
 
     /**
      * Display list Medicine
@@ -97,24 +100,21 @@ public interface IMedicineService {
      * Search by kind of medicine
      *
      * @param pageable Pagination after search
-     * @param searchByNameKindOfMedicine Parameters used to search
+     * @param searchByKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
-    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByNameKindOfMedicine);
-
-    Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price);
-
-    Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price);
-
-    Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price);
+    Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable,String searchByKindOfMedicine);
 
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(Pageable pageable, Float price);
 
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(Pageable pageable, Float price);
 
-    Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price);
-
     Medicine getMedicineById(Long id);
+    Medicine getMedicineByName(String nameMedicine);
+
+    List<Medicine> listMedicine();
 
     Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional);
+
+    List<Medicine> getAllForInvoice();
 }

@@ -39,6 +39,14 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Modifying
     @Transactional
+    @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted,:app_user_id)", nativeQuery = true)
+    void saveCustomerHasAppUser(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted,@Param(value = "app_user_id")Long appUserId);
+    /**
+     * Author: TinDT
+     * Goal: save customers
+     */
+    @Modifying
+    @Transactional
     @Query(value = "INSERT INTO retro_care.customer(code,name,birth_day,address,phone_number,email,point,note,flag_deleted) VALUES(:code,:name,:birth_day,:address,:phone_number,:email,:point,:note,:flag_deleted)", nativeQuery = true)
     void saveCustomer(@Param(value = "code") String code,@Param(value = "name") String name,@Param(value = "birth_day") String birthDay,@Param(value = "address")String address,@Param(value = "phone_number") String phoneNumber,@Param(value = "email") String email,@Param(value = "point")Long point,@Param(value = "note")String note,@Param(value = "flag_deleted")Boolean flagDeleted);
 
@@ -79,7 +87,13 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
      */
     @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where code =:code and flag_deleted = false", nativeQuery = true)
     Customer findCustomerByCode(@Param(value = "code") String code);
-
+    /**
+     * Author: TinDT
+     * Goal: find customers by app_user_id
+     * return customer
+     */
+    @Query(value = "SELECT id,code,name,birth_day,address,phone_number,email,point,note,flag_deleted,app_user_id from retro_care.customer where app_user_id =:app_user_id and flag_deleted = false", nativeQuery = true)
+    Customer findCustomerByAppUser(@Param(value = "app_user_id") Long app_user_id);
     /**
      * Author: QuyenHT
      * Goal: get all customers
@@ -93,11 +107,6 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
             "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +
             "     ELSE (c.app_user_id is null or c.app_user_id is not null) " +
             "END ",
-//            "ORDER BY " +
-//            "CASE WHEN :sortItem = 'group' THEN c.app_user_id " +
-//            "     WHEN :sortItem = 'name' THEN c.name " +
-//            "     ELSE c.code " +
-//            "END ",
             countQuery = " SELECT COUNT(*) from retro_care.customer c WHERE c.flag_deleted = false AND c.name LIKE :name AND c.code LIKE :code AND c.address LIKE :address AND c.phone_number LIKE :phoneNumber AND " +
                     "CASE WHEN :groupValue = '0' THEN (c.app_user_id is null) " +
                     "     WHEN :groupValue = '1' THEN (c.app_user_id is not null) " +

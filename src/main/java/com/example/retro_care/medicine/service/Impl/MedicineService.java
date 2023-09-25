@@ -61,6 +61,11 @@ public class MedicineService implements IMedicineService {
         return iMedicineRepository.getLastInsertedId();
     }
 
+    @Override
+    public boolean existsByIdAndFlagDeletedIsFalse(Long id) {
+        return iMedicineRepository.existsByIdAndFlagDeletedIsFalse(id);
+    }
+
 
     /**
      * author: DaoPTA
@@ -74,7 +79,6 @@ public class MedicineService implements IMedicineService {
     public Page<IMedicineListDto> findAll(Pageable pageable, String search) {
         return iMedicineRepository.findAll(pageable, search);
     }
-
 
     /**
      * author: DaoPTA
@@ -90,9 +94,8 @@ public class MedicineService implements IMedicineService {
 
     @Override
     public List<Medicine> getAll() {
-        return iMedicineRepository.findAll();
+        return iMedicineRepository.getMedicineList();
     }
-
 
     /**
      * author: DaoPTA
@@ -106,7 +109,6 @@ public class MedicineService implements IMedicineService {
     @Override
     public Page<IMedicineListDto> searchByCodeMedicine(Pageable pageable, String searchByCode) {
         return iMedicineRepository.searchCode(searchByCode, pageable);
-
     }
 
     /**
@@ -143,27 +145,12 @@ public class MedicineService implements IMedicineService {
      * Search by kind of medicine
      *
      * @param pageable Pagination after search
-     * @param searchByNameKindOfMedicine Parameters used to search
+     * @param searchByKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
     @Override
-    public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByNameKindOfMedicine) {
-        return iMedicineRepository.searchByKindOfName(searchByNameKindOfMedicine, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithEqualPrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithEqualPrice(price, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithBiggerPrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithBiggerPrice(price, pageable);
-    }
-
-    @Override
-    public Page<IMedicineListDto> searchWithLittlePrice(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithLittlePrice(price, pageable);
+    public Page<IMedicineListDto> searchByNameKindOfMedicine(Pageable pageable, String searchByKindOfMedicine) {
+        return iMedicineRepository.searchByKindOfName(searchByKindOfMedicine, pageable);
     }
 
     @Override
@@ -177,35 +164,42 @@ public class MedicineService implements IMedicineService {
     }
 
     @Override
-    public Page<IMedicineListDto> searchWithPriceNotEqual(Pageable pageable, Float price) {
-        return iMedicineRepository.searchWithPriceNotEqual(price, pageable);
-    }
-
-    @Override
     public Medicine getMedicineById(Long id) {
         return iMedicineRepository.findById(id).get();
     }
 
     @Override
+    public Medicine getMedicineByName(String nameMedicine) {
+        return iMedicineRepository.getMedicinesByName(nameMedicine);
+    }
+
+    @Override
+    public List<Medicine> listMedicine() {
+        return iMedicineRepository.findAll();
+    }
+
+    @Override
     public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
-        Float price = Float.parseFloat(search);
-        switch (conditional) {
-            case "equal":
-               return searchWithEqualPrice(pageable,price);
-            case "bigger":
-                return searchWithBiggerPrice(pageable,price);
-            case "litter":
-                return searchWithLittlePrice(pageable,price);
-            case "greater":
-                return searchWithGreaterThanOrEqualPrice(pageable, price);
-            case "small":
-                return searchWithSmallerThanOrEqualPrice(pageable, price);
-            case "notEqual":
-                return searchWithPriceNotEqual(pageable,price);
-            default:
-                return findAll(pageable,search);
+        Float price = null;
+        try{
+           price  = Float.parseFloat(search);
+            switch (conditional) {
+                case "greater":
+                    return searchWithGreaterThanOrEqualPrice(pageable, price);
+                case "small":
+                    return searchWithSmallerThanOrEqualPrice(pageable, price);
+                default:
+                    return findAll(pageable,search);
+            }
+        }catch (Exception e){
+            return findAll(pageable,search);
         }
 
+    }
+
+    @Override
+    public List<Medicine> getAllForInvoice() {
+        return iMedicineRepository.getAllForInvoice();
     }
 
 }

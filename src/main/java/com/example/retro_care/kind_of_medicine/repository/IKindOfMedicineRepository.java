@@ -9,7 +9,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
 import javax.transaction.Transactional;
 
 @Repository
@@ -61,4 +60,10 @@ public interface IKindOfMedicineRepository extends JpaRepository<KindOfMedicine,
     @Query(nativeQuery = true,
             value = "select kind_of_medicine.id,kind_of_medicine.code,kind_of_medicine.name from kind_of_medicine where id = :id and flag_deleted = false")
     KindOfMedicine getKindOfMedicineById(@Param("id") Long id);
+
+    // get id max
+
+    @Query(nativeQuery = true, value = "select max(id) from kind_of_medicine")
+    int getMaxId();
+
 }

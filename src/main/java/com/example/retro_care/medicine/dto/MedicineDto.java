@@ -1,7 +1,5 @@
 package com.example.retro_care.medicine.dto;
 
-import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
-import com.example.retro_care.medicine.model.ImageMedicine;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -10,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 
-public class MedicineDto {
+public class MedicineDto implements Validator {
     private Long id;
 //    @Size(max = 8)
 //    @Pattern(regexp = "^[0-9a-zA-Z]{8}$")
@@ -31,11 +29,11 @@ public class MedicineDto {
     @NotBlank(message = "Không được để trống trường này")
     @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
-    @NotBlank(message = "Không được để trống trường này")
+//    @NotEmpty(message = "Không được để trống trường này")
     @Min(value = 0, message = "Lợi nhuận bán lẻ không được nhỏ hơn 0")
     private Float retailProfits;
     private Boolean flagDeleted;
-    @NotBlank(message = "Không được để trống trường này")
+//    @NotBlank(message = "Không được để trống trường này")
     private KindOfMedicineDto kindOfMedicineDto;
     //    @Valid
     private UnitDetailDto unitDetailDto;
@@ -181,5 +179,15 @@ public class MedicineDto {
 
     public void setImageMedicineDto(ImageMedicineDto imageMedicineDto) {
         this.imageMedicineDto = imageMedicineDto;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return false;
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }
