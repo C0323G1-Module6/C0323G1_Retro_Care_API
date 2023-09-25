@@ -231,5 +231,37 @@ public class CustomerController {
         }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    @PatchMapping("/update-new/{id}")
+    public ResponseEntity<Map<String,String>> updateNewCustomer(@Valid @RequestBody CustomerDto customerDto,@PathVariable Long id,BindingResult bindingResult) {
+        Customer customer= customerService.findCustomerById(id);
+        new CustomerDto().validate(customerDto,bindingResult);
+        Map<String, String> errors = new HashMap<>();
+        if (bindingResult.hasErrors()) {
+            for (FieldError err : bindingResult.getFieldErrors()) {
+                errors.put(err.getField(), err.getDefaultMessage());
+            }
+        }
 
+            Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
+            if (customerCheckEmail != null){
+                errors.put(EMAIL,"Email đã tồn tại");
+            }
+
+
+            Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
+            if (customerCheckPhone != null){
+                errors.put("phoneNumber","Số điện thoại đã tồn tại");
+            }
+
+        if (errors.size() != 0){
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        }
+        if (customer == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }else {
+            BeanUtils.copyProperties(customerDto,customer);
+            customer.setId(id);
+            customerService.updateCustomer(customer);}
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

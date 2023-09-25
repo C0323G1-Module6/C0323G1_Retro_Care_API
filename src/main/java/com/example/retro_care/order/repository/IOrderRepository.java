@@ -25,15 +25,24 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    @Query(value = "SELECT  o.code , e.name_employee AS nameEmployee , c.name AS nameCustomer, " +
-            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
-            "o.note AS orderNote " +
-            "FROM orders o " +
-            "INNER JOIN employee e ON o.id = e.id " +
-            "INNER JOIN user_order uo ON o.id = uo.id " +
-            "INNER JOIN app_user au ON uo.id = au.id " +
-            "INNER JOIN customer c ON au.id = c.id " +
-            "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
+    @Query(value = " SELECT\n" +
+            "        o.code AS code,\n" +
+            "        MAX(e.name_employee) AS nameEmployee,\n" +
+            "        MAX(c.name) AS nameCustomer,\n" +
+            "        o.date_time AS orderDate,\n" +
+            "        sum(od.current_price) AS orderDetailsPrice,\n" +
+            "        o.note as orderNote\n" +
+            "    FROM\n" +
+            "        orders o\n" +
+            "            LEFT JOIN user_order uo ON o.id = uo.order_id\n" +
+            "            LEFT JOIN app_user au ON uo.app_user_id = au.id\n" +
+            "            LEFT JOIN employee e ON au.id = e.app_user_id\n" +
+            "            LEFT JOIN customer c ON au.id = c.app_user_id\n" +
+            "\t\t\t\tLEFT JOIN order_details od  ON od.order_id = o.id\n" +
+            "            LEFT JOIN user_role ur  ON ur.app_user_id = au.id\n" +
+            "            LEFT JOIN app_role ar  ON ur.app_role_id = ar.id\n" +
+            "  \n" +
+            "    GROUP BY o.`code`", nativeQuery = true)
     Page<IOrderProjection> getAllList1(Pageable pageable);
 
 

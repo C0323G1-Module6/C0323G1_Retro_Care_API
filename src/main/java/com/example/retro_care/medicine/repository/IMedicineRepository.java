@@ -74,6 +74,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             ":#{#medicine.kindOfMedicine.id}, false)", nativeQuery = true)
     void addMedicine(@Param("medicine") Medicine medicine);
 
+
     /**
      * Retrieves the last inserted ID from the database-TinVV
      *
