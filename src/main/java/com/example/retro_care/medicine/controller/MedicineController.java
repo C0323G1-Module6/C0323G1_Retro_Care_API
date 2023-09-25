@@ -236,7 +236,7 @@ public class MedicineController {
             case "searchByActiveElement":
                 medicines = iMedicineService.searchActiveElement(pageable, search);
                 break;
-            case "searchByNameKindOfMedicine":
+            case "searchByKindOfMedicine":
                 medicines = iMedicineService.searchByNameKindOfMedicine(pageable, search);
                 break;
             case "searchByPrice":
