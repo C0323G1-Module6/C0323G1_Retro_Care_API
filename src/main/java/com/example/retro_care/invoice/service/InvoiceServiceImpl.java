@@ -79,6 +79,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+//        Invoice confirmForInvoice = invoiceRepository.getInvoiceById(invoice.getId());
+        //logic for paid
+//        Double totalPrice = 0D;
+//        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+//            totalPrice += (invoiceDetail.getMedicineQuantity() *
+//                    (invoiceDetail.getMedicineId().getPrice() - (invoiceDetail.getMedicineId().getPrice() * (invoiceDetail.getMedicineId().getVat() + invoiceDetail.getMedicineId().getRetailProfits())
+//                    ))
+//            );
+//        }
         return invoiceRepository.editInvoice(invoice);
     }
 
@@ -100,10 +109,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         for (InvoiceDetail invoiceDetail : invoiceDetailSet) {
             UnitDetail unitDetail = unitDetailRepository.findUnitDetailByMedicineId(invoiceDetail.getMedicineId().getId());
             InvoiceDetailEditDto invoiceDetailEditDto = new InvoiceDetailEditDto();
-            BeanUtils.copyProperties(invoiceDetail,invoiceDetailEditDto);
+            BeanUtils.copyProperties(invoiceDetail, invoiceDetailEditDto);
             invoiceDetailEditDto.setUnit(unitDetail.getUnit().getName());
             invoiceDetailEditDtoList.add(invoiceDetailEditDto);
         }
+
         invoiceEditDto.setInvoiceDetailEditDtoList(invoiceDetailEditDtoList);
         return invoiceEditDto;
     }
@@ -183,8 +193,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
-        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn, String sortType) {
+        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn, sortType);
     }
 
 }
