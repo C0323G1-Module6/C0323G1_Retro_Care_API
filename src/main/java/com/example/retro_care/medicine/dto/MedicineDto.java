@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 
 public class MedicineDto implements Validator {
     private Long id;
-//    @Size(max = 8)
+    //    @Size(max = 8)
 //    @Pattern(regexp = "^[0-9a-zA-Z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
