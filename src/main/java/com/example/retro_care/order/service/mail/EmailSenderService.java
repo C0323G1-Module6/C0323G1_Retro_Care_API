@@ -11,9 +11,7 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailSenderService implements IEmailSenderService {
-
     private final JavaMailSender mailSender;
-
 
     public EmailSenderService(JavaMailSender mailSender){
         this.mailSender = mailSender;
@@ -37,7 +35,8 @@ public class EmailSenderService implements IEmailSenderService {
             helper.setTo(emailMessage.getTo());
             helper.setSubject(emailMessage.getSubject());
 
-            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getCartProjections());
+            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getMailProjections(), emailMessage.getTotalPrice(),
+                    emailMessage.getCustomer(), emailMessage.getOrderCode(), emailMessage.getIsVNP());
 
             String htmlContent = emailMessage.getMessage() + tableOfProds;
 

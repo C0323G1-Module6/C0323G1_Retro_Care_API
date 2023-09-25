@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 
 public class SupplierServiceImpl implements ISupplierService {
@@ -17,8 +19,8 @@ public class SupplierServiceImpl implements ISupplierService {
     private ISupplierRepository iSupplierRepository;
 
     @Override
-    public Page<ISupplierProjection> getListSupplier(Pageable pageable) {
-        return iSupplierRepository.getListSupplier(pageable);
+    public Page<ISupplierProjection> getListSupplier(Pageable pageable,String code,String name,String phoneNumber,String address) {
+        return iSupplierRepository.getListSupplier(pageable,code,name,phoneNumber,address);
     }
 
     @Override
@@ -42,7 +44,37 @@ public class SupplierServiceImpl implements ISupplierService {
     }
 
     @Override
-    public Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable) {
-        return iSupplierRepository.findAllListInvoiceByIdSupplier(id,pageable);
+    public Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable,String startDate,String endDate) {
+        return iSupplierRepository.findAllListInvoiceByIdSupplier(id,pageable,startDate,endDate);
+    }
+
+    @Override
+    public ISupplierProjection getSupplierDetailById(Long id) {
+        return iSupplierRepository.getSupplierDetailById(id);
+    }
+
+    @Override
+    public List<Supplier> getListSupplier() {
+        return iSupplierRepository.getListSupplier();
+    }
+
+    @Override
+    public Supplier getSupplierByCode(String code) {
+        return iSupplierRepository.getSupplierByCode(code);
+    }
+
+    @Override
+    public Supplier getSupplierByName(String name) {
+        return iSupplierRepository.getSupplierByName(name);
+    }
+
+    @Override
+    public Supplier getSupplierByEmail(String email) {
+        return iSupplierRepository.getSupplierByEmail(email);
+    }
+
+    @Override
+    public Supplier getSupplierByPhoneNumber(String phoneNumber) {
+        return iSupplierRepository.getSupplierByPhoneNumber(phoneNumber);
     }
 }

@@ -11,10 +11,20 @@ import java.util.List;
 
 @Repository
 public interface IRevenueRepository extends JpaRepository<OrderDetails, Long> {
-    @Query(value = "SELECT o.date_time AS sellDate, SUM(od.current_price * od.quantity) AS total" +
-            "FROM `orders` o JOIN `order_details` od ON o.id = od.order_id" +
-            "WHERE o.flag_deleted = 1" +
-            "AND o.date_time BETWEEN :startDate AND :endDate" +
-            "GROUP BY o.date_time", nativeQuery = true)
+    /**
+     * Author: DuyTV
+     * Goal: Get data of revenue report
+     * Date created: 15/09/2023
+     *
+     * @param startDate
+     * @param endDate
+     * @return List of Revenue
+     */
+    @Query(value = "SELECT o.date_time AS sellDate, SUM(od.current_price * od.quantity) AS total " +
+            "FROM `orders` o JOIN `order_details` od ON o.id = od.order_id " +
+            "WHERE o.flag_deleted = 0 " +
+            "AND o.date_time BETWEEN :startDate AND :endDate " +
+            "GROUP BY o.date_time" +
+            " ORDER BY o.date_time ASC ", nativeQuery = true)
     List<Revenue> findRevenue(@Param(value = "startDate") String startDate, @Param(value = "endDate") String endDate);
 }

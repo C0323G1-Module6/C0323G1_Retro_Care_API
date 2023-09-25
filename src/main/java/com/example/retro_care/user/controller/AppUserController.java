@@ -1,5 +1,6 @@
 package com.example.retro_care.user.controller;
 
+import com.example.retro_care.customer.service.ICustomerService;
 import com.example.retro_care.user.common.RandomStringGenerator;
 import com.example.retro_care.user.common.ValidateAppUser;
 import com.example.retro_care.user.config.JwtTokenUtil;
@@ -10,6 +11,7 @@ import com.example.retro_care.user.model.JwtResponse;
 import com.example.retro_care.user.service.IAppUserService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,7 +40,10 @@ public class AppUserController {
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ICustomerService customerService;
 
+    private static final String LOGIN_FAILED = "Đăng nhập thất bại";
     /**
      * method loginByAccount
      * Creater NhatNHH
@@ -47,21 +52,14 @@ public class AppUserController {
      * return JwtResponse(jwtToken)
      */
     @PostMapping("/login-by-username")
-    public ResponseEntity<?> loginByAccount(@Valid @RequestBody AppUserDto appUserDto,
+    public ResponseEntity<Object> loginByAccount(@Valid @RequestBody AppUserDto appUserDto,
                                             BindingResult bindingResult) {
 
         new AppUserDto().validate(appUserDto, bindingResult);
-//        Map<String, String> errorsMap = new HashMap<>();
         if (bindingResult.hasErrors()) {
-//            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-//                errorsMap.put(fieldError.getField(), fieldError.getDefaultMessage());
-//            }
-//            return ResponseEntity
-//                    .status(HttpStatus.NOT_ACCEPTABLE)
-//                    .body(errorsMap);
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Đăng nhập thất bại");
+                    .body(LOGIN_FAILED);
         }
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
@@ -73,7 +71,7 @@ public class AppUserController {
         } catch (BadCredentialsException e) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
-                    .body("Đăng nhập thất bại");
+                    .body(LOGIN_FAILED);
         }
 
         AppUser appUser = new AppUser();
@@ -84,16 +82,8 @@ public class AppUserController {
 
         String jwtToken = jwtTokenUtil.generateToken(userDetails);
 
-//        ResponseCookie cookie = ResponseCookie.from("JWT", jwtToken)
-//                .httpOnly(false)
-//                .secure(false)
-//                .path("/")
-//                .maxAge(60*60*60)
-//                .build();
-
         return ResponseEntity
                 .ok()
-//                .header(HttpHeaders.SET_COOKIE, cookie.toString())
                 .body(new JwtResponse(jwtToken));
 
     }
@@ -106,23 +96,25 @@ public class AppUserController {
      * return JwtResponse(jwtToken)
      */
     @PostMapping("/login-by-facebook")
-    public ResponseEntity<?> loginByFacebook(@RequestBody FacebookMailRequest facebookMailRequest) {
+    public ResponseEntity<Object> loginByFacebook(@RequestBody FacebookMailRequest facebookMailRequest) {
         if (facebookMailRequest == null ||
                 facebookMailRequest.getFacebookMail() == null ||
                 facebookMailRequest.getFacebookMail().trim().equals("")) {
             return ResponseEntity
                     .badRequest()
-                    .body("Đăng nhập thất bại");
+                    .body(LOGIN_FAILED);
         }
+
         String facebookMail = facebookMailRequest.getFacebookMail();
-        Boolean checkExistAppUser = appUserService.existsByUsername(facebookMail);
+        boolean checkExistAppUser = appUserService.existsByUsername(facebookMail);
         if (!checkExistAppUser) {
             AppUser appUser = new AppUser();
             appUser.setUserName(facebookMail);
             String randomPassword = RandomStringGenerator.generateRandomString();
-            System.out.println(randomPassword);
             appUser.setPassword(passwordEncoder.encode(randomPassword));
             appUserService.createNewAppUser(appUser,"ROLE_CUSTOMER");
+            Long appUserId = appUserService.findAppUserIdByUserName(appUser.getUserName());
+            customerService.saveCustomerForAppUser(appUserId);
         }
         UserDetails userDetails = appUserService.loadUserByUsername(facebookMail);
 
@@ -141,13 +133,13 @@ public class AppUserController {
      * return ResponseEntity.ok(Register Success)
      */
     @PostMapping("/register-by-customer")
-    public ResponseEntity<?> registerByCustomer(@Valid @RequestBody AppUserDto appUserDto,
+    public ResponseEntity<Object> registerByCustomer(@Valid @RequestBody AppUserDto appUserDto,
                                                 BindingResult bindingResult) {
         new AppUserDto().validate(appUserDto, bindingResult);
         ValidateAppUser.checkValidateConfirmAppUserPassword(appUserDto.getConfirmPassword(), bindingResult);
         Map<String, String> errorsMap = new HashMap<>();
         if (!ValidateAppUser.checkVerificationPassword(appUserDto.getPassword(), appUserDto.getConfirmPassword())) {
-            bindingResult.rejectValue("confirmPassword",null,"Mật khẩu không khớp");
+            bindingResult.rejectValue("confirmPassword","","Mật khẩu không khớp");
         }
         if (bindingResult.hasErrors()) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
@@ -157,7 +149,7 @@ public class AppUserController {
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(errorsMap);
         }
-        Boolean existsByUsername = appUserService.existsByUsername(appUserDto.getUserName());
+        boolean existsByUsername = appUserService.existsByUsername(appUserDto.getUserName());
         if (existsByUsername) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
@@ -168,9 +160,11 @@ public class AppUserController {
         BeanUtils.copyProperties(appUserDto, appUser);
         appUser.setPassword(passwordEncoder.encode(appUser.getPassword()));
         Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_CUSTOMER");
-        if (!checkAddNewAppUser) {
+        if (Boolean.FALSE.equals(checkAddNewAppUser)) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Đăng ký thất bại, vui lòng chờ trong giây lất");
         }
+        Long appUserId = appUserService.findAppUserIdByUserName(appUser.getUserName());
+        customerService.saveCustomerForAppUser(appUserId);
         return ResponseEntity.ok("Đăng ký thành công, vui lòng bấm nút đăng nhập");
     }
 
@@ -182,25 +176,24 @@ public class AppUserController {
      * return ResponseEntity.ok(Register Success)
      */
     @PostMapping("/register-by-manager")
-    public ResponseEntity<?> registerByManager(@RequestParam String userName) {
-        //check validate userName
+    public ResponseEntity<Object> registerByManager(@RequestParam String userName) {
+
         String errMsg = ValidateAppUser.checkValidateOnlyAppUserName(userName);
         if (!errMsg.equals("")) {
             return ResponseEntity
                     .status(HttpStatus.NOT_ACCEPTABLE)
                     .body(errMsg);
         }
-        Boolean userNameExisted = appUserService.existsByUsername(userName);
+        boolean userNameExisted = appUserService.existsByUsername(userName);
         if (userNameExisted) {
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
                     .body("Tài khoản này đã tồn tại");
         }
-
         AppUser appUser = new AppUser();
         appUser.setUserName(userName);
         appUser.setPassword(passwordEncoder.encode("123"));
-        Boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_EMPLOYEE");
+        boolean checkAddNewAppUser = appUserService.createNewAppUser(appUser,"ROLE_EMPLOYEE");
         if (!checkAddNewAppUser) {
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -217,8 +210,8 @@ public class AppUserController {
      * return ResponseEntity.ok(Logout Success)
      */
     @GetMapping("/logout/{userName}")
-    public ResponseEntity<?> logout(@PathVariable String userName) {
-        Boolean logout = appUserService.logout(userName);
+    public ResponseEntity<Object> logout(@PathVariable String userName) {
+        boolean logout = appUserService.logout(userName);
         if (logout) {
             return ResponseEntity.ok("Đăng xuất thành công");
         }
@@ -227,5 +220,12 @@ public class AppUserController {
                 .body("Đăng xuất thất bại, vui lòng chờ trong giây lát");
     }
 
-
+    @GetMapping("/get-id-app-user/{userName}")
+    public ResponseEntity<Object> getIdByAppUserName(@PathVariable String userName){
+        Long id = appUserService.findAppUserIdByUserName(userName);
+        if(id == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Không có dữ liệu");
+        }
+        return ResponseEntity.ok().body(id);
+    }
 }

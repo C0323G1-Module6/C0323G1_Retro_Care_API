@@ -1,5 +1,6 @@
 package com.example.retro_care.indication.service;
 
+import com.example.retro_care.indication.dto.IndicationDto;
 import com.example.retro_care.indication.model.Indication;
 import com.example.retro_care.indication.repository.IIndicationRepository;
 import com.example.retro_care.prescription.model.Prescription;
@@ -7,6 +8,7 @@ import com.example.retro_care.prescription.service.IPrescriptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -33,7 +35,8 @@ public class IndicationService implements IIndicationService {
      * Date:17/09/2023
      * return id max of prescription
      */
-    Long maxId(){
+    @Override
+    public Long maxId(){
         List<Prescription> prescriptionList = prescriptionService.getAll();
         Long idMax = prescriptionList.get(0).getId();
         for (Prescription p : prescriptionList) {
@@ -42,6 +45,25 @@ public class IndicationService implements IIndicationService {
             }
         }return idMax;
     }
+
+    @Override
+    public List<IndicationDto> getAllIndicationDto(Long idPrescription) {
+        List<Indication> indicationList = indicationRepository.getAllIndication(idPrescription);
+        List<IndicationDto> indicationDtoList = new ArrayList<>();
+        for (Indication i: indicationList) {
+            IndicationDto indicationDto = new IndicationDto();
+            indicationDto.setDosage(i.getDosage());
+            indicationDto.setFrequency(i.getFrequency());
+            indicationDto.setMedicine(i.getMedicine().getName());
+            indicationDto.setFlagDeleted(i.getFlagDeleted());
+            indicationDto.setPrescription(i.getPrescription().getId());
+            indicationDto.setId(i.getId());
+            indicationDtoList.add(indicationDto);
+        }
+        return indicationDtoList;
+    }
+
+
     /**
      * Author: ThanhKN
      * Goal:Create indication
@@ -51,8 +73,9 @@ public class IndicationService implements IIndicationService {
      */
     @Override
     public void createIndication(Indication indication) {
-        indication.setId(maxId()+1);
-        indicationRepository.createIndication(indication);
+        Prescription prescription = prescriptionService.getPrescriptionById(maxId());
+        indication.setPrescription(prescription);
+        indicationRepository.save(indication);
     }
 
     /**
@@ -88,7 +111,7 @@ public class IndicationService implements IIndicationService {
      */
     @Override
     public void editIndication(Indication indication) {
-        indicationRepository.editIndication(indication);
+        indicationRepository.save(indication);
     }
 
     @Override

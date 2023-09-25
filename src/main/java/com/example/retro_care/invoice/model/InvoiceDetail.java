@@ -105,5 +105,18 @@ public class InvoiceDetail {
         this.expiry = expiry;
     }
 
+    @Override
+    public String toString() {
+        return "InvoiceDetail{" +
+                "id=" + id +
+                ", discount=" + discount +
+                ", expiry=" + expiry +
+                ", medicineQuantity=" + medicineQuantity +
+                ", lot='" + lot + '\'' +
+                ", flagDeleted=" + flagDeleted +
+                ", medicineId=" + medicineId +
+                ", invoiceId=" + invoiceId +
+                '}';
+    }
 
 }

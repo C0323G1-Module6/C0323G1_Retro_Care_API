@@ -35,6 +35,7 @@ public class PrescriptionService implements IPrescriptionService{
      */
     @Override
     public void createPrescription(Prescription prescription) {
+        prescription.setFlagDeleted(false);
         prescriptionRepository.createPrescription(prescription);
     }
 
@@ -73,6 +74,11 @@ public class PrescriptionService implements IPrescriptionService{
         return prescriptionRepository.getPrescriptionById(id);
     }
 
+    @Override
+    public Prescription getPrescriptionByCode(String code) {
+        return prescriptionRepository.getPrescriptionByCode(code);
+    }
+
     /**
      * Author: ThanhKN
      * Goal:edit prescription by id
@@ -82,8 +88,21 @@ public class PrescriptionService implements IPrescriptionService{
      */
     @Override
     public void editPrescription(Prescription prescription) {
-        System.out.println(">>>"+prescription.getId());
-       Integer a = prescriptionRepository.editPrescription(prescription);
-        System.out.println(a);
+        prescriptionRepository.editPrescription(prescription);
+    }
+
+    @Override
+    public Page<Prescription> searchByNamePrescription(String name, Pageable pageable) {
+        return prescriptionRepository.searchByNamePrescription(name,pageable);
+    }
+
+    @Override
+    public Page<Prescription> searchByCodePrescription(String code, Pageable pageable) {
+        return prescriptionRepository.searchByCodePrescription(code,pageable);
+    }
+
+    @Override
+    public Page<Prescription> searchBySymptomsPrescription(String symptoms, Pageable pageable) {
+        return prescriptionRepository.searchBySymptomsPrescription(symptoms,pageable);
     }
 }

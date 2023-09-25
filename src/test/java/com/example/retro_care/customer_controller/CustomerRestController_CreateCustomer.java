@@ -31,12 +31,12 @@ public class CustomerRestController_CreateCustomer {
     @Test
     public void create_Customer_12() throws Exception {
         CustomerDto customerDto = new CustomerDto();
-        customerDto.setCode("KH-999");
-        customerDto.setName("Nguyễn Văn Tân");
+        customerDto.setCode("KH-112");
+        customerDto.setName("Nguyễn Văn Tình");
         customerDto.setBirthday("2002-10-03");
         customerDto.setAddress("16 Mỹ khê 6 Sơn trà tp Đà Nẵng");
-        customerDto.setPhoneNumber("0339774756");
-        customerDto.setEmail("TanTre@gmail.com");
+        customerDto.setPhoneNumber("0339779768");
+        customerDto.setEmail("thoaitin@gmail.com");
         customerDto.setNote("Khách vip");
         AppUser appUser = new AppUser();
         appUser.setId(1L);
@@ -56,6 +56,7 @@ public class CustomerRestController_CreateCustomer {
     public void create_Customer_name_13() throws Exception {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setCode("KH-999");
+        customerDto.setName(null);
         customerDto.setBirthday("2019-04-01");
         customerDto.setAddress("16 Mỹ khê 6 Sơn trà tp Đà Nẵng");
         customerDto.setPhoneNumber("0339774756");
@@ -103,7 +104,7 @@ public class CustomerRestController_CreateCustomer {
     public void create_Customer_name_15() throws Exception {
         CustomerDto customerDto = new CustomerDto();
         customerDto.setCode("KH-789");
-        customerDto.setName("1");
+        customerDto.setName("ffgnv1");
         customerDto.setBirthday("2002-04-02");
         customerDto.setAddress("16 Bạch đằng 6 Sơn trà tp Đà Nẵng");
         customerDto.setPhoneNumber("0913422887");
@@ -155,6 +156,7 @@ public class CustomerRestController_CreateCustomer {
         customerDto.setBirthday("2002-04-02");
         customerDto.setPhoneNumber("0913422887");
         customerDto.setEmail("thoaijtin@gmail.com");
+        customerDto.setAddress(null);
         customerDto.setNote("Khách cực giàu");
         AppUser appUser = new AppUser();
         appUser.setId(1L);
@@ -224,6 +226,7 @@ public class CustomerRestController_CreateCustomer {
         customerDto.setCode("KH-789");
         customerDto.setName("Đàm Thoại Tin");
         customerDto.setAddress("Trần Việt Duy");
+        customerDto.setBirthday(null);
         customerDto.setPhoneNumber("0913422887");
         customerDto.setEmail("thoaijtin@gmail.com");
         customerDto.setNote("Khách cực giàu");
@@ -320,7 +323,7 @@ public class CustomerRestController_CreateCustomer {
         customerDto.setName("Trần Việt Duy");
         customerDto.setAddress("20 Võ Nguyên Giáp");
         customerDto.setBirthday("1997-4-2");
-//        customerDto.setPhoneNumber("");
+        customerDto.setPhoneNumber(null);
         customerDto.setEmail("duyTran@gmail.com");
         customerDto.setNote("Khách cực giàu");
         AppUser appUser = new AppUser();
@@ -368,7 +371,7 @@ public class CustomerRestController_CreateCustomer {
         customerDto.setName("Trần Việt Duy");
         customerDto.setAddress("20 Võ Nguyên Giáp");
         customerDto.setBirthday("1997-4-2");
-        customerDto.setPhoneNumber("03397787689");
+        customerDto.setPhoneNumber("033977876899");
         customerDto.setEmail("duyTran@gmail.com");
         customerDto.setNote("Khách cực giàu");
         AppUser appUser = new AppUser();
@@ -394,7 +397,7 @@ public class CustomerRestController_CreateCustomer {
         customerDto.setAddress("20 Võ Nguyên Giáp");
         customerDto.setBirthday("1997-4-2");
         customerDto.setPhoneNumber("0339778768");
-//        customerDto.setEmail("duyTran@gmail.com");
+        customerDto.setEmail(null);
         customerDto.setNote("Khách cực giàu");
         AppUser appUser = new AppUser();
         appUser.setId(1L);

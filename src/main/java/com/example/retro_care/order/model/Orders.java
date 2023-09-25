@@ -5,14 +5,13 @@ import java.time.LocalDateTime;
 
 @Entity
 public class Orders {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String code;
 
-
+    @Column(columnDefinition = "datetime")
     private LocalDateTime dateTime;
 
     @Column(name = "flag_deleted")

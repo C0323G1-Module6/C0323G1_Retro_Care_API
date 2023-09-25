@@ -1,8 +1,10 @@
 package com.example.retro_care.customer.service;
 
+import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.customer.dto.ICustomerDto;
 import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.customer.repository.ICustomerRepository;
+import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,30 @@ import org.springframework.stereotype.Service;
 public class CustomerService implements ICustomerService {
     @Autowired
     private ICustomerRepository customerRepository;
+    /**
+     * Author: HANHNLM
+     * Goal: update customers online
+     */
+    @Override
+    public int updateOnlineCustomer(Customer customer) {
+        return customerRepository.updateOnlineCustomer(customer);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits email of customer
+     */
+    @Override
+    public boolean existsByEmail(String email, Long id) {
+        return customerRepository.existsByEmailAndIdNotAndFlagDeletedIsFalse(email,id);
+    }
+    /**
+     * Author: HANHNLM
+     * Goal: exits phone of customer
+     */
+    @Override
+    public boolean existsByPhoneNumber(String phoneNumber, Long id) {
+        return customerRepository.existsByPhoneNumberAndIdNotAndFlagDeletedIsFalse(phoneNumber,id);
+    }
 
     /**
      * Author: TinDT
@@ -20,17 +46,26 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public Customer saveCustomer(Customer customer) {
-        customer.setFlagDeleted(true);
+        customer.setFlagDeleted(false);
         customer.setPoint(0l);
-        customerRepository.saveCustomer(customer.getCode(),customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getPoint(),customer.getNote(),customer.getFlagDeleted());
-
-        Customer checkingCustomer = customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
-        return checkingCustomer;
+        customerRepository.saveCustomer(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted());
+        return customerRepository.findCustomerByPhoneNumber(customer.getPhoneNumber());
     }
 
+    /**
+     * Author: TinDT
+     * Goal: create customer for app user
+     * * return customer
+     */
     @Override
-    public Page<Customer> findAllByName(Pageable pageable, String searchName) {
-        return customerRepository.findCustomerByNameContaining(pageable,searchName);
+    public void saveCustomerForAppUser(Long id) {
+        Customer customer = new Customer();
+        String code = FormatCustomer.generateCustomerCode();
+        customer.setCode(code);
+        customer.setFlagDeleted(false);
+        customer.setPoint(0l);
+        customerRepository.saveCustomerHasAppUser(customer.getCode(), customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getPoint(), customer.getNote(), customer.getFlagDeleted(), id);
+
     }
 
     /**
@@ -40,8 +75,7 @@ public class CustomerService implements ICustomerService {
      */
     @Override
     public void updateCustomer(Customer customer) {
-        System.out.println(customer);
-        customerRepository.updateCustomer(customer.getName(),customer.getBirthday(),customer.getAddress(),customer.getPhoneNumber(),customer.getEmail(),customer.getNote(),customer.getId());
+        customerRepository.updateCustomer(customer.getName(), customer.getBirthday(), customer.getAddress(), customer.getPhoneNumber(), customer.getEmail(), customer.getNote(), customer.getId());
 
     }
 
@@ -75,13 +109,23 @@ public class CustomerService implements ICustomerService {
     }
     /**
      * Author: TinDT
-     * Goal: find customer by email
+     * Goal: find customer by phone
      * * return customer
      */
     @Override
     public Customer findCustomerByPhone(String phoneNumber) {
         return customerRepository.findCustomerByPhoneNumber(phoneNumber);
     }
+    /**
+     * Author: TinDT
+     * Goal: find customer by app_user_id
+     * * return customer
+     */
+    @Override
+    public Customer findCustomerByAppUser(Long appUserId) {
+        return customerRepository.findCustomerByAppUser(appUserId);
+    }
+
 
     /**
      * Author: QuyenHT
@@ -89,9 +133,8 @@ public class CustomerService implements ICustomerService {
      * return list of customers
      */
     @Override
-    public Page<ICustomerDto> findAllCustomer(String searchInput, String code, String address, String phoneNumber, String groupValue, String sortItem, Pageable pageable) {
-        return customerRepository.findAllCustomer(searchInput, code, address, phoneNumber, groupValue, sortItem, pageable);
-
+    public Page<ICustomerDto> findAllCustomer(String name, String code, String address, String phoneNumber, String groupValue, Pageable pageable) {
+        return customerRepository.findAllCustomer(name, code, address, phoneNumber, groupValue, pageable);
     }
 
     /**

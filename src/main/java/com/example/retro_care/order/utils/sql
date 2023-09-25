@@ -1,9 +1,11 @@
+-- HanhNLM procedure Query SQL - altered 239 1700
+
 ALTER TABLE cart_details
     ADD UNIQUE INDEX user_medicine_index (app_user_id, medicine_id);
 
-
 -------------------------------------------------------------------------
-CREATE PROCEDURE createOrder(IN user_id BIGINT)
+
+CREATE PROCEDURE createOrder(IN user_id BIGINT, IN loyaltyPoint BIGINT, IN cart_ids TEXT,OUT return_order_id BIGINT)
 BEGIN
     -- create a new order
     INSERT INTO orders (date_time, flag_deleted)
@@ -12,7 +14,7 @@ BEGIN
     -- get the ID of the new added order
     SET @order_id = LAST_INSERT_ID();
 
-    -- uupdate the 'code' field with the prefix 'KOL' and the orderId
+    -- update the 'code' field with the prefix 'KOL' and the orderId
     UPDATE orders
     SET code = CONCAT('KOL', @order_id)
     WHERE id = @order_id;
@@ -26,31 +28,41 @@ BEGIN
     SELECT @order_id, cd.medicine_id, cd.quantity, m2.price
     FROM cart_details cd
     inner join medicine m2 on m2.id = cd.medicine_id
-    WHERE app_user_id = user_id;
+    WHERE app_user_id = user_id AND FIND_IN_SET(cd.id, cart_ids);
 
     -- update the quantity in the medicine table
     UPDATE medicine AS m
-        INNER JOIN cart_details AS c ON m.id = c.medicine_id
-    SET m.quantity = m.quantity - c.quantity
+    INNER JOIN cart_details AS c ON m.id = c.medicine_id AND FIND_IN_SET(c.id, cart_ids)
+    INNER JOIN unit_detail AS ud ON m.id = ud.medicine_id
+    SET m.quantity = m.quantity - (c.quantity * ud.conversion_rate)
     WHERE c.app_user_id = user_id;
 
+    -- update point
+    update customer c
+    set c.point = loyaltyPoint
+    where c.app_user_id = user_id;
+
     -- delete the items from the cart
-    DELETE FROM cart_details WHERE app_user_id = user_id;
+    DELETE FROM cart_details WHERE app_user_id = user_id AND FIND_IN_SET(id, cart_ids);
+
+    -- set the OUT parameter to the order ID
+        SET return_order_id = @order_id;
 
 END;
 
 
-
-
 -------------------------------------------------------------------------
 drop procedure createOrder;
+drop procedure getCartDetailsForMail;
+drop procedure getCartDetails;
 
 
 -------------------------------------------------------------------------
 
-CREATE PROCEDURE getCartDetailsForMail(IN user_id BIGINT)
+CREATE PROCEDURE getCartDetails(IN user_id BIGINT)
 BEGIN
-    SELECT c.email as customerEmail, m.name AS medicineName,
+    SELECT c.id as customerId, c.phone_number as phoneNumber,
+     cd.id as cartId, m.id as medicineId, c.email as customerEmail, m.name AS medicineName,
            ( SELECT image_path
              FROM image_medicine im
              WHERE im.medicine_id = m.id
@@ -59,12 +71,36 @@ BEGIN
            m.price as medicinePrice,
            cd.quantity AS quantityInCart,
            c.name AS customerName,
-           c.address AS address
+           c.address AS address,
+           c.point as loyaltyPoint,
+           m.quantity as medicineQuantity,
+           ud.conversion_rate as conversionRate
     FROM cart_details as cd
              JOIN medicine m ON cd.medicine_id = m.id
+             JOIN unit_detail AS ud ON m.id = ud.medicine_id
              JOIN app_user au ON cd.app_user_id = au.id
              JOIN customer c ON au.id = c.app_user_id
     WHERE cd.app_user_id = user_id;
 END;
+----------------------------------------------------------------
+CREATE PROCEDURE getCartDetailsForMail(IN order_id BIGINT)
+BEGIN
+    SELECT
+        m.name AS medicineName,
+        ( SELECT image_path
+          FROM image_medicine im
+          WHERE im.medicine_id = m.id
+          ORDER BY im.id
+          LIMIT 1) as medicineImage,
+        m.price as medicinePrice,
+        od.quantity AS quantityInCart
+    FROM order_details as od
+             JOIN orders o on od.order_id = o.id
+             JOIN medicine m ON od.medicine_id = m.id
+    WHERE od.order_id = order_id;
+END;
+-----
+SET GLOBAL sql_mode=(SELECT REPLACE(@@sql_mode,'ONLY_FULL_GROUP_BY',''));
+--------
 
--- alter
+--last altered 249 23:23

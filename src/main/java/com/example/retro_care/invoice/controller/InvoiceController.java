@@ -1,10 +1,6 @@
 package com.example.retro_care.invoice.controller;
 
-import com.example.retro_care.invoice.model.IInvoiceResult;
-import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.model.InvoiceDetailDto;
-import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.model.*;
 import com.example.retro_care.invoice.service.IInvoiceService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -174,8 +170,9 @@ public class InvoiceController {
     }
 
     @GetMapping("/detail/{id}")
-    public ResponseEntity<?> getInvoiceDetailById(@PathVariable Long id ){
+    public ResponseEntity<?> getCustomerById(@PathVariable Long id ){
         List<IInvoiceResult> medicine = invoiceService.getInvoiceDetailById(id);
+
         if(medicine==null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -218,11 +215,11 @@ public class InvoiceController {
      * @return an invoice
      */
     @GetMapping("/{invoiceId}")
-    public ResponseEntity<Invoice> getInvoiceById(@PathVariable Long invoiceId) {
-        Invoice invoice = invoiceService.getInvoiceById(invoiceId);
-        if (invoice == null)
+    public ResponseEntity<InvoiceEditDto> getInvoiceById(@PathVariable Long invoiceId) {
+        InvoiceEditDto invoiceEditDto = invoiceService.getInvoiceById(invoiceId);
+        if (invoiceEditDto== null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        return new ResponseEntity<>(invoice, HttpStatus.OK);
+        return new ResponseEntity<>(invoiceEditDto, HttpStatus.OK);
     }
 
     /**
@@ -234,6 +231,8 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        System.out.println(invoiceDto);
+
         if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);

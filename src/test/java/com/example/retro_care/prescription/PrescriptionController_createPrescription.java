@@ -101,7 +101,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -129,7 +129,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -156,7 +156,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -184,7 +184,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -212,7 +212,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -240,7 +240,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))
@@ -267,7 +267,7 @@ public class PrescriptionController_createPrescription {
 
         Patient patient = new Patient();
         patient.setId(1L);
-        prescriptionDto.setPatient(patient);
+//        prescriptionDto.setPatient(patient);
         this.mockMvc.perform(
                         MockMvcRequestBuilders.post("/prescription/create")
                                 .content(this.objectMapper.writeValueAsString(prescriptionDto))

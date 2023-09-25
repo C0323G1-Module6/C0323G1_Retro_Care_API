@@ -1,24 +1,39 @@
 package com.example.retro_care.order.model;
 
+import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.order.projection.CartProjection;
+import com.example.retro_care.order.projection.MailProjection;
 
 import java.util.List;
 
 public class EmailMessage {
-
     private String to;
     private String subject;
     private String message;
-    private List<CartProjection> cartProjections;
+
+    private Long totalPrice;
+
+    private List<MailProjection> mailProjections;
+    private Customer customer;
+
+    private String orderCode;
+
+    private boolean isVNP;
 
     public EmailMessage() {
     }
 
-    public EmailMessage(String to, String subject, String message, List<CartProjection> cartProjections) {
+    public EmailMessage(String to, String subject, String message, Long totalPrice,
+                        List<MailProjection> mailProjections, Customer customer, String orderCode, boolean isVNP) {
         this.to = to;
         this.subject = subject;
         this.message = message;
-        this.cartProjections = cartProjections;
+        this.totalPrice = totalPrice;
+        this.mailProjections = mailProjections;
+        this.customer = customer;
+        this.orderCode = orderCode;
+        this.isVNP = isVNP;
+
     }
 
     public String getTo() {
@@ -45,11 +60,44 @@ public class EmailMessage {
         this.message = message;
     }
 
-    public List<CartProjection> getCartProjections() {
-        return cartProjections;
+    public Long getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setCartProjections(List<CartProjection> cartProjections) {
-        this.cartProjections = cartProjections;
+    public void setTotalPrice(Long totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public List<MailProjection> getMailProjections() {
+        return mailProjections;
+    }
+
+
+    public void setMailProjections(List<MailProjection> mailProjections) {
+        this.mailProjections = mailProjections;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public String getOrderCode() {
+        return orderCode;
+    }
+
+    public void setOrderCode(String orderCode) {
+        this.orderCode = orderCode;
+    }
+
+    public boolean getIsVNP() {
+        return isVNP;
+    }
+
+    public void setIsVNP(boolean VNP) {
+        isVNP = VNP;
     }
 }

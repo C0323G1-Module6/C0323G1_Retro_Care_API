@@ -1,19 +1,17 @@
 package com.example.retro_care.order.repository;
 
-import com.example.retro_care.order.model.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
-import com.sun.tools.javac.util.List;
+import com.example.retro_care.order.projection.IOrderProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Repository
@@ -28,20 +26,17 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    @Query(value = "SELECT  o.code , e.name_employee AS name_employee , c.name AS name_customer, " +
-            "DATE(o.date_time) AS order_date, TIME(o.date_time) AS order_time, od.current_price AS order_details_price, " +
-            "o.note AS order_note " +
+    @Query(value = "SELECT  o.code , e.name_employee AS nameEmployee , c.name AS nameCustomer, " +
+            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
+            "o.note AS orderNote " +
             "FROM orders o " +
             "INNER JOIN employee e ON o.id = e.id " +
             "INNER JOIN user_order uo ON o.id = uo.id " +
             "INNER JOIN app_user au ON uo.id = au.id " +
             "INNER JOIN customer c ON au.id = c.id " +
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
-//    @Query(nativeQuery = true, value = "select * from orders")
     Page<IOrderProjection> getAllList1(Pageable pageable);
 
-
-//
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -58,8 +53,8 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN user_order as uo ON o.id = uo.id " +
             "INNER JOIN app_user as au ON uo.id = au.id " +
             "INNER JOIN customer as customer au.id = customer.id " +
-            "INNER JOIN order_details as od ON o.id = od.id where o.flag_delete=0 and o.id=:id ",nativeQuery = true)
-    Orders findByOrder(@Param("id")Long id);
+            "INNER JOIN order_details as od ON o.id = od.id where o.flag_delete=0 and o.id=:id ", nativeQuery = true)
+    Orders findByOrder(@Param("id") Long id);
 
 
     /**
@@ -68,14 +63,13 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * date create: 15/09/2023
      *
      * @param code
-     * @param localDate
      * @param note
      */
     @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "insert into orders(code, date_time, flag_delete, note)\n" +
-            "values (:code, :date_time, false, :note)")
-    void createOrder(@Param("code") String code, @Param("date_time") LocalDate localDate, @Param("note") String note);
+    @Query(nativeQuery = true, value = "insert into orders(code, date_time, flag_deleted, note)\n" +
+            "values (:code, localtime(), false, :note)")
+    void createOrder(@Param("code") String code, @Param("note") String note);
 
 
     /**
@@ -85,10 +79,8 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      *
      * @return the newest orders
      */
-    @Query(nativeQuery = true, value = "select id, code, date_time, flag_delete, note from order " +
-            "where id=last_insert_id() and flag_delete = false")
-    Orders getLastInsertOrders();
-
+    @Query(nativeQuery = true, value = "SELECT MAX(id) FROM orders WHERE flag_deleted = false")
+    Long getLastInsertOrders();
 
 
     /**
@@ -159,7 +151,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Transactional
     @Modifying
-    @Query(value = "update orders set flag_delete = true where id = :id", nativeQuery = true)
+    @Query(value = "update orders set flag_deleted = true where id = :id", nativeQuery = true)
     void deleteOrder(@Param("id") Long id);
 
     /**
@@ -170,11 +162,30 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    @Query(value = "SELECT * FROM orders WHERE datetime >= :startDateTime AND datetime <= :endDateTime", nativeQuery = true)
-    List<Orders> findByDateTimeRange(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
+    @Query(value ="SELECT o.code AS code, e.name_employee AS nameEmployee , customer.name AS nameCustomer, " +
+            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
+            "o.note AS orderNote " +
+            "FROM orders as o " +
+            "INNER JOIN employee as e ON o.id = e.id " +
+            "INNER JOIN user_order as uo ON o.id = uo.id " +
+            "INNER JOIN app_user as au ON uo.id = au.id " +
+            "INNER JOIN customer as customer ON au.id = customer.id " +
+            "INNER JOIN order_details as od ON o.id = od.id where o.flag_deleted = 0 " +
+            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime", nativeQuery = true)
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
 
+    /**
+     * Create by: HanhNLM;
+     * Create Date: 15/09/2023;
+     * Function: create new order and update loyalty point of a customer;
+     *
+     * @param : appUserId, loyaltyPoint;
+     */
     @Modifying
-    @Query(nativeQuery = true, value = "call createOrder(:appUserId)")
-    void createOrderForUser(@Param("appUserId") Long appUserId);
+    @Procedure("createOrder")
+    Long createOrderForUser(@Param("appUserId") Long appUserId, @Param("loyaltyPoint") Long loyaltyPoint,
+                               @Param("cartIDsInText") String cartIDsInText);
+    @Query(nativeQuery = true, value = "SELECT code FROM orders WHERE id = :orderId")
+    String getOrderCodeByOrderId(@Param("orderId") Long orderId);
 
 }

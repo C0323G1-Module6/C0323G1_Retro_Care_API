@@ -1,13 +1,10 @@
 package com.example.retro_care.user.repository;
 
 import com.example.retro_care.user.model.AppUser;
-import net.bytebuddy.asm.Advice;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
@@ -18,8 +15,11 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
      * param: String userName
      * return: AppUser
      */
-    @Query(value = "select * from retro_care.app_user where user_name = :name", nativeQuery = true)
+
+    @Transactional()
+    @Query(value = "select * from retro_care.app_user where user_name = :name and flag_deleted = 0 ", nativeQuery = true)
     AppUser findAppUserByName(@Param("name") String userName);
+
 
     /**
      * method: addNewAppUser
@@ -63,6 +63,7 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
      * param: String userName
      * return: Long
      */
+
     @Query(value = " select au.id from retro_care.app_user au where au.user_name = :userName ",nativeQuery = true)
     Long findIdByUserName(@Param("userName") String userName);
 
@@ -73,6 +74,7 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
      * param: String userName
      * return: Integer
      */
+
     @Query(value =  " select r.id from app_role r where r.name = :name " ,nativeQuery = true)
     Long findAppRoleIdByName(@Param("name")String name);
 
@@ -87,5 +89,14 @@ public interface IAppUserRepository extends JpaRepository<AppUser, Long> {
     @Transactional
     @Query(value = " call addRoleForAppUser(:appRoleId,:appUserId) ",nativeQuery = true)
     void insertRoleForCustomer(@Param("appRoleId") Long appRoleId,@Param("appUserId") Long appUserId);
-
+    /**
+     * method:  existsById
+     * Creater: HanhNLM
+     * Date: 15-09-2023
+     * param: Long aLong
+     * return: boolean
+     * function: check user existence by id
+     */
+    @Override
+    boolean existsById(Long aLong);
 }

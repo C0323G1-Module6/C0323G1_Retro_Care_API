@@ -1,48 +1,50 @@
 package com.example.retro_care.medicine.dto;
 
-import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
-import com.example.retro_care.medicine.model.ImageMedicine;
-import com.example.retro_care.medicine.model.UnitDetail;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 
 public class MedicineDto implements Validator {
     private Long id;
-
+//    @Size(max = 8)
+//    @Pattern(regexp = "^[0-9a-zA-Z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
+//    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
-    @Min(value = 1, message = "Giá không được nhỏ hơn 1")
+    @NotNull(message = "Giá không được để trống.")
+    @Min(value = 0, message = "Giá không được là số âm")
     private Double price;
     private Long quantity;
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
-
-
-
-
+    @Size(max = 50, message = "Nhà sản xuất không được dài hơn 50 kí tự")
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
+    @NotBlank(message = "Không được để trống trường này")
+    @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
-    @Min(value = 1, message = "Lợi nhuận bán lẻ không được nhỏ hơn 1")
+
+    @NotNull(message = "Không được để trống.")
+    @Min(value = 0, message = "Lợi nhuận bán lẻ không được nhỏ hơn 0")
     private Float retailProfits;
     private Boolean flagDeleted;
-    private KindOfMedicine kindOfMedicine;
-    @Valid
+    private KindOfMedicineDto kindOfMedicineDto;
     private UnitDetailDto unitDetailDto;
-    private ImageMedicine imageMedicine;
+    private ImageMedicineDto imageMedicineDto;
 
     public MedicineDto() {
     }
 
-    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicine kindOfMedicine, UnitDetail unitDetail, ImageMedicine imageMedicine) {
+
+    public MedicineDto(Long id, String code, String name, Double price, Long quantity, Float vat, String note, String maker, String activeElement, String origin, Float retailProfits, Boolean flagDeleted, KindOfMedicineDto kindOfMedicineDto, UnitDetailDto unitDetailDto, ImageMedicineDto imageMedicineDto) {
         this.id = id;
         this.code = code;
         this.name = name;
@@ -55,9 +57,9 @@ public class MedicineDto implements Validator {
         this.origin = origin;
         this.retailProfits = retailProfits;
         this.flagDeleted = flagDeleted;
-        this.kindOfMedicine = kindOfMedicine;
+        this.kindOfMedicineDto = kindOfMedicineDto;
         this.unitDetailDto = unitDetailDto;
-        this.imageMedicine = imageMedicine;
+        this.imageMedicineDto = imageMedicineDto;
     }
 
     public Long getId() {
@@ -156,12 +158,12 @@ public class MedicineDto implements Validator {
         this.flagDeleted = flagDeleted;
     }
 
-    public KindOfMedicine getKindOfMedicine() {
-        return kindOfMedicine;
+    public KindOfMedicineDto getKindOfMedicineDto() {
+        return kindOfMedicineDto;
     }
 
-    public void setKindOfMedicine(KindOfMedicine kindOfMedicine) {
-        this.kindOfMedicine = kindOfMedicine;
+    public void setKindOfMedicineDto(KindOfMedicineDto kindOfMedicineDto) {
+        this.kindOfMedicineDto = kindOfMedicineDto;
     }
 
     public UnitDetailDto getUnitDetailDto() {
@@ -172,12 +174,12 @@ public class MedicineDto implements Validator {
         this.unitDetailDto = unitDetailDto;
     }
 
-    public ImageMedicine getImageMedicine() {
-        return imageMedicine;
+    public ImageMedicineDto getImageMedicineDto() {
+        return imageMedicineDto;
     }
 
-    public void setImageMedicine(ImageMedicine imageMedicine) {
-        this.imageMedicine = imageMedicine;
+    public void setImageMedicineDto(ImageMedicineDto imageMedicineDto) {
+        this.imageMedicineDto = imageMedicineDto;
     }
 
     @Override
