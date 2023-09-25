@@ -101,8 +101,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/carts/get-loyalty-point/**",
                         "/api/carts/check-availability/**",
                         "/payment/**",
-                        "/customers/api/online-customer/**"
-
+                        "/customers/api/online-customer/**",
+                        "/customers/user/{id}/**"
 
                 ).hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER","ROLE_CUSTOMER","ROLE_EMPLOYEE")
                 .antMatchers(
@@ -141,7 +141,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/kindOfMedicines/get/**",
                         "/api/kindOfMedicines/get/**",
 
-                        // chua merg code
                         "/api/medicine/code/create/**",
                         "/api/medicine/{id}/**",
                         "/api/medicine/**",
@@ -152,15 +151,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/medicine/get-unitDetail/{id}/**",
                         "/api/medicine/get-list-for-invoice/**",
 
-                        //Chưa xong, chờ tin
-                        "/customers/api/dto/create/**",
                         "/customers/api/dto/create/**",
                         "/customers/api/create/**",
                         "/customers/api/update/{id}/**",
                         "/customers/api/{id}/**",
+                        "/customers/api/user/{id}/**",
                         "/customers/api/list/**",
-                        "/customers/api/list-customer/**",
                         "/customers/api/delete/{id}/**",
+
 
                         "/api/supplier/**",
                         "/api/supplier/delete/{id}/**",
