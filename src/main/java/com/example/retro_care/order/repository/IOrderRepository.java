@@ -124,7 +124,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Query(nativeQuery = true, value = "select point\n" +
             "from customer\n" +
-            "where app_user_id = :id;\n")
+            "where app_user_id = :id\n")
     Long getPointCustomerByAppUserId(@Param("id") Long id);
 
 
