@@ -34,7 +34,7 @@ public class HomeController {
             @RequestParam(defaultValue = "", required = false) String type) {
         List<MedicineForHomePageDTO> medicines = homeService.findMedicineForHomepage(keyword, type);
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
@@ -49,7 +49,7 @@ public class HomeController {
     public ResponseEntity<List<MedicineForHomePageDTO>> findFavoriteMedicineForHomepage() {
         List<MedicineForHomePageDTO> medicines = homeService.findFavoriteMedicineForHomepage();
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
@@ -65,7 +65,7 @@ public class HomeController {
         Pageable pageable = PageRequest.of(page, limit, sort);
         Page<MedicineForHomePageDTO> medicines = homeService.getListMedicineWithPagination(keyword,type,pageable);
         if (medicines.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(medicines, HttpStatus.OK);
     }
