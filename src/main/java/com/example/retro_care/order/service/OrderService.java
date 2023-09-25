@@ -43,32 +43,6 @@ public class OrderService implements IOrderService {
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-    @Override
-    public Orders findOrderById(Long id) {
-        return iOrderRepository.findByOrder(id);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    @Override
-    public void deleteOrderById(Long id) {
-        iOrderRepository.deleteOrder(id);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
      * Function: Filter for order by datetime;
      *
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
