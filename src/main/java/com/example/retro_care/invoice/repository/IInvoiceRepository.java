@@ -41,7 +41,9 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
 
 
     @Query(value = "SELECT i.code, m.id as idMedicine, m.active_element, m.code as codeMedicine, m.maker, m.name as nameMedicine,\n" +
-            "       m.note as noteMedicine, m.origin, m.price, m.quantity, m.retail_profits as retailProfits,m.active_element as activeElement, m.vat,\n" +
+            "       m.note as noteMedicine, m.origin, " +
+            "        ROUND((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) AS importPrice,\n" +
+            "       m.quantity, m.retail_profits as retailProfits,m.active_element as activeElement, m.vat,\n" +
             "       m.kind_of_medicine_id, k.code as codeKind, k.name as nameKind\n " +
             "        FROM invoice i \n" +
             "        JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
@@ -90,7 +92,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "    subquery.nameSupplier,\n" +
             "    subquery.address,\n" +
             "    sum(subquery.total) AS total,\n" +
-            "    sum(subquery.billOwed) AS billOwed\n" +
+            "    (SUM(subquery.total) - i.paid) AS billOwed\n" +
             "FROM\n" +
             "    invoice i\n" +
             "JOIN (\n" +
@@ -99,8 +101,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "        s.name AS nameSupplier,\n" +
             "        s.address AS address,\n" +
             "        ROUND((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) AS importPrice,\n" +
-            "        ROUND(SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) AS total,\n" +
-            "        ROUND((SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) - i.paid) AS billOwed\n" +
+            "        ROUND(SUM((m.price - (m.price * (((m.retail_profits + m.vat) / 100) * ind.discount)))) * ind.medicine_quantity) AS total\n" +
             "    FROM\n" +
             "        invoice i\n" +
             "    JOIN invoice_detail ind ON i.id = ind.invoice_id\n" +
