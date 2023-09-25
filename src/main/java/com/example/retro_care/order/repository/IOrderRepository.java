@@ -19,10 +19,9 @@ import java.time.LocalDateTime;
 public interface IOrderRepository extends JpaRepository<Orders, Long> {
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
+     * Author: TanNV
+     * Date: 25/09/2023
+     * get list invoice order
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
@@ -36,6 +35,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN customer c ON au.id = c.id " +
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
     Page<IOrderProjection> getAllList1(Pageable pageable);
+
 
     /**
      * Create by: VuDT;
@@ -83,6 +83,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     Long getLastInsertOrders();
 
 
+
     /**
      * author: VuNL
      * date create: 15/09/2023
@@ -123,7 +124,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Query(nativeQuery = true, value = "select point\n" +
             "from customer\n" +
-            "where app_user_id = :id;\n")
+            "where app_user_id = :id\n")
     Long getPointCustomerByAppUserId(@Param("id") Long id);
 
 
@@ -142,23 +143,9 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     void updatePointCustomer(@Param("point") Long point, @Param("id") Long id);
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    @Transactional
-    @Modifying
-    @Query(value = "update orders set flag_deleted = true where id = :id", nativeQuery = true)
-    void deleteOrder(@Param("id") Long id);
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Filter for order by datetime;
-     *
+     * Author:TanNv
+     * Date:25/09/2023
+     * Get list by date time
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */

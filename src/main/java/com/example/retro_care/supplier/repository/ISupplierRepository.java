@@ -26,59 +26,59 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      * return Page<ISupplierProjection>
      */
     @Query(nativeQuery = true,
-            value = "SELECT\n" +
-                    "    s.id AS idSupplier,\n" +
-                    "    s.code AS codeSupplier,\n" +
-                    "    s.name AS nameSupplier,\n" +
-                    "    s.phone_number AS phoneNumber,\n" +
-                    "    s.address AS address,\n" +
-                    "    s.note AS note,\n" +
-                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
-                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
-                    "    END AS debt\n" +
-                    "FROM\n" +
-                    "    supplier s\n" +
-                    "        LEFT JOIN\n" +
-                    "    (\n" +
-                    "        SELECT\n" +
-                    "            i.supplier_id,\n" +
-                    "            SUM(i.paid) OVER (PARTITION BY i.supplier_id) AS total_paid_amount\n" +
-                    "        FROM\n" +
-                    "            invoice i\n" +
-                    "        WHERE\n" +
-                    "            i.flag_deleted = 0\n" +
-                    "    ) AS paid_amounts ON s.id = paid_amounts.supplier_id\n" +
-                    "        LEFT JOIN\n" +
-                    "    (\n" +
-                    "        SELECT\n" +
-                    "            i.supplier_id,\n" +
-                    "            SUM(id.medicine_quantity * m.price) OVER (PARTITION BY i.supplier_id) AS total_invoice_detail_amount\n" +
-                    "        FROM\n" +
-                    "            invoice_detail id\n" +
-                    "                JOIN\n" +
-                    "            invoice i ON id.invoice_id = i.id\n" +
-                    "                JOIN\n" +
-                    "            medicine m ON id.medicine_id = m.id\n" +
-                    "        WHERE\n" +
-                    "            i.flag_deleted = 0\n" +
-                    "          AND id.flag_deleted = 0\n" +
-                    "    ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
-                    "WHERE\n" +
-                    "    s.flag_deleted = 0 \n" +
-                    "    AND code like concat ('%',:code ,'%')\n" +
-                    "    AND name like concat ('%',:name ,'%')\n" +
-                    "    AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
-                    "    AND address like concat ('%',:address ,'%')\n" +
-                    "GROUP BY\n" +
-                    "    s.id,\n" +
-                    "    s.code,\n" +
-                    "    s.name,\n" +
-                    "    s.phone_number,\n" +
-                    "    s.address,\n" +
-                    "    s.note,\n" +
-                    "    CASE WHEN COALESCE(total_invoice_detail_amount - total_paid_amount, 0) < 0 THEN 0\n" +
-                    "         ELSE COALESCE(total_invoice_detail_amount - total_paid_amount, 0)\n" +
-                    "    END\n")
+            value = "    SELECT\n" +
+                    "                            s.id AS idSupplier,\n" +
+                    "                            s.code AS codeSupplier,\n" +
+                    "                            s.name AS nameSupplier,\n" +
+                    "                            s.phone_number AS phoneNumber,\n" +
+                    "                            s.address AS address,\n" +
+                    "                            s.note AS note,\n" +
+                    "                            CASE WHEN COALESCE(total_invoice_detail_amount , 0) < 0 THEN 0\n" +
+                    "                                 ELSE COALESCE(total_invoice_detail_amount , 0)\n" +
+                    "                            END AS debt\n" +
+                    "                        FROM\n" +
+                    "                            supplier s\n" +
+                    "                                LEFT JOIN\n" +
+                    "                            (\n" +
+                    "                                SELECT\n" +
+                    "                                    supplier_id,\n" +
+                    "                                    SUM(total_amount) AS total_invoice_detail_amount\n" +
+                    "                                FROM\n" +
+                    "                                    (\n" +
+                    "                                        SELECT\n" +
+                    "                                            i.supplier_id,\n" +
+                    "                                            SUM(m.quantity * m.price)/2 AS total_amount\n" +
+                    "                                        FROM\n" +
+                    "                                            invoice_detail id\n" +
+                    "                                                JOIN\n" +
+                    "                                            invoice i ON id.invoice_id = i.id\n" +
+                    "                                                JOIN\n" +
+                    "                                            medicine m ON id.medicine_id = m.id\n" +
+                    "                                        WHERE\n" +
+                    "                                                i.flag_deleted = 0\n" +
+                    "                                          AND id.flag_deleted = 0\n" +
+                    "                                        GROUP BY\n" +
+                    "                                            i.supplier_id\n" +
+                    "                                    ) AS subquery\n" +
+                    "                                GROUP BY\n" +
+                    "                                    supplier_id\n" +
+                    "                            ) AS invoice_detail_amounts ON s.id = invoice_detail_amounts.supplier_id\n" +
+                    "                        WHERE\n" +
+                    "                            s.flag_deleted = 0\n" +
+                    "                            AND code like concat ('%',:code ,'%')\n" +
+                    "                            AND name like concat ('%',:name ,'%')\n" +
+                    "                            AND phone_number like concat ('%',:phoneNumber ,'%')\n" +
+                    "                            AND address like concat ('%',:address ,'%')\n" +
+                    "                        GROUP BY\n" +
+                    "                            s.id,\n" +
+                    "                            s.code,\n" +
+                    "                            s.name,\n" +
+                    "                            s.phone_number,\n" +
+                    "                            s.address,\n" +
+                    "                            s.note,\n" +
+                    "                            CASE WHEN COALESCE(total_invoice_detail_amount , 0) < 0 THEN 0\n" +
+                    "                                 ELSE COALESCE(total_invoice_detail_amount , 0)\n" +
+                    "                            END")
     Page<ISupplierProjection> getListSupplier(Pageable pageable,@Param("code")String code,@Param("name")String name,
                                               @Param("phoneNumber")String phoneNumber,@Param("address")String address);
 
@@ -203,30 +203,29 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
      */
 
     @Query( nativeQuery = true,
-            value = "SELECT\n" +
-                    "                      invoice.id as idInvoice,\n" +
-                    "                      invoice.`code` as codeInvoice,\n" +
-                    "                      invoice.document_number as documentNumber,\n" +
-                    "                      DATE(invoice.creation_date) AS createDate,\n" +
-                    "                      TIME(invoice.creation_date) AS createTime,\n" +
-                    "                      SUM(invoice_detail.medicine_quantity * medicine.price) AS totalAmount,\n" +
-                    "                      CASE\n" +
-                    "                        WHEN (ANY_VALUE(invoice_detail.medicine_quantity) * ANY_VALUE(medicine.price)) - invoice.paid < 0 THEN 0\n" +
-                    "                        ELSE (ANY_VALUE(invoice_detail.medicine_quantity) * ANY_VALUE(medicine.price)) - invoice.paid\n" +
-                    "                      END AS amountDue\n" +
-                    "                    FROM\n" +
-                    "                      invoice\n" +
-                    "                    JOIN\n" +
-                    "                      invoice_detail ON invoice_detail.invoice_id = invoice.id\n" +
-                    "                    JOIN\n" +
-                    "                      medicine ON invoice_detail.medicine_id = medicine.id\n" +
-                    "                    JOIN\n" +
-                    "                      supplier ON invoice.supplier_id = supplier.id\n" +
-                    "                    WHERE supplier.id = :id \n " +
-                    "                    AND (DATE(invoice.creation_date) >= :startDate OR :startDate IS NULL OR :startDate = '')\n " +
-                    "                    AND (DATE(invoice.creation_date) <= :endDate OR :endDate IS NULL OR :endDate = '' )\n " +
-                    "                    GROUP BY\n" +
-                    "                      invoice.id")
+            value = "SELECT                                          invoice.id as idInvoice,\n" +
+                    "                                          invoice.`code` as codeInvoice,\n" +
+                    "                                          invoice.document_number as documentNumber,\n" +
+                    "                                          DATE(invoice.creation_date) AS createDate,\n" +
+                    "                                          TIME(invoice.creation_date) AS createTime,\n" +
+                    "                                          SUM(medicine.quantity * medicine.price) AS totalAmount,\n" +
+                    "                                          CASE\n" +
+                    "                                            WHEN (ANY_VALUE(medicine.quantity) * ANY_VALUE(medicine.price)) < 0 THEN 0\n" +
+                    "                                            ELSE (ANY_VALUE(medicine.quantity) * ANY_VALUE(medicine.price))\n" +
+                    "                                          END AS amountDue\n" +
+                    "                                        FROM\n" +
+                    "                                          invoice\n" +
+                    "                                        JOIN\n" +
+                    "                                          invoice_detail ON invoice_detail.invoice_id = invoice.id\n" +
+                    "                                        JOIN\n" +
+                    "                                          medicine ON invoice_detail.medicine_id = medicine.id\n" +
+                    "                                        JOIN\n" +
+                    "                                          supplier ON invoice.supplier_id = supplier.id\n" +
+                    "                                        WHERE supplier.id = :id\n" +
+                    "                                        AND (DATE(invoice.creation_date) >= :startDate OR :startDate IS NULL OR :startDate = '')\n" +
+                    "                                        AND (DATE(invoice.creation_date) <= :endDate OR :endDate IS NULL OR :endDate = '' )\n" +
+                    "                                        GROUP BY\n" +
+                    "                                          invoice.id")
     Page<IInvoiceProjection> findAllListInvoiceByIdSupplier(Long id, Pageable pageable,@Param("startDate")String startDate,
                                                             @Param("endDate") String endDate);
     /**
@@ -252,7 +251,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(nativeQuery = true,
             value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
                     "from supplier s " +
-                    "where s.code = :code and s.flag_deleted = 0")
+                    "where s.code = :code and s.flag_deleted = 0 ")
     Supplier getSupplierByCode(@Param("code") String code);
     /**
      * method :getSupplierByName()
@@ -265,7 +264,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(nativeQuery = true,
             value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
                     "from supplier s " +
-                    "where s.name = :name and s.flag_deleted = 0")
+                    "where s.name = :name and s.flag_deleted = 0 ")
     Supplier getSupplierByName(@Param("name") String name);
     /**
      * method :getSupplierByName()
@@ -278,7 +277,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(nativeQuery = true,
             value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
                     "from supplier s " +
-                    "where s.email = :email and s.flag_deleted = 0")
+                    "where s.email = :email and s.flag_deleted = 0 ")
     Supplier getSupplierByEmail(@Param("email") String email);
     /**
      * method :getSupplierByPhoneNumber()
@@ -291,7 +290,7 @@ public interface ISupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(nativeQuery = true,
             value = "select s.id,s.address,s.code,s.email,s.name,s.note,s.flag_deleted,s.phone_number " +
                     "from supplier s " +
-                    "where s.phone_number = :phoneNumber and s.flag_deleted = 0")
+                    "where s.phone_number = :phoneNumber and s.flag_deleted = 0 ")
     Supplier getSupplierByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
 

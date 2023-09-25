@@ -105,6 +105,12 @@ public class CartDetailsService implements ICartDetailsService{
      */
     @Override
     public List<ICartDetailProjectionWhenSell> getAllCardByAppUserId(Long id) {
+        List<ICartDetailProjectionWhenSell> list = iCartDetailsRepository.getAllCardByAppUserId(id);
+        for (ICartDetailProjectionWhenSell cart:list) {
+            if(cart.getFlag_deleted()){
+                iCartDetailsRepository.deleteCartDetailsById(cart.getCd_id());
+            }
+        }
         return iCartDetailsRepository.getAllCardByAppUserId(id);
     }
 

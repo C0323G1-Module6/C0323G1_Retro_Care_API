@@ -50,12 +50,17 @@ public class MedicineController {
     public ResponseEntity<MedicineDto> getMedicineCodeForCreate() {
         MedicineDto medicineDto = new MedicineDto();
         UUID uuid = UUID.randomUUID();
-        String code = uuid.toString().replace("-", "").substring(0, 8);
+        String code = "MD" + uuid.toString().replace("-", "").substring(0, 6);
         while (true) {
             if (iMedicineService.findMedicineByCode(code) == null) {
                 break;
             }
         }
+        ImageMedicineDto imageMedicineDto = new ImageMedicineDto();
+        imageMedicineDto.setImagePath("https://firebasestorage.googleapis.com/v0/b/uploadingfile-22321.appspot.com/o" +
+                "/medicine%2F383370977_1695718934225766_8669927500495399948_n.png8b80d56b-0698-4e4d-a027-e5987c85ffc6" +
+                "?alt=media&token=0d11f6e1-c166-4f96-9af2-bee55c2409ae");
+        medicineDto.setImageMedicineDto(imageMedicineDto);
         medicineDto.setCode(code);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
@@ -87,6 +92,7 @@ public class MedicineController {
         unitDetailDto.setUnit(unitDetails.getUnit().getId());
         medicineDto.setImageMedicineDto(imageMedicineDto);
         medicineDto.setUnitDetailDto(unitDetailDto);
+        System.out.println(medicineDto);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
 
@@ -261,6 +267,7 @@ public class MedicineController {
         }
         return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
+
     @GetMapping("get-medicine/{id}")
     public ResponseEntity getMedicineById(@PathVariable("id") Long id) {
         Medicine medicine = iMedicineService.getMedicineById(id);
@@ -280,6 +287,7 @@ public class MedicineController {
     /**
      * Get a list for invoice
      * Code by CuongHLT
+     *
      * @return List Medicine
      */
     @GetMapping("/get-list-for-invoice")

@@ -24,6 +24,9 @@ public class OrderService implements IOrderService {
     private IOrderDetailsRepository iOrderDetailsRepository;
     @Autowired
     private IUserOrderRepository iUserOrderRepository;
+
+    @Autowired
+    private ICartDetailsService iCartDetailsService;
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -35,32 +38,6 @@ public class OrderService implements IOrderService {
     @Override
     public Page<IOrderProjection> getListOrder(Pageable pageable) {
         return iOrderRepository.getAllList1(pageable);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-    @Override
-    public Orders findOrderById(Long id) {
-        return iOrderRepository.findByOrder(id);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    @Override
-    public void deleteOrderById(Long id) {
-        iOrderRepository.deleteOrder(id);
     }
 
     /**
@@ -121,7 +98,7 @@ public class OrderService implements IOrderService {
         //check quantity
         double point = 0;
 
-        List<ICartDetailProjectionWhenSell> list = (List<ICartDetailProjectionWhenSell>) iCartDetailsRepository.getAllCardByAppUserId(employeeUserId);
+        List<ICartDetailProjectionWhenSell> list = iCartDetailsService.getAllCardByAppUserId(employeeUserId);
         for (ICartDetailProjectionWhenSell cart : list) {
             if (cart.getCd_quantity() > cart.getM_quantity()) {
                 name += cart.getName() + " ";

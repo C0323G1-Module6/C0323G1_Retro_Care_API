@@ -30,7 +30,7 @@ public class SortOrders {
                 pageable = PageRequest.of(page, 5, Sort.by("orderDetailsPrice").descending());
                 break;
             default:
-                pageable = PageRequest.of(page, 5, Sort.by("code").descending());
+                pageable = PageRequest.of(page, 5, Sort.by("id").descending());
         }
         return pageable;
     }
