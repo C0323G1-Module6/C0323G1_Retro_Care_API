@@ -195,7 +195,7 @@ public class MedicineController {
         if (id == null) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        List<Medicine> medicinePage = iMedicineService.getAll();
+        List<Medicine> medicinePage = iMedicineService.listMedicine();
         for (Medicine m : medicinePage) {
             if (m.getId().equals(id)) {
                 iMedicineService.removeMedicine(id);
@@ -244,6 +244,7 @@ public class MedicineController {
                 if (conditional.equals("")) {
                     return new ResponseEntity<>(medicines, HttpStatus.NO_CONTENT);
                 }
+                break;
             default:
                 medicines = iMedicineService.findAll(pageable, search);
                 break;
