@@ -20,4 +20,6 @@ public interface IReportService {
 
     List<MedicineNeedMore> findMedicineNeedMore();
 
+    List<Profits> getAllProfitDto(String dateTime,String endTime);
+
 }

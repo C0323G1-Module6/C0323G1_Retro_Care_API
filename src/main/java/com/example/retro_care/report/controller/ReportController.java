@@ -57,7 +57,7 @@ public class ReportController {
                 }
                 return new ResponseEntity<>(revenueList, HttpStatus.OK);
             case PROFIT:
-                List<Profit> profitList = reportService.findProfit(startDate, endDate);
+                List<Profits> profitList = reportService.getAllProfitDto(startDate, endDate);
                 if (profitList.isEmpty()) {
                     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
                 }
@@ -149,7 +149,7 @@ public class ReportController {
                     .body(errMap);
 
         }
-        List<Profit> profitList = reportService.findProfit(startDate, endDate);
+        List<Profits> profitList = reportService.getAllProfitDto(startDate, endDate);
         if (profitList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -167,7 +167,7 @@ public class ReportController {
                     .body(errMap);
 
         }
-        List<Profit> profitList = reportService.findProfit(startDate, endDate);
+        List<Profits> profitList = reportService.getAllProfitDto(startDate, endDate);
         List<Revenue> revenueList = reportService.findRevenue(startDate, endDate);
         if (profitList.isEmpty() || revenueList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -175,7 +175,7 @@ public class ReportController {
         long sumProfit = 0;
         long sumRevenue = 0;
         for (int i = 0; i < profitList.size(); i++) {
-            sumProfit += Math.round(Double.parseDouble(profitList.get(i).getTotal()));
+            sumProfit += Math.round(profitList.get(i).getTotal());
             sumRevenue += Math.round(Double.parseDouble(revenueList.get(i).getTotal()));
         }
         LocalDate beginingDate = LocalDate.parse(startDate);
@@ -185,5 +185,7 @@ public class ReportController {
         SumReport sumReport = new SumReport(sumProfit, sumRevenue, sumProfit / days, sumRevenue / days);
         return new ResponseEntity<>(sumReport, HttpStatus.OK);
     }
+
+
 
 }

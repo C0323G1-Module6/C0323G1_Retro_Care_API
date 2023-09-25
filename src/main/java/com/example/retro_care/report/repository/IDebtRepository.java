@@ -24,6 +24,7 @@ public interface IDebtRepository extends JpaRepository<OrderDetails, Long> {
             "JOIN invoice inv ON s.id = inv.supplier_id " +
             "JOIN invoice_detail invd ON inv.id = invd.invoice_id " +
             "join medicine m on invd.medicine_id = m.id " +
+            "where total>0 " +
             "GROUP BY s.name ", nativeQuery = true)
     List<Debt> findDebt();
 }
