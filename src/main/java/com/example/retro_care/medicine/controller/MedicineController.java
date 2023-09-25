@@ -25,10 +25,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -40,6 +40,25 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
+    /**
+     * This method is used to retrieve a new medicine code for creating a new medicine-TinVV
+     *
+     * @return ResponseEntity containing the MedicineDto object and the HTTP status code
+     */
+    @GetMapping("/code/create")
+    public ResponseEntity<MedicineDto> getMedicineCodeForCreate() {
+        MedicineDto medicineDto = new MedicineDto();
+        UUID uuid = UUID.randomUUID();
+        String code = uuid.toString().replace("-", "").substring(0, 8);
+        while (true) {
+            if (iMedicineService.findMedicineByCode(code) == null) {
+                break;
+            }
+        }
+        medicineDto.setCode(code);
+        return new ResponseEntity<>(medicineDto, HttpStatus.OK);
+    }
 
     /**
      * Find a medicine by its ID-TinVV
@@ -106,7 +125,7 @@ public class MedicineController {
                 imageMedicine.setImagePath("");
                 iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
                 iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
-            }else {
+            } else {
                 iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
                 iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
             }
@@ -242,7 +261,6 @@ public class MedicineController {
         }
         return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
-
     @GetMapping("get-medicine/{id}")
     public ResponseEntity getMedicineById(@PathVariable("id") Long id) {
         Medicine medicine = iMedicineService.getMedicineById(id);

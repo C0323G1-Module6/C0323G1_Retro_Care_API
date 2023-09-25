@@ -45,7 +45,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     */
    @Modifying
    @Transactional
-   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = false",nativeQuery = true)
    void updateEmployee(@Param(value = "employee")Employee employee,
                         @Param(value = "id") Long id
    );
@@ -106,6 +106,6 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     @Query(value = "SELECT e.id ,e.address,e.birthday,e.code_employee,e.flag_delete," +
             "e.id_card,e.image,e.name_employee,e.note,e.phone_number,e.start_day,e.app_user_id" +
             " FROM employee e join app_user a on e.app_user_id = a.id" +
-            " where a.user_name = :username and e.flag_delete = 1", nativeQuery = true)
+            " where a.user_name = :username and e.flag_delete = 0", nativeQuery = true)
     Employee getEmployeeByUserName(@Param("username") String username);
 }
