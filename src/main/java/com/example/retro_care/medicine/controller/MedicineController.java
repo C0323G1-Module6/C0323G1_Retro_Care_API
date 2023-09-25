@@ -266,7 +266,7 @@ public class MedicineController {
      */
     @GetMapping("/get-list-for-invoice")
     public ResponseEntity<List<Medicine>> getListForInvoice() {
-        List<Medicine> list = new ArrayList<>();
+        List<Medicine> list = iMedicineService.getAllForInvoice();
         if (list == null)
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         return new ResponseEntity<>(list, HttpStatus.OK);
