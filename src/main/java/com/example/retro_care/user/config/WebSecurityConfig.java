@@ -80,9 +80,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                        "/api/user/logout/**",
 //                        "/api/home/**",
 //                        "/api/home/search/**",
-//                        "/api/home/favorite/**"
+//                        "/api/home/favorite/**",
+//                        "/api/user/get-id-app-user/{userName}"
 //
-//                ).anonymous()
+//                ).permitAll()
 //                .antMatchers(
 //                        "/api/orders/**",
 //                        "/api/orders/list/**",
@@ -137,7 +138,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                        "/patien/**",
 //                        "/api/report/general/**",
 //                        "/api/report/chart/revenue/**",
-//                        "/api/report//chart/profit/**"
+//                        "/api/report/chart/profit/**"
 //
 //                ).hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
 //
