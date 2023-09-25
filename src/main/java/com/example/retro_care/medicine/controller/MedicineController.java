@@ -1,7 +1,5 @@
 package com.example.retro_care.medicine.controller;
 
-import com.example.retro_care.customer.dto.CustomerDto;
-import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
@@ -54,7 +52,7 @@ public class MedicineController {
         UUID uuid = UUID.randomUUID();
         String code = uuid.toString().replace("-", "").substring(0, 8);
         while (true) {
-            if (iMedicineService.findCustomerByCode(code) == null) {
+            if (iMedicineService.findMedicineByCode(code) == null) {
                 break;
             }
         }

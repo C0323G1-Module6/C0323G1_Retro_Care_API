@@ -24,7 +24,7 @@ public class MedicineService implements IMedicineService {
      * @return The Medicine object associated with the given code, or null if not found.
      */
     @Override
-    public Medicine findCustomerByCode(String code) {
+    public Medicine findMedicineByCode(String code) {
         return iMedicineRepository.findMedicineByCode(code);
     }
 
