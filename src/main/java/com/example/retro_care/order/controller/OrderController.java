@@ -43,12 +43,14 @@ public class OrderController {
     private IEmailSenderService iEmailSenderService;
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
-     * @param : page (page number), limit(number of elements in the page);
-     * @return : paginated order list with limit number of molecules per page.
+     * Author:TanNV
+     * Date: 25/09/2023
+     * Get list invoice order
+     * @param page
+     * @param sortBy
+     * @param startDateTime
+     * @param endDateTime
+     * @return
      */
     @GetMapping(value = { "/list"})
     public ResponseEntity<?> getListOrder(@RequestParam("page") int page,
@@ -70,39 +72,6 @@ public class OrderController {
             Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
             return new ResponseEntity<>(ordersPage, HttpStatus.OK);
         }
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-
-    @GetMapping({"/{id}"})
-    public ResponseEntity<?> getOrderById(@PathVariable Long id){
-        Orders orders = iOrderService.findOrderById(id);
-        if (orders == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
-        this.iOrderService.deleteOrderById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/createOrder")

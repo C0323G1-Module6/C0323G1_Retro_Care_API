@@ -20,10 +20,9 @@ import java.time.LocalDateTime;
 public interface IOrderRepository extends JpaRepository<Orders, Long> {
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
+     * Author: TanNV
+     * Date: 25/09/2023
+     * get list invoice order
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
@@ -38,25 +37,6 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
     Page<IOrderProjection> getAllList1(Pageable pageable);
 
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-    @Query(value = "SELECT o.code AS order_code, e.name_employee AS name_employee , customer.name AS name, " +
-            "DATE(o.date_time) AS order_date, TIME(o.date_time) AS order_time, od.current_price AS order_details_price, " +
-            "o.note AS order_note " +
-            "FROM orders as o " +
-            "INNER JOIN employee as e ON o.id = e.id " +
-            "INNER JOIN user_order as uo ON o.id = uo.id " +
-            "INNER JOIN app_user as au ON uo.id = au.id " +
-            "INNER JOIN customer as customer au.id = customer.id " +
-            "INNER JOIN order_details as od ON o.id = od.id where o.flag_delete=0 and o.id=:id ",nativeQuery = true)
-    Orders findByOrder(@Param("id")Long id);
 
 
     /**
@@ -145,23 +125,9 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     void updatePointCustomer(@Param("point") Long point, @Param("id") Long id);
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    @Transactional
-    @Modifying
-    @Query(value = "update orders set flag_deleted = true where id = :id", nativeQuery = true)
-    void deleteOrder(@Param("id") Long id);
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Filter for order by datetime;
-     *
+     * Author:TanNv
+     * Date:25/09/2023
+     * Get list by date time
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
