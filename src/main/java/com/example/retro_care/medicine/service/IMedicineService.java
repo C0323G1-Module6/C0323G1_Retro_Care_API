@@ -15,7 +15,7 @@ public interface IMedicineService {
      * @param code The code of the Medicine to retrieve.
      * @return The Medicine object associated with the given code, or null if not found.
      */
-    Medicine findCustomerByCode(String code);
+    Medicine findMedicineByCode(String code);
     /**
      * Retrieve a Medicine object by its ID-TinVV
      *
