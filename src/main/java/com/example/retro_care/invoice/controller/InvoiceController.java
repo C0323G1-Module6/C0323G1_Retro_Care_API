@@ -232,6 +232,7 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        System.out.println(invoiceDto);
         if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);
@@ -242,6 +243,7 @@ public class InvoiceController {
             }
             return new ResponseEntity<>(err, HttpStatus.NOT_ACCEPTABLE);
         }
+        System.out.println(invoiceDto);
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);

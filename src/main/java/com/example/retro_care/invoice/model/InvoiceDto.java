@@ -87,6 +87,19 @@ public class InvoiceDto implements Validator {
     }
 
     @Override
+    public String toString() {
+        return "InvoiceDto{" +
+                "id=" + id +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", appUserId=" + appUserId +
+                ", supplierId=" + supplierId +
+                ", invoiceDetailDtoSet=" + invoiceDetailDtoSet +
+                '}';
+    }
+
+    @Override
     public boolean supports(Class<?> clazz) {
         return false;
     }

@@ -174,7 +174,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
     Invoice getInvoiceById(@Param("invoiceId") Long invoiceId);
 
     @Transactional
-    @Query(value = "call edit_invoice(:#{#invoice.id},:#{#invoice.documentNumber}, :#{#invoice.paid},:#{#invoice.note},:#{#invoice.supplierId.id})", nativeQuery = true)
+    @Query(value = "call edit_invoice(:#{#invoice.id},:#{#invoice.documentNumber},:#{#invoice.paid},:#{#invoice.note},:#{#invoice.supplierId.id})", nativeQuery = true)
     Invoice editInvoice(@Param("invoice") Invoice invoice);
 
     /**
