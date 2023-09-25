@@ -45,7 +45,7 @@ public interface IEmployeeRepository extends JpaRepository<Employee, Long> {
     */
    @Modifying
    @Transactional
-   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = 1",nativeQuery = true)
+   @Query(value = "UPDATE `retro_care`.`employee` SET `address` = :#{#employee.address}, `birthday` = :#{#employee.birthday}, `id_card` = :#{#employee.idCard}, `image` = :#{#employee.image}, `name_employee` = :#{#employee.nameEmployee}, `note` = :#{#employee.note}, `phone_number` = :#{#employee.phoneNumber}, `start_day` = :#{#employee.startDay} WHERE (`id` = :id) and flag_delete = false",nativeQuery = true)
    void updateEmployee(@Param(value = "employee")Employee employee,
                         @Param(value = "id") Long id
    );
