@@ -243,7 +243,6 @@ public class InvoiceController {
             }
             return new ResponseEntity<>(err, HttpStatus.NOT_ACCEPTABLE);
         }
-        System.out.println(invoiceDto);
         Invoice invoice = new Invoice();
         BeanUtils.copyProperties(invoiceDto, invoice);
         Invoice selectedInvoice = invoiceService.editInvoice(invoice, invoiceDto);

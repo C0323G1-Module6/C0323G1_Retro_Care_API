@@ -117,7 +117,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        System.out.println(maxCode);
         if (maxCode.equals(""))
             return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
