@@ -9,7 +9,15 @@ import java.util.Locale;
 
 public class OrderUtils {
 
-    public static String generateHTMLForMail(List<MailProjection> carts, Long totalPrice, Customer customer, String orderCode) {
+    public static String generateHTMLForMail(List<MailProjection> carts, Long totalPrice,
+                                             Customer customer, String orderCode, boolean isVNP) {
+        String paymentMethod = "";
+        if (isVNP) {
+            paymentMethod = "VNPAY";
+        } else {
+            paymentMethod = "PAYPAL";
+        }
+
         NumberFormat numberFormat = NumberFormat.getNumberInstance(Locale.US);
         double fixedPrice = 0;
 
@@ -85,11 +93,11 @@ public class OrderUtils {
                         "<tr><td colspan='4'><h3>Thành tiền:<h3></td><td style='text-align:center'><h3>%s VND<h3></td></tr>" +
                         "<tr><hr></tr>" +
                         "<tr><td colspan='4'>Hình thức vận chuyển:</td><td><h4 style='text-align:center'>Giao hàng tiêu chuẩn</h4></td></tr>" +
-                        "<tr><td colspan='4'>Hình thức thanh toán:</td><td><h4 style='text-align:center'>PAYPAL</h4></td></tr>" +
+                        "<tr><td colspan='4'>Hình thức thanh toán:</td><td><h4 style='text-align:center'>"+ paymentMethod +"</h4></td></tr>" +
                         "<tr><td colspan='5' style='color:palevioletred'>Ghi chú đơn hàng: " + customer.getNote() + "</td></tr>" +
                         "</table>", formattedFixedPrice, formattedDiscount, formattedTotalPrice));
         html.append(String.format(
-                        "<p>Nếu bạn cần thêm thông tin, vui lòng liên hệ hotline 1900-77-77-77 để được hỗ trợ. RetroCare xin cảm ơn!</p>" +
+                "<p>Nếu bạn cần thêm thông tin, vui lòng liên hệ hotline 1900-77-77-77 để được hỗ trợ. RetroCare xin cảm ơn!</p>" +
                         "<p>Đội ngũ RetroCare!</p>" +
                         "<small>(Đây là email tự động, vui lòng không trả lời email này)</small>"));
         return html.toString();

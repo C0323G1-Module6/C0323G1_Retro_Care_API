@@ -18,11 +18,13 @@ public class EmailMessage {
 
     private String orderCode;
 
+    private boolean isVNP;
+
     public EmailMessage() {
     }
 
-    public EmailMessage(String to, String subject, String message,Long totalPrice,
-                        List<MailProjection> mailProjections, Customer customer,String orderCode) {
+    public EmailMessage(String to, String subject, String message, Long totalPrice,
+                        List<MailProjection> mailProjections, Customer customer, String orderCode, boolean isVNP) {
         this.to = to;
         this.subject = subject;
         this.message = message;
@@ -30,6 +32,7 @@ public class EmailMessage {
         this.mailProjections = mailProjections;
         this.customer = customer;
         this.orderCode = orderCode;
+        this.isVNP = isVNP;
 
     }
 
@@ -88,5 +91,13 @@ public class EmailMessage {
 
     public void setOrderCode(String orderCode) {
         this.orderCode = orderCode;
+    }
+
+    public boolean getIsVNP() {
+        return isVNP;
+    }
+
+    public void setIsVNP(boolean VNP) {
+        isVNP = VNP;
     }
 }
