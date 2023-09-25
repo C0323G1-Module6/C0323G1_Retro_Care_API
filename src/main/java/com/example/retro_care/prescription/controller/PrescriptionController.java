@@ -56,7 +56,7 @@ public class PrescriptionController {
                                                                  @RequestParam(defaultValue = "", required = false) String searchPrescription,
                                                                  @RequestParam(defaultValue = "",required = false) String search,
                                                                  @RequestParam(defaultValue = "id",required = false) String sortBy) {
-        Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy).descending());
         Page<Prescription> prescriptionPage ;
         switch (searchPrescription){
             case "searchByName":

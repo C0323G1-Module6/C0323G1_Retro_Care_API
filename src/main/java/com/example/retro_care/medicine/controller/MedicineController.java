@@ -25,10 +25,10 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin("*")
@@ -40,6 +40,30 @@ public class MedicineController {
     private IImageMedicineService iImageMedicineService;
     @Autowired
     private IUnitDetailService iUnitDetailService;
+
+    /**
+     * This method is used to retrieve a new medicine code for creating a new medicine-TinVV
+     *
+     * @return ResponseEntity containing the MedicineDto object and the HTTP status code
+     */
+    @GetMapping("/code/create")
+    public ResponseEntity<MedicineDto> getMedicineCodeForCreate() {
+        MedicineDto medicineDto = new MedicineDto();
+        UUID uuid = UUID.randomUUID();
+        String code = "MD" + uuid.toString().replace("-", "").substring(0, 6);
+        while (true) {
+            if (iMedicineService.findMedicineByCode(code) == null) {
+                break;
+            }
+        }
+        ImageMedicineDto imageMedicineDto = new ImageMedicineDto();
+        imageMedicineDto.setImagePath("https://firebasestorage.googleapis.com/v0/b/uploadingfile-22321.appspot.com/o" +
+                "/medicine%2F383370977_1695718934225766_8669927500495399948_n.png8b80d56b-0698-4e4d-a027-e5987c85ffc6" +
+                "?alt=media&token=0d11f6e1-c166-4f96-9af2-bee55c2409ae");
+        medicineDto.setImageMedicineDto(imageMedicineDto);
+        medicineDto.setCode(code);
+        return new ResponseEntity<>(medicineDto, HttpStatus.OK);
+    }
 
     /**
      * Find a medicine by its ID-TinVV
@@ -68,6 +92,7 @@ public class MedicineController {
         unitDetailDto.setUnit(unitDetails.getUnit().getId());
         medicineDto.setImageMedicineDto(imageMedicineDto);
         medicineDto.setUnitDetailDto(unitDetailDto);
+        System.out.println(medicineDto);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
 
@@ -106,7 +131,7 @@ public class MedicineController {
                 imageMedicine.setImagePath("");
                 iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
                 iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
-            }else {
+            } else {
                 iImageMedicineService.addImageMedicine(imageMedicine, idMedicine);
                 iUnitDetailService.addUnitDetail(unitDetail, idMedicine, medicineDto.getUnitDetailDto().getUnit());
             }
@@ -262,6 +287,7 @@ public class MedicineController {
     /**
      * Get a list for invoice
      * Code by CuongHLT
+     *
      * @return List Medicine
      */
     @GetMapping("/get-list-for-invoice")

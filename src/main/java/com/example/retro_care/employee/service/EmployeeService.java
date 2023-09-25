@@ -134,4 +134,8 @@ public class EmployeeService implements IEmployeeService{
     public Employee getByPhoneNumber(String phoneNumber,Long id) {
         return employeeRepository.findEmployeeByPhoneNumber(phoneNumber,id);
     }
+    @Override
+    public Employee getEmployeeByUserName(String username) {
+        return employeeRepository.getEmployeeByUserName(username);
+    }
 }

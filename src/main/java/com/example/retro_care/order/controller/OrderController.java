@@ -137,6 +137,7 @@ public class OrderController {
     public ResponseEntity<?> createNewOrder(@RequestParam("appUserId") Long appUserId,
                                             @RequestParam("loyaltyPoint") Long loyaltyPoint,
                                             @RequestParam("totalPrice") Long totalPrice,
+                                            @RequestParam("isVNP") boolean isVNP,
                                             @RequestBody() ReqBody reqBody){
         System.out.println(appUserId + "hihihi");
         String cartIDsInText = String.join(",", reqBody.getCartIDs());
@@ -155,7 +156,7 @@ public class OrderController {
             String subject = "Billing and Thank You Letter from RetroCare!";
             String message = "Hi " + reqBody.getCustomerInfo().getName() + "!";
             EmailMessage emailMessage = new EmailMessage(reqBody.getCustomerInfo().getEmail(),
-                    subject, message, totalPrice, cartsForBill, reqBody.getCustomerInfo(), orderCode);
+                    subject, message, totalPrice, cartsForBill, reqBody.getCustomerInfo(), orderCode, isVNP);
             iEmailSenderService.sendEmail(emailMessage);
             System.out.println(orderID);
             return new ResponseEntity<>( orderID, HttpStatus.OK);
