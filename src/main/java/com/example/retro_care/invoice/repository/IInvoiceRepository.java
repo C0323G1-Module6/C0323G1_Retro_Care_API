@@ -89,7 +89,7 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "    subquery.nameSupplier,\n" +
             "    subquery.address,\n" +
             "    sum(subquery.total) AS total,\n" +
-            "    (sum(subquery.billOwed)-i.paid) AS billOwed\n" +
+            "    (sum(subquery.total) g- i.paid) AS billOwed\n" +
             "FROM\n" +
             "    invoice i\n" +
             "JOIN (\n" +
