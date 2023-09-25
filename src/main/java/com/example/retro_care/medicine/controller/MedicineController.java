@@ -1,7 +1,5 @@
 package com.example.retro_care.medicine.controller;
 
-import com.example.retro_care.customer.dto.CustomerDto;
-import com.example.retro_care.customer.dto.FormatCustomer;
 import com.example.retro_care.kind_of_medicine.model.KindOfMedicine;
 import com.example.retro_care.medicine.dto.ImageMedicineDto;
 import com.example.retro_care.medicine.dto.KindOfMedicineDto;
