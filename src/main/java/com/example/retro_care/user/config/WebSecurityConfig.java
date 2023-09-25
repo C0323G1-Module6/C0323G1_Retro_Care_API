@@ -81,8 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/home/**",
                         "/api/home/search/**",
                         "/api/home/favorite/**",
-                        "/api/user/get-id-app-user/{userName}"
-
+                        "/api/user/get-id-app-user/{userName}",
+                        "/api/carts/get-details/**"
 
                 ).permitAll()
                 .antMatchers(
@@ -95,7 +95,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/carts/delete-cart/**",
                         "/api/carts/getInforCustomer/**",
                         "/api/carts/check-quantity/**",
-                        "/api/carts/get-details/**",
+
                         "/api/carts/get-all/**",
                         "/api/carts/get-quantity-in-cart/**",
                         "/api/carts/get-loyalty-point/**",
