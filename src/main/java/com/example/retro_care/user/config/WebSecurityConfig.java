@@ -86,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 ).permitAll()
                 .antMatchers(
-                        "/api/orders/**",
+
                         "/api/orders/list/**",
                         "/api/orders/{id}/**",
                         "/api/carts/add-from-home-details/**",
@@ -142,13 +142,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/kindOfMedicines/get/**",
 
                         // chua merg code
+                        "/api/medicine/code/create/**",
                         "/api/medicine/{id}/**",
                         "/api/medicine/**",
                         "/api/medicine/get-medicine/**",
+                        "/api/medicine/search/**",
                         "/api/medicine/get-list/**",
-                        "/api/medicine/search/**",
-                        "/api/medicine/search/**",
+                        "/api/medicine/get-medicine/{id}/**",
+                        "/api/medicine/get-unitDetail/{id}/**",
+                        "/api/medicine/get-list-for-invoice/**",
 
+                        //Chưa xong, chờ tin
                         "/customers/api/dto/create/**",
                         "/customers/api/dto/create/**",
                         "/customers/api/create/**",
@@ -158,15 +162,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/customers/api/list-customer/**",
                         "/customers/api/delete/{id}/**",
 
-                        "/supplier/**",
-                        "/supplier/delete/{id}/**",
-                        "/supplier/create-supplier/**",
-                        "/supplier/update-supplier/{id}/**",
-                        "/supplier/detail-supplier/{id}/**",
-                        "/supplier/get/{id}/**",
-                        "/supplier/get-detail/{id}/**",
-                        "/supplier//list/**",
-                        "/supplier/{id}/**",
+                        "/api/supplier/**",
+                        "/api/supplier/delete/{id}/**",
+                        "/api/supplier/create-supplier/**",
+                        "/api/supplier/update-supplier/{id}/**",
+                        "/api/supplier/detail-supplier/{id}/**",
+                        "/api/supplier/get/{id}/**",
+                        "/api/supplier/get-detail/{id}/**",
+                        "/api/supplier/list/**",
+
 
                         "/api/employees/create/**",
                         "/api/employees/{id}/**",
@@ -176,7 +180,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/employees/delete-employee/**",
                         "/api/employees/by-user/{username}/**",
 
+
                         "/indication/{id}/**",
+                        "/indicationDto/{id}/**",
                         "/indication/delete/{id}/**",
                         "/indication/create/**",
                         "/indication/edit/**",
@@ -185,14 +191,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/prescription/create/**",
                         "/prescription/{id}/**",
                         "/prescription/delete/{id}/**",
-                        "/prescription/edit/{id}/**",
+                        "/prescription/edit/**",
 
-                        "/patien/**",
+                        "/patient/**",
+
                         "/api/report/general/**",
                         "/api/report/chart/revenue/**",
-                        "/api/report/chart/profit/**"
+                        "/api/report/chart/profit/**",
+                        "/api/report/sum/**"
 
-                ).hasAnyRole("ROLE_ADMIN","ROLE_MANAGER")
+                ).hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER")
 
                 .anyRequest()
                 .authenticated()
@@ -203,11 +211,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 
-        httpSecurity
-                .authorizeRequests()
-                .anyRequest().permitAll()
-                .and()
-                .csrf().disable();
+//        httpSecurity
+//                .authorizeRequests()
+//                .anyRequest().permitAll()
+//                .and()
+//                .csrf().disable();
     }
 
 }
