@@ -60,6 +60,7 @@ public interface IInvoiceService {
                                 String endDate,
                                 String startTime,
                                 String endTime,
-                                String sortColumn
+                                String sortColumn,
+                                String sortType
     );
 }
