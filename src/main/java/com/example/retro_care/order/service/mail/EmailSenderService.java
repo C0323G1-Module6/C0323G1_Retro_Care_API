@@ -35,7 +35,8 @@ public class EmailSenderService implements IEmailSenderService {
             helper.setTo(emailMessage.getTo());
             helper.setSubject(emailMessage.getSubject());
 
-            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getMailProjections(), emailMessage.getTotalPrice(), emailMessage.getCustomer(), emailMessage.getOrderCode());
+            String tableOfProds = OrderUtils.generateHTMLForMail(emailMessage.getMailProjections(), emailMessage.getTotalPrice(),
+                    emailMessage.getCustomer(), emailMessage.getOrderCode(), emailMessage.getIsVNP());
 
             String htmlContent = emailMessage.getMessage() + tableOfProds;
 

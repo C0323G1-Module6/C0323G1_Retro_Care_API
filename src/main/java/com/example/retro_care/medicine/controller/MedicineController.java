@@ -262,4 +262,32 @@ public class MedicineController {
         }
         return new ResponseEntity<>(medicine, HttpStatus.OK);
     }
+    @GetMapping("get-medicine/{id}")
+    public ResponseEntity getMedicineById(@PathVariable("id") Long id) {
+        Medicine medicine = iMedicineService.getMedicineById(id);
+        if (medicine == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(medicine, HttpStatus.OK);
+    }
+
+    @GetMapping("/get-unitDetail/{id}")
+    public ResponseEntity<UnitDetail> getUnitDetailById(@PathVariable("id") Long id) {
+        UnitDetail unitDetail = iUnitDetailService.findUnitDetailByMedicineId(id);
+        if (unitDetail == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(unitDetail, HttpStatus.OK);
+    }
+
+    /**
+     * Get a list for invoice
+     * Code by CuongHLT
+     * @return List Medicine
+     */
+    @GetMapping("/get-list-for-invoice")
+    public ResponseEntity<List<Medicine>> getListForInvoice() {
+        List<Medicine> list = iMedicineService.getAllForInvoice();
+        if (list == null)
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
 }
