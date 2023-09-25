@@ -24,6 +24,9 @@ public class OrderService implements IOrderService {
     private IOrderDetailsRepository iOrderDetailsRepository;
     @Autowired
     private IUserOrderRepository iUserOrderRepository;
+
+    @Autowired
+    private ICartDetailsService iCartDetailsService;
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -95,7 +98,7 @@ public class OrderService implements IOrderService {
         //check quantity
         double point = 0;
 
-        List<ICartDetailProjectionWhenSell> list = (List<ICartDetailProjectionWhenSell>) iCartDetailsRepository.getAllCardByAppUserId(employeeUserId);
+        List<ICartDetailProjectionWhenSell> list = iCartDetailsService.getAllCardByAppUserId(employeeUserId);
         for (ICartDetailProjectionWhenSell cart : list) {
             if (cart.getCd_quantity() > cart.getM_quantity()) {
                 name += cart.getName() + " ";

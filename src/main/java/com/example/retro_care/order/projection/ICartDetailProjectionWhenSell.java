@@ -9,4 +9,6 @@ public interface ICartDetailProjectionWhenSell {
     Double getPrice();
     Long getM_quantity();
     String getConversion_unit();
+
+    Boolean getFlag_deleted();
 }
