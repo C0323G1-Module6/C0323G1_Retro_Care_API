@@ -119,7 +119,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         String maxCode = invoiceRepository.findMaxCode();
         System.out.println(maxCode);
         if (maxCode.equals(""))
-            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
+            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
         String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
@@ -128,7 +128,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         numericValue++;
 
         // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
-        String newNumericPart = String.format("%05d", numericValue);
+        String newNumericPart = String.format("%04d", numericValue);
         String newCode = "HDN" + newNumericPart;
 
         return newCode;
