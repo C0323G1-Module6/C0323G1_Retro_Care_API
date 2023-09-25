@@ -54,7 +54,7 @@ public class MedicineController {
         UUID uuid = UUID.randomUUID();
         String code = uuid.toString().replace("-", "").substring(0, 8);
         while (true) {
-            if (iMedicineService.findCustomerByCode(code) == null) {
+            if (iMedicineService.findMedicineByCode(code) == null) {
                 break;
             }
         }
