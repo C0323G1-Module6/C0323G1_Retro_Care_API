@@ -1,13 +1,12 @@
 package com.example.retro_care.invoice.service;
 
-import com.example.retro_care.invoice.model.IInvoiceResult;
-import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.model.InvoiceDetailDto;
-import com.example.retro_care.invoice.model.InvoiceDto;
+import com.example.retro_care.invoice.model.*;
 import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
 import com.example.retro_care.invoice.repository.IInvoiceRepository;
 import com.example.retro_care.medicine.model.Medicine;
+import com.example.retro_care.medicine.model.UnitDetail;
+import com.example.retro_care.medicine.repository.IMedicineRepository;
+import com.example.retro_care.medicine.repository.IUnitDetailRepository;
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;
 import org.springframework.beans.BeanUtils;
@@ -16,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class InvoiceServiceImpl implements IInvoiceService {
@@ -26,6 +23,10 @@ public class InvoiceServiceImpl implements IInvoiceService {
     IInvoiceRepository invoiceRepository;
     @Autowired
     IInvoiceDetailRepository invoiceDetailRepository;
+    @Autowired
+    IMedicineRepository medicineRepository;
+    @Autowired
+    IUnitDetailRepository unitDetailRepository;
 
     /**
      * create an Invoice and call method for create InvoiceDetail
@@ -38,22 +39,37 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
-        invoice.setAppUserId(new AppUser());
+        AppUser appUser = new AppUser();
+        appUser.setId(invoiceDto.getAppUserId());
+        invoice.setAppUserId(appUser);
+        // Set CreationDate
         invoice.setCreationDate(new Date());
+//        Set Supplier
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+        //Set Max code
         invoice.setCode(findMaxCode());
+        //Create invoice
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
+        //Create invoiceDetail
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
+
             InvoiceDetail invoiceDetail = new InvoiceDetail();
             Medicine medicine = new Medicine();
             medicine.setId(invoiceDetailDto.getMedicineId());
             BeanUtils.copyProperties(invoiceDetailDto, invoiceDetail);
+            //Set medicineID
             invoiceDetail.setMedicineId(medicine);
+            //Set invoiceID
             invoiceDetail.setInvoiceId(selectedInvoice);
-            System.out.println(invoiceDetail);
+            //Create InvoiceDetail
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+            //Get quantity medicine
+            Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
+//            //Update quantity medicine
+            medicineRepository.updateQuantity(invoiceDetail.getMedicineId().getId(), currentQuantity + invoiceDetail.getMedicineQuantity());
+
         }
         return selectedInvoice;
     }
@@ -75,8 +91,21 @@ public class InvoiceServiceImpl implements IInvoiceService {
      * @return Invoice
      */
     @Override
-    public Invoice getInvoiceById(Long invoiceId) {
-        return invoiceRepository.getInvoiceById(invoiceId);
+    public InvoiceEditDto getInvoiceById(Long invoiceId) {
+        Invoice invoice = invoiceRepository.getInvoiceById(invoiceId);
+        InvoiceEditDto invoiceEditDto = new InvoiceEditDto();
+        BeanUtils.copyProperties(invoice, invoiceEditDto);
+        Set<InvoiceDetail> invoiceDetailSet = invoice.getInvoiceDetailSet();
+        List<InvoiceDetailEditDto> invoiceDetailEditDtoList = new ArrayList<>();
+        for (InvoiceDetail invoiceDetail : invoiceDetailSet) {
+            UnitDetail unitDetail = unitDetailRepository.findUnitDetailByMedicineId(invoiceDetail.getMedicineId().getId());
+            InvoiceDetailEditDto invoiceDetailEditDto = new InvoiceDetailEditDto();
+            BeanUtils.copyProperties(invoiceDetail,invoiceDetailEditDto);
+            invoiceDetailEditDto.setUnit(unitDetail.getUnit().getName());
+            invoiceDetailEditDtoList.add(invoiceDetailEditDto);
+        }
+        invoiceEditDto.setInvoiceDetailEditDtoList(invoiceDetailEditDtoList);
+        return invoiceEditDto;
     }
 
     /**
@@ -88,9 +117,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        System.out.println(maxCode);
         if (maxCode.equals(""))
-            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
+            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
         String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
@@ -99,7 +127,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         numericValue++;
 
         // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
-        String newNumericPart = String.format("%05d", numericValue);
+        String newNumericPart = String.format("%04d", numericValue);
         String newCode = "HDN" + newNumericPart;
 
         return newCode;

@@ -56,7 +56,7 @@ public class PrescriptionController {
                                                                  @RequestParam(defaultValue = "", required = false) String searchPrescription,
                                                                  @RequestParam(defaultValue = "",required = false) String search,
                                                                  @RequestParam(defaultValue = "id",required = false) String sortBy) {
-        Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
+        Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy).descending());
         Page<Prescription> prescriptionPage ;
         switch (searchPrescription){
             case "searchByName":
@@ -101,7 +101,10 @@ public class PrescriptionController {
         if(prescriptionCheckCode != null) {
             errors.put("code","Mã toa thuốc đã tồn tại!");
         }
-
+        if (errors.size() != 0){
+            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
+        }
+        prescriptionService.createPrescription(prescription);
 
 
         List<IndicationDto> indicationDtoList = prescriptionDto.getIndicationDto();
@@ -115,10 +118,7 @@ public class PrescriptionController {
                 indicationService.createIndication(indication);
             }
         }
-        if (errors.size() != 0){
-            return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
-        }
-        prescriptionService.createPrescription(prescription);
+
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

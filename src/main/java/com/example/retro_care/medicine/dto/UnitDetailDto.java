@@ -5,11 +5,13 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 
 public class UnitDetailDto  implements Validator {
     private Long id;
     private Boolean flagDeleted;
+    @NotNull(message = "Không được để trống.")
     @Min(value = 1, message = "Tỷ lệ quy đổi không được nhỏ hơn 1")
     private Long conversionRate;
     private String conversionUnit;

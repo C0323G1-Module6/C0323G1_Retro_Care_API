@@ -7,12 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Repository
 @Transactional
@@ -35,9 +35,8 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN app_user au ON uo.id = au.id " +
             "INNER JOIN customer c ON au.id = c.id " +
             "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
-//    @Query(nativeQuery = true, value = "select * from orders")
     Page<IOrderProjection> getAllList1(Pageable pageable);
-//
+
     /**
      * Create by: VuDT;
      * Date create: 15/09/2023
@@ -54,8 +53,8 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "INNER JOIN user_order as uo ON o.id = uo.id " +
             "INNER JOIN app_user as au ON uo.id = au.id " +
             "INNER JOIN customer as customer au.id = customer.id " +
-            "INNER JOIN order_details as od ON o.id = od.id where o.flag_delete=0 and o.id=:id ",nativeQuery = true)
-    Orders findByOrder(@Param("id")Long id);
+            "INNER JOIN order_details as od ON o.id = od.id where o.flag_delete=0 and o.id=:id ", nativeQuery = true)
+    Orders findByOrder(@Param("id") Long id);
 
 
     /**
@@ -82,7 +81,6 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Query(nativeQuery = true, value = "SELECT MAX(id) FROM orders WHERE flag_deleted = false")
     Long getLastInsertOrders();
-
 
 
     /**
@@ -164,17 +162,30 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    @Query(value = "SELECT * FROM orders WHERE datetime >= :startDateTime AND datetime <= :endDateTime", nativeQuery = true)
-    List<Orders> findByDateTimeRange(@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
+    @Query(value ="SELECT o.code AS code, e.name_employee AS nameEmployee , customer.name AS nameCustomer, " +
+            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
+            "o.note AS orderNote " +
+            "FROM orders as o " +
+            "INNER JOIN employee as e ON o.id = e.id " +
+            "INNER JOIN user_order as uo ON o.id = uo.id " +
+            "INNER JOIN app_user as au ON uo.id = au.id " +
+            "INNER JOIN customer as customer ON au.id = customer.id " +
+            "INNER JOIN order_details as od ON o.id = od.id where o.flag_deleted = 0 " +
+            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime", nativeQuery = true)
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
 
     /**
      * Create by: HanhNLM;
      * Create Date: 15/09/2023;
      * Function: create new order and update loyalty point of a customer;
+     *
      * @param : appUserId, loyaltyPoint;
      */
     @Modifying
-    @Query(nativeQuery = true, value = "call createOrder(:appUserId, :loyaltyPoint)")
-    void createOrderForUser(@Param("appUserId") Long appUserId,@Param("loyaltyPoint") Long loyaltyPoint);
+    @Procedure("createOrder")
+    Long createOrderForUser(@Param("appUserId") Long appUserId, @Param("loyaltyPoint") Long loyaltyPoint,
+                               @Param("cartIDsInText") String cartIDsInText);
+    @Query(nativeQuery = true, value = "SELECT code FROM orders WHERE id = :orderId")
+    String getOrderCodeByOrderId(@Param("orderId") Long orderId);
 
 }

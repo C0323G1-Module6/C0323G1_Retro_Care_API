@@ -7,8 +7,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Set;
-
 public interface IImageMedicineRepository extends JpaRepository<ImageMedicine, Long> {
     /**
      * Adds an ImageMedicine to the database for a given medicine-TinVV
@@ -16,7 +14,6 @@ public interface IImageMedicineRepository extends JpaRepository<ImageMedicine, L
      * @param imageMedicine The ImageMedicine object to be added.
      * @param medicineId    The ID of the medicine associated with the ImageMedicine.
      */
-
     @Transactional
     @Modifying
     @Query(value = "INSERT INTO image_medicine (image_path, flag_deleted, medicine_id) VALUES " +

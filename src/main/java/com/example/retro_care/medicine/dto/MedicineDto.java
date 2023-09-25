@@ -5,6 +5,7 @@ import org.springframework.validation.Validator;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
@@ -16,26 +17,26 @@ public class MedicineDto implements Validator {
     @NotBlank(message = "Không được để trống trường này")
 //    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
+    @NotNull(message = "Giá không được để trống.")
     @Min(value = 0, message = "Giá không được là số âm")
     private Double price;
     private Long quantity;
     @Min(value = 0, message = "vat không được nhỏ hơn 0")
     private Float vat;
     private String note;
-    @Size(min = 2,max = 50, message = "Nhà sản xuất không được ít hơn 2 kí tự và dài hơn 50 kí tự")
+    @Size(max = 50, message = "Nhà sản xuất không được dài hơn 50 kí tự")
     private String maker;
     @NotBlank(message = "Không được để trống trường này")
     private String activeElement;
     @NotBlank(message = "Không được để trống trường này")
     @Size(max = 50, message = "Xuất xứ không được vượt quá 50 kí tự")
     private String origin;
-//    @NotEmpty(message = "Không được để trống trường này")
+
+    @NotNull(message = "Không được để trống.")
     @Min(value = 0, message = "Lợi nhuận bán lẻ không được nhỏ hơn 0")
     private Float retailProfits;
     private Boolean flagDeleted;
-//    @NotBlank(message = "Không được để trống trường này")
     private KindOfMedicineDto kindOfMedicineDto;
-    //    @Valid
     private UnitDetailDto unitDetailDto;
     private ImageMedicineDto imageMedicineDto;
 

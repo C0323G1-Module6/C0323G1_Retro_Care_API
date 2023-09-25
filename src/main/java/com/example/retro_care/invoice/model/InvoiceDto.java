@@ -3,7 +3,6 @@ package com.example.retro_care.invoice.model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import java.util.Date;
 import java.util.Set;
 
 public class InvoiceDto implements Validator {
@@ -11,6 +10,7 @@ public class InvoiceDto implements Validator {
     private String documentNumber;
     private Double paid;
     private String note;
+    private Long appUserId;
 
     private Long supplierId;
 
@@ -20,11 +20,12 @@ public class InvoiceDto implements Validator {
     public InvoiceDto() {
     }
 
-    public InvoiceDto(Long id, String documentNumber, Double paid, String note, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
+    public InvoiceDto(Long id, String documentNumber, Double paid, String note, Long appUserId, Long supplierId, Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.id = id;
         this.documentNumber = documentNumber;
         this.paid = paid;
         this.note = note;
+        this.appUserId = appUserId;
         this.supplierId = supplierId;
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
     }
@@ -75,6 +76,27 @@ public class InvoiceDto implements Validator {
 
     public void setInvoiceDetailDtoSet(Set<InvoiceDetailDto> invoiceDetailDtoSet) {
         this.invoiceDetailDtoSet = invoiceDetailDtoSet;
+    }
+
+    public Long getAppUserId() {
+        return appUserId;
+    }
+
+    public void setAppUserId(Long appUserId) {
+        this.appUserId = appUserId;
+    }
+
+    @Override
+    public String toString() {
+        return "InvoiceDto{" +
+                "id=" + id +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", paid=" + paid +
+                ", note='" + note + '\'' +
+                ", appUserId=" + appUserId +
+                ", supplierId=" + supplierId +
+                ", invoiceDetailDtoSet=" + invoiceDetailDtoSet +
+                '}';
     }
 
     @Override

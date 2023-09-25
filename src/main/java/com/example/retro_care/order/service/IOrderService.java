@@ -1,9 +1,11 @@
 package com.example.retro_care.order.service;
 
+import com.example.retro_care.order.projection.IOrderProjection;
 import com.example.retro_care.order.model.Orders;
 import com.example.retro_care.order.projection.IOrderProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +50,7 @@ public interface IOrderService {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime);
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     /**
      * author: VuNL
@@ -92,7 +94,9 @@ public interface IOrderService {
      * Function: create new order and update loyalty point of a customer;
      * @param : appUserId, loyaltyPoint;
      */
-    void createOrderForUser(Long appUserId, Long loyaltyPoint);
+    Long createOrderForUser(Long appUserId, Long loyaltyPoint, String cartIDsInText);
+
+    String getOrderCodeByOrderId(Long orderId);
 
 
 }

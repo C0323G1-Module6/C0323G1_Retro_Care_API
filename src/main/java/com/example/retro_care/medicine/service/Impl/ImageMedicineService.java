@@ -6,7 +6,6 @@ import com.example.retro_care.medicine.service.IImageMedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class ImageMedicineService implements IImageMedicineService {
     @Autowired

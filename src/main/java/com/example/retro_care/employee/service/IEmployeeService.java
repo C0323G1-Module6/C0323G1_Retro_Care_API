@@ -85,4 +85,6 @@ public interface IEmployeeService {
   * @return
   */
  Employee getByPhoneNumber(String phoneNumber,Long id);
+ Employee getEmployeeByUserName(String username);
+
 }
