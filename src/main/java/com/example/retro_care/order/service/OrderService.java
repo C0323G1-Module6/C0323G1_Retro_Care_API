@@ -72,8 +72,8 @@ public class OrderService implements IOrderService {
      * otherwise the original list will be returned.
      */
     @Override
-    public List<Orders> findByDateTimeRange(LocalDateTime startDateTime, LocalDateTime endDateTime) {
-        return iOrderRepository.findByDateTimeRange(startDateTime, endDateTime);
+    public Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        return iOrderRepository.findByDateTimeRange(pageable,startDateTime, endDateTime);
     }
 
 
@@ -148,7 +148,7 @@ public class OrderService implements IOrderService {
         if (customerUserId != -1) {
             iUserOrderRepository.createUserOrder(customerUserId, id);
             Long currentPoint = iOrderRepository.getPointCustomerByAppUserId(customerUserId);
-            Long newPoint = currentPoint + (long) Math.floor(point * 0.1);
+            Long newPoint = currentPoint + (long) Math.floor(point * 0.01);
             iOrderRepository.updatePointCustomer(newPoint, customerUserId);
         }
         return "true";
@@ -162,8 +162,13 @@ public class OrderService implements IOrderService {
      * @param : appUserId, loyaltyPoint;
      */
     @Override
-    public void createOrderForUser(Long appUserId, Long loyaltyPoint) {
-        iOrderRepository.createOrderForUser(appUserId, loyaltyPoint);
+    public Long createOrderForUser(Long appUserId, Long loyaltyPoint, String cartIDsInText) {
+        return iOrderRepository.createOrderForUser(appUserId, loyaltyPoint, cartIDsInText);
+    }
+
+    @Override
+    public String getOrderCodeByOrderId(Long orderId) {
+        return iOrderRepository.getOrderCodeByOrderId(orderId);
     }
 
 

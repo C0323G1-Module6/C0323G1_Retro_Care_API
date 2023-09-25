@@ -12,10 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -69,21 +67,20 @@ public class KindOfMedicineController {
 
     //    Create
     @PostMapping("/create")
-    public ResponseEntity<?> getCreationForm(@RequestBody KindOfMedicine kindOfMedicine) {
-        kindOfMedicine.setFlagDeleted(false);
-        try {
-
-            kindOfMedicineService.addKindOfMedicine(kindOfMedicine);
-            return ResponseEntity.status(HttpStatus.OK).body("add successfully");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("add fail");
+    public ResponseEntity<Object> getCreationForm(@Valid @RequestBody KindOfMedicineCreationDto kindOfMedicineCreationDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        kindOfMedicineCreationDto.setFlagDeleted(false);
+        KindOfMedicine kindOfMedicine = new KindOfMedicine();
+        BeanUtils.copyProperties(kindOfMedicineCreationDto,kindOfMedicine);
+        kindOfMedicineService.addKindOfMedicine(kindOfMedicine);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
+
     // Edit
     @PutMapping("/edit")
-    public ResponseEntity<?> editKindOfMedicine(@RequestBody KindOfMedicine kindOfMedicine) {
-        List<KindOfMedicine> kindOfMedicineList = kindOfMedicineService.getListKindOfMedicine();
-        System.err.println(kindOfMedicine.getId());
+    public ResponseEntity<Object> editKindOfMedicine(@RequestBody KindOfMedicine kindOfMedicine) {
         kindOfMedicine.setFlagDeleted(false);
         if (kindOfMedicineService.getKindOfMedicineById(kindOfMedicine.getId()) == null) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

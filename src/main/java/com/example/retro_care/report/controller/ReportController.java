@@ -181,7 +181,7 @@ public class ReportController {
         LocalDate beginingDate = LocalDate.parse(startDate);
         LocalDate finishingDate = LocalDate.parse(endDate);
         Period startAndEndPeriod = Period.between(beginingDate, finishingDate);
-        int days = startAndEndPeriod.getDays() +1;
+        int days = startAndEndPeriod.getDays() + 1;
         SumReport sumReport = new SumReport(sumProfit, sumRevenue, sumProfit / days, sumRevenue / days);
         return new ResponseEntity<>(sumReport, HttpStatus.OK);
     }
