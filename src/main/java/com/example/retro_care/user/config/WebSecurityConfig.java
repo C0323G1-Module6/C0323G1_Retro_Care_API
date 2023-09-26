@@ -82,7 +82,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/home/search/**",
                         "/api/home/favorite/**",
                         "/api/user/get-id-app-user/{userName}",
-                        "/api/carts/get-details/**"
+                        "/api/carts/get-details/**",
+                        "/api/kindOfMedicines"
 
                 ).permitAll()
                 .antMatchers(
@@ -103,8 +104,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/payment/**",
                         "/customers/api/online-customer/**",
                         "/customers/user/{id}/**",
-                        "/customers/api/user/{id}/**"
-                ).hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER","ROLE_CUSTOMER","ROLE_EMPLOYEE")
+                        "/customers/api/user/{id}/**",
+                        "/customers/api/update-new/{id}/**"
+
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_CUSTOMER", "ROLE_EMPLOYEE")
                 .antMatchers(
                         "/api/carts/getMedicine/**",
                         "/api/carts/getAllCartDetailsByUser/**",
@@ -116,7 +119,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/carts/delete-multi/**"
 
                 )
-                .hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER","ROLE_EMPLOYEE")
+                .hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EMPLOYEE")
                 .antMatchers(
                         //Authen Role admin and manager
                         "/api/user/register-by-manager/**",
@@ -153,11 +156,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                         "/customers/api/dto/create/**",
                         "/customers/api/create/**",
-                        "/customers/api/update/{id}/**",
                         "/customers/api/{id}/**",
                         "/customers/api/list/**",
                         "/customers/api/delete/{id}/**",
-
+                        "/customers/api/update/{id}/**",
 
                         "/api/supplier/**",
                         "/api/supplier/delete/{id}/**",
@@ -197,7 +199,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/report/chart/profit/**",
                         "/api/report/sum/**"
 
-                ).hasAnyAuthority("ROLE_ADMIN","ROLE_MANAGER")
+                ).hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER")
 
                 .anyRequest()
                 .authenticated()
