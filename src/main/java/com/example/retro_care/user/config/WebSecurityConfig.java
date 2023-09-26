@@ -116,9 +116,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/carts/getIndication/**",
                         "/api/carts/getNameEmployee/**",
                         "/api/carts/getOneMedicineByName/**",
-                        "/api/carts/delete-multi/**"
+                        "/api/carts/delete-multi/**",
+                        "/prescription/**",
+                        "/prescription/create/**",
+                        "/prescription/{id}/**",
+                        "/prescription/delete/{id}/**",
+                        "/prescription/edit/**"
 
-                )
+
+                        )
                 .hasAnyAuthority("ROLE_ADMIN", "ROLE_MANAGER", "ROLE_EMPLOYEE")
                 .antMatchers(
                         //Authen Role admin and manager
@@ -186,11 +192,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/indication/create/**",
                         "/indication/edit/**",
 
-                        "/prescription/**",
-                        "/prescription/create/**",
-                        "/prescription/{id}/**",
-                        "/prescription/delete/{id}/**",
-                        "/prescription/edit/**",
 
                         "/patient/**",
 

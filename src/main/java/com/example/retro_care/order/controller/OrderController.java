@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.retro_care.order.model.EmailMessage;
@@ -63,19 +64,19 @@ public class OrderController {
      * @return
      */
     @GetMapping(value = { "/list"})
-    public ResponseEntity<?> getListOrder(@RequestParam("page") int page,
-                                          @RequestParam(defaultValue = "") String sortBy,
-                                          @RequestParam(defaultValue = "") String startDateTime,
-                                          @RequestParam(defaultValue = "") String endDateTime) {
-        Map<String,String> errorMap = OrderDto.validateOrder(startDateTime,endDateTime);
-        if(!errorMap.isEmpty()){
-            return new ResponseEntity<>(errorMap,HttpStatus.NOT_ACCEPTABLE);
-        }
+    public ResponseEntity<?> getListOrder(@RequestParam(required = false,defaultValue = "0") int page,
+                                          @RequestParam(required = false,defaultValue = "") String sortBy,
+                                          @RequestParam(required = false,defaultValue = "") String startDateTime,
+                                          @RequestParam(required = false,defaultValue = "") String endDateTime) {
+////        Map<String,String> errorMap = OrderDto.validateOrder(startDateTime,endDateTime);
+//        if(!errorMap.isEmpty()){
+//            return new ResponseEntity<>(errorMap,HttpStatus.NOT_ACCEPTABLE);
+//        }
         Pageable pageable = SortOrders.sortBy(sortBy,page);
         if(!startDateTime.equals("")||!endDateTime.equals("")) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            LocalDateTime localStartDateTime = LocalDateTime.parse(startDateTime, formatter);
-            LocalDateTime localEndDateTime = LocalDateTime.parse(endDateTime, formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localStartDateTime = LocalDate.parse(startDateTime, formatter);
+            LocalDate localEndDateTime = LocalDate.parse(endDateTime, formatter);
             Page<IOrderProjection> orders = iOrderService.findByDateTimeRange(pageable, localStartDateTime, localEndDateTime);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         }else {

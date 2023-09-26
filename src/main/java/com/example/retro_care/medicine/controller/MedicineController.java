@@ -228,7 +228,7 @@ public class MedicineController {
                                                                    @RequestParam(defaultValue = "", required = false) String search,
                                                                    @RequestParam(defaultValue = "", required = false) String conditional) {
 
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.ASC, "code"));
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(Sort.Direction.DESC, "id"));
         Page<IMedicineListDto> medicines;
         switch (searchInMedicine) {
             case "searchByName":

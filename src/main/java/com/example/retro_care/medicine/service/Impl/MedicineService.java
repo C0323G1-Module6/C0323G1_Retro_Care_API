@@ -36,6 +36,7 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public Medicine findMedicineById(Long id) {
+        System.out.println(iMedicineRepository.findMedicineById(id));
         return iMedicineRepository.findMedicineById(id);
     }
 
