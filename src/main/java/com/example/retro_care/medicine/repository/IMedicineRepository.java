@@ -41,9 +41,9 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param id The ID of the Medicine to find.
      * @return The Medicine object with the specified ID.
      */
-    @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name\n" +
-            "FROM retro_care.medicine AS m\n" +
-            "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id\n" +
+    @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name \n" +
+            "FROM retro_care.medicine AS m \n" +
+            "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id \n" +
             "where m.id=:id and m.flag_deleted = false", nativeQuery = true)
     Medicine findMedicineById(@Param("id") Long id);
 

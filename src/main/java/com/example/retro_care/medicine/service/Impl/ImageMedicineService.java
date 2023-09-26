@@ -23,6 +23,7 @@ public class ImageMedicineService implements IImageMedicineService {
 
     @Override
     public ImageMedicine findImageMedicineByMedicineId(Long medicineId) {
+        System.out.println(iImageMedicineRepository.findImageMedicineByMedicineId(medicineId));
         return iImageMedicineRepository.findImageMedicineByMedicineId(medicineId);
     }
 

@@ -31,7 +31,9 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "        MAX(e.name_employee) AS nameEmployee,\n" +
             "        MAX(c.name) AS nameCustomer,\n" +
             "        o.date_time AS orderDate,\n" +
-            "        sum(od.current_price) AS orderDetailsPrice,\n" +
+            "     CASE\n" +
+            "            WHEN e.id IS NULL or c.id IS NULL THEN sum(od.current_price * od.quantity)\n" + " WHEN c.id is not null and e.id is not null then sum(od.current_price * od.quantity)/2\n" +
+            "            END AS orderDetailsPrice,\n" +
             "        o.note as orderNote\n" +
             "    FROM\n" +
             "        orders o\n" +
@@ -39,7 +41,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
             "            LEFT JOIN app_user au ON uo.app_user_id = au.id\n" +
             "            LEFT JOIN employee e ON au.id = e.app_user_id\n" +
             "            LEFT JOIN customer c ON au.id = c.app_user_id\n" +
-            "\t\t\t\tLEFT JOIN order_details od  ON od.order_id = o.id\n" +
+            "            LEFT JOIN order_details od  ON od.order_id = o.id\n" +
             "            LEFT JOIN user_role ur  ON ur.app_user_id = au.id\n" +
             "            LEFT JOIN app_role ar  ON ur.app_role_id = ar.id\n" +
             "  \n" +

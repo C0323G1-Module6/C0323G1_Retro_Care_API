@@ -242,16 +242,19 @@ public class CustomerController {
             }
         }
 
+//            Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
+            if (!(customer.getEmail().equals(customerDto.getEmail()))){
             Customer customerCheckEmail = customerService.findCustomerByEmail(customerDto.getEmail());
             if (customerCheckEmail != null){
                 errors.put(EMAIL,"Email đã tồn tại");
             }
-
-
+        }
+        if (!(customer.getPhoneNumber().equals(customerDto.getPhoneNumber()))){
             Customer customerCheckPhone = customerService.findCustomerByPhone(customerDto.getPhoneNumber());
             if (customerCheckPhone != null){
                 errors.put("phoneNumber","Số điện thoại đã tồn tại");
             }
+        }
 
         if (errors.size() != 0){
             return new ResponseEntity<>(errors, HttpStatus.NOT_ACCEPTABLE);
