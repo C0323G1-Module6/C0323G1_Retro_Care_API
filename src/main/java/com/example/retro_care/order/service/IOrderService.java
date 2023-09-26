@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public interface IOrderService {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime);
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable, LocalDate startDateTime, LocalDate endDateTime);
 
     /**
      * author: VuNL

@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Repository
@@ -158,17 +159,28 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    @Query(value ="SELECT o.code AS code, e.name_employee AS nameEmployee , customer.name AS nameCustomer, " +
-            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
-            "o.note AS orderNote " +
-            "FROM orders as o " +
-            "INNER JOIN employee as e ON o.id = e.id " +
-            "INNER JOIN user_order as uo ON o.id = uo.id " +
-            "INNER JOIN app_user as au ON uo.id = au.id " +
-            "INNER JOIN customer as customer ON au.id = customer.id " +
-            "INNER JOIN order_details as od ON o.id = od.id where o.flag_deleted = 0 " +
-            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime", nativeQuery = true)
-    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
+    @Query(value =" SELECT\n" +
+            "        o.code AS code,\n" +
+            "        MAX(e.name_employee) AS nameEmployee,\n" +
+            "        MAX(c.name) AS nameCustomer,\n" +
+            "        o.date_time AS orderDate,\n" +
+            "        sum(od.current_price) AS orderDetailsPrice,\n" +
+            "        o.note as orderNote\n" +
+            "    FROM\n" +
+            "        orders o\n" +
+            "            LEFT JOIN user_order uo ON o.id = uo.order_id\n" +
+            "            LEFT JOIN app_user au ON uo.app_user_id = au.id\n" +
+            "            LEFT JOIN employee e ON au.id = e.app_user_id\n" +
+            "            LEFT JOIN customer c ON au.id = c.app_user_id\n" +
+            "\t\t\t\tLEFT JOIN order_details od  ON od.order_id = o.id\n" +
+            "            LEFT JOIN user_role ur  ON ur.app_user_id = au.id\n" +
+            "            LEFT JOIN app_role ar  ON ur.app_role_id = ar.id\n" +
+            "  \n" +
+            " where o.flag_deleted = 0 " +
+            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime"+
+            "    GROUP BY o.`code`"
+            , nativeQuery = true)
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable, @Param("startDateTime") LocalDate startDateTime, @Param("endDateTime") LocalDate endDateTime);
 
     /**
      * Create by: HanhNLM;
