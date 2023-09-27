@@ -11,14 +11,15 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 
-public interface HomeRepository extends JpaRepository<Medicine,Long> {
+public interface HomeRepository extends JpaRepository<Medicine, Long> {
 
     /**
-     * Search medicines with name or type input string
+     * Search for medicines based on a search string and kind of medicine.
+     *
+     * @param keyword The search string.
+     * @param type    The kind of medicine.
+     * @return A list of all medicines related to the provided keyword and type, excluding deleted ones.
      * @author HuyL
-     * @param keyword is the search string
-     * @param type is the kind of medicine
-     * @return list all medicine related to keyword and type and do not have flag_deleted
      */
     @Query(value = " SELECT " +
             "    m.id AS medicineId, " +
@@ -46,8 +47,9 @@ public interface HomeRepository extends JpaRepository<Medicine,Long> {
     List<MedicineForHomePageDTO> findMedicineForHomepage(@Param("keyword") String keyword, @Param("type") String type);
 
     /**
-     * Find favorite medicine base on their sale quantities
-     * @return 30 medicines that have the most sale quantity
+     * Find favorite medicines based on their sale quantities.
+     *
+     * @return The top 30 medicines with the highest sale quantities.
      * @author HuyL
      */
     @Query(value = " SELECT " +
@@ -77,6 +79,15 @@ public interface HomeRepository extends JpaRepository<Medicine,Long> {
             "LIMIT 30; ", nativeQuery = true)
     List<MedicineForHomePageDTO> findFavoriteMedicineForHomepage();
 
+    /**
+     * Retrieve a paginated list of medicines for the home page based on a search string and kind of medicine.
+     *
+     * @param keyword  The search string.
+     * @param type     The kind of medicine.
+     * @param pageable Pagination information.
+     * @return A paginated list of medicines based on the provided keyword, type, and pagination settings.
+     * @author HuyL
+     */
     @Query(value = "SELECT " +
             " m.id AS medicineId, " +
             " m.name AS medicineName, " +
