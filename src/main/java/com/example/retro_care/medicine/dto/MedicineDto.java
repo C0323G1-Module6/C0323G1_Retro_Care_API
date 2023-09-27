@@ -3,18 +3,16 @@ package com.example.retro_care.medicine.dto;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 
 public class MedicineDto implements Validator {
     private Long id;
-    //    @Size(max = 8)
+//        @Size(max = 8)
 //    @Pattern(regexp = "^[0-9a-zA-Z]{8}$")
     private String code;
     @NotBlank(message = "Không được để trống trường này")
+
 //    @Pattern(regexp = "^[\\\\p{Lu}][\\\\p{Ll}]{1,8}(\\\\s([\\\\p{Lu}]|[\\\\p{Lu}][\\\\p{Ll}]{1,10})){0,5}$", message = "Tên  phải viết đầu bằng chữ hoa và theo sau là chữ thường ")
     private String name;
     @NotNull(message = "Giá không được để trống.")

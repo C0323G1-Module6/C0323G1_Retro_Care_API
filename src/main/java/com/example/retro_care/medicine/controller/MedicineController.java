@@ -92,7 +92,6 @@ public class MedicineController {
         unitDetailDto.setUnit(unitDetails.getUnit().getId());
         medicineDto.setImageMedicineDto(imageMedicineDto);
         medicineDto.setUnitDetailDto(unitDetailDto);
-        System.out.println(medicineDto);
         return new ResponseEntity<>(medicineDto, HttpStatus.OK);
     }
 
