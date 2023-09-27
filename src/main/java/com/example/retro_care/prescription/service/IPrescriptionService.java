@@ -17,5 +17,6 @@ public interface IPrescriptionService {
     Page<Prescription> searchByNamePrescription(String name,Pageable pageable);
     Page<Prescription> searchByCodePrescription(String code,Pageable pageable);
     Page<Prescription> searchBySymptomsPrescription(String symptoms, Pageable pageable);
+    String findMaxCode();
 
 }

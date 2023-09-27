@@ -132,11 +132,7 @@ public class PrescriptionDto implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         PrescriptionDto prescriptionDto = (PrescriptionDto) target;
-        if (prescriptionDto.code.equals("")) {
-            errors.rejectValue("code", "", "Không được để trống mã toa thuốc");
-        } else if (prescriptionDto.code.length() > 6) {
-            errors.rejectValue("code", "", "Độ dài mã toa thuốc không được dài hơn 6 ký tự");
-        }
+
 
         if (prescriptionDto.name.equals("")) {
             errors.rejectValue("name", "", "Tên toa thuốc không được để trống");
