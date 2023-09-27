@@ -204,4 +204,10 @@ public class PrescriptionController {
         }
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
+
+    @GetMapping("/prescription/maxCode")
+    public ResponseEntity<String> maxCode() {
+        String code = prescriptionService.findMaxCode();
+        return new ResponseEntity<>(code,HttpStatus.OK);
+    }
 }
