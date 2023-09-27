@@ -69,7 +69,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     @Modifying
     @Query(value = "INSERT INTO medicine (code, name, price, quantity, vat, note, maker, active_element, origin, " +
             "retail_profits, kind_of_medicine_id, flag_deleted) VALUES (:#{#medicine.code}, :#{#medicine.name}, " +
-            ":#{#medicine.price}, :#{#medicine.quantity}, :#{#medicine.vat}, :#{#medicine.note}, :#{#medicine.maker}, " +
+            ":#{#medicine.price}, 0, :#{#medicine.vat}, :#{#medicine.note}, :#{#medicine.maker}, " +
             ":#{#medicine.activeElement}, :#{#medicine.origin}, :#{#medicine.retailProfits}, " +
             ":#{#medicine.kindOfMedicine.id}, false)", nativeQuery = true)
     void addMedicine(@Param("medicine") Medicine medicine);

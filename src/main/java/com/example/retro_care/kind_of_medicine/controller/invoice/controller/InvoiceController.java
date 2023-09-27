@@ -1,7 +1,10 @@
-package com.example.retro_care.invoice.controller;
+package com.example.retro_care.kind_of_medicine.controller.invoice.controller;
 
-import com.example.retro_care.invoice.model.*;
-import com.example.retro_care.invoice.service.IInvoiceService;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.IInvoiceResult;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceDto;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceEditDto;
+import com.example.retro_care.kind_of_medicine.controller.invoice.service.IInvoiceService;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.Invoice;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

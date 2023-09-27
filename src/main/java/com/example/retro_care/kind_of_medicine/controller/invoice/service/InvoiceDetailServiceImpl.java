@@ -1,7 +1,7 @@
-package com.example.retro_care.invoice.service;
+package com.example.retro_care.kind_of_medicine.controller.invoice.service;
 
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceDetail;
+import com.example.retro_care.kind_of_medicine.controller.invoice.repository.IInvoiceDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

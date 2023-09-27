@@ -1,8 +1,8 @@
-package com.example.retro_care.invoice.service;
+package com.example.retro_care.kind_of_medicine.controller.invoice.service;
 
-import com.example.retro_care.invoice.model.*;
-import com.example.retro_care.invoice.repository.IInvoiceDetailRepository;
-import com.example.retro_care.invoice.repository.IInvoiceRepository;
+import com.example.retro_care.kind_of_medicine.controller.invoice.repository.IInvoiceDetailRepository;
+import com.example.retro_care.kind_of_medicine.controller.invoice.repository.IInvoiceRepository;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.*;
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.medicine.model.UnitDetail;
 import com.example.retro_care.medicine.repository.IMedicineRepository;

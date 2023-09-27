@@ -1,6 +1,6 @@
-package com.example.retro_care.invoice.repository;
+package com.example.retro_care.kind_of_medicine.controller.invoice.repository;
 
-import com.example.retro_care.invoice.model.InvoiceDetail;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

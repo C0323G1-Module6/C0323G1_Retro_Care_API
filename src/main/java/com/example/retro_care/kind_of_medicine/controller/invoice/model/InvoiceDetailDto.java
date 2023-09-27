@@ -1,4 +1,4 @@
-package com.example.retro_care.invoice.model;
+package com.example.retro_care.kind_of_medicine.controller.invoice.model;
 import java.sql.Date;
 
 public class InvoiceDetailDto {

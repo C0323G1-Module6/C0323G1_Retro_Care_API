@@ -1,9 +1,9 @@
-package com.example.retro_care.invoice.service;
+package com.example.retro_care.kind_of_medicine.controller.invoice.service;
 
-import com.example.retro_care.invoice.model.IInvoiceResult;
-import com.example.retro_care.invoice.model.Invoice;
-import com.example.retro_care.invoice.model.InvoiceDto;
-import com.example.retro_care.invoice.model.InvoiceEditDto;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.IInvoiceResult;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.Invoice;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceDto;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceEditDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

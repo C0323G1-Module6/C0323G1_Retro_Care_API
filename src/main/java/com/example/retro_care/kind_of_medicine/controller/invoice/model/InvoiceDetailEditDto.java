@@ -1,14 +1,10 @@
-package com.example.retro_care.invoice.model;
+package com.example.retro_care.kind_of_medicine.controller.invoice.model;
 
 import com.example.retro_care.medicine.model.Medicine;
 
-import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-public class InvoiceDetail {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class InvoiceDetailEditDto {
     private Long id;
     private Float discount;
     private Date expiry;
@@ -18,18 +14,18 @@ public class InvoiceDetail {
 
     private Boolean flagDeleted;
 
-    @ManyToOne
-    @JoinColumn(name = "medicine_id", referencedColumnName = "id")
     private Medicine medicineId;
 
-    @ManyToOne
-    @JoinColumn(name = "invoice_id", referencedColumnName = "id")
+
     private Invoice invoiceId;
 
-    public InvoiceDetail() {
+
+    private String unit;
+
+    public InvoiceDetailEditDto() {
     }
 
-    public InvoiceDetail(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId) {
+    public InvoiceDetailEditDto(Long id, Float discount, Date expiry, Integer medicineQuantity, String lot, Boolean flagDeleted, Medicine medicineId, Invoice invoiceId, String unit) {
         this.id = id;
         this.discount = discount;
         this.expiry = expiry;
@@ -38,6 +34,15 @@ public class InvoiceDetail {
         this.flagDeleted = flagDeleted;
         this.medicineId = medicineId;
         this.invoiceId = invoiceId;
+        this.unit = unit;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
     }
 
     public Long getId() {
@@ -54,6 +59,14 @@ public class InvoiceDetail {
 
     public void setDiscount(Float discount) {
         this.discount = discount;
+    }
+
+    public Date getExpiry() {
+        return expiry;
+    }
+
+    public void setExpiry(Date expiry) {
+        this.expiry = expiry;
     }
 
     public Integer getMedicineQuantity() {
@@ -94,27 +107,5 @@ public class InvoiceDetail {
 
     public void setInvoiceId(Invoice invoiceId) {
         this.invoiceId = invoiceId;
-    }
-
-    public Date getExpiry() {
-        return expiry;
-    }
-
-    public void setExpiry(Date expiry) {
-        this.expiry = expiry;
-    }
-
-    @Override
-    public String toString() {
-        return "InvoiceDetail{" +
-                "id=" + id +
-                ", discount=" + discount +
-                ", expiry=" + expiry +
-                ", medicineQuantity=" + medicineQuantity +
-                ", lot='" + lot + '\'' +
-                ", flagDeleted=" + flagDeleted +
-                ", medicineId=" + medicineId +
-                ", invoiceId=" + invoiceId +
-                '}';
     }
 }

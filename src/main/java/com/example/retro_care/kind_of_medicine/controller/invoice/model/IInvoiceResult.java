@@ -1,4 +1,4 @@
-package com.example.retro_care.invoice.model;
+package com.example.retro_care.kind_of_medicine.controller.invoice.model;
 
 import com.example.retro_care.supplier.model.Supplier;
 import com.example.retro_care.user.model.AppUser;

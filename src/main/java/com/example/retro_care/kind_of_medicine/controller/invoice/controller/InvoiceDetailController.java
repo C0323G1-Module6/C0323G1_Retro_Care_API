@@ -1,7 +1,7 @@
-package com.example.retro_care.invoice.controller;
+package com.example.retro_care.kind_of_medicine.controller.invoice.controller;
 
-import com.example.retro_care.invoice.model.InvoiceDetail;
-import com.example.retro_care.invoice.service.IInvoiceDetailService;
+import com.example.retro_care.kind_of_medicine.controller.invoice.model.InvoiceDetail;
+import com.example.retro_care.kind_of_medicine.controller.invoice.service.IInvoiceDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
