@@ -18,9 +18,9 @@ public class HomeController_findMedicineForHomepage {
     private MockMvc mockMvc;
 
     /**
-     * Test for get list with size > 0
+     * Test to retrieve a list of medicines with a size greater than 0.
      *
-     * @throws Exception successful
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test
@@ -41,9 +41,9 @@ public class HomeController_findMedicineForHomepage {
     }
 
     /**
-     * Test for wrong url
+     * Test for a wrong URL, expecting a 404 Not Found response.
      *
-     * @throws Exception 404 Not Found
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test
@@ -57,9 +57,9 @@ public class HomeController_findMedicineForHomepage {
 
 
     /**
-     * Test NOT_FOUND status by empty database
+     * Tests the NOT_FOUND status when the database is empty.
      *
-     * @throws Exception NOT_FOUND
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test

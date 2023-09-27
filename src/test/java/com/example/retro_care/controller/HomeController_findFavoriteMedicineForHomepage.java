@@ -18,8 +18,9 @@ public class HomeController_findFavoriteMedicineForHomepage {
     private MockMvc mockMvc;
 
     /**
-     * Test if the methods show the right results with the product with the highest quantity on top
-     * @throws Exception Successful Ok status
+     * Tests if the method displays the correct results with the product having the highest quantity on top.
+     *
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test
@@ -41,9 +42,11 @@ public class HomeController_findFavoriteMedicineForHomepage {
                 .andExpect(jsonPath("$[29].medicineSaleQuantity").value(1));
     }
 
+
     /**
-     * Test when database had empty, the result is not found
-     * @throws Exception Not Found
+     * Tests the case when the database is empty, ensuring the result is not found.
+     *
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test
@@ -57,8 +60,9 @@ public class HomeController_findFavoriteMedicineForHomepage {
     }
 
     /**
-     * Test for wrong url
-     * @throws Exception 404 Not Found
+     * Tests for the case of a wrong URL, expecting a 404 Not Found response.
+     *
+     * @throws Exception Thrown when the test encounters an unexpected error.
      * @author HuyL
      */
     @Test
