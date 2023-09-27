@@ -39,15 +39,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
     public Invoice createInvoice(Invoice invoice, InvoiceDto invoiceDto) {
         invoice.setCreationDate(new Date());
 //        Set AppUserId
-<<<<<<< HEAD
-        invoice.setAppUserId(new AppUser());
-        invoice.setCreationDate(new Date());
-        Supplier supplier = new Supplier();
-        supplier.setId(invoiceDto.getSupplierId());
-        invoice.setSupplierId(supplier);
-        invoice.setCode(findMaxCode());
-        Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
-=======
+
         AppUser appUser = new AppUser();
         appUser.setId(invoiceDto.getAppUserId());
         invoice.setAppUserId(appUser);
@@ -62,7 +54,6 @@ public class InvoiceServiceImpl implements IInvoiceService {
         //Create invoice
         Invoice selectedInvoice = invoiceRepository.createInvoice(invoice);
         //Create invoiceDetail
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
         for (InvoiceDetailDto invoiceDetailDto : invoiceDto.getInvoiceDetailDtoSet()) {
 
             InvoiceDetail invoiceDetail = new InvoiceDetail();
@@ -73,11 +64,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoiceDetail.setMedicineId(medicine);
             //Set invoiceID
             invoiceDetail.setInvoiceId(selectedInvoice);
-<<<<<<< HEAD
-            System.out.println(invoiceDetail);
-=======
+
             //Create InvoiceDetail
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
             //Get quantity medicine
             Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
@@ -131,14 +119,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-<<<<<<< HEAD
-        System.out.println(maxCode);
-        if (maxCode.equals(""))
-            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
-=======
+
         if (maxCode.equals(""))
             return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
         // Tách phần số từ code lớn nhất hiện tại
         String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
@@ -147,11 +130,9 @@ public class InvoiceServiceImpl implements IInvoiceService {
         numericValue++;
 
         // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
-<<<<<<< HEAD
-        String newNumericPart = String.format("%05d", numericValue);
-=======
+
         String newNumericPart = String.format("%04d", numericValue);
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
+
         String newCode = "HDN" + newNumericPart;
 
         return newCode;
@@ -206,8 +187,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
-        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn, String sortType) {
+        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn, sortType);
     }
 
 }

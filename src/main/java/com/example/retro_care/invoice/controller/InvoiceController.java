@@ -109,7 +109,7 @@ public class InvoiceController {
                                                  @RequestParam(required = false) String startTime,
                                                  @RequestParam(required = false) String endTime,
                                                  @RequestParam(defaultValue = "id") String sortColumn,
-                                                 @RequestParam(defaultValue = "DESC") String sort) {
+                                                 @RequestParam(defaultValue = "DESC ") String sort) {
         Sort sortable = null;
         if (sort.equals("ASC")) {
             sortable = Sort.by(sortColumn).ascending();
@@ -160,7 +160,7 @@ public class InvoiceController {
 
 
 
-        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn, sort);
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

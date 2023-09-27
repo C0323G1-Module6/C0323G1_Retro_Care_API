@@ -3,10 +3,8 @@ package com.example.retro_care.invoice.service;
 import com.example.retro_care.invoice.model.IInvoiceResult;
 import com.example.retro_care.invoice.model.Invoice;
 import com.example.retro_care.invoice.model.InvoiceDto;
-<<<<<<< HEAD
-=======
+
 import com.example.retro_care.invoice.model.InvoiceEditDto;
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -54,11 +52,6 @@ public interface IInvoiceService {
     void deleteInvoice(Long id);
 
     Invoice findById(Long id);
-<<<<<<< HEAD
-=======
-
-    List<IInvoiceResult> getInvoiceDetailById(Long id);
->>>>>>> 6591502e1fb9aa68248d1d8f8333629520a56a92
 
     List<IInvoiceResult> getInvoiceDetailById(Long id);
 
@@ -67,6 +60,8 @@ public interface IInvoiceService {
                                 String endDate,
                                 String startTime,
                                 String endTime,
-                                String sortColumn
+                                String sortColumn,
+                                String sortType
+
     );
 }

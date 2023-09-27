@@ -141,13 +141,14 @@ public interface IInvoiceRepository extends JpaRepository<Invoice, Long> {
             "    i.note,\n" +
             "    subquery.nameSupplier,\n" +
             "    subquery.address\n" +
-            "ORDER BY  :sortColum DESC\n")
+            "ORDER BY  :sortColum :sortType\n")
     Page<IInvoiceResult> searchInvoiceResult(Pageable pageable,
                                              @Param("start_date") String startDate,
                                              @Param("end_date") String endDate,
                                              @Param("start_time") String startTime,
                                              @Param("end_time") String endTime,
-                                             @Param("sortColum") String sortColum
+                                             @Param("sortColum") String sortColum,
+                                             @Param("sortType") String sortType
                                              );
 
     /**
