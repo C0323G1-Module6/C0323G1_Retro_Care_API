@@ -65,9 +65,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoiceDetail.setInvoiceId(selectedInvoice);
             //Create InvoiceDetail
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+
+
             //Get quantity medicine
             Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
 //            //Update quantity medicine
+
+            if (currentQuantity == null)
+                currentQuantity = 0L;
             medicineRepository.updateQuantity(invoiceDetail.getMedicineId().getId(), currentQuantity + invoiceDetail.getMedicineQuantity());
 
         }
