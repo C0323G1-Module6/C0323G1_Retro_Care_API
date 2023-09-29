@@ -8,6 +8,14 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface IMedicineService {
+
+    /**
+     * Retrieves a Medicine object based on the provided code-TinVV
+     *
+     * @param code The code of the Medicine to retrieve.
+     * @return The Medicine object associated with the given code, or null if not found.
+     */
+    Medicine findMedicineByCode(String code);
     /**
      * Retrieve a Medicine object by its ID-TinVV
      *

@@ -161,7 +161,7 @@ public class InvoiceController {
 
         // Check for empty string ("") and set to null
 
-        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+        Page<IInvoiceResult> invoices = invoiceService.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn, sort);
 
         if (invoices.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -232,6 +232,7 @@ public class InvoiceController {
      */
     @PatchMapping("/edit")
     public ResponseEntity<?> editInvoice(@Valid @RequestBody InvoiceDto invoiceDto, BindingResult bindingResult) {
+        System.out.println(invoiceDto);
         if (invoiceService.getInvoiceById(invoiceDto.getId()) == null)
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         new InvoiceDto().validate(invoiceDto, bindingResult);

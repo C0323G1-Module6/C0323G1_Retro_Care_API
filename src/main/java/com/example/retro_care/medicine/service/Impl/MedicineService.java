@@ -1,5 +1,6 @@
 package com.example.retro_care.medicine.service.Impl;
 
+import com.example.retro_care.customer.model.Customer;
 import com.example.retro_care.medicine.dto.IMedicineListDto;
 import com.example.retro_care.medicine.model.Medicine;
 import com.example.retro_care.medicine.repository.IMedicineRepository;
@@ -10,12 +11,22 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class MedicineService implements IMedicineService {
     @Autowired
     private IMedicineRepository iMedicineRepository;
+
+    /**
+     * Finds a Medicine object based on the provided code-TinVV
+     *
+     * @param code The code of the Medicine to be searched for.
+     * @return The Medicine object associated with the given code, or null if not found.
+     */
+    @Override
+    public Medicine findMedicineByCode(String code) {
+        return iMedicineRepository.findMedicineByCode(code);
+    }
 
     /**
      * Find a medicine by its ID-TinVV
@@ -25,6 +36,7 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public Medicine findMedicineById(Long id) {
+        System.out.println(iMedicineRepository.findMedicineById(id));
         return iMedicineRepository.findMedicineById(id);
     }
 
@@ -45,9 +57,6 @@ public class MedicineService implements IMedicineService {
      */
     @Override
     public void addMedicine(Medicine medicine) {
-        UUID uuid = UUID.randomUUID();
-        String code = uuid.toString().replace("-", "").substring(0, 8);
-        medicine.setCode(code);
         iMedicineRepository.addMedicine(medicine);
     }
 
@@ -102,7 +111,7 @@ public class MedicineService implements IMedicineService {
      * workday: 17/09/2023
      * Search for drugs by medicine code
      *
-     * @param pageable Pagination after search
+     * @param pageable     Pagination after search
      * @param searchByCode Parameters used to search
      * @return approximate drug code with filter.
      */
@@ -116,7 +125,7 @@ public class MedicineService implements IMedicineService {
      * workday: 17/06/2023
      * Search by medicine name
      *
-     * @param pageable Pagination after search
+     * @param pageable     Pagination after search
      * @param searchByName Parameters used to search
      * @return the drug name that approximates the filter
      */
@@ -130,7 +139,7 @@ public class MedicineService implements IMedicineService {
      * workday: 17/09/2023
      * Search by active element of medicine
      *
-     * @param pageable Pagination after search
+     * @param pageable              Pagination after search
      * @param searchByActiveElement Parameters used to search
      * @return the drug's active ingredient approximated by the filter
      */
@@ -144,7 +153,7 @@ public class MedicineService implements IMedicineService {
      * workday: 17/09/2023
      * Search by kind of medicine
      *
-     * @param pageable Pagination after search
+     * @param pageable               Pagination after search
      * @param searchByKindOfMedicine Parameters used to search
      * @return the drug group of the drug approximated by the filter
      */
@@ -158,7 +167,7 @@ public class MedicineService implements IMedicineService {
      * workday: 22/09/2023
      *
      * @param pageable pagination with medicine list
-     * @param price Search value to compare with retail price
+     * @param price    Search value to compare with retail price
      * @return value to compare with retail price
      */
     @Override
@@ -171,7 +180,7 @@ public class MedicineService implements IMedicineService {
      * workday: 22/09/2023
      *
      * @param pageable pagination with medicine list
-     * @param price Search value to compare with retail price
+     * @param price    Search value to compare with retail price
      * @return value to compare with retail price
      */
     @Override
@@ -212,26 +221,26 @@ public class MedicineService implements IMedicineService {
      * author: DaoPTA
      * workday: 22/09/2023
      *
-     * @param pageable pagination with medicine list
-     * @param search Search value to compare with meidicne
+     * @param pageable    pagination with medicine list
+     * @param search      Search value to compare with meidicne
      * @param conditional Search value to compare with conditional
      * @return value to compare with conditional
      */
     @Override
     public Page<IMedicineListDto> searchByPrice(Pageable pageable, String search, String conditional) {
         Float price = null;
-        try{
-           price  = Float.parseFloat(search);
+        try {
+            price = Float.parseFloat(search);
             switch (conditional) {
                 case "greater":
                     return searchWithGreaterThanOrEqualPrice(pageable, price);
                 case "small":
                     return searchWithSmallerThanOrEqualPrice(pageable, price);
                 default:
-                    return findAll(pageable,search);
+                    return findAll(pageable, search);
             }
-        }catch (Exception e){
-            return findAll(pageable,search);
+        } catch (Exception e) {
+            return findAll(pageable, search);
         }
 
     }
@@ -239,6 +248,7 @@ public class MedicineService implements IMedicineService {
     /**
      * Get a list for invoice
      * Code by CuongHLT
+     *
      * @return List Medicine
      */
     @Override

@@ -12,6 +12,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Repository
@@ -19,23 +20,34 @@ import java.time.LocalDateTime;
 public interface IOrderRepository extends JpaRepository<Orders, Long> {
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
+     * Author: TanNV
+     * Date: 25/09/2023
+     * get list invoice order
      * @param : page (page number), limit(number of elements in the page);
      * @return : paginated order list with limit number of molecules per page.
      */
-    @Query(value = "SELECT  o.code , e.name_employee AS nameEmployee , c.name AS nameCustomer, " +
-            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
-            "o.note AS orderNote " +
-            "FROM orders o " +
-            "INNER JOIN employee e ON o.id = e.id " +
-            "INNER JOIN user_order uo ON o.id = uo.id " +
-            "INNER JOIN app_user au ON uo.id = au.id " +
-            "INNER JOIN customer c ON au.id = c.id " +
-            "INNER JOIN order_details od ON o.id = od.id ", nativeQuery = true)
+    @Query(value = " SELECT\n" +
+            "        o.code AS code,\n" +
+            "        MAX(e.name_employee) AS nameEmployee,\n" +
+            "        MAX(c.name) AS nameCustomer,\n" +
+            "        o.date_time AS orderDate,\n" +
+            "     CASE\n" +
+            "            WHEN e.id IS NULL or c.id IS NULL THEN sum(od.current_price * od.quantity)\n" + " WHEN c.id is not null and e.id is not null then sum(od.current_price * od.quantity)/2\n" +
+            "            END AS orderDetailsPrice,\n" +
+            "        o.note as orderNote\n" +
+            "    FROM\n" +
+            "        orders o\n" +
+            "            LEFT JOIN user_order uo ON o.id = uo.order_id\n" +
+            "            LEFT JOIN app_user au ON uo.app_user_id = au.id\n" +
+            "            LEFT JOIN employee e ON au.id = e.app_user_id\n" +
+            "            LEFT JOIN customer c ON au.id = c.app_user_id\n" +
+            "            LEFT JOIN order_details od  ON od.order_id = o.id\n" +
+            "            LEFT JOIN user_role ur  ON ur.app_user_id = au.id\n" +
+            "            LEFT JOIN app_role ar  ON ur.app_role_id = ar.id\n" +
+            "  \n" +
+            "    GROUP BY o.`code`", nativeQuery = true)
     Page<IOrderProjection> getAllList1(Pageable pageable);
+
 
     /**
      * Create by: VuDT;
@@ -83,6 +95,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     Long getLastInsertOrders();
 
 
+
     /**
      * author: VuNL
      * date create: 15/09/2023
@@ -123,7 +136,7 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
      */
     @Query(nativeQuery = true, value = "select point\n" +
             "from customer\n" +
-            "where app_user_id = :id;\n")
+            "where app_user_id = :id\n")
     Long getPointCustomerByAppUserId(@Param("id") Long id);
 
 
@@ -142,37 +155,34 @@ public interface IOrderRepository extends JpaRepository<Orders, Long> {
     void updatePointCustomer(@Param("point") Long point, @Param("id") Long id);
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    @Transactional
-    @Modifying
-    @Query(value = "update orders set flag_deleted = true where id = :id", nativeQuery = true)
-    void deleteOrder(@Param("id") Long id);
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Filter for order by datetime;
-     *
+     * Author:TanNv
+     * Date:25/09/2023
+     * Get list by date time
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    @Query(value ="SELECT o.code AS code, e.name_employee AS nameEmployee , customer.name AS nameCustomer, " +
-            "DATE(o.date_time) AS orderDate, TIME(o.date_time) AS orderTime, od.current_price AS orderDetailsPrice, " +
-            "o.note AS orderNote " +
-            "FROM orders as o " +
-            "INNER JOIN employee as e ON o.id = e.id " +
-            "INNER JOIN user_order as uo ON o.id = uo.id " +
-            "INNER JOIN app_user as au ON uo.id = au.id " +
-            "INNER JOIN customer as customer ON au.id = customer.id " +
-            "INNER JOIN order_details as od ON o.id = od.id where o.flag_deleted = 0 " +
-            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime", nativeQuery = true)
-    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,@Param("startDateTime") LocalDateTime startDateTime, @Param("endDateTime") LocalDateTime endDateTime);
+    @Query(value =" SELECT\n" +
+            "        o.code AS code,\n" +
+            "        MAX(e.name_employee) AS nameEmployee,\n" +
+            "        MAX(c.name) AS nameCustomer,\n" +
+            "        o.date_time AS orderDate,\n" +
+            "        sum(od.current_price) AS orderDetailsPrice,\n" +
+            "        o.note as orderNote\n" +
+            "    FROM\n" +
+            "        orders o\n" +
+            "            LEFT JOIN user_order uo ON o.id = uo.order_id\n" +
+            "            LEFT JOIN app_user au ON uo.app_user_id = au.id\n" +
+            "            LEFT JOIN employee e ON au.id = e.app_user_id\n" +
+            "            LEFT JOIN customer c ON au.id = c.app_user_id\n" +
+            "\t\t\t\tLEFT JOIN order_details od  ON od.order_id = o.id\n" +
+            "            LEFT JOIN user_role ur  ON ur.app_user_id = au.id\n" +
+            "            LEFT JOIN app_role ar  ON ur.app_role_id = ar.id\n" +
+            "  \n" +
+            " where o.flag_deleted = 0 " +
+            "and o.date_time >= :startDateTime AND o.date_time <= :endDateTime"+
+            "    GROUP BY o.`code`"
+            , nativeQuery = true)
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable, @Param("startDateTime") LocalDate startDateTime, @Param("endDateTime") LocalDate endDateTime);
 
     /**
      * Create by: HanhNLM;

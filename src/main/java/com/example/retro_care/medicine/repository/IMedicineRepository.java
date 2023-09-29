@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
-     String PREFIX_SEARCH_NOT_PRICE = " SELECT " +
+    String PREFIX_SEARCH_NOT_PRICE = " SELECT " +
             "    m.id AS id," +
             "    m.code AS code," +
             "    m.name AS name," +
@@ -25,7 +25,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    km.name AS kindOfMedicineName," +
             "    u.name AS unitName," +
              " ud.conversion_unit AS conversionUnit," +
-            "    ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100))) as retailPrice " +
+            "    ROUND(sum(m.price + (m.price * m.retail_profits / 100) )) as retailPrice " +
             " FROM " +
             " medicine m" +
             " JOIN" +
@@ -41,11 +41,23 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * @param id The ID of the Medicine to find.
      * @return The Medicine object with the specified ID.
      */
+    @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name \n" +
+            "FROM retro_care.medicine AS m \n" +
+            "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id \n" +
+            "where m.id=:id and m.flag_deleted = false", nativeQuery = true)
+    Medicine findMedicineById(@Param("id") Long id);
+
+    /**
+     * Find a Medicine by its Code-TinVV
+     *
+     * @param code The Code of the Medicine to find.
+     * @return The Medicine object with the specified Code.
+     */
     @Query(value = "SELECT m.id, m.code, m.name, m.price, m.quantity, m.vat, m.note, m.maker, m.active_element, m.origin, m.retail_profits, k.name\n" +
             "FROM retro_care.medicine AS m\n" +
             "JOIN kind_of_medicine AS k ON m.kind_of_medicine_id = k.id\n" +
-            "where m.id=:id ", nativeQuery = true)
-    Medicine findMedicineById(@Param("id") Long id);
+            "where m.code=:code and m.flag_deleted = false", nativeQuery = true)
+    Medicine findMedicineByCode(@Param("code") String code);
 
     /**
      * Adds a new Medicine to the database-TinVV
@@ -61,6 +73,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             ":#{#medicine.activeElement}, :#{#medicine.origin}, :#{#medicine.retailProfits}, " +
             ":#{#medicine.kindOfMedicine.id}, false)", nativeQuery = true)
     void addMedicine(@Param("medicine") Medicine medicine);
+
 
     /**
      * Retrieves the last inserted ID from the database-TinVV
@@ -114,7 +127,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "    m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
             "    km.name, u.name, ud.conversion_unit ", nativeQuery = true)
     Page<IMedicineListDto> findAll(Pageable pageable,
-                                          @Param("search") String search);
+                                   @Param("search") String search);
 
     /**
      * author: DaoPTA
@@ -128,21 +141,21 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     @Query(value = "update medicine m set m.flag_deleted = true where m.id = :id", nativeQuery = true)
     int deleteMedicineById(@Param("id") Long id);
 
-        /**
+    /**
      * author: DaoPTA
      * workday: 17/09/2023
      * Search by code medicine
      *
      * @param searchByCode
-     * @param pageable pagination after search
+     * @param pageable     pagination after search
      * @return returns approximate drug code with filter.
      */
 
-        @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
-                "AND m.code like CONCAT('%', :searchByCode ,'%')" +
-                "GROUP BY" +
-                "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
-                " km.name, u.name, ud.conversion_unit", nativeQuery = true)
+    @Query(value = PREFIX_SEARCH_NOT_PRICE + " where m.flag_deleted = false " +
+            "AND m.code like CONCAT('%', :searchByCode ,'%')" +
+            "GROUP BY" +
+            "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
+            " km.name, u.name, ud.conversion_unit", nativeQuery = true)
     Page<IMedicineListDto> searchCode(@Param("searchByCode") String searchByCode, Pageable pageable);
 
     /**
@@ -151,7 +164,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * Search by name medicine
      *
      * @param searchByName
-     * @param pageable pagination after search
+     * @param pageable     pagination after search
      * @return Returns the drug name that approximates the filter
      */
 
@@ -160,7 +173,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "GROUP BY" +
             "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
             " km.name, u.name, ud.conversion_unit", nativeQuery = true)
-    Page<IMedicineListDto> searchName(@Param("searchByName") String searchByName ,Pageable pageable);
+    Page<IMedicineListDto> searchName(@Param("searchByName") String searchByName, Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -168,15 +181,15 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * Search by active element of medicine
      *
      * @param searchByActiveElement
-     * @param pageable pagination after search
+     * @param pageable              pagination after search
      * @return returns the drug's active ingredient approximated by the filter
      */
-    @Query(value = PREFIX_SEARCH_NOT_PRICE +" where m.flag_deleted = false " +
+    @Query(value = PREFIX_SEARCH_NOT_PRICE + " where m.flag_deleted = false " +
             "AND m.active_element like CONCAT('%', :searchByActiveElement ,'%') " +
             "GROUP BY" +
             "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
-            " km.name, u.name, ud.conversion_unit" , nativeQuery = true)
-    Page<IMedicineListDto> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement ,Pageable pageable);
+            " km.name, u.name, ud.conversion_unit", nativeQuery = true)
+    Page<IMedicineListDto> searchActiveElement(@Param("searchByActiveElement") String searchByActiveElement, Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -184,7 +197,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
      * Search by kind of medicine
      *
      * @param searchByKindOfMedicine Method to search for drug group names
-     * @param pageable pagination after search
+     * @param pageable               pagination after search
      * @return returns the drug group of the drug approximated by the filter
      */
 
@@ -194,7 +207,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "GROUP BY" +
             "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
             " km.name, u.name, ud.conversion_unit", nativeQuery = true)
-    Page<IMedicineListDto> searchByKindOfName(@Param("searchByKindOfMedicine") String searchByKindOfMedicine ,Pageable pageable);
+    Page<IMedicineListDto> searchByKindOfName(@Param("searchByKindOfMedicine") String searchByKindOfMedicine, Pageable pageable);
 
     /**
      * author: DaoPTA
@@ -210,7 +223,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "GROUP BY" +
             "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
             " km.name, u.name, ud.conversion_unit " +
-            "HAVING :price <= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
+            "HAVING :price <= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))", nativeQuery = true)
     Page<IMedicineListDto> searchWithGreaterThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
     /**
@@ -227,7 +240,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
             "GROUP BY" +
             "  m.id, m.code, m.name, m.active_element, m.quantity, m.vat, m.price, m.retail_profits," +
             " km.name, u.name, ud.conversion_unit " +
-            "HAVING :price >= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))",nativeQuery = true)
+            "HAVING :price >= ROUND(sum(m.price - (m.price/ (100+ (m.vat + m.retail_profits)) * 100)))", nativeQuery = true)
     Page<IMedicineListDto> searchWithSmallerThanOrEqualPrice(@Param("price") Float price, Pageable pageable);
 
     /**
@@ -252,7 +265,7 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     @Query(value = "select * from medicine m " +
             "join unit_detail u on m.id = u.medicine_id " +
             "where u.conversion_unit like 'Viên' " +
-            "and m.flag_deleted = false",nativeQuery = true)
+            "and m.flag_deleted = false", nativeQuery = true)
     List<Medicine> getMedicineList();
 
     /**
@@ -277,9 +290,10 @@ public interface IMedicineRepository extends JpaRepository<Medicine, Long> {
     /**
      * Get a list for invoice
      * Code by CuongHLT
+     *
      * @return List Medicine
      */
-    @Query(value = "select * from medicine where flag_deleted =0",nativeQuery = true)
+    @Query(value = "select * from medicine where flag_deleted =0", nativeQuery = true)
     List<Medicine> getAllForInvoice();
 }
 

@@ -144,7 +144,7 @@ public interface ICartDetailsRepository extends JpaRepository<CartDetails, Long>
      * @return List cart when sell
      */
     @Query(nativeQuery = true, value = "select c.id as cd_id, c.quantity as cd_quantity, m.id as m_id," +
-            " m.name, m.code, m.price, m.quantity as m_quantity, u.conversion_unit " +
+            " m.name, m.code, m.price, m.quantity as m_quantity,m.flag_deleted, u.conversion_unit " +
             "from cart_details c join medicine m on m.id = c.medicine_id join unit_detail u on m.id = u.medicine_id " +
             "where c.app_user_id = :id ")
     List<ICartDetailProjectionWhenSell> getAllCardByAppUserId(@Param("id") Long id);

@@ -65,9 +65,14 @@ public class InvoiceServiceImpl implements IInvoiceService {
             invoiceDetail.setInvoiceId(selectedInvoice);
             //Create InvoiceDetail
             invoiceDetailRepository.createInvoiceDetail(invoiceDetail);
+
+
             //Get quantity medicine
             Long currentQuantity = medicineRepository.getMedicineQuantity(invoiceDetail.getMedicineId().getId());
 //            //Update quantity medicine
+
+            if (currentQuantity == null)
+                currentQuantity = 0L;
             medicineRepository.updateQuantity(invoiceDetail.getMedicineId().getId(), currentQuantity + invoiceDetail.getMedicineQuantity());
 
         }
@@ -79,6 +84,15 @@ public class InvoiceServiceImpl implements IInvoiceService {
         Supplier supplier = new Supplier();
         supplier.setId(invoiceDto.getSupplierId());
         invoice.setSupplierId(supplier);
+//        Invoice confirmForInvoice = invoiceRepository.getInvoiceById(invoice.getId());
+        //logic for paid
+//        Double totalPrice = 0D;
+//        for (InvoiceDetail invoiceDetail : invoice.getInvoiceDetailSet()) {
+//            totalPrice += (invoiceDetail.getMedicineQuantity() *
+//                    (invoiceDetail.getMedicineId().getPrice() - (invoiceDetail.getMedicineId().getPrice() * (invoiceDetail.getMedicineId().getVat() + invoiceDetail.getMedicineId().getRetailProfits())
+//                    ))
+//            );
+//        }
         return invoiceRepository.editInvoice(invoice);
     }
 
@@ -100,10 +114,11 @@ public class InvoiceServiceImpl implements IInvoiceService {
         for (InvoiceDetail invoiceDetail : invoiceDetailSet) {
             UnitDetail unitDetail = unitDetailRepository.findUnitDetailByMedicineId(invoiceDetail.getMedicineId().getId());
             InvoiceDetailEditDto invoiceDetailEditDto = new InvoiceDetailEditDto();
-            BeanUtils.copyProperties(invoiceDetail,invoiceDetailEditDto);
+            BeanUtils.copyProperties(invoiceDetail, invoiceDetailEditDto);
             invoiceDetailEditDto.setUnit(unitDetail.getUnit().getName());
             invoiceDetailEditDtoList.add(invoiceDetailEditDto);
         }
+
         invoiceEditDto.setInvoiceDetailEditDtoList(invoiceDetailEditDtoList);
         return invoiceEditDto;
     }
@@ -117,9 +132,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
     @Override
     public String findMaxCode() {
         String maxCode = invoiceRepository.findMaxCode();
-        System.out.println(maxCode);
         if (maxCode.equals(""))
-            return "HDN00001"; // Hoặc giá trị mặc định khác cho code đầu tiên
+            return "HDN0001"; // Hoặc giá trị mặc định khác cho code đầu tiên
         // Tách phần số từ code lớn nhất hiện tại
         String numericPart = maxCode.substring(3);
         int numericValue = Integer.parseInt(numericPart);
@@ -128,7 +142,7 @@ public class InvoiceServiceImpl implements IInvoiceService {
         numericValue++;
 
         // Định dạng lại giá trị số thành chuỗi có độ dài 4 và thêm vào tiền tố "HDN"
-        String newNumericPart = String.format("%05d", numericValue);
+        String newNumericPart = String.format("%04d", numericValue);
         String newCode = "HDN" + newNumericPart;
 
         return newCode;
@@ -184,8 +198,8 @@ public class InvoiceServiceImpl implements IInvoiceService {
      */
 
     @Override
-    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn) {
-        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn);
+    public Page<IInvoiceResult> searchInvoiceResult(Pageable pageable, String startDate, String endDate, String startTime, String endTime, String sortColumn, String sortType) {
+        return invoiceRepository.searchInvoiceResult(pageable, startDate, endDate, startTime, endTime, sortColumn, sortType);
     }
 
 }

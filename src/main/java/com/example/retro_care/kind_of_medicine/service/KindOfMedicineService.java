@@ -45,7 +45,16 @@ public class KindOfMedicineService implements IKindOfMedicineService {
         // get max id
         int maxId = kindOfMedicineRepository.getMaxId();
         int newId = maxId + 1;
-        String newCode = "NT" + newId;
+        String newCode="";
+        if(newId <10){
+            newCode = "NT000"+newId;
+        }
+        if (newId <100){
+            newCode = "NT00"+newId;
+        }
+        if (newId <1000){
+            newCode = "NT0"+newId;
+        }
         String newName = kindOfMedicine.getName();
         Boolean newFlagDeleted = false;
         KindOfMedicine newKindOfMedicine = new KindOfMedicine(newCode, newName, newFlagDeleted);

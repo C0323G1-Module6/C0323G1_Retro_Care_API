@@ -24,7 +24,14 @@ import java.util.List;
 public class KindOfMedicineController {
     @Autowired
     private IKindOfMedicineService kindOfMedicineService;
-
+    /**
+     * method :displayListKindOfMedicine()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: List<KindOfMedicine>
+     * return List<KindOfMedicine>
+     */
     //List
     @GetMapping("")
     public ResponseEntity<List<KindOfMedicine>> displayListKindOfMedicine() {
@@ -32,6 +39,14 @@ public class KindOfMedicineController {
     }
 
     // Get by id
+    /**
+     * method :getKindOfMedicineById()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: KindOfMedicine
+     * return KindOfMedicine
+     */
     @GetMapping("/kindOfMedicine/{id}")
     public ResponseEntity<KindOfMedicine> getKindOfMedicineById(@PathVariable("id") Long id) {
         if (id == null) {
@@ -41,6 +56,14 @@ public class KindOfMedicineController {
     }
 
     //    Delete
+    /**
+     * method :deleteKindOfMedicine()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: Long id
+     *  void
+     */
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<List<KindOfMedicine>> deleteKindOfMedicine(@PathVariable("id") Long id) {
         if (id == null) {
@@ -57,6 +80,14 @@ public class KindOfMedicineController {
     }
 
     // Deletes
+    /**
+     * method :deleteItems()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: List<Long> ids
+     * void
+     */
     @PostMapping("/delete-items")
     public ResponseEntity<KindOfMedicine> deleteItems(@RequestBody List<Long> ids) {
         if (ids == null) {
@@ -66,6 +97,14 @@ public class KindOfMedicineController {
     }
 
     //    Create
+    /**
+     * method :getCreationForm()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: Object
+     * void
+     */
     @PostMapping("/create")
     public ResponseEntity<Object> getCreationForm(@Valid @RequestBody KindOfMedicineCreationDto kindOfMedicineCreationDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -79,6 +118,14 @@ public class KindOfMedicineController {
     }
 
     // Edit
+    /**
+     * method :editKindOfMedicine()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: editKindOfMedicine
+     * void
+     */
     @PutMapping("/edit")
     public ResponseEntity<Object> editKindOfMedicine(@RequestBody KindOfMedicine kindOfMedicine) {
         kindOfMedicine.setFlagDeleted(false);
@@ -92,6 +139,14 @@ public class KindOfMedicineController {
 
 
     // Pagination
+    /**
+     * method :getAllKindOfMedicine()
+     * created by :CaoNv
+     * date create: 14/09/2023
+     *
+     * @param: Long id
+     * return List<KindOfMedicine>
+     */
     @GetMapping("/get")
     public ResponseEntity<Page<?>> getAllKindOfMedicine(@RequestParam(value = "page", defaultValue = "0", required = false) Integer page,
                                                         @RequestParam(value = "searchCode", defaultValue = "", required = false) String searchCode,

@@ -22,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.example.retro_care.order.model.EmailMessage;
@@ -53,66 +54,35 @@ public class OrderController {
     private IAppUserService iAppUserService;
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
-     * @param : page (page number), limit(number of elements in the page);
-     * @return : paginated order list with limit number of molecules per page.
+     * Author:TanNV
+     * Date: 25/09/2023
+     * Get list invoice order
+     * @param page
+     * @param sortBy
+     * @param startDateTime
+     * @param endDateTime
+     * @return
      */
     @GetMapping(value = { "/list"})
-    public ResponseEntity<?> getListOrder(@RequestParam("page") int page,
-                                          @RequestParam(defaultValue = "") String sortBy,
-                                          @RequestParam(defaultValue = "") String startDateTime,
-                                          @RequestParam(defaultValue = "") String endDateTime) {
-        Map<String,String> errorMap = OrderDto.validateOrder(startDateTime,endDateTime);
-        if(!errorMap.isEmpty()){
-            return new ResponseEntity<>(errorMap,HttpStatus.NOT_ACCEPTABLE);
-        }
+    public ResponseEntity<?> getListOrder(@RequestParam(required = false,defaultValue = "0") int page,
+                                          @RequestParam(required = false,defaultValue = "") String sortBy,
+                                          @RequestParam(required = false,defaultValue = "") String startDateTime,
+                                          @RequestParam(required = false,defaultValue = "") String endDateTime) {
+////        Map<String,String> errorMap = OrderDto.validateOrder(startDateTime,endDateTime);
+//        if(!errorMap.isEmpty()){
+//            return new ResponseEntity<>(errorMap,HttpStatus.NOT_ACCEPTABLE);
+//        }
         Pageable pageable = SortOrders.sortBy(sortBy,page);
         if(!startDateTime.equals("")||!endDateTime.equals("")) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-            LocalDateTime localStartDateTime = LocalDateTime.parse(startDateTime, formatter);
-            LocalDateTime localEndDateTime = LocalDateTime.parse(endDateTime, formatter);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate localStartDateTime = LocalDate.parse(startDateTime, formatter);
+            LocalDate localEndDateTime = LocalDate.parse(endDateTime, formatter);
             Page<IOrderProjection> orders = iOrderService.findByDateTimeRange(pageable, localStartDateTime, localEndDateTime);
             return new ResponseEntity<>(orders, HttpStatus.OK);
         }else {
             Page<IOrderProjection> ordersPage = iOrderService.getListOrder(pageable);
             return new ResponseEntity<>(ordersPage, HttpStatus.OK);
         }
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-
-    @GetMapping({"/{id}"})
-    public ResponseEntity<?> getOrderById(@PathVariable Long id){
-        Orders orders = iOrderService.findOrderById(id);
-        if (orders == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(orders, HttpStatus.OK);
-    }
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@PathVariable Long id) {
-        this.iOrderService.deleteOrderById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/createOrder")

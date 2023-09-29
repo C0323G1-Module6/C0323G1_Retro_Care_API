@@ -7,50 +7,29 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public interface IOrderService {
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: displays a paginated list of order;
-     *
-     * @param : page (page number), limit(number of elements in the page);
-     * @return : paginated order list with limit number of molecules per page.
+     * Author:TanNV
+     * Date: 25/09/2023
+     * Get list invoice
+     * @param pageable
+     * @return
      */
     Page<IOrderProjection> getListOrder(Pageable pageable);
 
     /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: get list for order by id;
-     *
-     * @return : If the id parameter is found, the data of that id will be displayed.
-     * @Param Long id;
-     */
-    Orders findOrderById(Long id);
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Delete for order by id;
-     *
-     * @return :If the passed id parameter is found, the word with that id will be removed from the list
-     * @Param Long id;
-     */
-    void deleteOrderById(Long id);
-
-    /**
-     * Create by: VuDT;
-     * Date create: 15/09/2023
-     * Function: Filter for order by datetime;
-     *
+     * Author:TanNV
+     * Date: 25/09/2023
+     * Get list by date time
      * @return : If the correct parameter is passed, the list will be filtered according to that parameter,
      * otherwise the original list will be returned.
      */
-    Page<IOrderProjection> findByDateTimeRange(Pageable pageable,LocalDateTime startDateTime, LocalDateTime endDateTime);
+    Page<IOrderProjection> findByDateTimeRange(Pageable pageable, LocalDate startDateTime, LocalDate endDateTime);
 
     /**
      * author: VuNL

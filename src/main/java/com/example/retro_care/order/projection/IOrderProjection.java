@@ -5,7 +5,6 @@ public interface IOrderProjection {
     String getNameEmployee();
     String getNameCustomer();
     String getOrderDate();
-    String getOrderTime();
     String getOrderDetailsPrice();
     String getOrderNote();
 }

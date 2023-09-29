@@ -16,22 +16,24 @@ public class HomeService implements IHomeService {
     private HomeRepository homeRepository;
 
     /**
-     * Search medicines with name or type input string
-     * @param keyword is the search string
-     * @param type    is the kind of medicine
-     * @return list all medicine related to keyword and type and do not have flag_deleted
+     * Searches for medicines based on a search string and kind of medicine.
+     *
+     * @param keyword The search string.
+     * @param type    The kind of medicine.
+     * @return A list of medicines related to the search string and kind of medicine that are not flagged as deleted.
      * @author HuyL
      */
     public List<MedicineForHomePageDTO> findMedicineForHomepage(String keyword, String type) {
         String keywordParam = '%' + keyword + '%';
         String typeParam = '%' + type + '%';
-        System.out.println("Search:" + keywordParam );
+        System.out.println("Search:" + keywordParam);
         return homeRepository.findMedicineForHomepage(keywordParam, typeParam);
     }
 
     /**
-     * Find favorite medicine base on their sale quantities
-     * @return 30 medicines that have the most sale quantity
+     * Finds favorite medicines based on their sale quantities.
+     *
+     * @return The 30 medicines with the highest sale quantities.
      * @author HuyL
      */
     @Override
@@ -39,10 +41,19 @@ public class HomeService implements IHomeService {
         return homeRepository.findFavoriteMedicineForHomepage();
     }
 
+    /**
+     * Retrieves a paginated list of medicines for the home page.
+     *
+     * @param keyword  The search keyword.
+     * @param type     The kind of medicine.
+     * @param pageable Pagination information.
+     * @return A paginated list of medicines based on the provided parameters.
+     * @author HuyL
+     */
     @Override
     public Page<MedicineForHomePageDTO> getListMedicineWithPagination(String keyword, String type, Pageable pageable) {
         String keywordParam = '%' + keyword + '%';
         String typeParam = '%' + type + '%';
-        return homeRepository.getListMedicineWithPagination(keywordParam,typeParam,pageable);
+        return homeRepository.getListMedicineWithPagination(keywordParam, typeParam, pageable);
     }
 }
